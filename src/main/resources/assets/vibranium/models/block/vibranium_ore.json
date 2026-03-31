@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "all": "vibranium:block/vibranium_ore"
+  },
+  "render_type": "solid"
+}
