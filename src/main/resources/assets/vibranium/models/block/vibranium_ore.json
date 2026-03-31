@@ -10,17 +10,5 @@
     "translation": [ 0, 0, 0 ],
     "scale": [ 0.625, 0.625, 0.625 ]
   }
-},
-  "fabric": {
-    "textures": {
-      "end": {
-        "base": "vibranium:block/vibranium_ore_top",
-        "emissive": "vibranium:block/vibranium_ore_top_e"
-      },
-      "side": {
-        "base": "vibranium:block/vibranium_ore",
-        "emissive": "vibranium:block/vibranium_ore_e"
-      }
-    }
-  }
+}
 }
