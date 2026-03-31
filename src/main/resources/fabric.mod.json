@@ -3,9 +3,9 @@
 	"id": "vibranium",
 	"version": "${version}",
 	"name": "Vibranium",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Bringing the strength of vibranium ore to Minecraft",
 	"authors": [
-		"Me!"
+		"Leiriad Jenkins"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -33,9 +33,9 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.18.5",
-		"minecraft": "~26.1",
-		"java": ">=25",
+		"fabricloader": ">=0.18.4",
+		"minecraft": "1.21.11",
+		"java": ">=21",
 		"fabric-api": "*"
 	}
 }

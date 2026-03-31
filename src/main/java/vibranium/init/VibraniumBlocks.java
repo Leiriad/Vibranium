@@ -1,35 +1,72 @@
 package vibranium.init;
 
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import vibranium.Vibranium;
 import vibranium.block.VibraniumOre;
 
+import java.util.function.Function;
+
 public class VibraniumBlocks {
+    public static Block VIBRANIUM_ORE;
 
-    // 1. Définition du bloc
-    public static final Block VIBRANIUM_ORE = registerBlock("vibranium_ore", new VibraniumOre(BlockBehaviour.Properties.of()));
-
-    // Méthode générique pour enregistrer le bloc et son ItemBlock
-    private static <T extends Block> T registerBlock(String name, T block) {
-            Identifier identifier = Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, name);
-
-        // Enregistrement du bloc
-        Registry.register(BuiltInRegistries.BLOCK, identifier, block);
-
-        // Enregistrement de l'item correspondant
-        Registry.register(BuiltInRegistries.ITEM, identifier, new BlockItem(block, new Item.Properties()));
-
-        return block;
+    public static void initialize() {
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register((itemGroup) -> {
+            itemGroup.accept(VIBRANIUM_ORE.asItem());
+        });
     }
 
-    // Appelé lors de l'initialisation du mod
     public static void registerModBlocks() {
-        Vibranium.LOGGER.info("Enregistrement des blocs pour " + Vibranium.MOD_ID);
+        //Vibranium Ore
+        VIBRANIUM_ORE = register(
+                "vibranium_ore",
+                VibraniumOre::new,
+                BlockBehaviour.Properties.of()
+                        .strength(5.0f, 15.0f)
+                        .requiresCorrectToolForDrops()
+                        .lightLevel(state -> 5),
+                true
+        );
+
     }
+
+    private static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.Properties settings, boolean shouldRegisterItem) {
+        // Create a registry key for the block
+        ResourceKey<Block> blockKey = keyOfBlock(name);
+        // Create the block instance
+        Block block = blockFactory.apply(settings.setId(blockKey));
+
+        // Sometimes, you may not want to register an item for the block.
+        // Eg: if it's a technical block like `minecraft:moving_piston` or `minecraft:end_gateway`
+        if (shouldRegisterItem) {
+            // Items need to be registered with a different type of registry key, but the ID
+            // can be the same.
+            ResourceKey<Item> itemKey = keyOfItem(name);
+
+            BlockItem blockItem = new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix());
+            Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem);
+        }
+
+        return Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
+    }
+
+
+        private static ResourceKey<Block> keyOfBlock(String name) {
+        return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, name));
+    }
+
+    private static ResourceKey<Item> keyOfItem(String name) {
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, name));
+    }
+
+
 }

@@ -1,7 +1,7 @@
 {
-	"required": true,
+	/*"required": true,
 	"package": "vibranium.mixin.client",
-	"compatibilityLevel": "JAVA_25",
+	"compatibilityLevel": "JAVA_21",
 	"client": [
 		"ExampleClientMixin"
 	],
@@ -10,5 +10,5 @@
 	},
 	"overwrites": {
 		"requireAnnotations": true
-	}
+	}*/
 }
