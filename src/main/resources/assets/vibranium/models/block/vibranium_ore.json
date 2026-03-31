@@ -1,6 +1,26 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
+  "ambientocclusion": true,
   "textures": {
-    "all": "vibranium:block/vibranium_ore"
+    "end": "vibranium:block/vibranium_ore_top",
+    "side": "vibranium:block/vibranium_ore"
+  },"display": {
+  "gui": {
+    "rotation": [ 30, 225, 0 ],
+    "translation": [ 0, 0, 0 ],
+    "scale": [ 0.625, 0.625, 0.625 ]
+  }
+},
+  "fabric": {
+    "textures": {
+      "end": {
+        "base": "vibranium:block/vibranium_ore_top",
+        "emissive": "vibranium:block/vibranium_ore_top_e"
+      },
+      "side": {
+        "base": "vibranium:block/vibranium_ore",
+        "emissive": "vibranium:block/vibranium_ore_e"
+      }
+    }
   }
 }

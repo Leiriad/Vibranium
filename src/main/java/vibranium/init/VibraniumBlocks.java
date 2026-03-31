@@ -32,8 +32,7 @@ public class VibraniumBlocks {
                 VibraniumOre::new,
                 BlockBehaviour.Properties.of()
                         .strength(5.0f, 15.0f)
-                        .requiresCorrectToolForDrops()
-                        .lightLevel(state -> 5),
+                        .requiresCorrectToolForDrops(),
                 true
         );
 

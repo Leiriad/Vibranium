@@ -9,8 +9,6 @@ public class VibraniumOre extends Block {
 
     public VibraniumOre(Properties properties) {
 
-        super(properties.strength(5.0f, 15.0f)
-                .requiresCorrectToolForDrops()
-                .lightLevel(state -> 5));
+        super(properties);
     }
 }
