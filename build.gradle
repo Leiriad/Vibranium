@@ -14,7 +14,7 @@ loom {
     splitEnvironmentSourceSets()
 
     mods {
-        "test" {
+        "vibranium" {
             sourceSet sourceSets.main
             sourceSet sourceSets.client
         }
