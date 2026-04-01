@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import vibranium.Vibranium;
+import vibranium.block.VibraniumGrassBlock;
 import vibranium.block.VibraniumSoil;
 import vibranium.block.VibraniumOre;
 
@@ -23,12 +24,14 @@ import java.util.function.Function;
 public class VibraniumBlocks {
     public static Block VIBRANIUM_ORE;
     public static Block VIBRANIUM_SOIL;
+    public static Block VIBRANIUM_GRASS_BLOCK;
 
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
                 (itemGroup) -> {
                     itemGroup.accept(VIBRANIUM_ORE.asItem());
                     itemGroup.accept(VIBRANIUM_SOIL.asItem());
+                    itemGroup.accept(VIBRANIUM_GRASS_BLOCK.asItem());
         });
     }
 
@@ -45,6 +48,14 @@ public class VibraniumBlocks {
         VIBRANIUM_SOIL = register(
                 "vibranium_soil",
                 VibraniumSoil::new,
+                BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
+                        .strength(0.5f,3f)
+                        .sound(SoundType.GRAVEL),
+                true
+        );
+        VIBRANIUM_GRASS_BLOCK = register(
+                "vibranium_grass_block",
+                VibraniumGrassBlock::new,
                 BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
                         .strength(0.5f,3f)
                         .sound(SoundType.GRAVEL),

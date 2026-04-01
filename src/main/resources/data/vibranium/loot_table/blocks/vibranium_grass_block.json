@@ -9,7 +9,7 @@
           "children": [
             {
               "type": "minecraft:item",
-              "name": "vibranium:vibranium_soil",
+              "name": "vibranium:vibranium_grass_block",
               "conditions": [
                 { "condition": "minecraft:match_tool", "predicate": { "enchantments": [ { "enchantment": "minecraft:silk_touch", "levels": { "min": 1 } } ] } }
               ]

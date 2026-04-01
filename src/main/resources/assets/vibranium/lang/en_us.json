@@ -2,5 +2,7 @@
   "item.vibranium.vibranium_ore": "Vibranium Ore",
   "block.vibranium.vibranium_ore": "Vibranium Ore",
   "item.vibranium.vibranium_soil": "Vibranium Soil",
-  "block.vibranium.vibranium_soil": "Vibranium Soil"
+  "block.vibranium.vibranium_soil": "Vibranium Soil",
+  "item.vibranium.vibranium_grass_block": "Vibranized Grass",
+  "block.vibranium.vibranium_grass_block": "Vibranized Grass"
 }
