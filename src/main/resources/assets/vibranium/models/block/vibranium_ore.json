@@ -3,5 +3,6 @@
   "textures": {
     "end": "vibranium:block/vibranium_ore_top",
     "side": "vibranium:block/vibranium_ore"
-  }
+  },
+  "render_type": "solid"
 }

@@ -31,10 +31,14 @@ public class Vibranium implements ModInitializer {
 		VibraniumBlocks.initialize();
 		VibraniumBlocks.registerModBlocks();
 		//Biome placement
-		//Key creation
+		//Keys creation
 		ResourceKey<PlacedFeature> vibraniumOrePlacedKey = ResourceKey.create(
 				Registries.PLACED_FEATURE,
 				Identifier.fromNamespaceAndPath("vibranium", "vibranium_ore")
+		);
+		ResourceKey<PlacedFeature> vibraniumSoilPlacedKey = ResourceKey.create(
+				Registries.PLACED_FEATURE,
+				Identifier.fromNamespaceAndPath("vibranium", "vibranium_soil")
 		);
 
 		//Use Fabric API to inject ore in world
@@ -42,6 +46,11 @@ public class Vibranium implements ModInitializer {
 					BiomeSelectors.foundInOverworld(),
 					GenerationStep.Decoration.UNDERGROUND_ORES,
 					vibraniumOrePlacedKey
+		);
+		BiomeModifications.addFeature(
+					BiomeSelectors.foundInOverworld(),
+					GenerationStep.Decoration.UNDERGROUND_ORES,
+					vibraniumSoilPlacedKey
 		);
 
 	}

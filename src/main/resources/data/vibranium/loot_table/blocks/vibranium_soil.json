@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "vibranium:blocks/vibranium_soil",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:vibranium_soil"
+        }
+      ]
+    }
+  ]
+}

@@ -12,5 +12,6 @@ public class VibraniumClient implements ClientModInitializer {
 		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
 		// Dans ta méthode onInitializeClient
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.VIBRANIUM_ORE, ChunkSectionLayer.SOLID);
+		BlockRenderLayerMap.putBlock(VibraniumBlocks.VIBRANIUM_SOIL, ChunkSectionLayer.SOLID);
 	}
 }

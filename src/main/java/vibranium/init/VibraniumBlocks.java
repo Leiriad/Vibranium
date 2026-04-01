@@ -10,18 +10,25 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import vibranium.Vibranium;
+import vibranium.block.VibraniumSoil;
 import vibranium.block.VibraniumOre;
 
 import java.util.function.Function;
 
 public class VibraniumBlocks {
     public static Block VIBRANIUM_ORE;
+    public static Block VIBRANIUM_SOIL;
 
     public static void initialize() {
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register((itemGroup) -> {
-            itemGroup.accept(VIBRANIUM_ORE.asItem());
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
+                (itemGroup) -> {
+                    itemGroup.accept(VIBRANIUM_ORE.asItem());
+                    itemGroup.accept(VIBRANIUM_SOIL.asItem());
         });
     }
 
@@ -31,8 +38,16 @@ public class VibraniumBlocks {
                 "vibranium_ore",
                 VibraniumOre::new,
                 BlockBehaviour.Properties.of()
-                        .strength(5.0f, 15.0f)
+                        .strength(3f, 10f)
                         .requiresCorrectToolForDrops(),
+                true
+        );
+        VIBRANIUM_SOIL = register(
+                "vibranium_soil",
+                VibraniumSoil::new,
+                BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
+                        .strength(0.5f,3f)
+                        .sound(SoundType.GRAVEL),
                 true
         );
 
