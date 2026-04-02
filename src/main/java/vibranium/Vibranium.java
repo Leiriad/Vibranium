@@ -36,30 +36,12 @@ public class Vibranium implements ModInitializer {
 				Registries.PLACED_FEATURE,
 				Identifier.fromNamespaceAndPath("vibranium", "vibranium_ore")
 		);
-		ResourceKey<PlacedFeature> vibraniumSoilPlacedKey = ResourceKey.create(
-				Registries.PLACED_FEATURE,
-				Identifier.fromNamespaceAndPath("vibranium", "vibranium_soil")
-		);
-		ResourceKey<PlacedFeature> vibraniumGrassBlockPlacedKey = ResourceKey.create(
-				Registries.PLACED_FEATURE,
-				Identifier.fromNamespaceAndPath("vibranium", "vibranium_grass_block")
-		);
 
 		//Use Fabric API to inject ore in world
 		BiomeModifications.addFeature(
 					BiomeSelectors.foundInOverworld(),
 					GenerationStep.Decoration.UNDERGROUND_ORES,
 					vibraniumOrePlacedKey
-		);
-		BiomeModifications.addFeature(
-					BiomeSelectors.foundInOverworld(),
-					GenerationStep.Decoration.UNDERGROUND_DECORATION,
-					vibraniumSoilPlacedKey
-		);
-		BiomeModifications.addFeature(
-				BiomeSelectors.foundInOverworld(),
-				GenerationStep.Decoration.UNDERGROUND_DECORATION,
-				vibraniumGrassBlockPlacedKey
 		);
 
 	}

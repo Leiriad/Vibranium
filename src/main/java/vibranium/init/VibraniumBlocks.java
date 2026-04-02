@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import vibranium.Vibranium;
 import vibranium.block.VibraniumGrassBlock;
 import vibranium.block.VibraniumSoil;
@@ -35,30 +35,34 @@ public class VibraniumBlocks {
         });
     }
 
-    public static void registerModBlocks() {
+    private static BlockBehaviour.Properties baseVibraniumDirtSettings() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
+                .strength(0.5f, 0.5f)
+                .sound(SoundType.GRASS)
+                .instrument(NoteBlockInstrument.BASEDRUM);
+    }
+
+   public static void registerModBlocks() {
         //Vibranium Ore
         VIBRANIUM_ORE = register(
                 "vibranium_ore",
                 VibraniumOre::new,
                 BlockBehaviour.Properties.of()
                         .strength(3f, 10f)
-                        .requiresCorrectToolForDrops(),
+                        .requiresCorrectToolForDrops()
+                        .instrument(NoteBlockInstrument.CHIME),
                 true
         );
         VIBRANIUM_SOIL = register(
                 "vibranium_soil",
                 VibraniumSoil::new,
-                BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
-                        .strength(0.5f,3f)
-                        .sound(SoundType.GRAVEL),
+                baseVibraniumDirtSettings().sound(SoundType.GRAVEL),
                 true
         );
         VIBRANIUM_GRASS_BLOCK = register(
                 "vibranium_grass_block",
                 VibraniumGrassBlock::new,
-                BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
-                        .strength(0.5f,3f)
-                        .sound(SoundType.GRAVEL),
+                baseVibraniumDirtSettings(),
                 true
         );
 
