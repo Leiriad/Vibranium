@@ -66,6 +66,7 @@ public class VibraniumBlocks {
                 true
         );
 
+
     }
 
     private static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.Properties settings, boolean shouldRegisterItem) {

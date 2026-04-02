@@ -2,7 +2,8 @@
   "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "vibranium:block/vibranium_ore_top",
-    "side": "vibranium:block/vibranium_ore"
+    "side": "vibranium:block/vibranium_ore",
+    "particle":"minecraft:block/blackstone"
   },
   "render_type": "solid"
 }

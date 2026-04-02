@@ -8,6 +8,7 @@ public class VibraniumDataGenerator implements DataGeneratorEntrypoint {
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
 		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
+
 		// Adds Loot tables
 		pack.addProvider(VibraniumLootTableProvider::new);
 		//Adds translations
