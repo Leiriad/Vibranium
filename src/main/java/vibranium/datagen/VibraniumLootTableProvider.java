@@ -1,4 +1,4 @@
-package vibranium.init;
+package vibranium.datagen;
 
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -8,6 +8,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import vibranium.init.VibraniumBlocks;
 
 import java.util.concurrent.CompletableFuture;
 

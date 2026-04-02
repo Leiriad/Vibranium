@@ -22,7 +22,7 @@
 			"vibranium.VibraniumClient"
 		],
 		"fabric-datagen": [
-			"vibranium.VibraniumDataGenerator"
+          "vibranium.datagen.VibraniumDataGenerator"
 		]
 	},
 	"mixins": [
