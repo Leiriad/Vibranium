@@ -12,6 +12,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vibranium.init.VibraniumBlocks;
+import vibranium.utils.VibraniumToolActions;
 
 public class Vibranium implements ModInitializer {
 	public static final String MOD_ID = "vibranium";
@@ -44,5 +45,7 @@ public class Vibranium implements ModInitializer {
 					vibraniumOrePlacedKey
 		);
 
+		//Actions on blocks
+		VibraniumToolActions.register();
 	}
 }

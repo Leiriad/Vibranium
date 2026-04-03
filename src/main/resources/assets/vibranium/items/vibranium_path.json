@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "vibranium:item/vibranium_soil"
+    "model": "vibranium:item/vibranium_path"
   }
 }

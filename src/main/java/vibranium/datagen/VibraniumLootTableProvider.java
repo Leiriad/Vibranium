@@ -23,15 +23,18 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
     public void generate() {
         // Make blocs drop themselves with silk touch only
         dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_ORE);
-        dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_SOIL);
+        dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_DIRT);
         dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK);
+        dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_PATH);
 
         //Make blocks drop loot otherwise
         //ORE drops vibranium_dust
         //All dirt variants drop dirt
-        add(VibraniumBlocks.VIBRANIUM_SOIL, LootTable.lootTable().withPool(applyExplosionCondition(Items.DIRT, LootPool.lootPool()
+        add(VibraniumBlocks.VIBRANIUM_DIRT, LootTable.lootTable().withPool(applyExplosionCondition(Items.DIRT, LootPool.lootPool()
                 .add(LootItem.lootTableItem(Items.DIRT)))));
         add(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK, LootTable.lootTable().withPool(applyExplosionCondition(Items.DIRT, LootPool.lootPool()
+                .add(LootItem.lootTableItem(Items.DIRT)))));
+        add(VibraniumBlocks.VIBRANIUM_PATH, LootTable.lootTable().withPool(applyExplosionCondition(Items.DIRT, LootPool.lootPool()
                 .add(LootItem.lootTableItem(Items.DIRT)))));
 
     }

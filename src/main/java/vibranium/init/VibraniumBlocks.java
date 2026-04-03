@@ -16,22 +16,27 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import vibranium.Vibranium;
 import vibranium.block.VibraniumGrassBlock;
-import vibranium.block.VibraniumSoil;
+import vibranium.block.VibraniumPathBlock;
+import vibranium.block.VibraniumDirt;
 import vibranium.block.VibraniumOre;
 
 import java.util.function.Function;
 
 public class VibraniumBlocks {
     public static Block VIBRANIUM_ORE;
-    public static Block VIBRANIUM_SOIL;
+    public static Block VIBRANIUM_DIRT;
     public static Block VIBRANIUM_GRASS_BLOCK;
+    public static Block VIBRANIUM_PATH;
 
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
                 (itemGroup) -> {
                     itemGroup.accept(VIBRANIUM_ORE.asItem());
-                    itemGroup.accept(VIBRANIUM_SOIL.asItem());
+                    itemGroup.accept(VIBRANIUM_DIRT.asItem());
                     itemGroup.accept(VIBRANIUM_GRASS_BLOCK.asItem());
+                    itemGroup.accept(VIBRANIUM_PATH.asItem());
+
+
         });
     }
 
@@ -53,9 +58,9 @@ public class VibraniumBlocks {
                         .instrument(NoteBlockInstrument.CHIME),
                 true
         );
-        VIBRANIUM_SOIL = register(
-                "vibranium_soil",
-                VibraniumSoil::new,
+        VIBRANIUM_DIRT = register(
+                "vibranium_dirt",
+                VibraniumDirt::new,
                 baseVibraniumDirtSettings().sound(SoundType.GRAVEL),
                 true
         );
@@ -65,7 +70,12 @@ public class VibraniumBlocks {
                 baseVibraniumDirtSettings(),
                 true
         );
-
+        VIBRANIUM_PATH = register(
+               "vibranium_path",
+               VibraniumPathBlock::new,
+               baseVibraniumDirtSettings(),
+               true
+        );
 
     }
 

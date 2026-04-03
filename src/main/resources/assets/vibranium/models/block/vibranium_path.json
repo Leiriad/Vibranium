@@ -1,9 +1,9 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "minecraft:block/dirt_path",
   "textures": {
-    "top": "vibranium:block/snow",
+    "top": "vibranium:block/vibranium_path_top",
     "bottom": "vibranium:block/vibranium_dirt",
-    "side": "vibranium:block/vibranium_grass_block_side_snowy",
+    "side": "vibranium:block/vibranium_path_side",
     "particle": "vibranium:block/vibranium_dirt"
   },
   "render_type": "solid"
