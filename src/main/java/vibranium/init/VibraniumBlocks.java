@@ -39,7 +39,7 @@ public class VibraniumBlocks {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
                 .strength(0.5f, 0.5f)
                 .sound(SoundType.GRASS)
-                .instrument(NoteBlockInstrument.BASEDRUM);
+                .instrument(NoteBlockInstrument.BASEDRUM).randomTicks();
     }
 
    public static void registerModBlocks() {
