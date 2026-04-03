@@ -29,18 +29,21 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_DIRT, "Terre vibranisée");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK, "Herbe vibranisée");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_PATH, "Chemin de terre vibranisée");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_FARMLAND, "Terre vibranisée labourée");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_DIRT, "Tierra vibranizada");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK, "Hierba vibranizada");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_PATH, "Camino de tierra vibranizada");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_FARMLAND, "Tierra vibranizada de cultivo");
                 break;
             default:
-                translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium ore");
-                translationBuilder.add(VibraniumBlocks.VIBRANIUM_DIRT, "Vibranized dirt");
-                translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK, "Vibranized grass ");
-                translationBuilder.add(VibraniumBlocks.VIBRANIUM_PATH, "Vibranized dirt path");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_DIRT, "Vibranized Dirt");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK, "Vibranized Grass ");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_PATH, "Vibranized Dirt Path");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_FARMLAND, "Vibranised Farmland");
         }
 
     }

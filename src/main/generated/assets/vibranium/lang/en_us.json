@@ -1,6 +1,7 @@
 {
-  "block.vibranium.vibranium_dirt": "Vibranized dirt",
-  "block.vibranium.vibranium_grass_block": "Vibranized grass ",
-  "block.vibranium.vibranium_ore": "Vibranium ore",
-  "block.vibranium.vibranium_path": "Vibranized dirt path"
+  "block.vibranium.vibranium_dirt": "Vibranized Dirt",
+  "block.vibranium.vibranium_farmland": "Vibranised Farmland",
+  "block.vibranium.vibranium_grass_block": "Vibranized Grass ",
+  "block.vibranium.vibranium_ore": "Vibranium Ore",
+  "block.vibranium.vibranium_path": "Vibranized Dirt Path"
 }

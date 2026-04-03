@@ -5,18 +5,22 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import vibranium.init.VibraniumBlocks;
+
+import static net.minecraft.world.level.block.Block.pushEntitiesUp;
 
 public class VibraniumBlockActions {
     static int vibraniumPurple = 0xD500F9;
     private static final DustParticleOptions vibraniumDust = new DustParticleOptions(vibraniumPurple, 1.0f);
 
 
-    public static void turnsIntoGrass(ServerLevel world, BlockPos pos, RandomSource random) {
+    public static void turnsToVibraniumGrass(ServerLevel world, BlockPos pos, RandomSource random) {
         // check if neighbor block is grass
         for (BlockPos targetPos : BlockPos.betweenClosed(
                 pos.offset(-1, -1, -1),
@@ -43,6 +47,11 @@ public class VibraniumBlockActions {
             }
 
         }
+    }
+    public static void turnToVibraniumDirt(Entity entity, BlockState state, Level world, BlockPos pos) {
+        BlockState blockState2 = pushEntitiesUp(state, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState(), world, pos);
+        world.setBlockAndUpdate(pos, blockState2);
+        world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, blockState2));
     }
     public static void fertilizes(ServerLevel world, RandomSource random, BlockPos pos) {
 
@@ -71,7 +80,6 @@ public class VibraniumBlockActions {
             }
         }
     }
-
     private static void growPlant(ServerLevel world, RandomSource random, BonemealableBlock growable, BlockPos above, BlockState plant) {
         growable.performBonemeal(world, random, above, plant);
         sendVibraniumParticles(world, above);
@@ -83,8 +91,7 @@ public class VibraniumBlockActions {
         //Vibranium purple particles
         world.sendParticles(vibraniumDust, above.getX() + 0.5, above.getY() + 0.5, above.getZ() + 0.5, 10, 0.3, 0.3, 0.3, 0.1);
     }
-
-    //Shows vibranium particules around inert object
+    //Shows vibranium particles around inert object
     public static void showVibraniumParticles(Level world, RandomSource random, BlockPos pos){
         //1 chance over 4 to emit vibranium particles in a tick
         if (random.nextInt(4) == 0) {
@@ -96,7 +103,6 @@ public class VibraniumBlockActions {
             world.addParticle(vibraniumDust, x, y, z, 0.0D, 0.0D, 0.0D);
         }
     }
-
     //Shows reverse portal particles around inert object
     public static void showReversePortalParticles(Level world, RandomSource random, BlockPos pos){
         if (random.nextInt(10) == 0) {
@@ -107,4 +113,6 @@ public class VibraniumBlockActions {
                     0, 0, 0);
         }
     }
+
+
 }

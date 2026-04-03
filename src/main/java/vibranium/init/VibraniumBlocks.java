@@ -15,10 +15,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import vibranium.Vibranium;
-import vibranium.block.VibraniumGrassBlock;
-import vibranium.block.VibraniumPathBlock;
-import vibranium.block.VibraniumDirt;
-import vibranium.block.VibraniumOre;
+import vibranium.block.*;
 
 import java.util.function.Function;
 
@@ -27,6 +24,7 @@ public class VibraniumBlocks {
     public static Block VIBRANIUM_DIRT;
     public static Block VIBRANIUM_GRASS_BLOCK;
     public static Block VIBRANIUM_PATH;
+    public static Block VIBRANIUM_FARMLAND;
 
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
@@ -34,9 +32,6 @@ public class VibraniumBlocks {
                     itemGroup.accept(VIBRANIUM_ORE.asItem());
                     itemGroup.accept(VIBRANIUM_DIRT.asItem());
                     itemGroup.accept(VIBRANIUM_GRASS_BLOCK.asItem());
-                    itemGroup.accept(VIBRANIUM_PATH.asItem());
-
-
         });
     }
 
@@ -73,6 +68,12 @@ public class VibraniumBlocks {
         VIBRANIUM_PATH = register(
                "vibranium_path",
                VibraniumPathBlock::new,
+               baseVibraniumDirtSettings(),
+               true
+        );
+        VIBRANIUM_FARMLAND = register(
+               "vibranium_farmland",
+               VibraniumFarmland::new,
                baseVibraniumDirtSettings(),
                true
         );
