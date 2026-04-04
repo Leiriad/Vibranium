@@ -10,11 +10,16 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
 public class BlackGravel extends FallingBlock {
+    public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL);
+    }
     public BlackGravel(Properties properties) {
         super(properties);
     }

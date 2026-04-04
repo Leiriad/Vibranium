@@ -9,7 +9,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import vibranium.init.VibraniumBlocks;
 
 import java.util.List;
@@ -36,6 +38,13 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 createSilkTouchDispatchTable(block,
                         this.applyExplosionDecay(block, LootItem.lootTableItem(VibraniumBlocks.VIBRANIUM_ORE)))
         );
+        // Blackclay mimics vanilla clay
+        this.add(VibraniumBlocks.BLACKCLAY, (block) ->
+                createSilkTouchDispatchTable(block,
+                        this.applyExplosionDecay(block,
+                                LootItem.lootTableItem(Items.CLAY_BALL)
+                                        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(4)))))
+        );
 
         // Dirt blocks give normal dirt withour silk touch
         List.of(
@@ -47,7 +56,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 this.add(block, (b) -> createSilkTouchDispatchTable(b, LootItem.lootTableItem(Items.DIRT)))
         );
 
-        // 3. Blackgravel mimics vanilla
+        // Blackgravel mimics vanilla gravel
         this.add(VibraniumBlocks.BLACKGRAVEL, (block) ->
                 createSilkTouchDispatchTable(block,
                         this.applyExplosionCondition(block,
@@ -58,5 +67,6 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                         )
                 )
         );
+
     }
 }

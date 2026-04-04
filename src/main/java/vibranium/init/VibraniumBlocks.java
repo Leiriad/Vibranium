@@ -26,6 +26,7 @@ public class VibraniumBlocks {
     public static Block VIBRANIUM_GRASS_BLOCK;
     public static Block VIBRANIUM_PATH;
     public static Block VIBRANIUM_FARMLAND;
+    public static Block BLACKCLAY;
 
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
@@ -34,56 +35,53 @@ public class VibraniumBlocks {
                     itemGroup.accept(VIBRANIUM_DIRT.asItem());
                     itemGroup.accept(VIBRANIUM_GRASS_BLOCK.asItem());
                     itemGroup.accept(BLACKGRAVEL.asItem());
+                    itemGroup.accept(BLACKCLAY.asItem());
         });
     }
 
-    private static BlockBehaviour.Properties baseVibraniumDirtSettings() {
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT)
-                .strength(0.5f, 0.5f)
-                .sound(SoundType.GRASS)
-                .instrument(NoteBlockInstrument.BASEDRUM).randomTicks();
-    }
-
-   public static void registerModBlocks() {
+    public static void registerModBlocks() {
         //Vibranium Ore
         VIBRANIUM_ORE = register(
                 "vibranium_ore",
                 VibraniumOre::new,
-                BlockBehaviour.Properties.of()
-                        .strength(50f, 1200f)
-                        .requiresCorrectToolForDrops()
-                        .instrument(NoteBlockInstrument.CHIME),
+                VibraniumOre.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         VIBRANIUM_DIRT = register(
                 "vibranium_dirt",
                 VibraniumDirt::new,
-                baseVibraniumDirtSettings().sound(SoundType.GRAVEL),
+                VibraniumDirt.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         VIBRANIUM_GRASS_BLOCK = register(
                 "vibranium_grass_block",
                 VibraniumGrassBlock::new,
-                baseVibraniumDirtSettings(),
+                VibraniumGrassBlock.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         VIBRANIUM_PATH = register(
                "vibranium_path",
                VibraniumPathBlock::new,
-               baseVibraniumDirtSettings(),
+                VibraniumPathBlock.getProperties(BlockBehaviour.Properties.of()),
                true
         );
         VIBRANIUM_FARMLAND = register(
                "vibranium_farmland",
                VibraniumFarmland::new,
-               baseVibraniumDirtSettings(),
+                VibraniumFarmland.getProperties(BlockBehaviour.Properties.of()),
                true
         );
         BLACKGRAVEL = register(
                "blackgravel",
                BlackGravel::new,
-                BlockBehaviour.Properties.of(),
+                BlackGravel.getProperties(BlockBehaviour.Properties.of()),
                true
+        );
+        BLACKCLAY = register(
+                "blackclay",
+                BlackClay::new,
+                BlackClay.getProperties(BlockBehaviour.Properties.of()),
+                true
         );
 
     }

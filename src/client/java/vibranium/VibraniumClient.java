@@ -17,5 +17,6 @@ public class VibraniumClient implements ClientModInitializer {
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.VIBRANIUM_PATH, ChunkSectionLayer.SOLID);
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.VIBRANIUM_FARMLAND, ChunkSectionLayer.SOLID);
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.BLACKGRAVEL, ChunkSectionLayer.SOLID);
+		BlockRenderLayerMap.putBlock(VibraniumBlocks.BLACKCLAY, ChunkSectionLayer.SOLID);
 	}
 }

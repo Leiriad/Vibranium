@@ -31,6 +31,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_PATH, "Chemin de terre vibranisée");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_FARMLAND, "Terre vibranisée labourée");
                 translationBuilder.add(VibraniumBlocks.BLACKGRAVEL, "Gravier noir");
+                translationBuilder.add(VibraniumBlocks.BLACKCLAY, "Argile noire");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -39,6 +40,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_PATH, "Camino de tierra vibranizada");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_FARMLAND, "Tierra vibranizada de cultivo");
                 translationBuilder.add(VibraniumBlocks.BLACKGRAVEL, "Grava negra");
+                translationBuilder.add(VibraniumBlocks.BLACKCLAY, "Arcilla negra");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -47,6 +49,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_PATH, "Vibranized Dirt Path");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_FARMLAND, "Vibranised Farmland");
                 translationBuilder.add(VibraniumBlocks.BLACKGRAVEL, "Black Gravel");
+                translationBuilder.add(VibraniumBlocks.BLACKCLAY, "Black Clay");
         }
 
     }

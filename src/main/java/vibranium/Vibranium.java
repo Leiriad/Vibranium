@@ -29,8 +29,8 @@ public class Vibranium implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Vibranium est chargé!");
-		VibraniumBlocks.initialize();
 		VibraniumBlocks.registerModBlocks();
+		VibraniumBlocks.initialize();
 		//Biome placement
 		//Keys creation
 		ResourceKey<PlacedFeature> vibraniumOrePlacedKey = ResourceKey.create(

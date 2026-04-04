@@ -8,13 +8,18 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.DirtPathBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import vibranium.init.VibraniumBlocks;
 
+import static vibranium.block.VibraniumCommonDirtProperties.baseVibraniumDirtSettings;
+
 public class VibraniumPathBlock extends DirtPathBlock {
-
+    public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
+        return baseVibraniumDirtSettings().sound(SoundType.GRAVEL);
+    }
     public VibraniumPathBlock(Properties properties) {
-
         super(properties);
     }
     @Override

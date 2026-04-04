@@ -5,14 +5,18 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import vibranium.init.VibraniumBlocks;
 import vibranium.utils.VibraniumBlockActions;
 
+import static vibranium.block.VibraniumCommonDirtProperties.baseVibraniumDirtSettings;
+
 public class VibraniumGrassBlock extends GrassBlock {
-
+    public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
+        return baseVibraniumDirtSettings();
+    }
     public VibraniumGrassBlock(Properties properties) {
-
         super(properties);
     }
     @Override
