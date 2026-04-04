@@ -4,41 +4,59 @@ package vibranium.datagen;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import vibranium.init.VibraniumBlocks;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+
 
 public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
 
-    public VibraniumLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+    CompletableFuture<HolderLookup.Provider> lookUp;
 
+    public VibraniumLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(dataOutput, registryLookup);
+        lookUp = registryLookup;
     }
 
     @Override
     public void generate() {
-        // Make blocs drop themselves with silk touch only
-        dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_ORE);
-        dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_DIRT);
-        dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK);
-        dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_PATH);
-        dropWhenSilkTouch(VibraniumBlocks.VIBRANIUM_FARMLAND);
+        //Get enchantments
+        HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
-        //Make blocks drop loot otherwise
-        //ORE drops vibranium_dust
-        //All dirt variants drop dirt
-        add(VibraniumBlocks.VIBRANIUM_DIRT, LootTable.lootTable().withPool(applyExplosionCondition(Items.DIRT, LootPool.lootPool()
-                .add(LootItem.lootTableItem(Items.DIRT)))));
-        add(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK, LootTable.lootTable().withPool(applyExplosionCondition(Items.DIRT, LootPool.lootPool()
-                .add(LootItem.lootTableItem(Items.DIRT)))));
-        add(VibraniumBlocks.VIBRANIUM_PATH, LootTable.lootTable().withPool(applyExplosionCondition(Items.DIRT, LootPool.lootPool()
-                .add(LootItem.lootTableItem(Items.DIRT)))));
-        add(VibraniumBlocks.VIBRANIUM_FARMLAND, LootTable.lootTable().withPool(applyExplosionCondition(Items.DIRT, LootPool.lootPool()
-                .add(LootItem.lootTableItem(Items.DIRT)))));
+        //Ore drops itself with silk touch, drops vibranium dust otherwise
+        this.add(VibraniumBlocks.VIBRANIUM_ORE, (block) ->
+                createSilkTouchDispatchTable(block,
+                        this.applyExplosionDecay(block, LootItem.lootTableItem(VibraniumBlocks.VIBRANIUM_ORE)))
+        );
 
+        // Dirt blocks give normal dirt withour silk touch
+        List.of(
+                VibraniumBlocks.VIBRANIUM_DIRT,
+                VibraniumBlocks.VIBRANIUM_GRASS_BLOCK,
+                VibraniumBlocks.VIBRANIUM_PATH,
+                VibraniumBlocks.VIBRANIUM_FARMLAND
+        ).forEach(block ->
+                this.add(block, (b) -> createSilkTouchDispatchTable(b, LootItem.lootTableItem(Items.DIRT)))
+        );
+
+        // 3. Blackgravel mimics vanilla
+        this.add(VibraniumBlocks.BLACKGRAVEL, (block) ->
+                createSilkTouchDispatchTable(block,
+                        this.applyExplosionCondition(block,
+                                LootItem.lootTableItem(Items.FLINT)
+                                        .when(BonusLevelTableCondition.bonusLevelFlatChance(
+                                                enchantmentLookup.getOrThrow(Enchantments.FORTUNE),0.1F, 0.14285715F, 0.25F, 1.0F))
+                                        .otherwise(LootItem.lootTableItem(block))
+                        )
+                )
+        );
     }
 }

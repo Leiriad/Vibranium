@@ -20,6 +20,7 @@ import vibranium.block.*;
 import java.util.function.Function;
 
 public class VibraniumBlocks {
+    public static Block BLACKGRAVEL;
     public static Block VIBRANIUM_ORE;
     public static Block VIBRANIUM_DIRT;
     public static Block VIBRANIUM_GRASS_BLOCK;
@@ -32,6 +33,7 @@ public class VibraniumBlocks {
                     itemGroup.accept(VIBRANIUM_ORE.asItem());
                     itemGroup.accept(VIBRANIUM_DIRT.asItem());
                     itemGroup.accept(VIBRANIUM_GRASS_BLOCK.asItem());
+                    itemGroup.accept(BLACKGRAVEL.asItem());
         });
     }
 
@@ -48,7 +50,7 @@ public class VibraniumBlocks {
                 "vibranium_ore",
                 VibraniumOre::new,
                 BlockBehaviour.Properties.of()
-                        .strength(3f, 10f)
+                        .strength(50f, 1200f)
                         .requiresCorrectToolForDrops()
                         .instrument(NoteBlockInstrument.CHIME),
                 true
@@ -75,6 +77,12 @@ public class VibraniumBlocks {
                "vibranium_farmland",
                VibraniumFarmland::new,
                baseVibraniumDirtSettings(),
+               true
+        );
+        BLACKGRAVEL = register(
+               "blackgravel",
+               BlackGravel::new,
+                BlockBehaviour.Properties.of(),
                true
         );
 

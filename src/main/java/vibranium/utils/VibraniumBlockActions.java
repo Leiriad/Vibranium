@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,9 +50,18 @@ public class VibraniumBlockActions {
         }
     }
     public static void turnToVibraniumDirt(Entity entity, BlockState state, Level world, BlockPos pos) {
-        BlockState blockState2 = pushEntitiesUp(state, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState(), world, pos);
-        world.setBlockAndUpdate(pos, blockState2);
-        world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, blockState2));
+        // Definition of the target state (your custom vibranium dirt block)
+        BlockState newState = VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState();
+
+        // Using the static Block method to handle entity collisions and prevent clipping
+        // pushEntitiesUp shifts entities upward if the new block shape would trap them
+        BlockState finalizedState = Block.pushEntitiesUp(state, newState, world, pos);
+
+        // Updating the block in the world and notify neighboring blocks
+        world.setBlockAndUpdate(pos, finalizedState);
+
+        // Triggering a game event for features like Sculk Sensors or Wardens
+        world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, finalizedState));
     }
     public static void fertilizes(ServerLevel world, RandomSource random, BlockPos pos) {
 
@@ -61,7 +71,7 @@ public class VibraniumBlockActions {
             // If plant on block
             if (plant.getBlock() instanceof BonemealableBlock growable) {
 
-            // Random bonus chance behaviour either light and constant (10%)
+            // Random bonus chance behavior either light and constant (10%)
             if (random.nextFloat() < 0.10f) {
                 if (growable.isValidBonemealTarget(world, above, plant)) {
                     growPlant(world, random, growable, above, plant);

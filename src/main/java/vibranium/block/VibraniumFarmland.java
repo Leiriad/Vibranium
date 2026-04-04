@@ -48,7 +48,6 @@ public class VibraniumFarmland extends FarmBlock {
                 && entity.getBbWidth() * entity.getBbWidth() * entity.getBbHeight() > 0.512F) {
             VibraniumBlockActions.turnToVibraniumDirt(entity, state, world, pos);
         }
-        super.fallOn(world, state, pos, entity, d);
     }
 }
 
