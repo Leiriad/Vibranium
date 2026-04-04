@@ -8,9 +8,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import vibranium.init.VibraniumBlocks;
 
@@ -68,5 +72,14 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 )
         );
 
+        //Short grass loot
+        this.add(VibraniumBlocks.PURPLE_SHORT_GRASS,(block)->
+                this.createShearsDispatchTable(block,
+                        this.applyExplosionDecay(block,
+                                LootItem.lootTableItem(Items.WHEAT_SEEDS)
+                                        .when(LootItemRandomChanceCondition.randomChance(0.125f))
+                        )
+                )
+        );
     }
 }

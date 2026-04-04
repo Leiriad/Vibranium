@@ -27,6 +27,7 @@ public class VibraniumBlocks {
     public static Block VIBRANIUM_PATH;
     public static Block VIBRANIUM_FARMLAND;
     public static Block BLACKCLAY;
+    public static Block PURPLE_SHORT_GRASS;
 
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
@@ -36,6 +37,7 @@ public class VibraniumBlocks {
                     itemGroup.accept(VIBRANIUM_GRASS_BLOCK.asItem());
                     itemGroup.accept(BLACKGRAVEL.asItem());
                     itemGroup.accept(BLACKCLAY.asItem());
+                    itemGroup.accept(PURPLE_SHORT_GRASS.asItem());
         });
     }
 
@@ -83,6 +85,11 @@ public class VibraniumBlocks {
                 BlackClay.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
+        PURPLE_SHORT_GRASS = register(
+                "purple_short_grass",
+                PurpleShortGrass::new,
+                PurpleShortGrass.getProperties(BlockBehaviour.Properties.of()),
+                true);
 
     }
 
