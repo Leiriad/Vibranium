@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "vibranium:purple_short_grass",
+    "vibranium:purple_tall_grass",
+    "vibranium:purple_azalea",
+    "minecraft:allium",
+    "minecraft:pink_tulip",
+    "minecraft:lilac",
+    "minecraft:peony",
+    "minecraft:cornflower",
+    "minecraft:torchflower",
+    "minecraft:pink_petals"
+  ]
+}

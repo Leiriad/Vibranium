@@ -8,10 +8,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -37,11 +35,27 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         //Get enchantments
         HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
+        //Blocks
+        createVibraniumOreLoot();
+        createBlackClayLoot();
+        createVibraniumDirtBlocksLoot();
+        createBlackGravelLoot(enchantmentLookup);//BlackGRavel behaves differently with Fortune
+
+        //Plants
+        createPurpleShortGrassLoot();
+        createPurpleTallGrassLoot();
+        createPurpleAzaleaLoot();
+    }
+
+    private void createVibraniumOreLoot() {
         //Ore drops itself with silk touch, drops vibranium dust otherwise
         this.add(VibraniumBlocks.VIBRANIUM_ORE, (block) ->
                 createSilkTouchDispatchTable(block,
                         this.applyExplosionDecay(block, LootItem.lootTableItem(VibraniumBlocks.VIBRANIUM_ORE)))
         );
+    }
+
+    private void createBlackClayLoot() {
         // Blackclay mimics vanilla clay
         this.add(VibraniumBlocks.BLACKCLAY, (block) ->
                 createSilkTouchDispatchTable(block,
@@ -49,8 +63,10 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                                 LootItem.lootTableItem(Items.CLAY_BALL)
                                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(4)))))
         );
+    }
 
-        // Dirt blocks give normal dirt withour silk touch
+    private void createVibraniumDirtBlocksLoot() {
+        // Dirt blocks give normal dirt without silk touch
         List.of(
                 VibraniumBlocks.VIBRANIUM_DIRT,
                 VibraniumBlocks.VIBRANIUM_GRASS_BLOCK,
@@ -59,7 +75,9 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         ).forEach(block ->
                 this.add(block, (b) -> createSilkTouchDispatchTable(b, LootItem.lootTableItem(Items.DIRT)))
         );
+    }
 
+    private void createBlackGravelLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
         // Blackgravel mimics vanilla gravel
         this.add(VibraniumBlocks.BLACKGRAVEL, (block) ->
                 createSilkTouchDispatchTable(block,
@@ -71,8 +89,9 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                         )
                 )
         );
+    }
 
-        //Short grass loot
+    private void createPurpleShortGrassLoot() {
         this.add(VibraniumBlocks.PURPLE_SHORT_GRASS,(block)->
                 this.createShearsDispatchTable(block,
                         this.applyExplosionDecay(block,
@@ -81,5 +100,21 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                         )
                 )
         );
+    }
+
+    private void createPurpleTallGrassLoot() {
+        this.add(VibraniumBlocks.PURPLE_TALL_GRASS,(block)->
+                this.createShearsDispatchTable(block,
+                        this.applyExplosionDecay(block,
+                                LootItem.lootTableItem(Items.WHEAT_SEEDS)
+                                        .when(LootItemRandomChanceCondition.randomChance(0.125f))
+                        )
+                )
+        );
+    }
+
+    private void createPurpleAzaleaLoot(){
+        this.add(VibraniumBlocks.PURPLE_AZALEA, (b) ->
+                createSilkTouchDispatchTable(b, LootItem.lootTableItem(Blocks.AZALEA)));
     }
 }

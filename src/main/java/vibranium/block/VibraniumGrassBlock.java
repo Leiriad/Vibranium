@@ -1,21 +1,28 @@
 package vibranium.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
 import vibranium.init.VibraniumBlocks;
 import vibranium.utils.VibraniumBlockActions;
 
 import static vibranium.block.VibraniumCommonDirtProperties.baseVibraniumDirtSettings;
 
-public class VibraniumGrassBlock extends GrassBlock {
+public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock{
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return baseVibraniumDirtSettings();
+        return baseVibraniumDirtSettings().mapColor(MapColor.COLOR_PURPLE);
     }
+    public static final TagKey<Block> VIBRANIUM_VEGETATION = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("vibranium","vibranium_vegetation"));
     public VibraniumGrassBlock(Properties properties) {
         super(properties);
     }
@@ -25,6 +32,9 @@ public class VibraniumGrassBlock extends GrassBlock {
         
         //Vibranium_Grass_block spreads
         spreadsToTarget(world, random, pos);
+
+        //Vibranium_Grass_Block spawns plants
+        growsCompatiblePlants(world, random, pos);
 
         //Vibranium_Grass_Block make plants grow faster with a risk of destruction
         VibraniumBlockActions.fertilizes(world, random, pos);
@@ -58,6 +68,65 @@ public class VibraniumGrassBlock extends GrassBlock {
             }
         }
 
+    }
+
+    //Bonemealable methods
+
+    @Override
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos pos, BlockState state) {
+        return super.isValidBonemealTarget(levelReader, pos, state);
+    }
+
+    @Override
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+        return true;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        growsCompatiblePlants(level, random, pos);
+    }
+
+    private void growsCompatiblePlants(ServerLevel level, RandomSource random, BlockPos pos) {
+
+        BlockPos targetBasePos = pos.above();
+        var blockRegistry = level.registryAccess().lookupOrThrow(Registries.BLOCK);
+        int growthspeed = random.nextInt(5);
+
+        // Get all vibranium plants
+        var tagIterable = blockRegistry.get(VIBRANIUM_VEGETATION);
+
+        if (tagIterable.isPresent()) {
+            for (int i = 0; i < 8; ++i) {
+                BlockPos targetPos = targetBasePos.offset(
+                        random.nextInt(3) - 1,
+                        random.nextInt(2) - random.nextInt(2),
+                        random.nextInt(3) - 1
+                );
+
+                if (level.isEmptyBlock(targetPos) && level.getBlockState(targetPos.below()).is(this)) {
+
+                    //pick one of the plants in the list
+                    var nodes = tagIterable.get();
+                    if (nodes.size() > 0) {
+                        Block randomPlant = nodes.get(random.nextInt(nodes.size())).value();
+
+                        //if randomPlant it has less chances to spawn
+                        boolean isFlower = randomPlant.defaultBlockState().is(BlockTags.FLOWERS);
+                        if (isFlower && growthspeed!=0){continue;}
+
+                        // Place the plant depending on its size
+                        if (randomPlant instanceof DoublePlantBlock) {
+                            if (level.isEmptyBlock(targetPos.above())) {
+                                DoublePlantBlock.placeAt(level, randomPlant.defaultBlockState(), targetPos, 3);
+                            }
+                        } else {
+                            level.setBlock(targetPos, randomPlant.defaultBlockState(), 3);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

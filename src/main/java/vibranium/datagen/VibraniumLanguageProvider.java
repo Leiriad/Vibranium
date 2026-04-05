@@ -32,7 +32,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_FARMLAND, "Terre vibranisée labourée");
                 translationBuilder.add(VibraniumBlocks.BLACKGRAVEL, "Gravier noir");
                 translationBuilder.add(VibraniumBlocks.BLACKCLAY, "Argile noire");
-                translationBuilder.add(VibraniumBlocks.PURPLE_SHORT_GRASS, "Herbe violette");
+                translationBuilder.add(VibraniumBlocks.PURPLE_SHORT_GRASS, "Herbe courte violette");
+                translationBuilder.add(VibraniumBlocks.PURPLE_TALL_GRASS, "Herbe haute violette");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA, "Azalée violet");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -42,7 +44,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_FARMLAND, "Tierra vibranizada de cultivo");
                 translationBuilder.add(VibraniumBlocks.BLACKGRAVEL, "Grava negra");
                 translationBuilder.add(VibraniumBlocks.BLACKCLAY, "Arcilla negra");
-                translationBuilder.add(VibraniumBlocks.PURPLE_SHORT_GRASS, "Hierba morada");
+                translationBuilder.add(VibraniumBlocks.PURPLE_SHORT_GRASS, "Hierba corta morada");
+                translationBuilder.add(VibraniumBlocks.PURPLE_TALL_GRASS, "Hierba alta morada");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA, "Azalea morada");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -53,6 +57,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BLACKGRAVEL, "Black Gravel");
                 translationBuilder.add(VibraniumBlocks.BLACKCLAY, "Black Clay");
                 translationBuilder.add(VibraniumBlocks.PURPLE_SHORT_GRASS, "Purple Short Grass");
+                translationBuilder.add(VibraniumBlocks.PURPLE_TALL_GRASS, "Purple tall Grass");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA, "Purple Azalea");
         }
 
     }

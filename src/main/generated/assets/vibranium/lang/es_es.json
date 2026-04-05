@@ -1,7 +1,9 @@
 {
   "block.vibranium.blackclay": "Arcilla negra",
   "block.vibranium.blackgravel": "Grava negra",
-  "block.vibranium.purple_short_grass": "Hierba morada",
+  "block.vibranium.purple_azalea": "Azalea morada",
+  "block.vibranium.purple_short_grass": "Hierba corta morada",
+  "block.vibranium.purple_tall_grass": "Hierba alta morada",
   "block.vibranium.vibranium_dirt": "Tierra vibranizada",
   "block.vibranium.vibranium_farmland": "Tierra vibranizada de cultivo",
   "block.vibranium.vibranium_grass_block": "Hierba vibranizada",

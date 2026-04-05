@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "vibranium:block/purple_tall_grass_bottom"
+  },
+  "render_type": "minecraft:cutout"
+}
