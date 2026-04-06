@@ -16,7 +16,9 @@ public class VibraniumOre extends Block {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)
                 .strength(50f, 1200f)
                 .requiresCorrectToolForDrops()
-                .instrument(NoteBlockInstrument.CHIME);
+                .instrument(NoteBlockInstrument.CHIME)
+                .emissiveRendering((state, world, pos) -> true)
+                .hasPostProcess((state, world, pos) -> true);
     }
 
     public VibraniumOre(Properties properties) {
@@ -24,8 +26,8 @@ public class VibraniumOre extends Block {
     }
 
     @Override
-    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, RandomSource randomSource) {
-        VibraniumBlockActions.showVibraniumParticles(level,randomSource,blockPos);
-        VibraniumBlockActions.showReversePortalParticles(level, randomSource, blockPos);
+    public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource source) {
+        VibraniumBlockActions.showVibraniumParticles(world,source,pos);
+        VibraniumBlockActions.showReversePortalParticles(world, source, pos);
     }
 }
