@@ -9,11 +9,13 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import vibranium.init.VibraniumBlocks;
 
 import java.util.List;
@@ -45,6 +47,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createPurpleShortGrassLoot();
         createPurpleTallGrassLoot();
         createPurpleAzaleaLoot();
+        createPurpleAzaleaLeavesLoot(enchantmentLookup);
     }
 
     private void createVibraniumOreLoot() {
@@ -114,7 +117,23 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
     }
 
     private void createPurpleAzaleaLoot(){
-        this.add(VibraniumBlocks.PURPLE_AZALEA, (b) ->
-                createSilkTouchDispatchTable(b, LootItem.lootTableItem(Blocks.AZALEA)));
+        this.add(VibraniumBlocks.PURPLE_AZALEA, (block) ->
+                createSilkTouchDispatchTable(block, LootItem.lootTableItem(Blocks.AZALEA)));
+    }
+
+    private void createPurpleAzaleaLeavesLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
+        List.of(
+                VibraniumBlocks.PURPLE_AZALEA_LEAVES_VIOLET,
+                VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE,
+                VibraniumBlocks.PURPLE_AZALEA_LEAVES_CYAN
+        ).forEach(leafBlock ->
+                this.add(leafBlock, (block) ->
+                        this.createLeavesDrops(
+                                block,
+                                VibraniumBlocks.PURPLE_AZALEA,
+                                0.05F, 0.0625F, 0.083333336F, 0.1F
+                        )
+                )
+        );
     }
 }

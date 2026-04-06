@@ -10,12 +10,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import vibranium.Vibranium;
 import vibranium.block.*;
+
 
 import java.util.function.Function;
 
@@ -30,6 +28,9 @@ public class VibraniumBlocks {
     public static Block PURPLE_SHORT_GRASS;
     public static Block PURPLE_TALL_GRASS;
     public static Block PURPLE_AZALEA;
+    public static Block PURPLE_AZALEA_LEAVES_VIOLET;
+    public static Block PURPLE_AZALEA_LEAVES_DARK_BLUE;
+    public static Block PURPLE_AZALEA_LEAVES_CYAN;
 
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
@@ -42,6 +43,9 @@ public class VibraniumBlocks {
                     itemGroup.accept(PURPLE_SHORT_GRASS.asItem());
                     itemGroup.accept(PURPLE_TALL_GRASS.asItem());
                     itemGroup.accept(PURPLE_AZALEA.asItem());
+                    itemGroup.accept(PURPLE_AZALEA_LEAVES_VIOLET.asItem());
+                    itemGroup.accept(PURPLE_AZALEA_LEAVES_DARK_BLUE.asItem());
+                    itemGroup.accept(PURPLE_AZALEA_LEAVES_CYAN.asItem());
         });
     }
 
@@ -98,6 +102,21 @@ public class VibraniumBlocks {
                 "purple_tall_grass",
                 PurpleTallGrass::new,
                 PurpleTallGrass.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_AZALEA_LEAVES_VIOLET= register(
+                "purple_azalea_leaves_violet",
+                PurpleAzaleaLeavesViolet::new,
+                PurpleAzaleaLeavesViolet.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_AZALEA_LEAVES_DARK_BLUE= register(
+                "purple_azalea_leaves_dark_blue",
+                PurpleAzaleaLeavesDarkBlue::new,
+                PurpleAzaleaLeavesDarkBlue.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_AZALEA_LEAVES_CYAN= register(
+                "purple_azalea_leaves_cyan",
+                PurpleAzaleaLeavesCyan::new,
+                PurpleAzaleaLeavesCyan.getProperties(BlockBehaviour.Properties.of()),
                 true);
         PURPLE_AZALEA= register(
                 "purple_azalea",

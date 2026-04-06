@@ -12,6 +12,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vibranium.init.VibraniumBlocks;
+import vibranium.init.VibraniumTreeDecorators;
 import vibranium.utils.VibraniumToolActions;
 
 public class Vibranium implements ModInitializer {
@@ -30,6 +31,7 @@ public class Vibranium implements ModInitializer {
 
 		LOGGER.info("Vibranium est chargé!");
 		VibraniumBlocks.registerModBlocks();
+		VibraniumTreeDecorators.register();
 		VibraniumBlocks.initialize();
 		//Biome placement
 		//Keys creation

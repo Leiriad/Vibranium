@@ -35,6 +35,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_SHORT_GRASS, "Herbe courte violette");
                 translationBuilder.add(VibraniumBlocks.PURPLE_TALL_GRASS, "Herbe haute violette");
                 translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA, "Azalée violet");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_VIOLET, "Feuilles d'azalée violet");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE, "Feuilles d'azalée violet indigo");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_CYAN, "Feuilles d'azalée violet cyan");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -47,6 +50,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_SHORT_GRASS, "Hierba corta morada");
                 translationBuilder.add(VibraniumBlocks.PURPLE_TALL_GRASS, "Hierba alta morada");
                 translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA, "Azalea morada");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_VIOLET, "Hojas de azalea morada");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE, "Hojas de azalea morada indigo");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_CYAN, "Hojas de azalea morada cian");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -59,6 +65,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_SHORT_GRASS, "Purple Short Grass");
                 translationBuilder.add(VibraniumBlocks.PURPLE_TALL_GRASS, "Purple tall Grass");
                 translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA, "Purple Azalea");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_VIOLET, "Purple Azalea Leaves");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE, "Indigo Purple Azalea Leaves");
+                translationBuilder.add(VibraniumBlocks.PURPLE_AZALEA_LEAVES_CYAN, "Cyan Purple Azalea Leaves");
         }
 
     }
