@@ -31,6 +31,10 @@ public class VibraniumBlocks {
     public static Block PURPLE_AZALEA_LEAVES_VIOLET;
     public static Block PURPLE_AZALEA_LEAVES_DARK_BLUE;
     public static Block PURPLE_AZALEA_LEAVES_CYAN;
+    public static Block FLOWERING_PURPLE_AZALEA;
+    public static Block FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET;
+    public static Block FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE;
+    public static Block FLOWERING_PURPLE_AZALEA_LEAVES_CYAN;
 
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
@@ -46,6 +50,10 @@ public class VibraniumBlocks {
                     itemGroup.accept(PURPLE_AZALEA_LEAVES_VIOLET.asItem());
                     itemGroup.accept(PURPLE_AZALEA_LEAVES_DARK_BLUE.asItem());
                     itemGroup.accept(PURPLE_AZALEA_LEAVES_CYAN.asItem());
+                    itemGroup.accept(FLOWERING_PURPLE_AZALEA.asItem());
+                    itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET.asItem());
+                    itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE.asItem());
+                    itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_CYAN.asItem());
         });
     }
 
@@ -122,6 +130,26 @@ public class VibraniumBlocks {
                 "purple_azalea",
                 PurpleAzalea::new,
                 PurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET= register(
+                "flowering_purple_azalea_leaves_violet",
+                FloweringPurpleAzaleaLeavesViolet::new,
+                FloweringPurpleAzaleaLeavesViolet.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE= register(
+                "flowering_purple_azalea_leaves_dark_blue",
+                FloweringPurpleAzaleaLeavesDarkBlue::new,
+                FloweringPurpleAzaleaLeavesDarkBlue.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        FLOWERING_PURPLE_AZALEA_LEAVES_CYAN= register(
+                "flowering_purple_azalea_leaves_cyan",
+                FloweringPurpleAzaleaLeavesCyan::new,
+                FloweringPurpleAzaleaLeavesCyan.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        FLOWERING_PURPLE_AZALEA= register(
+                "flowering_purple_azalea",
+                FloweringPurpleAzalea::new,
+                FloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
                 true);
 
     }

@@ -64,30 +64,29 @@ public class VibraniumBlockActions {
         world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(entity, finalizedState));
     }
     public static void fertilizes(ServerLevel world, RandomSource random, BlockPos pos) {
+        BlockPos above = pos.above();
+        BlockState plant = world.getBlockState(above);
 
-            BlockPos above = pos.above();
-            BlockState plant = world.getBlockState(above);
+        if (plant.getBlock() instanceof BonemealableBlock growable) {
+            float chance = random.nextFloat();
 
-            // If plant on block
-            if (plant.getBlock() instanceof BonemealableBlock growable) {
-
-            // Random bonus chance behavior either light and constant (10%)
-            if (random.nextFloat() < 0.10f) {
+            if (chance < 0.05f) {
+                // 5% probabilities of plant death
+                world.destroyBlock(above, true);
+            }
+            else if (chance < 0.15f) {
+                // 10% probabilities (from 0.05 to 0.15) of light growth
                 if (growable.isValidBonemealTarget(world, above, plant)) {
                     growPlant(world, random, growable, above, plant);
                 }
             }
-            // or big (10%)
-            if (random.nextFloat() < 0.45f) {
+            else if (chance < 0.60f) {
+                // 45% probabilities (from 0.15 tp 0.60) of high growth
                 if (growable.isValidBonemealTarget(world, above, plant)) {
                     growable.performBonemeal(world, random, above, plant);
                 }
             }
-
-            //or grows too quickly and dies
-            if (random.nextFloat() < 0.05f) {
-                world.destroyBlock(above, true);
-            }
+            // The other 40% of the time, nothing happens
         }
     }
     private static void growPlant(ServerLevel world, RandomSource random, BonemealableBlock growable, BlockPos above, BlockState plant) {

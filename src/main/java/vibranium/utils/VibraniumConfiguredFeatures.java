@@ -4,9 +4,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.world.entity.ai.behavior.ShufflingList;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -16,11 +15,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
-import net.minecraft.world.level.levelgen.feature.treedecorators.AlterGroundDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import vibranium.Vibranium;
 import vibranium.init.VibraniumBlocks;
+import vibranium.utils.VibraniumGradientDecorator;
 
 import java.util.List;
 
@@ -29,18 +27,30 @@ public class VibraniumConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> PURPLE_AZALEA_TREE_KEY =
             ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, "purple_azalea_tree"));
 
+    public static final ResourceKey<ConfiguredFeature<?, ?>> FLOWERING_PURPLE_AZALEA_TREE_KEY =
+            ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, "flowering_purple_azalea_tree"));
+
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        register(context, PURPLE_AZALEA_TREE_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+        // Enregistre l'arbre normal
+        register(context, PURPLE_AZALEA_TREE_KEY, Feature.TREE,
+                createAzaleaTree(VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE).build());
+
+        // Enregistre l'arbre fleuri (on change juste le bloc de base ou on pourrait passer un flag au décorateur)
+        register(context, FLOWERING_PURPLE_AZALEA_TREE_KEY, Feature.TREE,
+                createAzaleaTree(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE).build());
+    }
+
+    // Méthode utilitaire pour éviter de répéter 15 lignes de code
+    private static TreeConfiguration.TreeConfigurationBuilder createAzaleaTree(Block baseLeaf) {
+        return new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.OAK_LOG),
                 new StraightTrunkPlacer(4, 2, 0),
-                BlockStateProvider.simple(VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE),
-
+                BlockStateProvider.simple(baseLeaf), // Le bloc de base (servira de référence)
                 new BlobFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), 3),
                 new TwoLayersFeatureSize(1, 0, 1)
         )
                 .dirt(BlockStateProvider.simple(Blocks.ROOTED_DIRT))
-                .decorators(List.of(VibraniumGradientDecorator.INSTANCE))
-                .build());
+                .decorators(List.of(VibraniumGradientDecorator.INSTANCE)); // Ton décorateur magique
     }
 
     private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC config) {

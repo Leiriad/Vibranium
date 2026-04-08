@@ -2,6 +2,7 @@ package vibranium.utils;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import vibranium.init.VibraniumBlocks;
@@ -16,7 +17,6 @@ public class VibraniumGradientDecorator extends TreeDecorator {
 
     @Override
     protected TreeDecoratorType<?> type() {
-        // Tu devras enregistrer ce type dans ton registre de TreeDecoratorTypes
         return VibraniumTreeDecorators.GRADIENT_DECORATOR;
     }
 
@@ -25,23 +25,34 @@ public class VibraniumGradientDecorator extends TreeDecorator {
         List<BlockPos> leaves = context.leaves();
         if (leaves.isEmpty()) return;
 
-        // Trouver le point le plus haut et le plus bas du feuillage
+        //Getting higher and lower point of the tree leaves
         int maxY = leaves.stream().max(Comparator.comparingInt(BlockPos::getY)).get().getY();
         int minY = leaves.stream().min(Comparator.comparingInt(BlockPos::getY)).get().getY();
         int totalHeight = maxY - minY;
 
+        //Find the first leaf to figure out if it's a flowering tree
+        boolean isFlowering = context.level().isStateAtPosition(
+                leaves.get(0),
+                (state) -> state.is(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE)
+        );
+
+        //Replace the placeholder leaves by the real ones
         for (BlockPos pos : leaves) {
             int relativeY = pos.getY() - minY;
-
-            // Calcul du tiers (0.0 à 1.0)
             double percentile = (double) relativeY / (totalHeight > 0 ? totalHeight : 1);
 
-            if (percentile > 0.7) { // Haut (30% du haut)
-                context.setBlock(pos, VibraniumBlocks.PURPLE_AZALEA_LEAVES_VIOLET.defaultBlockState());
-            } else if (percentile > 0.3) { // Milieu
-                context.setBlock(pos, VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE.defaultBlockState());
-            } else { // Bas
-                context.setBlock(pos, VibraniumBlocks.PURPLE_AZALEA_LEAVES_CYAN.defaultBlockState());
+            if (percentile > 0.7) { // HAUT
+                context.setBlock(pos, isFlowering
+                        ? VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET.defaultBlockState()
+                        : VibraniumBlocks.PURPLE_AZALEA_LEAVES_VIOLET.defaultBlockState());
+            } else if (percentile > 0.3) { // MILIEU
+                context.setBlock(pos, isFlowering
+                        ? VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE.defaultBlockState()
+                        : VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE.defaultBlockState());
+            } else { // BAS
+                context.setBlock(pos, isFlowering
+                        ? VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN.defaultBlockState()
+                        : VibraniumBlocks.PURPLE_AZALEA_LEAVES_CYAN.defaultBlockState());
             }
         }
     }

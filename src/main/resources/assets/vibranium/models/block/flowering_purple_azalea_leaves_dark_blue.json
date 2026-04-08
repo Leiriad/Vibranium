@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "vibranium:block/flowering_purple_azalea_leaves_dark_blue",
+    "particle": "vibranium:block/flowering_purple_azalea_leaves_dark_blue"
+  },
+  "render_type": "cutout"
+}

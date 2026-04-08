@@ -48,6 +48,8 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createPurpleTallGrassLoot();
         createPurpleAzaleaLoot();
         createPurpleAzaleaLeavesLoot(enchantmentLookup);
+        createFloweringPurpleAzaleaLoot();
+        createFloweringPurpleAzaleaLeavesLoot(enchantmentLookup);
     }
 
     private void createVibraniumOreLoot() {
@@ -120,6 +122,10 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         this.add(VibraniumBlocks.PURPLE_AZALEA, (block) ->
                 createSilkTouchDispatchTable(block, LootItem.lootTableItem(Blocks.AZALEA)));
     }
+    private void createFloweringPurpleAzaleaLoot(){
+        this.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA, (block) ->
+                createSilkTouchDispatchTable(block, LootItem.lootTableItem(Blocks.FLOWERING_AZALEA)));
+    }
 
     private void createPurpleAzaleaLeavesLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
         List.of(
@@ -131,6 +137,21 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                         this.createLeavesDrops(
                                 block,
                                 VibraniumBlocks.PURPLE_AZALEA,
+                                0.05F, 0.0625F, 0.083333336F, 0.1F
+                        )
+                )
+        );
+    }
+    private void createFloweringPurpleAzaleaLeavesLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
+        List.of(
+                VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET,
+                VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE,
+                VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN
+        ).forEach(leafBlock ->
+                this.add(leafBlock, (block) ->
+                        this.createLeavesDrops(
+                                block,
+                                VibraniumBlocks.FLOWERING_PURPLE_AZALEA,
                                 0.05F, 0.0625F, 0.083333336F, 0.1F
                         )
                 )
