@@ -1,14 +1,14 @@
 {
-	/*"required": true,
+	"required": true,
 	"package": "vibranium.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"CropBlockMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
 	},
 	"overwrites": {
 		"requireAnnotations": true
-	}*/
+	}
 }
