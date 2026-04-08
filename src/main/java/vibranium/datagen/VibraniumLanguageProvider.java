@@ -42,6 +42,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET, "Feuilles d'azalée violet fleuri");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE, "Feuilles d'azalée violet fleuri indigo");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN, "Feuilles d'azalée violet fleuri cyan");
+                translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_BLOCK, "Block de mousse violette");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -61,6 +62,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET, "Hojas de azalea morada florecida");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE, "Hojas de azalea morada florecida indigo");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN, "Hojas de azalea morada florecida cian");
+                translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_BLOCK, "Bloque de musgo morado");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -80,6 +82,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET, "Flowering Purple Azalea Leaves");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE, "Flowering Indigo Purple Azalea Leaves");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN, "Flowering Cyan Purple Azalea Leaves");
+                translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_BLOCK, "Purple Moss Block");
         }
 
     }

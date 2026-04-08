@@ -35,6 +35,7 @@ public class VibraniumBlocks {
     public static Block FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET;
     public static Block FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE;
     public static Block FLOWERING_PURPLE_AZALEA_LEAVES_CYAN;
+    public static Block PURPLE_MOSS_BLOCK;
 
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
@@ -54,6 +55,7 @@ public class VibraniumBlocks {
                     itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET.asItem());
                     itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE.asItem());
                     itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_CYAN.asItem());
+                    itemGroup.accept(PURPLE_MOSS_BLOCK.asItem());
         });
     }
 
@@ -150,6 +152,11 @@ public class VibraniumBlocks {
                 "flowering_purple_azalea",
                 FloweringPurpleAzalea::new,
                 FloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_MOSS_BLOCK= register(
+                "purple_moss_block",
+                PurpleMossBlock::new,
+                PurpleMossBlock.getProperties(BlockBehaviour.Properties.of()),
                 true);
 
     }

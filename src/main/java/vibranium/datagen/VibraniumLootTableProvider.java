@@ -10,6 +10,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
@@ -43,13 +44,14 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createVibraniumDirtBlocksLoot();
         createBlackGravelLoot(enchantmentLookup);//BlackGRavel behaves differently with Fortune
 
-        //Plants
+        //Vegetals
         createPurpleShortGrassLoot();
         createPurpleTallGrassLoot();
         createPurpleAzaleaLoot();
         createPurpleAzaleaLeavesLoot(enchantmentLookup);
         createFloweringPurpleAzaleaLoot();
         createFloweringPurpleAzaleaLeavesLoot(enchantmentLookup);
+        createPurpleMossLoot();
     }
 
     private void createVibraniumOreLoot() {
@@ -156,5 +158,9 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                         )
                 )
         );
+    }
+    private void createPurpleMossLoot() {
+        this.add(VibraniumBlocks.PURPLE_MOSS_BLOCK, (block) ->
+                this.createSingleItemTable(VibraniumBlocks.PURPLE_MOSS_BLOCK));
     }
 }
