@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:purple_cave_vines_plant"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:purple_cave_vines_plant",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "berries": "true"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:glow_berries"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

@@ -43,6 +43,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE, "Feuilles d'azalée violet fleuri indigo");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN, "Feuilles d'azalée violet fleuri cyan");
                 translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_BLOCK, "Block de mousse violette");
+                translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_CARPET, "Tapis de mousse violette");
+                translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES, "Liane des cavernes violette");
+                translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Liane des cavernes violette");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -63,6 +66,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE, "Hojas de azalea morada florecida indigo");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN, "Hojas de azalea morada florecida cian");
                 translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_BLOCK, "Bloque de musgo morado");
+                translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_CARPET, "Alfombra de musgo morado");
+                translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES, "Enredaderas de cueva moradas");
+                translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Enredaderas de cueva moradas");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -83,6 +89,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE, "Flowering Indigo Purple Azalea Leaves");
                 translationBuilder.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN, "Flowering Cyan Purple Azalea Leaves");
                 translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_BLOCK, "Purple Moss Block");
+                translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_CARPET, "Purple Moss Carpet");
+                translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES, "Purple Cave Vines");
+                translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Purple Cave Vines");
         }
 
     }

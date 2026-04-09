@@ -3,20 +3,24 @@ package vibranium.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CaveVines;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import vibranium.init.VibraniumBlocks;
 
 import java.util.List;
@@ -51,7 +55,10 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createPurpleAzaleaLeavesLoot(enchantmentLookup);
         createFloweringPurpleAzaleaLoot();
         createFloweringPurpleAzaleaLeavesLoot(enchantmentLookup);
-        createPurpleMossLoot();
+        createPurpleMossLoot(VibraniumBlocks.PURPLE_MOSS_BLOCK);
+        createPurpleMossLoot(VibraniumBlocks.PURPLE_MOSS_CARPET);
+        createPurpleCaveVinesLoot(VibraniumBlocks.PURPLE_CAVE_VINES);
+        createPurpleCaveVinesLoot(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT);
     }
 
     private void createVibraniumOreLoot() {
@@ -159,8 +166,23 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 )
         );
     }
-    private void createPurpleMossLoot() {
-        this.add(VibraniumBlocks.PURPLE_MOSS_BLOCK, (block) ->
-                this.createSingleItemTable(VibraniumBlocks.PURPLE_MOSS_BLOCK));
+    private void createPurpleMossLoot(Block mossblock) {
+        this.add(mossblock, (block) ->
+                this.createSingleItemTable(mossblock));
     }
+    private void createPurpleCaveVinesLoot(Block block) {
+        this.add(block, (vines) ->
+                LootTable.lootTable().withPool(
+                        LootPool.lootPool()
+                                .add(LootItem.lootTableItem(vines)) // Loots cave vine
+                ).withPool(
+                        LootPool.lootPool()
+                                .add(LootItem.lootTableItem(Items.GLOW_BERRIES)) // Loots droppable item (berries)
+                                .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(vines)
+                                        .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                .hasProperty(CaveVines.BERRIES, true))) // only if the vine contains berries
+                )
+        );
+    }
+
 }

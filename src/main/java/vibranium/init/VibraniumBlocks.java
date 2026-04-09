@@ -36,7 +36,11 @@ public class VibraniumBlocks {
     public static Block FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE;
     public static Block FLOWERING_PURPLE_AZALEA_LEAVES_CYAN;
     public static Block PURPLE_MOSS_BLOCK;
+    public static Block PURPLE_MOSS_CARPET;
+    public static Block PURPLE_CAVE_VINES;
+    public static Block PURPLE_CAVE_VINES_PLANT;
 
+    ///Registers item in inventory
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.NATURAL_BLOCKS).register(
                 (itemGroup) -> {
@@ -56,9 +60,10 @@ public class VibraniumBlocks {
                     itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE.asItem());
                     itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_CYAN.asItem());
                     itemGroup.accept(PURPLE_MOSS_BLOCK.asItem());
+                    itemGroup.accept(PURPLE_MOSS_CARPET.asItem());
         });
     }
-
+///Registers block in the game
     public static void registerModBlocks() {
         //Vibranium Ore
         VIBRANIUM_ORE = register(
@@ -157,6 +162,21 @@ public class VibraniumBlocks {
                 "purple_moss_block",
                 PurpleMossBlock::new,
                 PurpleMossBlock.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_MOSS_CARPET= register(
+                "purple_moss_carpet",
+                PurpleMossCarpet::new,
+                PurpleMossCarpet.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_CAVE_VINES= register(
+                "purple_cave_vines",
+                PurpleCaveVines::new,
+                PurpleCaveVines.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_CAVE_VINES_PLANT= register(
+                "purple_cave_vines_plant",
+                PurpleCaveVinesPlant::new,
+                PurpleCaveVinesPlant.getProperties(BlockBehaviour.Properties.of()),
                 true);
 
     }

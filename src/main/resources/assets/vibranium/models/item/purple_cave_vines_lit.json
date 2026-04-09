@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "vibranium:block/purple_cave_vines_lit"
+  }
+}
