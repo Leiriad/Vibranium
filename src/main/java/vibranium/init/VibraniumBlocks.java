@@ -40,6 +40,7 @@ public class VibraniumBlocks {
     public static Block PURPLE_CAVE_VINES;
     public static Block PURPLE_CAVE_VINES_PLANT;
     public static Block POTTED_PURPLE_AZALEA_BUSH;
+    public static Block POTTED_FLOWERING_PURPLE_AZALEA_BUSH;
 
     ///Registers item in inventory
     public static void initialize() {
@@ -183,6 +184,11 @@ public class VibraniumBlocks {
                 "potted_purple_azalea_bush",
                 PottedPurpleAzalea::new,
                 PottedPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        POTTED_FLOWERING_PURPLE_AZALEA_BUSH= register(
+                "potted_flowering_purple_azalea_bush",
+                PottedFloweringPurpleAzalea::new,
+                PottedFloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
                 true);
     }
 

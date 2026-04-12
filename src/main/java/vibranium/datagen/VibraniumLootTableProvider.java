@@ -188,6 +188,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
     }
     private void createPottedAzaleaLoot(){
         this.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH,(block) -> createPotFlowerItemTable(((FlowerPotBlock) block).getPotted()));
+        this.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH,(block) -> createPotFlowerItemTable(((FlowerPotBlock) block).getPotted()));
 
     }
 

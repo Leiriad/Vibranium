@@ -46,7 +46,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_CARPET, "Tapis de mousse violette");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES, "Liane des cavernes violette");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Liane des cavernes violette");
-                translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Azalée violet fleuri en pot");
+                translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Azalée violet en pot");
+                translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Azalée violet fleuri en pot");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -70,7 +71,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_MOSS_CARPET, "Alfombra de musgo morado");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES, "Enredaderas de cueva moradas");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Enredaderas de cueva moradas");
-                translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Maceta con azalea morada florecida");
+                translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Maceta con azalea morada");
+                translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Maceta con azalea morada florecida");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -95,6 +97,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES, "Purple Cave Vines");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Purple Cave Vines");
                 translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Potted Purple Azalea");
+                translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Potted Flowering Purple Azalea");
         }
 
     }
