@@ -32,5 +32,7 @@ public class VibraniumClient implements ClientModInitializer {
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.PURPLE_MOSS_CARPET, ChunkSectionLayer.CUTOUT);
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.PURPLE_CAVE_VINES, ChunkSectionLayer.CUTOUT);
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, ChunkSectionLayer.CUTOUT);
+		BlockRenderLayerMap.putBlock(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, ChunkSectionLayer.CUTOUT);
+
 	}
 }

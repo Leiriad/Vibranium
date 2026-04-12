@@ -13,6 +13,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CaveVines;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -59,6 +60,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createPurpleMossLoot(VibraniumBlocks.PURPLE_MOSS_CARPET);
         createPurpleCaveVinesLoot(VibraniumBlocks.PURPLE_CAVE_VINES);
         createPurpleCaveVinesLoot(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT);
+        createPottedAzaleaLoot();
     }
 
     private void createVibraniumOreLoot() {
@@ -183,6 +185,10 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                                                 .hasProperty(CaveVines.BERRIES, true))) // only if the vine contains berries
                 )
         );
+    }
+    private void createPottedAzaleaLoot(){
+        this.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH,(block) -> createPotFlowerItemTable(((FlowerPotBlock) block).getPotted()));
+
     }
 
 }
