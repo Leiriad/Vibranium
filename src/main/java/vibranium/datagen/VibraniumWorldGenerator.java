@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import java.util.concurrent.CompletableFuture;
 
 public class VibraniumWorldGenerator extends FabricDynamicRegistryProvider {
+    ///JSON Configure Feature files automation
     public VibraniumWorldGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }

@@ -10,7 +10,7 @@ public class PottedPurpleAzalea extends FlowerPotBlock {
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return  BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_AZALEA)
                 .emissiveRendering((state, world, pos) -> true)
-                .lightLevel((state) -> 5)
+                .lightLevel((state) -> 2)
                 .hasPostProcess((state, world, pos) -> true);
     }
     public PottedPurpleAzalea(Properties properties) {

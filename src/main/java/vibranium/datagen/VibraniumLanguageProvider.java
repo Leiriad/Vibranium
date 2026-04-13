@@ -8,14 +8,15 @@ import vibranium.init.VibraniumBlocks;
 import java.util.concurrent.CompletableFuture;
 
 public class VibraniumLanguageProvider extends FabricLanguageProvider {
+    ///JSON language file automation
     private String languageCode = "";
 
-    //Default en constructor
+    ///Default en constructor
     public VibraniumLanguageProvider (FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup){
         this(dataOutput, registryLookup, "en_us");
     }
 
-    //Constructor for other languages
+    ///Constructor for other languages
     public VibraniumLanguageProvider (FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup, String languageCode){
         super(dataOutput, languageCode, registryLookup);
         this.languageCode=languageCode;
@@ -48,6 +49,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Liane des cavernes violette");
                 translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Azalée violet en pot");
                 translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Azalée violet fleuri en pot");
+                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF, "Grande foliogoutte violette");
+                translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Petite foliogoutte violette");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -73,6 +76,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Enredaderas de cueva moradas");
                 translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Maceta con azalea morada");
                 translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Maceta con azalea morada florecida");
+                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF, "Plantaforma morada grande");
+                translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Plantaforma morada pequeña");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -98,6 +103,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT, "Purple Cave Vines");
                 translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Potted Purple Azalea");
                 translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Potted Flowering Purple Azalea");
+                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF, "Big Purple Dripleaf");
+                translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Small Purple Dripleaf");
         }
 
     }

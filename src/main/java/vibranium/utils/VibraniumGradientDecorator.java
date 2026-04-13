@@ -11,6 +11,7 @@ import vibranium.init.VibraniumTreeDecorators;
 import java.util.Comparator;
 import java.util.List;
 
+///Gradient tree making tool
 public class VibraniumGradientDecorator extends TreeDecorator {
     public static final MapCodec<VibraniumGradientDecorator> CODEC = MapCodec.unit(() -> VibraniumGradientDecorator.INSTANCE);
     public static final VibraniumGradientDecorator INSTANCE = new VibraniumGradientDecorator();

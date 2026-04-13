@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import vibranium.init.VibraniumBlocks;
 
 public class VibraniumToolActions {
-
+    ///Vibranium path block self-managed transition to dirt/grass
     private static BlockState getPathState(BlockState state){
         if (state.is(VibraniumBlocks.VIBRANIUM_DIRT)
                 || state.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK)) {
@@ -19,6 +19,7 @@ public class VibraniumToolActions {
         }
         return null;
     }
+    ///Vibranium farmland block self-managed transition to dirt/grass
     public static BlockState getFarmlandState(BlockState state) {
         if (state.is(VibraniumBlocks.VIBRANIUM_DIRT)
                 || state.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK)) {
@@ -26,6 +27,7 @@ public class VibraniumToolActions {
         }
         return null;
     }
+    ///Player actions on blocs
     public static void register() {
         UseBlockCallback.EVENT.register((player, world, hand, hit) -> {
 
@@ -37,7 +39,7 @@ public class VibraniumToolActions {
             BlockPos pos = hit.getBlockPos();
             BlockState state = world.getBlockState(pos);
 
-            // 🌿 SHOVEL
+            // Shovel
             if (item instanceof ShovelItem) {
                 BlockState result = VibraniumToolActions.getPathState(state);
 
@@ -47,7 +49,7 @@ public class VibraniumToolActions {
                 }
             }
 
-            // 🌾 HOE
+            // Hoe
             if (item instanceof HoeItem) {
                 BlockState result = VibraniumToolActions.getFarmlandState(state);
 

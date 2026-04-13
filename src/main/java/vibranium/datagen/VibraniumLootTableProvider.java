@@ -3,10 +3,10 @@ package vibranium.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import vibranium.init.VibraniumBlocks;
 
@@ -30,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
-
+///JSON Loot table files automation
     CompletableFuture<HolderLookup.Provider> lookUp;
 
     public VibraniumLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
@@ -61,6 +62,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createPurpleCaveVinesLoot(VibraniumBlocks.PURPLE_CAVE_VINES);
         createPurpleCaveVinesLoot(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT);
         createPottedAzaleaLoot();
+        createDripleavesLoot();
     }
 
     private void createVibraniumOreLoot() {
@@ -189,7 +191,18 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
     private void createPottedAzaleaLoot(){
         this.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH,(block) -> createPotFlowerItemTable(((FlowerPotBlock) block).getPotted()));
         this.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH,(block) -> createPotFlowerItemTable(((FlowerPotBlock) block).getPotted()));
-
     }
-
+    private void createDripleavesLoot(){
+        this.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF, (block) ->
+                this.createSingleItemTable(VibraniumBlocks.BIG_PURPLE_DRIPLEAF));
+        this.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, (block) ->
+                LootTable.lootTable()
+                        .withPool(LootPool.lootPool()
+                                .setRolls(ConstantValue.exactly(1.0F))
+                                .add(LootItem.lootTableItem(block)
+                                        .when(MatchTool.toolMatches(ItemPredicate.Builder.item()
+                                                .of(this.registries.lookupOrThrow(Registries.ITEM), Items.SHEARS)))
+                                )
+                        ));
+    }
 }

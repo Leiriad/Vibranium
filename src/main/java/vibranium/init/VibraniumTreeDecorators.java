@@ -11,6 +11,7 @@ import vibranium.utils.VibraniumGradientDecorator;
 import static vibranium.Vibranium.MOD_ID;
 
 public class VibraniumTreeDecorators {
+    ///Gradient tree making tool initializer
     public static final TreeDecoratorType<VibraniumGradientDecorator> GRADIENT_DECORATOR =
             Registry.register(BuiltInRegistries.TREE_DECORATOR_TYPE,
                     Identifier.fromNamespaceAndPath("vibranium", "gradient_decorator"),

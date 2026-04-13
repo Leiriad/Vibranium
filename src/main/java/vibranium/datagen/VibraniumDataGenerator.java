@@ -7,7 +7,7 @@ import net.minecraft.core.registries.Registries;
 import vibranium.utils.VibraniumConfiguredFeatures;
 
 public class VibraniumDataGenerator implements DataGeneratorEntrypoint {
-
+	///DataGen initializer
 	@Override
 	public void buildRegistry(RegistrySetBuilder registryBuilder) {
 		// tree registration

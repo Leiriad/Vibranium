@@ -41,6 +41,8 @@ public class VibraniumBlocks {
     public static Block PURPLE_CAVE_VINES_PLANT;
     public static Block POTTED_PURPLE_AZALEA_BUSH;
     public static Block POTTED_FLOWERING_PURPLE_AZALEA_BUSH;
+    public static Block BIG_PURPLE_DRIPLEAF;
+    public static Block SMALL_PURPLE_DRIPLEAF;
 
     ///Registers item in inventory
     public static void initialize() {
@@ -63,6 +65,8 @@ public class VibraniumBlocks {
                     itemGroup.accept(FLOWERING_PURPLE_AZALEA_LEAVES_CYAN.asItem());
                     itemGroup.accept(PURPLE_MOSS_BLOCK.asItem());
                     itemGroup.accept(PURPLE_MOSS_CARPET.asItem());
+                    itemGroup.accept(BIG_PURPLE_DRIPLEAF.asItem());
+                    itemGroup.accept(SMALL_PURPLE_DRIPLEAF.asItem());
         });
     }
 ///Registers block in the game
@@ -189,6 +193,16 @@ public class VibraniumBlocks {
                 "potted_flowering_purple_azalea_bush",
                 PottedFloweringPurpleAzalea::new,
                 PottedFloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        BIG_PURPLE_DRIPLEAF = register(
+                "big_purple_dripleaf",
+                BigPurpleDripleaf::new,
+                BigPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        SMALL_PURPLE_DRIPLEAF = register(
+                "small_purple_dripleaf",
+                SmallPurpleDripleaf::new,
+                SmallPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
                 true);
     }
 

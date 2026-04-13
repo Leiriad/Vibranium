@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/small_dripleaf_bottom",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "stem": "vibranium:block/small_purple_dripleaf_stem_bottom"
+  }
+}
