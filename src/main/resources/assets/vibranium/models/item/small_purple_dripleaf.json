@@ -6,7 +6,7 @@
     "3": "vibranium:block/small_purple_dripleaf_side",
     "5": "vibranium:block/small_purple_dripleaf_stem_top",
     "6": "vibranium:block/small_purple_dripleaf_top",
-    "particle": "textures/block/small_dripleaf_top"
+    "particle": "textures/block/small_purple_dripleaf_top"
   },
   "elements": [
     {
