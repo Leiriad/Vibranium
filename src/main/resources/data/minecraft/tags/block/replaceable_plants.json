@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "vibranium:purple_short_grass",
-    "vibranium:purple_tall_grass"
+    "vibranium:purple_tall_grass",
+    "vibranium:small_purple_dripleaf",
+    "vibranium:big_purple_dripleaf"
   ]
 }

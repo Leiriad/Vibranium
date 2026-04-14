@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
+    "particle": "vibranium:block/purple_moss_block",
     "all": "vibranium:block/purple_moss_block"
   },
   "render_type": "solid"

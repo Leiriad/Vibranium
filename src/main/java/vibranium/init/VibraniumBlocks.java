@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.BigDripleafStemBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import vibranium.Vibranium;
@@ -42,7 +43,9 @@ public class VibraniumBlocks {
     public static Block POTTED_PURPLE_AZALEA_BUSH;
     public static Block POTTED_FLOWERING_PURPLE_AZALEA_BUSH;
     public static Block BIG_PURPLE_DRIPLEAF;
+    public static Block BIG_PURPLE_DRIPLEAF_STEM;
     public static Block SMALL_PURPLE_DRIPLEAF;
+
 
     ///Registers item in inventory
     public static void initialize() {
@@ -198,6 +201,11 @@ public class VibraniumBlocks {
                 "big_purple_dripleaf",
                 BigPurpleDripleaf::new,
                 BigPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        BIG_PURPLE_DRIPLEAF_STEM = register(
+                "big_purple_dripleaf_stem",
+                BigPurpleDripleafStem::new,
+                BigPurpleDripleafStem.getProperties(BlockBehaviour.Properties.of()),
                 true);
         SMALL_PURPLE_DRIPLEAF = register(
                 "small_purple_dripleaf",

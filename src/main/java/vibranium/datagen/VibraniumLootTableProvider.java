@@ -195,6 +195,8 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
     private void createDripleavesLoot(){
         this.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF, (block) ->
                 this.createSingleItemTable(VibraniumBlocks.BIG_PURPLE_DRIPLEAF));
+        this.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, (block) ->
+                this.createSingleItemTable(VibraniumBlocks.BIG_PURPLE_DRIPLEAF));
         this.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, (block) ->
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()

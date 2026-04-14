@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=east": { "model": "vibranium:block/big_purple_dripleaf_stem", "y": 90 },
+    "facing=north": { "model": "vibranium:block/big_purple_dripleaf_stem" },
+    "facing=south": { "model": "vibranium:block/big_purple_dripleaf_stem", "y": 180 },
+    "facing=west": { "model": "vibranium:block/big_purple_dripleaf_stem", "y": 270 }
+  }
+}
