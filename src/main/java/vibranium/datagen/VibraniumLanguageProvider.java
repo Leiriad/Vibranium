@@ -53,6 +53,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Tige de grande foliogoutte pourpre");
                 translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Petite foliogoutte pourpre");
                 translationBuilder.add(VibraniumBlocks.PURPLE_VINE, "Liane pourpre");
+                translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_SPROUT, "Pousse d'herbe cœur");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -82,6 +83,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Tallo de plantaforma morada grande");
                 translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Plantaforma morada pequeña");
                 translationBuilder.add(VibraniumBlocks.PURPLE_VINE, "Enredadera morada");
+                translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_SPROUT, "Brote de hierba en forma de corazón");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -111,6 +113,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Big Purple Dripleaf Stem");
                 translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Small Purple Dripleaf");
                 translationBuilder.add(VibraniumBlocks.PURPLE_VINE, "Purple Vine");
+                translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_SPROUT, "Heart-shaped Herb Sprout");
         }
 
     }

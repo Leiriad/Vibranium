@@ -46,6 +46,7 @@ public class VibraniumBlocks {
     public static Block BIG_PURPLE_DRIPLEAF_STEM;
     public static Block SMALL_PURPLE_DRIPLEAF;
     public static Block PURPLE_VINE;
+    public static Block HEART_SHAPED_HERB_SPROUT;
 
 
     ///Registers item in inventory
@@ -72,6 +73,7 @@ public class VibraniumBlocks {
                     itemGroup.accept(BIG_PURPLE_DRIPLEAF.asItem());
                     itemGroup.accept(SMALL_PURPLE_DRIPLEAF.asItem());
                     itemGroup.accept(PURPLE_VINE.asItem());
+                    itemGroup.accept(HEART_SHAPED_HERB_SPROUT.asItem());
         });
     }
 ///Registers block in the game
@@ -218,6 +220,11 @@ public class VibraniumBlocks {
                 "purple_vine",
                 PurpleVine::new,
                 PurpleVine.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        HEART_SHAPED_HERB_SPROUT = register(
+                "heart_shaped_herb_sprout",
+                HeartShapedHerbSprout::new,
+                HeartShapedHerbSprout.getProperties(BlockBehaviour.Properties.of()),
                 true);
     }
 

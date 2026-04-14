@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/big_dripleaf",
   "render_type": "minecraft:cutout",
-  "particle": "textures/block/big_purple_dripleaf_top",
+  "particle": "vibranium:block/big_purple_dripleaf_top",
   "textures": {
     "tip": "vibranium:block/big_purple_dripleaf_tip",
     "side": "vibranium:block/big_purple_dripleaf_side",

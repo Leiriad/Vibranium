@@ -70,8 +70,8 @@ public class VibraniumBlockActions {
         if (plant.getBlock() instanceof BonemealableBlock growable) {
             float chance = random.nextFloat();
 
-            if (chance < 0.05f) {
-                // 5% probabilities of plant death
+            if (chance < 0.01f) {
+                // 1% probabilities of plant death
                 world.destroyBlock(above, true);
             }
             else if (chance < 0.15f) {

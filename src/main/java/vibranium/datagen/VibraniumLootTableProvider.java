@@ -64,6 +64,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createPottedAzaleaLoot();
         createDripleavesLoot();
         createVineLoot();
+        createHeartShapedHerbLoot();
     }
 
     private void createVibraniumOreLoot() {
@@ -203,5 +204,9 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
     }
     private void createVineLoot(){
         this.add(VibraniumBlocks.PURPLE_VINE, this::createShearsOnlyDrop);
+    }
+    private void createHeartShapedHerbLoot(){
+        this.add(VibraniumBlocks.HEART_SHAPED_HERB_SPROUT, this::createSilkTouchOnlyTable
+        );
     }
 }
