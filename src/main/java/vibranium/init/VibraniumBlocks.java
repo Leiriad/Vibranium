@@ -45,6 +45,7 @@ public class VibraniumBlocks {
     public static Block BIG_PURPLE_DRIPLEAF;
     public static Block BIG_PURPLE_DRIPLEAF_STEM;
     public static Block SMALL_PURPLE_DRIPLEAF;
+    public static Block PURPLE_VINE;
 
 
     ///Registers item in inventory
@@ -70,6 +71,7 @@ public class VibraniumBlocks {
                     itemGroup.accept(PURPLE_MOSS_CARPET.asItem());
                     itemGroup.accept(BIG_PURPLE_DRIPLEAF.asItem());
                     itemGroup.accept(SMALL_PURPLE_DRIPLEAF.asItem());
+                    itemGroup.accept(PURPLE_VINE.asItem());
         });
     }
 ///Registers block in the game
@@ -211,6 +213,11 @@ public class VibraniumBlocks {
                 "small_purple_dripleaf",
                 SmallPurpleDripleaf::new,
                 SmallPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_VINE = register(
+                "purple_vine",
+                PurpleVine::new,
+                PurpleVine.getProperties(BlockBehaviour.Properties.of()),
                 true);
     }
 

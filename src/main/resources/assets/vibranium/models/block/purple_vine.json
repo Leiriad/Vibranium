@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/vine",
+  "textures": {
+    "particle": "vibranium:block/purple_vine",
+    "vine": "vibranium:block/purple_vine"
+  }
+}

@@ -50,8 +50,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Azalée pourpre en pot");
                 translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Azalée pourpre fleuri en pot");
                 translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF, "Grande foliogoutte pourpre");
-                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Grande foliogoutte pourpre");
+                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Tige de grande foliogoutte pourpre");
                 translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Petite foliogoutte pourpre");
+                translationBuilder.add(VibraniumBlocks.PURPLE_VINE, "Liane pourpre");
                 break;
             case "es_es":
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Mineral de vibranium");
@@ -78,8 +79,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Maceta con azalea morada");
                 translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Maceta con azalea morada florecida");
                 translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF, "Plantaforma morada grande");
-                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Plantaforma morada grande");
+                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Tallo de plantaforma morada grande");
                 translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Plantaforma morada pequeña");
+                translationBuilder.add(VibraniumBlocks.PURPLE_VINE, "Enredadera morada");
                 break;
             default:
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_ORE, "Vibranium Ore");
@@ -106,8 +108,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH, "Potted Purple Azalea");
                 translationBuilder.add(VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH, "Potted Flowering Purple Azalea");
                 translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF, "Big Purple Dripleaf");
-                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Big Purple Dripleaf");
+                translationBuilder.add(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM, "Big Purple Dripleaf Stem");
                 translationBuilder.add(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF, "Small Purple Dripleaf");
+                translationBuilder.add(VibraniumBlocks.PURPLE_VINE, "Purple Vine");
         }
 
     }

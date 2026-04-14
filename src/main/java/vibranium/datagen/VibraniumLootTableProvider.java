@@ -54,15 +54,16 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createPurpleShortGrassLoot();
         createPurpleTallGrassLoot();
         createPurpleAzaleaLoot();
-        createPurpleAzaleaLeavesLoot(enchantmentLookup);
+        createPurpleAzaleaLeavesLoot();
         createFloweringPurpleAzaleaLoot();
-        createFloweringPurpleAzaleaLeavesLoot(enchantmentLookup);
+        createFloweringPurpleAzaleaLeavesLoot();
         createPurpleMossLoot(VibraniumBlocks.PURPLE_MOSS_BLOCK);
         createPurpleMossLoot(VibraniumBlocks.PURPLE_MOSS_CARPET);
         createPurpleCaveVinesLoot(VibraniumBlocks.PURPLE_CAVE_VINES);
         createPurpleCaveVinesLoot(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT);
         createPottedAzaleaLoot();
         createDripleavesLoot();
+        createVineLoot();
     }
 
     private void createVibraniumOreLoot() {
@@ -72,7 +73,6 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                         this.applyExplosionDecay(block, LootItem.lootTableItem(VibraniumBlocks.VIBRANIUM_ORE)))
         );
     }
-
     private void createBlackClayLoot() {
         // Blackclay mimics vanilla clay
         this.add(VibraniumBlocks.BLACKCLAY, (block) ->
@@ -82,7 +82,6 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(4)))))
         );
     }
-
     private void createVibraniumDirtBlocksLoot() {
         // Dirt blocks give normal dirt without silk touch
         List.of(
@@ -94,7 +93,6 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 this.add(block, (b) -> createSilkTouchDispatchTable(b, LootItem.lootTableItem(Items.DIRT)))
         );
     }
-
     private void createBlackGravelLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
         // Blackgravel mimics vanilla gravel
         this.add(VibraniumBlocks.BLACKGRAVEL, (block) ->
@@ -108,7 +106,6 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 )
         );
     }
-
     private void createPurpleShortGrassLoot() {
         this.add(VibraniumBlocks.PURPLE_SHORT_GRASS,(block)->
                 this.createShearsDispatchTable(block,
@@ -119,7 +116,6 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 )
         );
     }
-
     private void createPurpleTallGrassLoot() {
         this.add(VibraniumBlocks.PURPLE_TALL_GRASS,(block)->
                 this.createShearsDispatchTable(block,
@@ -130,7 +126,6 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 )
         );
     }
-
     private void createPurpleAzaleaLoot(){
         this.add(VibraniumBlocks.PURPLE_AZALEA, (block) ->
                 createSilkTouchDispatchTable(block, LootItem.lootTableItem(Blocks.AZALEA)));
@@ -139,8 +134,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         this.add(VibraniumBlocks.FLOWERING_PURPLE_AZALEA, (block) ->
                 createSilkTouchDispatchTable(block, LootItem.lootTableItem(Blocks.FLOWERING_AZALEA)));
     }
-
-    private void createPurpleAzaleaLeavesLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
+    private void createPurpleAzaleaLeavesLoot() {
         List.of(
                 VibraniumBlocks.PURPLE_AZALEA_LEAVES_VIOLET,
                 VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE,
@@ -155,7 +149,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 )
         );
     }
-    private void createFloweringPurpleAzaleaLeavesLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
+    private void createFloweringPurpleAzaleaLeavesLoot() {
         List.of(
                 VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET,
                 VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE,
@@ -206,5 +200,8 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                                                 .of(this.registries.lookupOrThrow(Registries.ITEM), Items.SHEARS)))
                                 )
                         ));
+    }
+    private void createVineLoot(){
+        this.add(VibraniumBlocks.PURPLE_VINE, this::createShearsOnlyDrop);
     }
 }
