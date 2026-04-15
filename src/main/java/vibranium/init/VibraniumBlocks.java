@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.BigDripleafStemBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import vibranium.Vibranium;
@@ -46,7 +45,7 @@ public class VibraniumBlocks {
     public static Block BIG_PURPLE_DRIPLEAF_STEM;
     public static Block SMALL_PURPLE_DRIPLEAF;
     public static Block PURPLE_VINE;
-    public static Block HEART_SHAPED_HERB_SPROUT;
+    public static Block HEART_SHAPED_HERB;
 
 
     ///Registers item in inventory
@@ -73,7 +72,7 @@ public class VibraniumBlocks {
                     itemGroup.accept(BIG_PURPLE_DRIPLEAF.asItem());
                     itemGroup.accept(SMALL_PURPLE_DRIPLEAF.asItem());
                     itemGroup.accept(PURPLE_VINE.asItem());
-                    itemGroup.accept(HEART_SHAPED_HERB_SPROUT.asItem());
+                    itemGroup.accept(HEART_SHAPED_HERB.asItem());
         });
     }
 ///Registers block in the game
@@ -221,10 +220,10 @@ public class VibraniumBlocks {
                 PurpleVine::new,
                 PurpleVine.getProperties(BlockBehaviour.Properties.of()),
                 true);
-        HEART_SHAPED_HERB_SPROUT = register(
-                "heart_shaped_herb_sprout",
-                HeartShapedHerbSprout::new,
-                HeartShapedHerbSprout.getProperties(BlockBehaviour.Properties.of()),
+        HEART_SHAPED_HERB = register(
+                "heart_shaped_herb",
+                HeartShapedHerb::new,
+                HeartShapedHerb.getProperties(BlockBehaviour.Properties.of()),
                 true);
     }
 
