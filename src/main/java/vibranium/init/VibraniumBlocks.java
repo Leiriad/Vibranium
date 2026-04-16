@@ -180,15 +180,15 @@ public class VibraniumBlocks {
                 PurpleMossCarpet::new,
                 PurpleMossCarpet.getProperties(BlockBehaviour.Properties.of()),
                 true);
-        PURPLE_CAVE_VINES= register(
-                "purple_cave_vines",
-                PurpleCaveVines::new,
-                PurpleCaveVines.getProperties(BlockBehaviour.Properties.of()),
-                true);
         PURPLE_CAVE_VINES_PLANT= register(
                 "purple_cave_vines_plant",
                 PurpleCaveVinesPlant::new,
                 PurpleCaveVinesPlant.getProperties(BlockBehaviour.Properties.of()),
+                true);
+        PURPLE_CAVE_VINES= register(
+                "purple_cave_vines",
+                PurpleCaveVines::new,
+                PurpleCaveVines.getProperties(BlockBehaviour.Properties.of()),
                 true);
         POTTED_PURPLE_AZALEA_BUSH= register(
                 "potted_purple_azalea_bush",

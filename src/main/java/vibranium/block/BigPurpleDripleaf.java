@@ -88,9 +88,14 @@ public class BigPurpleDripleaf extends BigDripleafBlock {
                 scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
             }
 
-            return direction == Direction.UP && blockState2.is(this)
-                    ? VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.withPropertiesOf(blockState)
-                    : super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
+            if (direction == Direction.UP && blockState2.is(this)) {
+                // We manually copy properties to the Stem block to keep the plant's orientation
+                return VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.defaultBlockState()
+                        .setValue(FACING, blockState.getValue(FACING))
+                        .setValue(WATERLOGGED, blockState.getValue(WATERLOGGED));
+            }
+
+            return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
         }
     }
     @Override

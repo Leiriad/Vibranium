@@ -31,16 +31,16 @@ public class VibraniumConfiguredFeatures {
             ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, "flowering_purple_azalea_tree"));
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-        // Enregistre l'arbre normal
+        // Registers the normal tree
         register(context, PURPLE_AZALEA_TREE_KEY, Feature.TREE,
                 createAzaleaTree(VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE).build());
 
-        // Enregistre l'arbre fleuri (on change juste le bloc de base ou on pourrait passer un flag au décorateur)
+        // Registers the flowering tree
         register(context, FLOWERING_PURPLE_AZALEA_TREE_KEY, Feature.TREE,
                 createAzaleaTree(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE).build());
     }
 
-    // Méthode utilitaire pour éviter de répéter 15 lignes de code
+
     private static TreeConfiguration.TreeConfigurationBuilder createAzaleaTree(Block baseLeaf) {
         return new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.OAK_LOG),
@@ -50,7 +50,7 @@ public class VibraniumConfiguredFeatures {
                 new TwoLayersFeatureSize(1, 0, 1)
         )
                 .dirt(BlockStateProvider.simple(Blocks.ROOTED_DIRT))
-                .decorators(List.of(VibraniumGradientDecorator.INSTANCE)); // Ton décorateur magique
+                .decorators(List.of(VibraniumGradientDecorator.INSTANCE)); //creates the gradient of colors
     }
 
     private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC config) {

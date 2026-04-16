@@ -12,6 +12,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vibranium.init.VibraniumBlocks;
+import vibranium.init.VibraniumMeteorite;
 import vibranium.init.VibraniumTreeDecorators;
 import vibranium.utils.VibraniumToolActions;
 
@@ -22,6 +23,11 @@ public class Vibranium implements ModInitializer {
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	//key to identify data/vibranium/worldgen/placed_feature/meteorite_placed.json
+	public static final ResourceKey<PlacedFeature> METEORITE_PLACED_KEY = ResourceKey.create(
+			Registries.PLACED_FEATURE,
+			Identifier.fromNamespaceAndPath(MOD_ID, "meteorite_placed")
+	);
 
 	@Override
 	public void onInitialize() {
@@ -30,24 +36,24 @@ public class Vibranium implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Vibranium est chargé!");
+		//Initialize Registry Content
 		VibraniumBlocks.registerModBlocks();
 		VibraniumTreeDecorators.register();
 		VibraniumBlocks.initialize();
-		//Biome placement
-		//Keys creation
-		ResourceKey<PlacedFeature> vibraniumOrePlacedKey = ResourceKey.create(
-				Registries.PLACED_FEATURE,
-				Identifier.fromNamespaceAndPath("vibranium", "vibranium_ore")
-		);
+		// Register the Meteorite Feature logic
+		VibraniumMeteorite.registerFeatures();
 
-		//Use Fabric API to inject ore in world
+		// 2. World Generation Placement
+		// This links the JSON file at data/vibranium/worldgen/placed_feature/meteorite_placed.json
+		// to the overworld biomes.
 		BiomeModifications.addFeature(
-					BiomeSelectors.foundInOverworld(),
-					GenerationStep.Decoration.UNDERGROUND_ORES,
-					vibraniumOrePlacedKey
+				BiomeSelectors.foundInOverworld(),
+				GenerationStep.Decoration.LOCAL_MODIFICATIONS, // Changed from ORES to LOCAL_MODIFICATIONS for structures
+				METEORITE_PLACED_KEY
 		);
 
-		//Actions on blocks
+		// 3. Other Actions
 		VibraniumToolActions.register();
 	}
+
 }

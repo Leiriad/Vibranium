@@ -1,6 +1,7 @@
 package vibranium.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -28,18 +29,37 @@ public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock
     }
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        super.randomTick(state, world, pos, random);
-        
-        //Vibranium_Grass_block spreads
-        spreadsToTarget(world, random, pos);
+        if (!canSurviveAsGrass(world, pos)) {
+            // If dies replaced by vibranium_dirt
+            world.setBlockAndUpdate(pos, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState());
+            return;
+        }
+        //If there is enough light (9 as for vanilla grass) it propagates and lives
+        if (world.getMaxLocalRawBrightness(pos.above()) >= 9) {
+            //Vibranium_Grass_block spreads
+            spreadsToTarget(world, random, pos);
+            //Vibranium_Grass_Block spawns plants
+            growsCompatiblePlants(world, random, pos);
+            //Vibranium_Grass_Block make plants grow faster with a risk of destruction
+            VibraniumBlockActions.fertilizes(world, random, pos);
+        }
 
-        //Vibranium_Grass_Block spawns plants
-        growsCompatiblePlants(world, random, pos);
-
-        //Vibranium_Grass_Block make plants grow faster with a risk of destruction
-        VibraniumBlockActions.fertilizes(world, random, pos);
     }
+    private boolean canSurviveAsGrass(ServerLevel world, BlockPos pos) {
+        BlockPos abovePos = pos.above();
+        BlockState aboveState = world.getBlockState(abovePos);
 
+        // Is under water ?
+        if (aboveState.getFluidState().getAmount() > 0) {
+            return false;
+        }
+        //Is under a dark bloc
+        if (aboveState.isViewBlocking(world, abovePos)) {
+            return false;
+        }
+
+        return true;
+    }
     private void spreadsToTarget(ServerLevel world, RandomSource random, BlockPos pos) {
 
         BlockPos targetPos = pos.offset(
@@ -86,6 +106,7 @@ public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
         growsCompatiblePlants(level, random, pos);
     }
+
 
     private void growsCompatiblePlants(ServerLevel level, RandomSource random, BlockPos pos) {
 
