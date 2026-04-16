@@ -1,6 +1,7 @@
 {
   "format_version": "1.21.11",
   "credit": "Made with Blockbench",
+  "render_type": "minecraft:cutout",
   "textures": {
     "0": "vibranium:block/heart_shaped_herb_bud",
     "1": "vibranium:block/heart_shaped_herb_bud_stem",

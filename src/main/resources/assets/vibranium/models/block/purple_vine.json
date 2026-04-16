@@ -1,4 +1,5 @@
 {
+  "render_type": "minecraft:cutout",
   "parent": "minecraft:block/vine",
   "textures": {
     "particle": "vibranium:block/purple_vine",

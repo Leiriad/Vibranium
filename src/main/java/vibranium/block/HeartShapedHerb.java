@@ -21,7 +21,7 @@ public class HeartShapedHerb extends BushBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.RED_TULIP).randomTicks().emissiveRendering((state, world, pos) -> true)
-                .lightLevel((state) -> 8);
+                .lightLevel((state) -> 2);
     }
 
     ///The herb as 3 growth stages sprout, bud, flower and spawns in random directions

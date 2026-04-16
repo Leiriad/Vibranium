@@ -6,5 +6,5 @@
     "side": "vibranium:block/purple_azalea_leaves_violet_side",
     "particle": "vibranium:block/purple_azalea_leaves_violet_side"
   },
-  "render_type": "cutout"
+  "render_type": "minecraft:cutout"
 }
