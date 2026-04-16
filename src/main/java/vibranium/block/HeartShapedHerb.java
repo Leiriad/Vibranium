@@ -23,13 +23,15 @@ public class HeartShapedHerb extends BushBlock {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.RED_TULIP).randomTicks().emissiveRendering((state, world, pos) -> true)
                 .lightLevel((state) -> 8);
     }
+
+    ///The herb as 3 growth stages sprout, bud, flower and spawns in random directions
     public HeartShapedHerb(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any()
                 .setValue(AGE,0)
                 .setValue(FACING,Direction.NORTH));
     }
-
+    ///Allows the herb to grow with time
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int age = state.getValue(AGE);
