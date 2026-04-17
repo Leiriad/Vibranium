@@ -35,24 +35,36 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel world = context.level();
-        // The geode's origin is calculated relatively to the chunk's center
-        BlockPos origin = context.origin().offset(8, 0, 8);
+        BlockPos origin = context.origin();
         RandomSource random = context.random();
 
-        boolean isWet = random.nextInt(5) == 0;
-        int radius = getRadius(random);
-        int waterLevel = calculateWaterLevel(isWet, radius, origin, random);
+        //Check ground under origin if close to surface, origin is surface minus half the radius
+        //Position center, the geode's origin is calculated relatively to the chunk's center, with a vertical offset to bury it in the ground
+        int surfaceY = world.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, origin.getX(), origin.getZ());
+        BlockPos finalOrigin;
+        if (Math.abs(origin.getY() - surfaceY) < 10) {
+            finalOrigin = new BlockPos(origin.getX() + 8, surfaceY - (getRadius(random) / 2), origin.getZ() + 8);
+        } else {
+            finalOrigin = origin.offset(8, 0, 8);
+        }
+        if (!world.isInsideBuildHeight(finalOrigin.getY())) {
+            return false;
+        }
 
         // First pass: Structural generation
+        int radius = getRadius(random);
+        boolean isWet = random.nextInt(5) == 0;
+        int waterLevel = calculateWaterLevel(isWet, radius, finalOrigin, random);
+
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
                 for (int z = -radius; z <= radius; z++) {
                     double distance = Math.sqrt(x * x + y * y + z * z);
                     if (distance <= radius) {
-                        BlockPos target = origin.offset(x, y, z);
+                        BlockPos target = finalOrigin.offset(x, y, z);
                         double noiseFactor = getNoise(target.getX(), target.getY(), target.getZ());
                         double distortedDistance = distance + noiseFactor;
-                        generateStructure(world, target, distortedDistance, radius, waterLevel, origin, random);
+                        generateStructure(world, target, distortedDistance, radius, waterLevel, finalOrigin, random);
                     }
                 }
             }
@@ -64,7 +76,7 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
                 for (int z = -radius; z <= radius; z++) {
                     double distance = Math.sqrt(x * x + y * y + z * z);
                     if (distance < radius - 1) {
-                        decorateInterior(world, origin.offset(x, y, z), random, waterLevel);
+                        decorateInterior(world, finalOrigin.offset(x, y, z), random);
                     }
                 }
             }
@@ -79,13 +91,10 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
 
     private int calculateWaterLevel(boolean isWet, int radius, BlockPos origin, RandomSource random) {
         if (isWet) return origin.getY() + (radius-2);
+
         //defines the amount of water in the geode
-        float puddleChance = random.nextFloat();
-        if (puddleChance < 0.9f) {
-            int baseFloorY = (int) (origin.getY() - (radius * 0.6));
-            return baseFloorY + 1 + random.nextInt(4);
-        }
-        return origin.getY() - radius - 1;
+        int baseFloorY = (int) (origin.getY() - (radius * 0.6));
+        return baseFloorY + 1 + random.nextInt(2);
     }
 
     private void generateStructure(WorldGenLevel world, BlockPos target, double distortedDistance, int radius, int waterLevel, BlockPos origin, RandomSource random) {
@@ -94,25 +103,25 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         BlockState current = world.getBlockState(target);
 
         if (target.getY() > surfaceY && current.isAir()) return;
-        boolean isAtSurface = target.getY() >= surfaceY - 1;
 
         if (distortedDistance < radius - 3) {
-            handleHollowInterior(world, target, distortedDistance, radius, waterLevel, origin, surfaceY);
+            handleHollowInterior(world, target, distortedDistance, radius, waterLevel, origin, surfaceY, random);
         } else if (distortedDistance > radius - 1.5) {
             generateShell(world, target, target.getY() >= surfaceY - 1, 0.4f, random);
         } else {
-            generateVibraniumVeins(world, target, target.getY() >= surfaceY - 1, random);
+            generateVibraniumVeins(world, target, target.getY() >= surfaceY - 1, random,distortedDistance,radius);
         }
     }
 
-    private void handleHollowInterior(WorldGenLevel world, BlockPos target, double distance, int radius, int waterLevel, BlockPos origin, int surfaceY) {
+    private void handleHollowInterior(WorldGenLevel world, BlockPos target, double distance, int radius, int waterLevel, BlockPos origin, int surfaceY, RandomSource random) {
         double noise = Math.sin(target.getX() * 0.15) * Math.cos(target.getZ() * 0.15) * 4;
         noise += Math.sin(target.getX() * 0.4) * 1.5;
         double edgeBoost = Math.max(0, (distance - (radius * 0.4)));
         int floorHeight = (int) (origin.getY() - (radius * 0.6) + noise + edgeBoost);
 
         if (target.getY() <= floorHeight) {
-            generateFloor(world, target, waterLevel);
+            int puddleDepth = 1 + random.nextInt(3);
+            generateFloor(world, target, waterLevel, puddleDepth);
         } else if (target.getY() <= waterLevel) {
             safeSetBlock(world, target, target.getY() < surfaceY - 1 ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState());
         } else {
@@ -121,10 +130,11 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         }
     }
 
-    private void generateVibraniumVeins(WorldGenLevel world, BlockPos target, boolean isAtSurface, RandomSource random) {
+    private void generateVibraniumVeins(WorldGenLevel world, BlockPos target, boolean isAtSurface, RandomSource random, double distortedDistance, int radius) {
         double oreNoise = Math.sin(target.getX() * 0.5) + Math.sin(target.getY() * 0.5) + Math.sin(target.getZ() * 0.5);
         //ore patches (the closest to 3 the rarest)
-        if (oreNoise > 2.8 || (oreNoise > 2.0 && random.nextFloat() < 0.4f)) {// 0.4f means we keep only 40% of the blocks
+        boolean isInnerShell = distortedDistance < (radius - 1.5) && distortedDistance > (radius - 2.5);
+        if (oreNoise > 2.4 || (isInnerShell && random.nextFloat() < 0.2f)) {// 0.2f means we keep only 20% of the blocks
             safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_ORE.defaultBlockState());
         } else {
             generateShell(world, target, isAtSurface, 0.2f, random);
@@ -134,72 +144,81 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
     private void generateShell(WorldGenLevel world, BlockPos target, boolean isAtSurface, float mossChance, RandomSource random) {
         BlockState shell = (isAtSurface && random.nextFloat() < mossChance) ?
                 Blocks.MOSSY_COBBLESTONE.defaultBlockState() : Blocks.BLACKSTONE.defaultBlockState();
+
         safeSetBlock(world, target, shell);
     }
 
-    private void generateFloor(WorldGenLevel world, BlockPos target, int waterLevel) {
+    private void generateFloor(WorldGenLevel world, BlockPos target, int waterLevel,int puddleDepth) {
         double patchNoise = Math.sin(target.getX() * 0.12) + Math.sin(target.getZ() * 0.12);
-        BlockState state;
         //perlin noise sets the size of the patches
         // sediments (underwater)
         if (target.getY() <= waterLevel) {
             // On crée trois zones distinctes selon le bruit
-            if (patchNoise > 0.2) {
-                safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState());
-            } else if (patchNoise > -0.2) {
-                safeSetBlock(world, target, VibraniumBlocks.BLACKCLAY.defaultBlockState());
-            } else {
-                safeSetBlock(world, target, VibraniumBlocks.BLACKGRAVEL.defaultBlockState());
+
+            if(target.getY()< waterLevel-puddleDepth){
+                if (patchNoise > 0.2) {
+                    safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState());
+                } else if (patchNoise > -0.2) {
+                    safeSetBlock(world, target, VibraniumBlocks.BLACKCLAY.defaultBlockState());
+                } else {
+                    safeSetBlock(world, target, VibraniumBlocks.BLACKGRAVEL.defaultBlockState());
+                }
+            }else {
+                safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.defaultBlockState());
             }
         }
         else { //Grass or moss
-            if (patchNoise > 0.3) {
-                safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.defaultBlockState());
-            } else {
-                safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_BLOCK.defaultBlockState());
-            }
+            safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.defaultBlockState());
         }
 
     }
 
-    private void decorateInterior(WorldGenLevel world, BlockPos target, RandomSource random, int waterLevel) {
+    private void decorateInterior(WorldGenLevel world, BlockPos target, RandomSource random) {
         BlockState current = world.getBlockState(target);
         //Clean vanilla blocks
         if (current.is(BlockTags.LOGS) || current.is(BlockTags.LEAVES) || current.is(Blocks.OAK_LOG)) {
             safeSetBlock(world, target, Blocks.AIR.defaultBlockState());
             return;
         }
-        if (!current.isAir() && !current.is(Blocks.WATER)) return;
+        if (!current.isAir() && !world.getFluidState(target).is(FluidTags.WATER)) return;
         //add dripstones
-        if (world.isEmptyBlock(target) && random.nextFloat() < 0.02f) { // Très rare
+        if (current.isAir() && random.nextFloat() < 0.05f) {
             if (world.getBlockState(target.above()).is(Blocks.BLACKSTONE)) {
-                placeDripstoneColumn(world, target, Direction.DOWN, random); // Stalactite
-                return;
-            } else if (world.getBlockState(target.below()).isFaceSturdy(world, target.below(), Direction.UP)) {
-                placeDripstoneColumn(world, target, Direction.UP, random); // Stalagmite
+                placeDripstoneColumn(world, target, random);
                 return;
             }
         }
+        //add vines
         if (current.isAir()) {
-            BlockState above = world.getBlockState(target.above());
-            if (above.is(Blocks.BLACKSTONE) || above.is(VibraniumBlocks.VIBRANIUM_ORE) || above.is(Blocks.MOSSY_COBBLESTONE)) {
-                if (random.nextFloat() < 0.20f) placeVineGrapnel(world, target, random);
+            if (random.nextFloat() < 0.25f) {
+                placeVineGrapnel(world, target, random);
             }
         }
-
+        //add cave vines and moss carpets
         if (world.getBlockState(target.below()).is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK)) {
             if (world.getFluidState(target).is(FluidTags.WATER)) {
-                if (random.nextFloat() < 0.15f) placeSmallDripleaf(world, target);
+                if (random.nextFloat() < 0.30f) placeSmallDripleaf(world, target);
             } else if (world.isEmptyBlock(target)) {
                 float r = random.nextFloat();
-                if (r < 0.10f) safeSetBlock(world, target, VibraniumBlocks.BIG_PURPLE_DRIPLEAF.defaultBlockState());
-                else if (r < 0.25f) safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_CARPET.defaultBlockState());
+                if (r < 0.15f) {
+                    safeSetBlock(world, target.below(), VibraniumBlocks.PURPLE_MOSS_BLOCK.defaultBlockState());
+                    if (random.nextBoolean()) {
+                        safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_CARPET.defaultBlockState());
+                    }
+                }
+                else if (r < 0.25f) {
+                    safeSetBlock(world, target, VibraniumBlocks.BIG_PURPLE_DRIPLEAF.defaultBlockState());
+                }
+                else if (r < 0.40f) {
+                    safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_CARPET.defaultBlockState());
+                }
             }
         }
     }
 
-    private void placeDripstoneColumn(WorldGenLevel world, BlockPos pos, Direction direction, RandomSource random) {
+    private void placeDripstoneColumn(WorldGenLevel world, BlockPos pos, RandomSource random) {
         //place support bloc
+        Direction direction = Direction.DOWN;
         BlockPos supportPos = pos.relative(direction.getOpposite());
         safeSetBlock(world, supportPos, Blocks.DRIPSTONE_BLOCK.defaultBlockState());
 
@@ -235,32 +254,36 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void placeVineGrapnel(WorldGenLevel world, BlockPos target, RandomSource random) {
+        boolean placed = false;
         if (world.getBlockState(target.above()).isFaceSturdy(world, target.above(), Direction.DOWN)) {
             // Add Age and Berries to ensure it stays as PurpleCaveVines
             BlockState head = VibraniumBlocks.PURPLE_CAVE_VINES.defaultBlockState()
                     .setValue(CaveVinesBlock.AGE, random.nextInt(25))
                     .setValue(CaveVinesBlock.BERRIES, random.nextFloat() < 0.15f);
             safeSetBlock(world, target, head);
-            return;
+            placed = true;
         }
 
-        BlockState wallVine = VibraniumBlocks.PURPLE_VINE.defaultBlockState();
-        boolean placed = false;
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            BlockPos neighbor = target.relative(dir);
-            BlockState neighborState = world.getBlockState(neighbor);
-            if (!neighborState.isAir() && !neighborState.is(Blocks.WATER)) {
-                wallVine = wallVine.setValue(VineBlock.getPropertyForFace(dir), true);
-                placed = true;
+        if (!placed) {
+            BlockState wallVine = VibraniumBlocks.PURPLE_VINE.defaultBlockState();
+            boolean wallFound = false;
+            for (Direction dir : Direction.Plane.HORIZONTAL) {
+                BlockPos neighbor = target.relative(dir);
+                BlockState neighborState = world.getBlockState(neighbor);
+
+                if (neighborState.isSolidRender()) {
+                    wallVine = wallVine.setValue(VineBlock.getPropertyForFace(dir), true);
+                    wallFound = true;
+                }
             }
+            if (wallFound) safeSetBlock(world, target, wallVine);
         }
-        if (placed) safeSetBlock(world, target, wallVine);
     }
 
     private static int getRadius(RandomSource random) {
         float roll = random.nextFloat();
-        if (roll < 0.30f) return 3 + random.nextInt(3);// 30% very small meteorite
-        if (roll < 0.55f) return 7 + random.nextInt(4);//55% standard 7 to 11 blocs radius
-        return 12 + random.nextInt(3);//10% huge (12 to 15)
+        if (roll < 0.10f) return 1 + random.nextInt(5);// 10% very small meteorite
+        if (roll < 0.55f) return 5 + random.nextInt(3);//55% standard 4 to 7 blocs radius
+        return 8 + random.nextInt(3);//45% huge (5 to 8)
     }
 }

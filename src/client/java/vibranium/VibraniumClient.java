@@ -2,6 +2,8 @@ package vibranium;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import vibranium.init.VibraniumBlocks;
 
@@ -40,6 +42,11 @@ public class VibraniumClient implements ClientModInitializer {
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.PURPLE_VINE, ChunkSectionLayer.CUTOUT);
 		BlockRenderLayerMap.putBlock(VibraniumBlocks.HEART_SHAPED_HERB, ChunkSectionLayer.CUTOUT);
 
+		//vine color fix
+		// On force le bloc à rester "naturel" (blanc pur = pas de changement de couleur)
+		ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> 0xFFFFFF, VibraniumBlocks.PURPLE_VINE);
 
 	}
+
+
 }

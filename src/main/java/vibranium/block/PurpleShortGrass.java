@@ -9,12 +9,16 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.material.MapColor;
 import vibranium.init.VibraniumBlocks;
 
 
 public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS)
+                .mapColor(MapColor.COLOR_PURPLE)
+                .emissiveRendering((state, world, pos) -> true)
+                .lightLevel((state) -> 2);
     }
     public PurpleShortGrass(Properties properties) {
         super(properties.randomTicks());
