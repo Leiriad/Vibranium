@@ -7,13 +7,11 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CaveVinesBlock;
-import net.minecraft.world.level.block.SmallDripleafBlock;
-import net.minecraft.world.level.block.VineBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -52,7 +50,9 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
                     double distance = Math.sqrt(x * x + y * y + z * z);
                     if (distance <= radius) {
                         BlockPos target = origin.offset(x, y, z);
-                        generateStructure(world, target, distance, radius, waterLevel, origin, random);
+                        double noiseFactor = getNoise(target.getX(), target.getY(), target.getZ());
+                        double distortedDistance = distance + noiseFactor;
+                        generateStructure(world, target, distortedDistance, radius, waterLevel, origin, random);
                     }
                 }
             }
@@ -72,17 +72,23 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         return true;
     }
 
+    private double getNoise(int x, int y, int z) {
+        // Uses different frequency sinuses to create irregular topography
+        return Math.sin(x * 0.2) * 1.5 + Math.cos(y * 0.2) * 1.5 + Math.sin(z * 0.2) * 1.5;
+    }
+
     private int calculateWaterLevel(boolean isWet, int radius, BlockPos origin, RandomSource random) {
-        if (isWet) return origin.getY() + radius;
+        if (isWet) return origin.getY() + (radius-2);
         //defines the amount of water in the geode
-        if (random.nextFloat() < 0.8f) {
-            int puddleDepth = radius / Math.max(1, 2 + random.nextInt(2));
-            return origin.getY() - (radius - puddleDepth);
+        float puddleChance = random.nextFloat();
+        if (puddleChance < 0.9f) {
+            int baseFloorY = (int) (origin.getY() - (radius * 0.6));
+            return baseFloorY + 1 + random.nextInt(4);
         }
         return origin.getY() - radius - 1;
     }
 
-    private void generateStructure(WorldGenLevel world, BlockPos target, double distance, int radius, int waterLevel, BlockPos origin, RandomSource random) {
+    private void generateStructure(WorldGenLevel world, BlockPos target, double distortedDistance, int radius, int waterLevel, BlockPos origin, RandomSource random) {
         //If the meteorite is at the surface, it is eroded: no roof and mossy stone eats at it
         int surfaceY = world.getHeight(Heightmap.Types.WORLD_SURFACE_WG, target.getX(), target.getZ());
         BlockState current = world.getBlockState(target);
@@ -90,12 +96,12 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         if (target.getY() > surfaceY && current.isAir()) return;
         boolean isAtSurface = target.getY() >= surfaceY - 1;
 
-        if (distance > radius - 1) {
-            generateShell(world, target, isAtSurface, 0.4f, random);
-        } else if (distance > radius - 3) {
-            generateVibraniumVeins(world, target, isAtSurface, random);
+        if (distortedDistance < radius - 3) {
+            handleHollowInterior(world, target, distortedDistance, radius, waterLevel, origin, surfaceY);
+        } else if (distortedDistance > radius - 1.5) {
+            generateShell(world, target, target.getY() >= surfaceY - 1, 0.4f, random);
         } else {
-            handleHollowInterior(world, target, distance, radius, waterLevel, origin, surfaceY);
+            generateVibraniumVeins(world, target, target.getY() >= surfaceY - 1, random);
         }
     }
 
@@ -135,26 +141,45 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         double patchNoise = Math.sin(target.getX() * 0.12) + Math.sin(target.getZ() * 0.12);
         BlockState state;
         //perlin noise sets the size of the patches
-        // Grass
-        if (patchNoise > 0.4) state = VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.defaultBlockState();
-        else if (patchNoise > 0.1) state = VibraniumBlocks.PURPLE_MOSS_BLOCK.defaultBlockState();
-        // Sediments
-        else if (target.getY() <= waterLevel) {
-            state = (patchNoise > -0.4) ? VibraniumBlocks.BLACKCLAY.defaultBlockState() : VibraniumBlocks.BLACKGRAVEL.defaultBlockState();
-        } else {
-            state = VibraniumBlocks.BLACKGRAVEL.defaultBlockState();
+        // sediments (underwater)
+        if (target.getY() <= waterLevel) {
+            // On crée trois zones distinctes selon le bruit
+            if (patchNoise > 0.2) {
+                safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState());
+            } else if (patchNoise > -0.2) {
+                safeSetBlock(world, target, VibraniumBlocks.BLACKCLAY.defaultBlockState());
+            } else {
+                safeSetBlock(world, target, VibraniumBlocks.BLACKGRAVEL.defaultBlockState());
+            }
         }
-        safeSetBlock(world, target, state);
+        else { //Grass or moss
+            if (patchNoise > 0.3) {
+                safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.defaultBlockState());
+            } else {
+                safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_BLOCK.defaultBlockState());
+            }
+        }
+
     }
 
     private void decorateInterior(WorldGenLevel world, BlockPos target, RandomSource random, int waterLevel) {
         BlockState current = world.getBlockState(target);
-
+        //Clean vanilla blocks
         if (current.is(BlockTags.LOGS) || current.is(BlockTags.LEAVES) || current.is(Blocks.OAK_LOG)) {
             safeSetBlock(world, target, Blocks.AIR.defaultBlockState());
             return;
         }
-
+        if (!current.isAir() && !current.is(Blocks.WATER)) return;
+        //add dripstones
+        if (world.isEmptyBlock(target) && random.nextFloat() < 0.02f) { // Très rare
+            if (world.getBlockState(target.above()).is(Blocks.BLACKSTONE)) {
+                placeDripstoneColumn(world, target, Direction.DOWN, random); // Stalactite
+                return;
+            } else if (world.getBlockState(target.below()).isFaceSturdy(world, target.below(), Direction.UP)) {
+                placeDripstoneColumn(world, target, Direction.UP, random); // Stalagmite
+                return;
+            }
+        }
         if (current.isAir()) {
             BlockState above = world.getBlockState(target.above());
             if (above.is(Blocks.BLACKSTONE) || above.is(VibraniumBlocks.VIBRANIUM_ORE) || above.is(Blocks.MOSSY_COBBLESTONE)) {
@@ -169,6 +194,29 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
                 float r = random.nextFloat();
                 if (r < 0.10f) safeSetBlock(world, target, VibraniumBlocks.BIG_PURPLE_DRIPLEAF.defaultBlockState());
                 else if (r < 0.25f) safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_CARPET.defaultBlockState());
+            }
+        }
+    }
+
+    private void placeDripstoneColumn(WorldGenLevel world, BlockPos pos, Direction direction, RandomSource random) {
+        //place support bloc
+        BlockPos supportPos = pos.relative(direction.getOpposite());
+        safeSetBlock(world, supportPos, Blocks.DRIPSTONE_BLOCK.defaultBlockState());
+
+        // place first spike
+        safeSetBlock(world, pos, Blocks.POINTED_DRIPSTONE.defaultBlockState()
+                .setValue(PointedDripstoneBlock.TIP_DIRECTION, direction)
+                .setValue(PointedDripstoneBlock.THICKNESS, DripstoneThickness.TIP));
+
+        // 50% chance to grow the spike
+        if (random.nextBoolean()) {
+            BlockPos nextPos = pos.relative(direction);
+            if (world.isEmptyBlock(nextPos) || world.getFluidState(nextPos).is(FluidTags.WATER)) {
+
+                safeSetBlock(world, pos, world.getBlockState(pos).setValue(PointedDripstoneBlock.THICKNESS, DripstoneThickness.FRUSTUM));
+                safeSetBlock(world, nextPos, Blocks.POINTED_DRIPSTONE.defaultBlockState()
+                        .setValue(PointedDripstoneBlock.TIP_DIRECTION, direction)
+                        .setValue(PointedDripstoneBlock.THICKNESS, DripstoneThickness.TIP));
             }
         }
     }
