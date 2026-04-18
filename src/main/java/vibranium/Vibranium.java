@@ -28,6 +28,10 @@ public class Vibranium implements ModInitializer {
 			Registries.PLACED_FEATURE,
 			Identifier.fromNamespaceAndPath(MOD_ID, "meteorite_placed")
 	);
+	public static final ResourceKey<PlacedFeature> METEORITE_END_KEY = ResourceKey.create(
+			Registries.PLACED_FEATURE,
+			Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, "meteorite_end_placed")
+	);
 
 	@Override
 	public void onInitialize() {
@@ -42,8 +46,10 @@ public class Vibranium implements ModInitializer {
 		VibraniumBlocks.initialize();
 		// Register the Meteorite Feature logic
 		VibraniumMeteorite.registerFeatures();
+		//place meteorites in overworld and end
+		VibraniumMeteorite.addWorldgen();
 
-		// 2. World Generation Placement
+		// World Generation Placement
 		// This links the JSON file at data/vibranium/worldgen/placed_feature/meteorite_placed.json
 		// to the overworld biomes.
 		BiomeModifications.addFeature(

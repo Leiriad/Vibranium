@@ -4,14 +4,14 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
-import vibranium.utils.VibraniumConfiguredFeatures;
+import vibranium.feature.VibraniumPurpleAzaleaFeatures;
 
 public class VibraniumDataGenerator implements DataGeneratorEntrypoint {
 	///DataGen initializer
 	@Override
 	public void buildRegistry(RegistrySetBuilder registryBuilder) {
 		// tree registration
-		registryBuilder.add(Registries.CONFIGURED_FEATURE, VibraniumConfiguredFeatures::bootstrap);
+		registryBuilder.add(Registries.CONFIGURED_FEATURE, VibraniumPurpleAzaleaFeatures::bootstrap);
 	}
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {

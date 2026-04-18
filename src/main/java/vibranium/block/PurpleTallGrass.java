@@ -17,7 +17,7 @@ public class PurpleTallGrass extends DoublePlantBlock {
         return Properties.ofFullCopy(Blocks.TALL_GRASS)
                 .mapColor(MapColor.COLOR_PURPLE)
                 .emissiveRendering((state, world, pos) -> true)
-                .lightLevel((state) -> 2);
+                .lightLevel((state) -> 1);
     }
     public PurpleTallGrass(Properties properties) {
         super(properties);

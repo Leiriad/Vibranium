@@ -11,28 +11,35 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.material.MapColor;
 
 public class SmallPurpleDripleaf extends SmallDripleafBlock {
 
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_DRIPLEAF);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_DRIPLEAF)
+                .mapColor(MapColor.COLOR_PURPLE)
+                .emissiveRendering((state, world, pos) -> true)
+                .lightLevel((state) -> 1);
     }
     public SmallPurpleDripleaf(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(HALF, DoubleBlockHalf.LOWER)
                 .setValue(BlockStateProperties.WATERLOGGED, false)
-                .setValue(FACING, Direction.NORTH));
+                .setValue(FACING, Direction.NORTH))                ;
     }
     @Override
     public void performBonemeal(ServerLevel serverLevel, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
-        if (blockState.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.LOWER) {
-            BlockPos blockPos2 = blockPos.above();
-            serverLevel.setBlock(blockPos2, serverLevel.getFluidState(blockPos2).createLegacyBlock(), 18);
-            BigPurpleDripleaf.placeWithRandomHeight(serverLevel, randomSource, blockPos, blockState.getValue(FACING));
+        Direction currentFacing = blockState.getValue(FACING);
+
+        if (blockState.getValue(SmallDripleafBlock.HALF) == DoubleBlockHalf.LOWER) {
+            BlockPos upperPos = blockPos.above();
+            serverLevel.setBlock(upperPos, serverLevel.getFluidState(upperPos).createLegacyBlock(), 18);
+
+            BigPurpleDripleaf.placeWithRandomHeight(serverLevel, randomSource, blockPos, currentFacing);
         } else {
-            BlockPos blockPos2 = blockPos.below();
-            this.performBonemeal(serverLevel, randomSource, blockPos2, serverLevel.getBlockState(blockPos2));
+            BlockPos lowerPos = blockPos.below();
+            this.performBonemeal(serverLevel, randomSource, lowerPos, serverLevel.getBlockState(lowerPos));
         }
     }
 

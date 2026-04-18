@@ -6,7 +6,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import vibranium.utils.VibraniumConfiguredFeatures;
+import vibranium.feature.VibraniumPurpleAzaleaFeatures;
 
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ public class FloweringPurpleAzalea extends PurpleAzalea {
     public static final TreeGrower FLOWERING_PURPLE_AZALEA_TREE_GROWER = new TreeGrower(
             "flowering_purple_azalea",
             Optional.empty(),
-            Optional.of(VibraniumConfiguredFeatures.FLOWERING_PURPLE_AZALEA_TREE_KEY),
+            Optional.of(VibraniumPurpleAzaleaFeatures.FLOWERING_PURPLE_AZALEA_TREE_KEY),
             Optional.empty());;
     public FloweringPurpleAzalea(BlockBehaviour.Properties properties) {
         super(properties);

@@ -1,19 +1,27 @@
 package vibranium.init;
 
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import vibranium.utils.MeteoriteFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import vibranium.feature.MeteoriteFeature;
 import vibranium.Vibranium;
+
+import static vibranium.Vibranium.METEORITE_END_KEY;
+import static vibranium.Vibranium.METEORITE_PLACED_KEY;
 
 public class VibraniumMeteorite {
 
     public static Feature<NoneFeatureConfiguration> METEORITE;
+
 
     public static void registerFeatures() {
         METEORITE = register("meteorite", new MeteoriteFeature(NoneFeatureConfiguration.CODEC));
@@ -28,6 +36,21 @@ public class VibraniumMeteorite {
         return ResourceKey.create(
                 Registries.FEATURE,
                 Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, name)
+        );
+    }
+    public static void addWorldgen() {
+        //Place in End
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInTheEnd(),
+                GenerationStep.Decoration.UNDERGROUND_ORES,
+                METEORITE_END_KEY
+        );
+
+        // Place in overworld
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInOverworld(),
+                GenerationStep.Decoration.UNDERGROUND_ORES,
+                METEORITE_PLACED_KEY
         );
     }
 }

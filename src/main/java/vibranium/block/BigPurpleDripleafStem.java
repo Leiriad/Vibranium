@@ -13,12 +13,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
 import vibranium.init.VibraniumBlocks;
 
 public class BigPurpleDripleafStem extends BigDripleafStemBlock {
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF_STEM);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF_STEM)
+                .mapColor(MapColor.COLOR_PURPLE)
+                .emissiveRendering((state, world, pos) -> true)
+                .lightLevel((state) -> 1);
     }
     public BigPurpleDripleafStem(Properties properties) {
         super(properties);

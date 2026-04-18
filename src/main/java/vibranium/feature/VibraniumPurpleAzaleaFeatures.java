@@ -1,4 +1,4 @@
-package vibranium.utils;
+package vibranium.feature;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -22,7 +21,7 @@ import vibranium.utils.VibraniumGradientDecorator;
 
 import java.util.List;
 
-public class VibraniumConfiguredFeatures {
+public class VibraniumPurpleAzaleaFeatures {
 
     public static final ResourceKey<ConfiguredFeature<?, ?>> PURPLE_AZALEA_TREE_KEY =
             ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(Vibranium.MOD_ID, "purple_azalea_tree"));
