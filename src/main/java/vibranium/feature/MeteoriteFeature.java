@@ -46,25 +46,41 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
 
         //Insure floor support
         boolean isEnd = world.getLevel().dimension().equals(net.minecraft.world.level.Level.END);
-        BlockPos groundPos = new BlockPos(checkX, surfaceY - 1, checkZ);
-        BlockState groundState = world.getBlockState(groundPos);
-        //End dimension generation specifics
-        if (isEnd) {
-            if (surfaceY < 15 || groundState.isAir()) {
-                return false;
-            }
-        } else { //Overworld
-            if (groundState.isAir() || groundState.is(Blocks.WATER) || groundState.is(BlockTags.REPLACEABLE)) {
-                return false;
-            }
-        }
+        int radius = getRadius(random);
+        BlockPos finalOrigin;
+        int originY = origin.getY();
 
         //Meteorite positioning
-        int radius = getRadius(random);
-        BlockPos finalOrigin = new BlockPos(checkX, surfaceY - (int)(radius * 0.75), checkZ);
+        if(originY>= surfaceY - 30){ //Surface meteorite
+            int targetSurfaceY = surfaceY - (int)(radius * 0.75); // we must have at least 75% of the meteorite buried in the ground
+            finalOrigin = new BlockPos(checkX, Math.min(originY, targetSurfaceY), checkZ);
+            BlockPos groundPos = new BlockPos(checkX, surfaceY - 1, checkZ);
+            BlockState groundState = world.getBlockState(groundPos);
+            //End dimension generation specifics
+            if (isEnd) {
+                if (surfaceY < 15 || groundState.isAir()) {
+                    return false;
+                }
+            } else { //Overworld
+                if (groundState.isAir() || groundState.is(Blocks.WATER) || groundState.is(BlockTags.REPLACEABLE)) {
+                    return false;
+                }
+            }
+        }
+        //Underground meteorites
+        else{
+            finalOrigin = new BlockPos(checkX, origin.getY(), checkZ);
+        }
+
+        //Validity check
+        BlockState stateAtOrigin = world.getBlockState(finalOrigin);
+        if (stateAtOrigin.isAir() || stateAtOrigin.is(Blocks.WATER)) {
+            return false;
+        }
         if (!world.isInsideBuildHeight(finalOrigin.getY())) {
             return false;
         }
+
 
         //Meteorite theoretical volume
         double theoreticalVolume = (4.0 / 3.0) * Math.PI * Math.pow(radius, 3);
