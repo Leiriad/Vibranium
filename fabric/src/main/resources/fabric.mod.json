@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "vibranium",
+  "version": "${version}",
+  "name": "Vibranium",
+  "description": "Brings the power of vibranium to Minecraft",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Leiriad/Vibranium",
+    "sources": "https://github.com/Leiriad/Vibranium"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/vibranium/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.leiriad.vibranium.fabric.VibraniumModFabric"
+    ],
+    "client": [
+      "io.github.leiriad.vibranium.fabric.client.VibraniumModFabricClient"
+    ]
+  },
+  "mixins": [
+    "vibranium.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": ">=1.21",
+    "java": ">=21",
+    "architectury": ">=13.0.0",
+    "fabric-api": "0.141.3+1.21.11"
+  }
+}
