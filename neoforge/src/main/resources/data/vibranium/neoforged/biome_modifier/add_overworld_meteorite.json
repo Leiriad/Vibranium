@@ -1,0 +1,6 @@
+{
+  "type": "neoforged:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "vibranium:meteorite_placed",
+  "step": "local_modifications"
+}

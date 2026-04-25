@@ -35,11 +35,6 @@ public class BlackGravel extends FallingBlock {
     }
 
     @Override
-    public BlockState getAppearance(BlockState state, BlockAndTintGetter renderView, BlockPos pos, Direction side, @Nullable BlockState sourceState, @Nullable BlockPos sourcePos) {
-        return super.getAppearance(state, renderView, pos, side, sourceState, sourcePos);
-    }
-
-    @Override
     public boolean isEnabled(FeatureFlagSet featureFlagSet) {
         return super.isEnabled(featureFlagSet);
     }

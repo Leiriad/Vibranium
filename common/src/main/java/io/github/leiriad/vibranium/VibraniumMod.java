@@ -1,28 +1,18 @@
 package io.github.leiriad.vibranium;
 
-import net.fabricmc.api.ModInitializer;
-
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import dev.architectury.event.events.common.LifecycleEvent;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumMeteorite;
 import io.github.leiriad.vibranium.init.VibraniumTreeDecorators;
-import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 
-public class VibraniumMod implements ModInitializer {
-	public static final String MOD_ID = "com/vibranium";
-
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+public class VibraniumMod {
+	public static final String MOD_ID = "vibranium";
 	//key to identify data/vibranium/worldgen/placed_feature/meteorite_placed.json
 	public static final ResourceKey<PlacedFeature> METEORITE_PLACED_KEY = ResourceKey.create(
 			Registries.PLACED_FEATURE,
@@ -30,11 +20,16 @@ public class VibraniumMod implements ModInitializer {
 	);
 	public static final ResourceKey<PlacedFeature> METEORITE_END_KEY = ResourceKey.create(
 			Registries.PLACED_FEATURE,
-			Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "meteorite_end_placed")
+			Identifier.fromNamespaceAndPath(MOD_ID, "meteorite_end_placed")
 	);
 
-	@Override
-	public void onInitialize() {
+	// This logger is used to write text to the console and the log file.
+	// It is considered best practice to use your mod id as the logger's name.
+	// That way, it's clear which mod wrote info, warnings, and errors.
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+
+	public static void init() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
@@ -43,23 +38,11 @@ public class VibraniumMod implements ModInitializer {
 		//Initialize Registry Content
 		VibraniumBlocks.registerModBlocks();
 		VibraniumTreeDecorators.register();
-		VibraniumBlocks.initialize();
 		// Register the Meteorite Feature logic
 		VibraniumMeteorite.registerFeatures();
-		//place meteorites in overworld and end
-		VibraniumMeteorite.addWorldgen();
-
-		// World Generation Placement
-		// This links the JSON file at data/vibranium/worldgen/placed_feature/meteorite_placed.json
-		// to the overworld biomes.
-		BiomeModifications.addFeature(
-				BiomeSelectors.foundInOverworld(),
-				GenerationStep.Decoration.LOCAL_MODIFICATIONS, // Changed from ORES to LOCAL_MODIFICATIONS for structures
-				METEORITE_PLACED_KEY
-		);
-
-		// 3. Other Actions
-		VibraniumToolActions.register();
+		LifecycleEvent.SETUP.register(() -> {
+			VibraniumBlocks.addItemsToTabs();
+		});
 	}
 
 }

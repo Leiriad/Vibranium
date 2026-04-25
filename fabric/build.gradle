@@ -53,3 +53,7 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
 }
+
+loom {
+    accessWidenerPath = project(":common").file("src/main/resources/vibranium.accesswidener")
+}

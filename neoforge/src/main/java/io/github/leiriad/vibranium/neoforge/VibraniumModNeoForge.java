@@ -1,13 +1,13 @@
-package com.example.neoforge;
+package io.github.leiriad.vibranium.neoforge;
 
+import io.github.leiriad.vibranium.VibraniumMod;
 import net.neoforged.fml.common.Mod;
 
-import com.example.ExampleMod;
 
-@Mod(ExampleMod.MOD_ID)
-public final class ExampleModNeoForge {
-    public ExampleModNeoForge() {
+@Mod(VibraniumMod.MOD_ID)
+public final class VibraniumModNeoForge {
+    public VibraniumModNeoForge() {
         // Run our common setup.
-        ExampleMod.init();
+        VibraniumMod.init();
     }
 }

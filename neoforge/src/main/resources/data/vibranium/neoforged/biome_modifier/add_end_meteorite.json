@@ -1,0 +1,6 @@
+{
+  "type": "neoforged:add_features",
+  "biomes": "#minecraft:is_end",
+  "features": "vibranium:meteorite_end_placed",
+  "step": "local_modifications"
+}
