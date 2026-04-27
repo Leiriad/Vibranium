@@ -22,9 +22,9 @@ public class PurpleAzalea extends AzaleaBlock {
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings) {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, world, pos) -> true)
-                .lightLevel((state) -> 5)
-                .hasPostProcess((state, world, pos) -> true);
+                .emissiveRendering((state, level, pos) -> true)
+                .hasPostProcess((state, level, pos) -> true)
+                .lightLevel((state) -> 5);
     }
 
     public PurpleAzalea(BlockBehaviour.Properties properties) {

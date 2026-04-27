@@ -50,8 +50,8 @@ public class VibraniumBlocks {
     public static Block HEART_SHAPED_HERB;
 
     private static final RegistrarManager REGISTRIES = RegistrarManager.get(VibraniumMod.MOD_ID);
-    private static final Registrar<Block> BLOCKS = REGISTRIES.get(Registries.BLOCK);
-    private static final Registrar<Item> ITEMS = REGISTRIES.get(Registries.ITEM);
+    public static final Registrar<Block> BLOCKS = REGISTRIES.get(Registries.BLOCK);
+    public static final Registrar<Item> ITEMS = REGISTRIES.get(Registries.ITEM);
 
     ///Registers block in the game
     public static void registerModBlocks() {
@@ -229,70 +229,34 @@ public class VibraniumBlocks {
     private static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.Properties settings, boolean shouldRegisterItem) {
         // Create a registry key for the block
         Identifier id = Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, name);
-        // Create the block instance
-        Block block = blockFactory.apply(settings);
-
-        //Register it on Architectury registrar
-        BLOCKS.register(id, () -> block);
+        // Use supplier to let the game choose when it creates the block instance
+        var supplier = BLOCKS.register(id, () -> blockFactory.apply(settings));
 
         // Sometimes, you may not want to register an item for the block.
         // Eg: if it's a technical block like `minecraft:moving_piston` or `minecraft:end_gateway`
         if (shouldRegisterItem) {
             // IMPORTANT : BlockItem should be created just before being called
-            ITEMS.register(id, () -> new BlockItem(block, new Item.Properties()));
+            ITEMS.register(id, () -> new BlockItem(supplier.get(), new Item.Properties()));
         }
 
-        return block;
+        return supplier.get();
     }
     //Add objets to creative tabs
     public static void addItemsToTabs() {
         //Natural blocks
-        /*CreativeTabRegistry.append(CreativeModeTabs.NATURAL_BLOCKS,
-                VIBRANIUM_ORE,
-                VIBRANIUM_DIRT,
-                VIBRANIUM_GRASS_BLOCK,
-                BLACKGRAVEL,
-                BLACKCLAY,
-                PURPLE_SHORT_GRASS,
-                PURPLE_TALL_GRASS,
-                PURPLE_AZALEA,
-                PURPLE_AZALEA_LEAVES_CYAN,
-                PURPLE_AZALEA_LEAVES_DARK_BLUE,
-                PURPLE_AZALEA_LEAVES_VIOLET,
-                FLOWERING_PURPLE_AZALEA,
-                FLOWERING_PURPLE_AZALEA_LEAVES_CYAN,
-                FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE,
-                FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET,
-                PURPLE_MOSS_BLOCK,
-                PURPLE_MOSS_CARPET,
-                BIG_PURPLE_DRIPLEAF,
-                SMALL_PURPLE_DRIPLEAF,
-                PURPLE_VINE,
-                HEART_SHAPED_HERB
-        );*/
-        CreativeTabRegistry.append(CreativeModeTabs.NATURAL_BLOCKS,
-                getItem("vibranium_ore"),
-                getItem("vibranium_dirt"),
-                getItem("vibranium_grass_block"),
-                getItem("blackgravel"),
-                getItem("blackclay"),
-                getItem("purple_short_grass"),
-                getItem("purple_tall_grass"),
-                getItem("purple_azalea"),
-                getItem("purple_azalea_leaves_cyan"),
-                getItem("purple_azalea_leaves_dark_blue"),
-                getItem("purple_azalea_leaves_violet"),
-                getItem("flowering_purple_azalea"),
-                getItem("flowering_purple_azalea_leaves_cyan"),
-                getItem("flowering_purple_azalea_leaves_dark_blue"),
-                getItem("flowering_purple_azalea_leaves_violet"),
-                getItem("purple_moss_block"),
-                getItem("purple_moss_carpet"),
-                getItem("big_purple_dripleaf"),
-                getItem("small_purple_dripleaf"),
-                getItem("purple_vine"),
-                getItem("heart_shaped_herb")
+
+        CreativeTabRegistry.appendStack(CreativeModeTabs.NATURAL_BLOCKS,
+                java.util.stream.Stream.of(
+                        VIBRANIUM_ORE, VIBRANIUM_DIRT, VIBRANIUM_GRASS_BLOCK, BLACKGRAVEL, BLACKCLAY,
+                        PURPLE_SHORT_GRASS, PURPLE_TALL_GRASS, PURPLE_AZALEA,
+                        PURPLE_AZALEA_LEAVES_CYAN, PURPLE_AZALEA_LEAVES_DARK_BLUE, PURPLE_AZALEA_LEAVES_VIOLET,
+                        FLOWERING_PURPLE_AZALEA, FLOWERING_PURPLE_AZALEA_LEAVES_CYAN,
+                        FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE, FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET,
+                        PURPLE_MOSS_BLOCK, PURPLE_MOSS_CARPET, BIG_PURPLE_DRIPLEAF,
+                        SMALL_PURPLE_DRIPLEAF, PURPLE_VINE, HEART_SHAPED_HERB
+                ).map(block -> (java.util.function.Supplier<ItemStack>) () -> new ItemStack(block))
         );
+
     }
 
     private static net.minecraft.world.item.Item getItem(String name) {

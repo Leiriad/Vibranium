@@ -21,7 +21,8 @@ public class BigPurpleDripleafStem extends BigDripleafStemBlock {
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF_STEM)
                 .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, world, pos) -> true)
+                .emissiveRendering((state, level, pos) -> true)
+                .hasPostProcess((state, level, pos) -> true)
                 .lightLevel((state) -> 1);
     }
     public BigPurpleDripleafStem(Properties properties) {

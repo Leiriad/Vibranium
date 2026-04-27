@@ -35,14 +35,14 @@ public class VibraniumMod {
 		// Proceed with mild caution.
 
 		LOGGER.info("Vibranium est chargé!");
+
 		//Initialize Registry Content
 		VibraniumBlocks.registerModBlocks();
 		VibraniumTreeDecorators.register();
 		// Register the Meteorite Feature logic
-		VibraniumMeteorite.registerFeatures();
-		LifecycleEvent.SETUP.register(() -> {
-			VibraniumBlocks.addItemsToTabs();
-		});
+		//VibraniumMeteorite.registerFeatures();
+		VibraniumBlocks.addItemsToTabs();
+
 	}
 
 }

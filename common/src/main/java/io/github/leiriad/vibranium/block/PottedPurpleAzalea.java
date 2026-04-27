@@ -8,9 +8,9 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 public class PottedPurpleAzalea extends FlowerPotBlock {
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return  BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_AZALEA)
-                .emissiveRendering((state, world, pos) -> true)
-                .lightLevel((state) -> 2)
-                .hasPostProcess((state, world, pos) -> true);
+                .emissiveRendering((state, level, pos) -> true)
+                .hasPostProcess((state, level, pos) -> true)
+                .lightLevel((state) -> 2);
     }
     public PottedPurpleAzalea(Properties properties) {
         super(VibraniumBlocks.PURPLE_AZALEA, properties);

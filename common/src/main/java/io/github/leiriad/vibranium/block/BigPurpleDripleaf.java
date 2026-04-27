@@ -26,8 +26,9 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 public class BigPurpleDripleaf extends BigDripleafBlock {
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF)
+                .emissiveRendering((state, level, pos) -> true)
+                .hasPostProcess((state, level, pos) -> true)
                 .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, world, pos) -> true)
                 .lightLevel((state) -> 1);
     }
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -120,4 +121,5 @@ public class BigPurpleDripleaf extends BigDripleafBlock {
             place(serverLevel, blockPos2, blockState2.getFluidState(), direction);
         }
     }
+
 }

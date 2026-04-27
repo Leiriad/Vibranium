@@ -17,7 +17,8 @@ public class SmallPurpleDripleaf extends SmallDripleafBlock {
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_DRIPLEAF)
                 .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, world, pos) -> true)
+                .emissiveRendering((state, level, pos) -> true)
+                .hasPostProcess((state, level, pos) -> true)
                 .lightLevel((state) -> 1);
     }
     public SmallPurpleDripleaf(Properties properties) {

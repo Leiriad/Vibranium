@@ -12,12 +12,13 @@ import java.util.List;
 
 ///Gradient tree making tool
 public class VibraniumGradientDecorator extends TreeDecorator {
-    public static final MapCodec<VibraniumGradientDecorator> CODEC = MapCodec.unit(() -> VibraniumGradientDecorator.INSTANCE);
-    public static final VibraniumGradientDecorator INSTANCE = new VibraniumGradientDecorator();
+
+    public VibraniumGradientDecorator() {
+    }
 
     @Override
     protected TreeDecoratorType<?> type() {
-        return VibraniumTreeDecorators.GRADIENT_DECORATOR;
+        return VibraniumTreeDecorators.GRADIENT_DECORATOR.get();
     }
 
     @Override
@@ -33,7 +34,7 @@ public class VibraniumGradientDecorator extends TreeDecorator {
         //Find the first leaf to figure out if it's a flowering tree
         boolean isFlowering = context.level().isStateAtPosition(
                 leaves.get(0),
-                (state) -> state.is(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE)
+                (state) -> state != null && state.is(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE)
         );
 
         //Replace the placeholder leaves by the real ones

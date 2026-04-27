@@ -17,7 +17,8 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS)
                 .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, world, pos) -> true)
+                .emissiveRendering((state, level, pos) -> true)
+                .hasPostProcess((state, level, pos) -> true)
                 .lightLevel((state) -> 1);
     }
     public PurpleShortGrass(Properties properties) {

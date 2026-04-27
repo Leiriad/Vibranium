@@ -49,7 +49,7 @@ public class VibraniumPurpleAzaleaFeatures {
                 new TwoLayersFeatureSize(1, 0, 1)
         )
                 .dirt(BlockStateProvider.simple(Blocks.ROOTED_DIRT))
-                .decorators(List.of(VibraniumGradientDecorator.INSTANCE)); //creates the gradient of colors
+                .decorators(List.of(new VibraniumGradientDecorator())); //creates the gradient of colors
     }
 
     private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, F feature, FC config) {

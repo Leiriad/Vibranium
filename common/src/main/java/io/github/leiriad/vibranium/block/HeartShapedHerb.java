@@ -19,7 +19,9 @@ public class HeartShapedHerb extends BushBlock {
     public static final IntegerProperty AGE = IntegerProperty.create("age",0,2);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.RED_TULIP).randomTicks().emissiveRendering((state, world, pos) -> true)
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.RED_TULIP).randomTicks()
+                .emissiveRendering((state, level, pos) -> true)
+                .hasPostProcess((state, level, pos) -> true)
                 .lightLevel((state) -> 2);
     }
 
