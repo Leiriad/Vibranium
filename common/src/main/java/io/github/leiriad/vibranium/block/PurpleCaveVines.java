@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -14,7 +15,11 @@ public class PurpleCaveVines extends CaveVinesBlock {
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return  BlockBehaviour.Properties.ofFullCopy(Blocks.CAVE_VINES);
     }
-
+    public static final MapCodec<CaveVinesBlock> CODEC = simpleCodec(PurpleCaveVines::new);
+    @Override
+    public MapCodec<CaveVinesBlock> codec() {
+        return CODEC;
+    }
     ///PurpleCaveVines contructor
     public PurpleCaveVines(Properties properties) {
         super(properties);
@@ -30,9 +35,5 @@ public class PurpleCaveVines extends CaveVinesBlock {
         return state.isAir();
     }
 
-    @Override
-    protected BlockState getGrowIntoState(BlockState state, RandomSource random) {
-        return VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.defaultBlockState()
-                .setValue(CaveVinesPlantBlock.BERRIES, state.getValue(BERRIES));
-    }
+
 }

@@ -1,8 +1,10 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoublePlantBlock;
@@ -16,12 +18,17 @@ public class PurpleTallGrass extends DoublePlantBlock {
     public static Properties getProperties (Properties settings){
         return Properties.ofFullCopy(Blocks.TALL_GRASS)
                 .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, level, pos) -> true)
-                .hasPostProcess((state, level, pos) -> true)
+                .emissiveRendering((state, level, pos) -> {return true;})
+                .hasPostProcess((state, level, pos) -> {return true;})
                 .lightLevel((state) -> 1);
     }
+    public static final MapCodec<DoublePlantBlock> CODEC = simpleCodec(PurpleTallGrass::new);
     public PurpleTallGrass(Properties properties) {
         super(properties);
+    }
+    @Override
+    public MapCodec<? extends DoublePlantBlock> codec() {
+        return CODEC;
     }
 
     @Override
@@ -35,4 +42,5 @@ public class PurpleTallGrass extends DoublePlantBlock {
         }
 
     }
+
 }

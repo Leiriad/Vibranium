@@ -18,6 +18,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class VibraniumBlocks {
     public static Block BLACKGRAVEL;
@@ -59,202 +60,220 @@ public class VibraniumBlocks {
         VIBRANIUM_ORE = register(
                 "vibranium_ore",
                 VibraniumOre::new,
-                VibraniumOre.getProperties(BlockBehaviour.Properties.of()),
+                () -> VibraniumOre.getProperties(BlockBehaviour.Properties.of()),//Use of lambda to provide a supplier instead of direct properties to lazy load in order to way for Minecraft data
                 true 
         );
 
         VIBRANIUM_DIRT = register(
                 "vibranium_dirt",
                 VibraniumDirt::new,
-                VibraniumDirt.getProperties(BlockBehaviour.Properties.of()),
+                ()-> VibraniumDirt.getProperties(BlockBehaviour.Properties.of()),
                 true 
         );
         VIBRANIUM_GRASS_BLOCK = register(
                 "vibranium_grass_block",
                 VibraniumGrassBlock::new,
-                VibraniumGrassBlock.getProperties(BlockBehaviour.Properties.of()),
+                ()->VibraniumGrassBlock.getProperties(BlockBehaviour.Properties.of()),
                 true 
         );
         VIBRANIUM_PATH = register(
                "vibranium_path",
                VibraniumPathBlock::new,
-                VibraniumPathBlock.getProperties(BlockBehaviour.Properties.of()),
+                () ->VibraniumPathBlock.getProperties(BlockBehaviour.Properties.of()),
                true
         );
         VIBRANIUM_FARMLAND = register(
                "vibranium_farmland",
                VibraniumFarmland::new,
-                VibraniumFarmland.getProperties(BlockBehaviour.Properties.of()),
+                ()->VibraniumFarmland.getProperties(BlockBehaviour.Properties.of()),
                true
         );
         BLACKGRAVEL = register(
                "blackgravel",
                BlackGravel::new,
-                BlackGravel.getProperties(BlockBehaviour.Properties.of()),
+                ()->BlackGravel.getProperties(BlockBehaviour.Properties.of()),
                true 
         );
         BLACKCLAY = register(
                 "blackclay",
                 BlackClay::new,
-                BlackClay.getProperties(BlockBehaviour.Properties.of()),
+                ()->BlackClay.getProperties(BlockBehaviour.Properties.of()),
                 true 
         );
         PURPLE_SHORT_GRASS = register(
                 "purple_short_grass",
                 PurpleShortGrass::new,
-                PurpleShortGrass.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleShortGrass.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_TALL_GRASS = register(
                 "purple_tall_grass",
                 PurpleTallGrass::new,
-                PurpleTallGrass.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleTallGrass.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_AZALEA_LEAVES_VIOLET= register(
                 "purple_azalea_leaves_violet",
                 PurpleAzaleaLeavesViolet::new,
-                PurpleAzaleaLeavesViolet.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleAzaleaLeavesViolet.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_AZALEA_LEAVES_DARK_BLUE= register(
                 "purple_azalea_leaves_dark_blue",
                 PurpleAzaleaLeavesDarkBlue::new,
-                PurpleAzaleaLeavesDarkBlue.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleAzaleaLeavesDarkBlue.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_AZALEA_LEAVES_CYAN= register(
                 "purple_azalea_leaves_cyan",
                 PurpleAzaleaLeavesCyan::new,
-                PurpleAzaleaLeavesCyan.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleAzaleaLeavesCyan.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_AZALEA= register(
                 "purple_azalea",
                 PurpleAzalea::new,
-                PurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
                 true);
         FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET= register(
                 "flowering_purple_azalea_leaves_violet",
                 FloweringPurpleAzaleaLeavesViolet::new,
-                FloweringPurpleAzaleaLeavesViolet.getProperties(BlockBehaviour.Properties.of()),
+                ()->FloweringPurpleAzaleaLeavesViolet.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE= register(
                 "flowering_purple_azalea_leaves_dark_blue",
                 FloweringPurpleAzaleaLeavesDarkBlue::new,
-                FloweringPurpleAzaleaLeavesDarkBlue.getProperties(BlockBehaviour.Properties.of()),
+                ()->FloweringPurpleAzaleaLeavesDarkBlue.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         FLOWERING_PURPLE_AZALEA_LEAVES_CYAN= register(
                 "flowering_purple_azalea_leaves_cyan",
                 FloweringPurpleAzaleaLeavesCyan::new,
-                FloweringPurpleAzaleaLeavesCyan.getProperties(BlockBehaviour.Properties.of()),
+                ()->FloweringPurpleAzaleaLeavesCyan.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         FLOWERING_PURPLE_AZALEA= register(
                 "flowering_purple_azalea",
                 FloweringPurpleAzalea::new,
-                FloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
+                ()->FloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_MOSS_BLOCK= register(
                 "purple_moss_block",
                 PurpleMossBlock::new,
-                PurpleMossBlock.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleMossBlock.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_MOSS_CARPET= register(
                 "purple_moss_carpet",
                 PurpleMossCarpet::new,
-                PurpleMossCarpet.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleMossCarpet.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_CAVE_VINES_PLANT= register(
                 "purple_cave_vines_plant",
                 PurpleCaveVinesPlant::new,
-                PurpleCaveVinesPlant.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleCaveVinesPlant.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_CAVE_VINES= register(
                 "purple_cave_vines",
                 PurpleCaveVines::new,
-                PurpleCaveVines.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleCaveVines.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         POTTED_PURPLE_AZALEA_BUSH= register(
                 "potted_purple_azalea_bush",
-                PottedPurpleAzalea::new,
-                PottedPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
+                (props) -> new PottedPurpleAzalea(
+                        BLOCKS.get(Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "purple_azalea")),
+                        props
+                ),
+                ()->PottedPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         POTTED_FLOWERING_PURPLE_AZALEA_BUSH= register(
                 "potted_flowering_purple_azalea_bush",
-                PottedFloweringPurpleAzalea::new,
-                PottedFloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
+                (props) -> new PottedFloweringPurpleAzalea(
+                        BLOCKS.get(Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "flowering_purple_azalea")),
+                        props
+                ),
+                ()->PottedFloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         BIG_PURPLE_DRIPLEAF = register(
                 "big_purple_dripleaf",
                 BigPurpleDripleaf::new,
-                BigPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
+                ()->BigPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         BIG_PURPLE_DRIPLEAF_STEM = register(
                 "big_purple_dripleaf_stem",
                 BigPurpleDripleafStem::new,
-                BigPurpleDripleafStem.getProperties(BlockBehaviour.Properties.of()),
+                ()->BigPurpleDripleafStem.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         SMALL_PURPLE_DRIPLEAF = register(
                 "small_purple_dripleaf",
                 SmallPurpleDripleaf::new,
-                SmallPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
+                ()->SmallPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         PURPLE_VINE = register(
                 "purple_vine",
                 PurpleVine::new,
-                PurpleVine.getProperties(BlockBehaviour.Properties.of()),
+                ()->PurpleVine.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
         HEART_SHAPED_HERB = register(
                 "heart_shaped_herb",
                 HeartShapedHerb::new,
-                HeartShapedHerb.getProperties(BlockBehaviour.Properties.of()),
+                ()->HeartShapedHerb.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
     }
 
-    private static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.Properties settings, boolean shouldRegisterItem) {
+    private static Block register(String name, Function<BlockBehaviour.Properties, Block> blockFactory, Supplier<BlockBehaviour.Properties> settingsSupplier, boolean shouldRegisterItem) {
         // Create a registry key for the block
         Identifier id = Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, name);
         // Use supplier to let the game choose when it creates the block instance
-        var supplier = BLOCKS.register(id, () -> blockFactory.apply(settings));
+        System.out.println("Enregistrement de : " + name);
+        var blockSupplier = BLOCKS.register(id, () -> blockFactory.apply(settingsSupplier.get()));
 
         // Sometimes, you may not want to register an item for the block.
         // Eg: if it's a technical block like `minecraft:moving_piston` or `minecraft:end_gateway`
         if (shouldRegisterItem) {
             // IMPORTANT : BlockItem should be created just before being called
-            ITEMS.register(id, () -> new BlockItem(supplier.get(), new Item.Properties()));
+            ITEMS.register(id, () -> new BlockItem(blockSupplier.get(), new Item.Properties()));
         }
 
-        return supplier.get();
+        return blockSupplier.get();
     }
     //Add objets to creative tabs
     public static void addItemsToTabs() {
         //Natural blocks
-
         CreativeTabRegistry.appendStack(CreativeModeTabs.NATURAL_BLOCKS,
-                java.util.stream.Stream.of(
-                        VIBRANIUM_ORE, VIBRANIUM_DIRT, VIBRANIUM_GRASS_BLOCK, BLACKGRAVEL, BLACKCLAY,
-                        PURPLE_SHORT_GRASS, PURPLE_TALL_GRASS, PURPLE_AZALEA,
-                        PURPLE_AZALEA_LEAVES_CYAN, PURPLE_AZALEA_LEAVES_DARK_BLUE, PURPLE_AZALEA_LEAVES_VIOLET,
-                        FLOWERING_PURPLE_AZALEA, FLOWERING_PURPLE_AZALEA_LEAVES_CYAN,
-                        FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE, FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET,
-                        PURPLE_MOSS_BLOCK, PURPLE_MOSS_CARPET, BIG_PURPLE_DRIPLEAF,
-                        SMALL_PURPLE_DRIPLEAF, PURPLE_VINE, HEART_SHAPED_HERB
-                ).map(block -> (java.util.function.Supplier<ItemStack>) () -> new ItemStack(block))
+                () -> new ItemStack(getItem("vibranium_ore")),
+                () -> new ItemStack(getItem("vibranium_dirt")),
+                () -> new ItemStack(getItem("vibranium_grass_block")),
+                () -> new ItemStack(getItem("blackgravel")),
+                () -> new ItemStack(getItem("blackclay")),
+                () -> new ItemStack(getItem("purple_short_grass")),
+                () -> new ItemStack(getItem("purple_tall_grass")),
+                () -> new ItemStack(getItem("purple_azalea")),
+                () -> new ItemStack(getItem("purple_azalea_leaves_cyan")),
+                () -> new ItemStack(getItem("purple_azalea_leaves_dark_blue")),
+                () -> new ItemStack(getItem("purple_azalea_leaves_violet")),
+                () -> new ItemStack(getItem("flowering_purple_azalea")),
+                () -> new ItemStack(getItem("flowering_purple_azalea_leaves_cyan")),
+                () -> new ItemStack(getItem("flowering_purple_azalea_leaves_dark_blue")),
+                () -> new ItemStack(getItem("flowering_purple_azalea_leaves_violet")),
+                () -> new ItemStack(getItem("purple_moss_block")),
+                () -> new ItemStack(getItem("purple_moss_carpet")),
+                () -> new ItemStack(getItem("big_purple_dripleaf")),
+                () -> new ItemStack(getItem("small_purple_dripleaf")),
+                () -> new ItemStack(getItem("purple_vine")),
+                () -> new ItemStack(getItem("heart_shaped_herb"))
         );
 
     }

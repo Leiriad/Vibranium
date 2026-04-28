@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -18,12 +19,17 @@ public class PurpleVine extends VineBlock {
                 .sound(SoundType.VINE)
                 .pushReaction(PushReaction.DESTROY);
     }
+    public static final MapCodec<VineBlock> CODEC = simpleCodec(PurpleVine::new);
     public PurpleVine(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(UP, false).setValue(NORTH, false)
                 .setValue(EAST, false).setValue(SOUTH, false)
                 .setValue(WEST, false));
+    }
+    @Override
+    public MapCodec<VineBlock> codec() {
+        return CODEC;
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

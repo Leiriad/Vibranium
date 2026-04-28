@@ -1,6 +1,8 @@
 package io.github.leiriad.vibranium.neoforge.client;
 
+
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.client.VibraniumModClient;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -11,7 +13,7 @@ public class VibraniumModNeoForgeClient {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-
+        VibraniumModClient.init();
     }
 
 

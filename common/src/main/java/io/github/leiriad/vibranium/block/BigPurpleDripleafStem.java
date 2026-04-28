@@ -1,8 +1,10 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BigDripleafStemBlock;
@@ -17,12 +19,13 @@ import net.minecraft.world.level.material.MapColor;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
 public class BigPurpleDripleafStem extends BigDripleafStemBlock {
+    public static final MapCodec<BigDripleafStemBlock> CODEC = simpleCodec(BigPurpleDripleafStem::new);
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF_STEM)
                 .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, level, pos) -> true)
-                .hasPostProcess((state, level, pos) -> true)
+                .emissiveRendering((state, level, pos) -> {return true;})
+                .hasPostProcess((state, level, pos) -> {return true;})
                 .lightLevel((state) -> 1);
     }
     public BigPurpleDripleafStem(Properties properties) {
@@ -31,7 +34,10 @@ public class BigPurpleDripleafStem extends BigDripleafStemBlock {
                 .setValue(WATERLOGGED, false)
                 .setValue(FACING, Direction.NORTH));
     }
-
+    @Override
+    public MapCodec<BigDripleafStemBlock> codec() {
+        return CODEC;
+    }
     protected static boolean place(LevelAccessor levelAccessor, BlockPos blockPos, FluidState fluidState, Direction direction) {
         BlockState blockState = VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM
                 .defaultBlockState()

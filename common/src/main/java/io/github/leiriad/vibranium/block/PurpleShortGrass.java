@@ -1,8 +1,10 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
@@ -17,10 +19,16 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS)
                 .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, level, pos) -> true)
-                .hasPostProcess((state, level, pos) -> true)
+                .emissiveRendering((state, level, pos) -> {return true;})
+                .hasPostProcess((state, level, pos) -> {return true;})
                 .lightLevel((state) -> 1);
     }
+    public static final MapCodec<BushBlock> CODEC = simpleCodec(PurpleShortGrass::new);
+    @Override
+    public MapCodec<BushBlock> codec() {
+        return CODEC;
+    }
+
     public PurpleShortGrass(Properties properties) {
         super(properties.randomTicks());
     }
@@ -58,4 +66,5 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
         level.setBlock(pos, VibraniumBlocks.PURPLE_TALL_GRASS.defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 3);
         level.setBlock(pos.above(), VibraniumBlocks.PURPLE_TALL_GRASS.defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER), 3);
     }
+
 }

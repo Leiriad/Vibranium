@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.block;
 
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -8,10 +9,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.BigDripleafBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -26,17 +24,21 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 public class BigPurpleDripleaf extends BigDripleafBlock {
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF)
-                .emissiveRendering((state, level, pos) -> true)
-                .hasPostProcess((state, level, pos) -> true)
+                .emissiveRendering((state, level, pos) -> {return true;})//Rendering must always be lazy loaded
+                .hasPostProcess((state, level, pos) -> {return true;})
                 .mapColor(MapColor.COLOR_PURPLE)
                 .lightLevel((state) -> 1);
     }
+    public static final MapCodec<BigDripleafBlock> CODEC = simpleCodec(BigPurpleDripleaf::new);
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public BigPurpleDripleaf(Properties properties) {
         super(properties);
     }
 
-
+    @Override
+    public MapCodec<BigDripleafBlock> codec() {
+        return CODEC;
+    }
     public static void placeWithRandomHeight(LevelAccessor levelAccessor, RandomSource randomSource, BlockPos blockPos, Direction direction) {
         int i = Mth.nextInt(randomSource, 2, 5);
         BlockPos.MutableBlockPos mutableBlockPos = blockPos.mutable();

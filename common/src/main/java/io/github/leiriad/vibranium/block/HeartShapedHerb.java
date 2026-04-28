@@ -1,10 +1,12 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -18,10 +20,11 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 public class HeartShapedHerb extends BushBlock {
     public static final IntegerProperty AGE = IntegerProperty.create("age",0,2);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final MapCodec<BushBlock> CODEC = simpleCodec(HeartShapedHerb::new);
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.RED_TULIP).randomTicks()
-                .emissiveRendering((state, level, pos) -> true)
-                .hasPostProcess((state, level, pos) -> true)
+                .emissiveRendering((state, level, pos) -> {return true;})
+                .hasPostProcess((state, level, pos) -> {return true;})
                 .lightLevel((state) -> 2);
     }
 
@@ -31,6 +34,10 @@ public class HeartShapedHerb extends BushBlock {
         this.registerDefaultState(this.getStateDefinition().any()
                 .setValue(AGE,0)
                 .setValue(FACING,Direction.NORTH));
+    }
+    @Override
+    public MapCodec<BushBlock> codec() {
+        return CODEC;
     }
     ///Allows the herb to grow with time
     @Override
@@ -64,4 +71,5 @@ public class HeartShapedHerb extends BushBlock {
         // the plant will face the direction opposite to the player like an oven
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
+
 }
