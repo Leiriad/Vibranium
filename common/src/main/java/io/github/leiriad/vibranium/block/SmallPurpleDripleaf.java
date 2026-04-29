@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.MapColor;
 
 public class SmallPurpleDripleaf extends SmallDripleafBlock {
-
+    //PROPERTIES
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_DRIPLEAF)
                 .mapColor(MapColor.COLOR_PURPLE)
@@ -24,6 +24,12 @@ public class SmallPurpleDripleaf extends SmallDripleafBlock {
                 .lightLevel((state) -> 1);
     }
     public static final MapCodec<SmallDripleafBlock> CODEC = simpleCodec(SmallPurpleDripleaf::new);
+    @Override
+    public MapCodec<SmallDripleafBlock> codec() {
+        return CODEC;
+    }
+
+    //CONSTRUCTOR
     public SmallPurpleDripleaf(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
@@ -31,10 +37,8 @@ public class SmallPurpleDripleaf extends SmallDripleafBlock {
                 .setValue(BlockStateProperties.WATERLOGGED, false)
                 .setValue(FACING, Direction.NORTH))                ;
     }
-    @Override
-    public MapCodec<SmallDripleafBlock> codec() {
-        return CODEC;
-    }
+
+    //ACTIONS
     @Override
     public void performBonemeal(ServerLevel serverLevel, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
         Direction currentFacing = blockState.getValue(FACING);

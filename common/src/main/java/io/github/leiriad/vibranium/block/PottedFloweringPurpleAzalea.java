@@ -12,6 +12,7 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class PottedFloweringPurpleAzalea extends FlowerPotBlock {
+    //PROPERTIES
     public static Properties getProperties(Properties settings){
         return  Properties.ofFullCopy(Blocks.POTTED_FLOWERING_AZALEA)
                 .emissiveRendering((state, level, pos) -> {return true;})
@@ -23,13 +24,14 @@ public class PottedFloweringPurpleAzalea extends FlowerPotBlock {
                             propertiesCodec())
                     .apply(instance, PottedFloweringPurpleAzalea::new)
     );
-    public PottedFloweringPurpleAzalea(Block content, Properties properties) {
-        super(content, properties);
-    }
     @Override
     public MapCodec<FlowerPotBlock> codec() {
         return CODEC;
     }
 
+    //CONSTRUCTOR
+    public PottedFloweringPurpleAzalea(Block content, Properties properties) {
+        super(content, properties);
+    }
 
 }

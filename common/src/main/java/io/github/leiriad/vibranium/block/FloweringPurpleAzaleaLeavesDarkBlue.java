@@ -12,20 +12,22 @@ import net.minecraft.world.level.block.state.BlockState;
 
 
 public class FloweringPurpleAzaleaLeavesDarkBlue extends LeavesBlock{
+    //PROPERTIES
     public static Properties getProperties(Properties settings){
         return VibraniumCommonLeavesProperties.baseVibraniumLeavesSettings(false);
     }
-    public static final MapCodec<FloweringPurpleAzaleaLeavesDarkBlue> CODEC = simpleCodec(FloweringPurpleAzaleaLeavesDarkBlue::new);
-
-    public FloweringPurpleAzaleaLeavesDarkBlue(Properties properties) {
-        super(0.05f, properties);
-    }
-
+    public static final MapCodec<? extends LeavesBlock> CODEC = simpleCodec(FloweringPurpleAzaleaLeavesDarkBlue::new);
     @Override
     public MapCodec<? extends LeavesBlock> codec() {
         return CODEC;
     }
 
+    //CONSTRUCTOR
+    public FloweringPurpleAzaleaLeavesDarkBlue(Properties properties) {
+        super(0.05f, properties);
+    }
+
+    //ACTIONS
     @Override
     public void animateTick(net.minecraft.world.level.block.state.BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);

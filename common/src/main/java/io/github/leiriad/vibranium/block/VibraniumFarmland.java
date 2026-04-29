@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -13,6 +14,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,13 +26,26 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.utils.VibraniumBlockActions;
 
 import static io.github.leiriad.vibranium.block.VibraniumCommonDirtProperties.baseVibraniumDirtSettings;
+import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
 
 public class VibraniumFarmland extends FarmBlock {
-    ///Vibranium_farmland constructor
+    //PROPERTIES
+    private static String DECAYBLOCKNAME ="vibranium_dirt";
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return baseVibraniumDirtSettings();
     }
+    public static final MapCodec<FarmBlock> CODEC = simpleCodec(VibraniumFarmland::new);
+    @Override
+    public MapCodec<FarmBlock> codec() {
+        return CODEC;
+    }
 
+    //CONSTRUCTOR
+    public VibraniumFarmland(Properties properties) {
+        super(properties);
+    }
+
+    //ACTIONS
     ///Tells us if the vibranium_farmland block should remain as is. If it returns false, block turns back to dirt
     private static boolean shouldMaintainFarmland(BlockGetter blockGetter, BlockPos blockPos) {
         return blockGetter.getBlockState(blockPos.above()).is(BlockTags.MAINTAINS_FARMLAND);
@@ -43,9 +59,6 @@ public class VibraniumFarmland extends FarmBlock {
             }
         }
         return false;
-    }
-    public VibraniumFarmland(Properties properties) {
-        super(properties);
     }
 
     ///Defines the vibranium_farmland block behavior
@@ -80,7 +93,7 @@ public class VibraniumFarmland extends FarmBlock {
     protected BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess scheduledTickAccess, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
 
         if (direction == Direction.UP && !state.canSurvive(world, pos)) {
-            return VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState();
+            return getBlock(DECAYBLOCKNAME, Blocks.DIRT).defaultBlockState();
         }
         return super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random);
     }

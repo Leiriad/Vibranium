@@ -11,21 +11,22 @@ import net.minecraft.world.level.block.state.BlockState;
 
 
 public class PurpleAzaleaLeavesViolet extends LeavesBlock {
+    //PROPERTIES
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return VibraniumCommonLeavesProperties.baseVibraniumLeavesSettings(false);
     }
-    public static final MapCodec<PurpleAzaleaLeavesViolet> CODEC = simpleCodec(PurpleAzaleaLeavesViolet::new);
-
-    public PurpleAzaleaLeavesViolet(Properties properties) {
-        super(0.05f, properties);
-    }
-
-
+    public static final MapCodec<? extends LeavesBlock> CODEC = simpleCodec(PurpleAzaleaLeavesViolet::new);
     @Override
     public MapCodec<? extends LeavesBlock> codec() {
         return CODEC;
     }
 
+    //CONSTRUCTOR
+    public PurpleAzaleaLeavesViolet(Properties properties) {
+        super(0.05f, properties);
+    }
+
+    //ACTIONS
     @Override
     public void animateTick(net.minecraft.world.level.block.state.BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);
@@ -35,6 +36,5 @@ public class PurpleAzaleaLeavesViolet extends LeavesBlock {
     protected void spawnFallingLeavesParticle(Level level, BlockPos blockPos, RandomSource randomSource) {
 
     }
-
 
 }

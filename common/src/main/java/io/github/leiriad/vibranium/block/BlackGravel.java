@@ -10,25 +10,31 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.Nullable;
 
 public class BlackGravel extends FallingBlock {
+    //PROPERTIES
+    public static final MapCodec<? extends FallingBlock> CODEC = simpleCodec(BlackGravel::new);
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.GRAVEL).mapColor(MapColor.COLOR_BLACK);
     }
+    @Override
+    protected MapCodec<? extends FallingBlock> codec() {
+        return CODEC;
+    }
+
+    //CONSTRUCTOR
     public BlackGravel(Properties properties) {
         super(properties);
     }
 
-    @Override
-    protected MapCodec<? extends FallingBlock> codec() {
-        return null;
-    }
-
+    //ACTIONS
     @Override
     public int getDustColor(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
         return 0;

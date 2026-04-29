@@ -201,18 +201,19 @@ public class VibraniumBlocks {
                 ()->PottedFloweringPurpleAzalea.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
-        BIG_PURPLE_DRIPLEAF = register(
-                "big_purple_dripleaf",
-                BigPurpleDripleaf::new,
-                ()->BigPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
-                true
-        );
         BIG_PURPLE_DRIPLEAF_STEM = register(
                 "big_purple_dripleaf_stem",
                 BigPurpleDripleafStem::new,
                 ()->BigPurpleDripleafStem.getProperties(BlockBehaviour.Properties.of()),
                 true
         );
+        BIG_PURPLE_DRIPLEAF = register(
+                "big_purple_dripleaf",
+                BigPurpleDripleaf::new,
+                ()->BigPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()),
+                true
+        );
+
         SMALL_PURPLE_DRIPLEAF = register(
                 "small_purple_dripleaf",
                 SmallPurpleDripleaf::new,

@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
@@ -11,7 +12,8 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import io.github.leiriad.vibranium.utils.VibraniumBlockActions;
 
 public class VibraniumOre extends Block {
-
+    //PROPERTIES
+    public static final MapCodec<Block> CODEC = simpleCodec(VibraniumOre::new);
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)
                 .strength(50f, 1200f)
@@ -20,11 +22,17 @@ public class VibraniumOre extends Block {
                 .emissiveRendering((state, world, pos) -> true)
                 .hasPostProcess((state, world, pos) -> true);
     }
+    @Override
+    protected MapCodec<? extends Block> codec() {
+        return CODEC;
+    }
 
+    //CONSTRUCTOR
     public VibraniumOre(Properties properties) {
         super(properties);
     }
 
+    //ACTIONS
     @Override
     public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource source) {
         VibraniumBlockActions.showVibraniumParticles(world,source,pos);

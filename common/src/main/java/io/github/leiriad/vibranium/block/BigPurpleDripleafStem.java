@@ -8,6 +8,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BigDripleafStemBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,7 +19,11 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
+import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+
 public class BigPurpleDripleafStem extends BigDripleafStemBlock {
+    //PROPERTIES
+    private static String BLOCKNAME = "big_purple_dripleaf_stem";
     public static final MapCodec<BigDripleafStemBlock> CODEC = simpleCodec(BigPurpleDripleafStem::new);
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
@@ -28,18 +33,22 @@ public class BigPurpleDripleafStem extends BigDripleafStemBlock {
                 .hasPostProcess((state, level, pos) -> {return true;})
                 .lightLevel((state) -> 1);
     }
+    @Override
+    public MapCodec<BigDripleafStemBlock> codec() {
+        return CODEC;
+    }
+
+    //CONSTRUCTOR
     public BigPurpleDripleafStem(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(WATERLOGGED, false)
                 .setValue(FACING, Direction.NORTH));
     }
-    @Override
-    public MapCodec<BigDripleafStemBlock> codec() {
-        return CODEC;
-    }
+
+    //ACTIONS
     protected static boolean place(LevelAccessor levelAccessor, BlockPos blockPos, FluidState fluidState, Direction direction) {
-        BlockState blockState = VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM
+        BlockState blockState = getBlock(BLOCKNAME, Blocks.AIR)
                 .defaultBlockState()
                 .setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER))
                 .setValue(FACING, direction);

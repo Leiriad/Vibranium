@@ -1,5 +1,7 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
+import io.github.leiriad.vibranium.VibraniumMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -15,19 +17,30 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.material.MapColor;
 
 import java.util.Optional;
 
 public class PurpleMossBlock extends Block implements BonemealableBlock {
+    //PROPERTIES
+    private static final ResourceKey<ConfiguredFeature <?,?>> PURPLE_MOSS_PATCHES = ResourceKey.create(Registries.CONFIGURED_FEATURE,
+            Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "purple_moss_patch"));
+    public static final MapCodec<Block> CODEC = simpleCodec(PurpleMossBlock::new);
     ///Copying all vanilla moss properties
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.MOSS_BLOCK);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.MOSS_BLOCK).mapColor(MapColor.COLOR_PURPLE);
     }
-    ///purple_moss constructor
+    @Override
+    protected MapCodec<? extends Block> codec() {
+        return CODEC;
+    }
+
+    //CONSTRUCTOR
     public PurpleMossBlock(Properties properties) {
         super(properties);
     }
 
+    //ACTIONS
     @Override
     public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
         return false;
@@ -43,8 +56,7 @@ public class PurpleMossBlock extends Block implements BonemealableBlock {
         //Get Configured Feature by ID
         serverLevel.registryAccess().lookup(Registries.CONFIGURED_FEATURE).ifPresent(registry -> {
                 Optional<? extends Holder.Reference<ConfiguredFeature<?, ?>>> feature =
-                    registry.get(ResourceKey.create(Registries.CONFIGURED_FEATURE,
-                            Identifier.fromNamespaceAndPath("com/vibranium", "purple_moss_patch")));
+                    registry.get(PURPLE_MOSS_PATCHES);
 
             // If feature exists run it above the moss block
             feature.ifPresent(f -> {

@@ -10,7 +10,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
+import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+
 public class PurpleCaveVines extends CaveVinesBlock {
+    //PROPERTIES
+    private static String BLOCKPARENT = "purple_cave_vines_plant";
     ///Copies vanilla Cave Vines properties
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return  BlockBehaviour.Properties.ofFullCopy(Blocks.CAVE_VINES);
@@ -20,15 +24,17 @@ public class PurpleCaveVines extends CaveVinesBlock {
     public MapCodec<CaveVinesBlock> codec() {
         return CODEC;
     }
-    ///PurpleCaveVines contructor
+
+    //CONSTRUTOR
     public PurpleCaveVines(Properties properties) {
         super(properties);
     }
 
+    //ACTIONS
     ///Tells the vine which body to use for its growth
     @Override
     protected Block getBodyBlock() {
-        return VibraniumBlocks.PURPLE_CAVE_VINES_PLANT;
+        return getBlock(BLOCKPARENT, Blocks.CAVE_VINES_PLANT);
     }
     @Override
     protected boolean canGrowInto(BlockState state) {

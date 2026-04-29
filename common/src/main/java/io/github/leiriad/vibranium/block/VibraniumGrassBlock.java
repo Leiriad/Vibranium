@@ -1,5 +1,7 @@
 package io.github.leiriad.vibranium.block;
 
+import com.mojang.serialization.MapCodec;
+import io.github.leiriad.vibranium.VibraniumMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -17,20 +19,32 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.utils.VibraniumBlockActions;
 
 import static io.github.leiriad.vibranium.block.VibraniumCommonDirtProperties.baseVibraniumDirtSettings;
+import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
 
 public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock{
+    //PROPERTIES
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return baseVibraniumDirtSettings().mapColor(MapColor.COLOR_PURPLE);
     }
-    public static final TagKey<Block> VIBRANIUM_VEGETATION = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("com/vibranium","vibranium_vegetation"));
+    public static final MapCodec<GrassBlock> CODEC = simpleCodec(VibraniumGrassBlock::new);
+
+    @Override
+    public MapCodec<GrassBlock> codec() {
+        return CODEC;
+    }
+    public static final TagKey<Block> VIBRANIUM_VEGETATION = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID,"vibranium_vegetation"));
+
+    //CONSTRUCTOR
     public VibraniumGrassBlock(Properties properties) {
         super(properties);
     }
+
+    //ACTIONS
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (!canSurviveAsGrass(world, pos)) {
             // If dies replaced by vibranium_dirt
-            world.setBlockAndUpdate(pos, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState());
+            world.setBlockAndUpdate(pos, getBlock("vibranium_dirt", Blocks.DIRT).defaultBlockState());
             return;
         }
         //If there is enough light (9 as for vanilla grass) it propagates and lives

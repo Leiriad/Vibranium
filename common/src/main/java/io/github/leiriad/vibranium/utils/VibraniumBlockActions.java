@@ -1,8 +1,10 @@
 package io.github.leiriad.vibranium.utils;
 
+import io.github.leiriad.vibranium.VibraniumMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -92,13 +94,13 @@ public class VibraniumBlockActions {
         sendVibraniumParticles(world, above);
     }
 
-    //Send particles to indicate an action (fertilization for exemple)
+    ///Send particles to indicate an action (fertilization for exemple)
     private static void sendVibraniumParticles(ServerLevel world, BlockPos above) {
 
         //Vibranium purple particles
         world.sendParticles(vibraniumDust, above.getX() + 0.5, above.getY() + 0.5, above.getZ() + 0.5, 10, 0.3, 0.3, 0.3, 0.1);
     }
-    //Shows vibranium particles around inert object
+    ///Shows vibranium particles around inert object
     public static void showVibraniumParticles(Level world, RandomSource random, BlockPos pos){
         //1 chance over 4 to emit vibranium particles in a tick
         if (random.nextInt(4) == 0) {
@@ -110,7 +112,7 @@ public class VibraniumBlockActions {
             world.addParticle(vibraniumDust, x, y, z, 0.0D, 0.0D, 0.0D);
         }
     }
-    //Shows reverse portal particles around inert object
+    ///Shows reverse portal particles around inert object
     public static void showReversePortalParticles(Level world, RandomSource random, BlockPos pos){
         if (random.nextInt(10) == 0) {
             world.addParticle(ParticleTypes.REVERSE_PORTAL,
@@ -120,6 +122,9 @@ public class VibraniumBlockActions {
                     0, 0, 0);
         }
     }
-
-
+    ///Safe way to access mod blocks
+    public static Block getBlock(String blockName, Block fallback) {
+        Block block = VibraniumBlocks.BLOCKS.get(Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, blockName));
+        return block!=null? block:fallback;
+    }
 }

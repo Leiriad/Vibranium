@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
@@ -14,8 +13,13 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.MapColor;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
+import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+
 
 public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
+    //PROPERTIES
+    private static String GROWNSTAGENAME = "purple_tall_grass";
+    private static String SUPPORTBLOCKNAME = "vibranium_grass_block";
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS)
                 .mapColor(MapColor.COLOR_PURPLE)
@@ -29,10 +33,12 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
         return CODEC;
     }
 
+    //CONSTRUCTOR
     public PurpleShortGrass(Properties properties) {
         super(properties.randomTicks());
     }
 
+    //ACTIONS
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if(level.getBlockState(pos.below()).is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK)){
@@ -43,12 +49,13 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
             }
         }
     }
+
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockPos groundPos = pos.below();
         BlockState groundState = level.getBlockState(groundPos);
 
-        return groundState.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK);
+        return groundState.is(getBlock(SUPPORTBLOCKNAME,Blocks.GRASS_BLOCK));
     }
 
     @Override
@@ -63,8 +70,8 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
-        level.setBlock(pos, VibraniumBlocks.PURPLE_TALL_GRASS.defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 3);
-        level.setBlock(pos.above(), VibraniumBlocks.PURPLE_TALL_GRASS.defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER), 3);
+        level.setBlock(pos, getBlock(GROWNSTAGENAME,Blocks.TALL_GRASS).defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 3);
+        level.setBlock(pos.above(), getBlock(GROWNSTAGENAME,Blocks.TALL_GRASS).defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER), 3);
     }
 
 }

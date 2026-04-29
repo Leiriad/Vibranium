@@ -1,12 +1,12 @@
 package io.github.leiriad.vibranium.block;
 
 import com.mojang.serialization.MapCodec;
+import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -15,9 +15,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
+import net.minecraft.world.level.material.MapColor;
+
+import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
 
 public class HeartShapedHerb extends BushBlock {
+    //PROPERTIES
+    private static String SUPPORTBLOCK = "vibranium_grass_block";
     public static final IntegerProperty AGE = IntegerProperty.create("age",0,2);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final MapCodec<BushBlock> CODEC = simpleCodec(HeartShapedHerb::new);
@@ -27,7 +31,12 @@ public class HeartShapedHerb extends BushBlock {
                 .hasPostProcess((state, level, pos) -> {return true;})
                 .lightLevel((state) -> 2);
     }
+    @Override
+    public MapCodec<BushBlock> codec() {
+        return CODEC;
+    }
 
+    //CONSTRUCTOR
     ///The herb as 3 growth stages sprout, bud, flower and spawns in random directions
     public HeartShapedHerb(Properties properties) {
         super(properties);
@@ -35,10 +44,8 @@ public class HeartShapedHerb extends BushBlock {
                 .setValue(AGE,0)
                 .setValue(FACING,Direction.NORTH));
     }
-    @Override
-    public MapCodec<BushBlock> codec() {
-        return CODEC;
-    }
+
+    //ACTIONS
     ///Allows the herb to grow with time
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
@@ -57,13 +64,13 @@ public class HeartShapedHerb extends BushBlock {
         super.createBlockStateDefinition(builder);
         builder.add(AGE,FACING);
     }
-    public int getAge (BlockState state){ return  state.getValue(AGE);}
+
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         BlockPos groundPos = pos.below();
         BlockState groundState = level.getBlockState(groundPos);
 
-        return groundState.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK);
+        return groundState.is(getBlock(SUPPORTBLOCK, Blocks.GRASS_BLOCK));
     }
     ///Direction when the player plants the herb
     @Override

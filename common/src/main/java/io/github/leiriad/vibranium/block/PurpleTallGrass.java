@@ -15,6 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 
 public class PurpleTallGrass extends DoublePlantBlock {
+    //PROPERTIES
     public static Properties getProperties (Properties settings){
         return Properties.ofFullCopy(Blocks.TALL_GRASS)
                 .mapColor(MapColor.COLOR_PURPLE)
@@ -23,14 +24,17 @@ public class PurpleTallGrass extends DoublePlantBlock {
                 .lightLevel((state) -> 1);
     }
     public static final MapCodec<DoublePlantBlock> CODEC = simpleCodec(PurpleTallGrass::new);
-    public PurpleTallGrass(Properties properties) {
-        super(properties);
-    }
     @Override
     public MapCodec<? extends DoublePlantBlock> codec() {
         return CODEC;
     }
 
+    //CONSTRUCTOR
+    public PurpleTallGrass(Properties properties) {
+        super(properties);
+    }
+
+    //ACTIONS
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
         super.setPlacedBy(world, pos, state, livingEntity, itemStack);
