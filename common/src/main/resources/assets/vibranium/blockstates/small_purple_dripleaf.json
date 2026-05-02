@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "half=lower": { "model": "vibranium:block/small_purple_dripleaf_bottom" },
-    "half=upper": { "model": "vibranium:block/small_purple_dripleaf_top" }
-  }
-}

@@ -19,7 +19,7 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.utils.VibraniumBlockActions;
 
 import static io.github.leiriad.vibranium.block.VibraniumCommonDirtProperties.baseVibraniumDirtSettings;
-import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.VIBRANIUM_DIRT;
 
 public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock{
     //PROPERTIES
@@ -44,7 +44,8 @@ public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (!canSurviveAsGrass(world, pos)) {
             // If dies replaced by vibranium_dirt
-            world.setBlockAndUpdate(pos, getBlock("vibranium_dirt", Blocks.DIRT).defaultBlockState());
+            world.setBlockAndUpdate(pos, VIBRANIUM_DIRT.get()
+                    .defaultBlockState());
             return;
         }
         //If there is enough light (9 as for vanilla grass) it propagates and lives
@@ -82,8 +83,7 @@ public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock
         );
 
         BlockState targetState = world.getBlockState(targetPos);
-
-        if (targetState.is(VibraniumBlocks.VIBRANIUM_DIRT)) {
+        if (targetState.is(VIBRANIUM_DIRT.get())) {
 
             //Converts the Vibranium_Dirt blocks around to vibranium_grass
             world.setBlockAndUpdate(targetPos, this.defaultBlockState());

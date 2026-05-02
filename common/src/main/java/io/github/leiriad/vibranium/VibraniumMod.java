@@ -40,7 +40,7 @@ public class VibraniumMod {
 		VibraniumBlocks.registerModBlocks();
 		VibraniumTreeDecorators.register();
 		// Register the Meteorite Feature logic
-		//VibraniumMeteorite.registerFeatures();
+		VibraniumMeteorite.registerFeatures();
 		VibraniumBlocks.addItemsToTabs();
 
 	}

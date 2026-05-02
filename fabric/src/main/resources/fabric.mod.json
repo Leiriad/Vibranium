@@ -12,7 +12,6 @@
     "sources": "https://github.com/Leiriad/Vibranium"
   },
   "license": "CC0-1.0",
-  "icon": "assets/vibranium/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -20,10 +19,12 @@
     ],
     "client": [
       "io.github.leiriad.vibranium.fabric.client.VibraniumModFabricClient"
-    ]
+    ],
+    "fabric-datagen": [ "io.github.leiriad.vibranium.fabric.datagen.VibraniumDataGenerator" ]
   },
   "mixins": [
-    "vibranium.mixins.json"
+    "vibranium.mixin.json",
+    "vibranium.client.mixin.json"
   ],
   "accessWidener": "vibranium.accesswidener",
   "depends": {

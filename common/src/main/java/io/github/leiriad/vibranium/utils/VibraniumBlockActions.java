@@ -4,6 +4,7 @@ import io.github.leiriad.vibranium.VibraniumMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -16,6 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.BLOCKS;
+
 public class VibraniumBlockActions {
     static int vibraniumPurple = 0xD500F9;
     private static final DustParticleOptions vibraniumDust = new DustParticleOptions(vibraniumPurple, 1.0f);
@@ -23,6 +26,9 @@ public class VibraniumBlockActions {
 
     public static void turnsToVibraniumGrass(ServerLevel world, BlockPos pos, RandomSource random) {
         // check if neighbor block is grass
+        Block vibraniumGrass = VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get();
+        BlockState vibraniumGrassState = vibraniumGrass.defaultBlockState();
+
         for (BlockPos targetPos : BlockPos.betweenClosed(
                 pos.offset(-1, -1, -1),
                 pos.offset(1, 1, 1))) {
@@ -30,10 +36,9 @@ public class VibraniumBlockActions {
             BlockState neighbor = world.getBlockState(targetPos);
 
             // if neighbor block is vibranium_grass it turns into vibranium_grass more quickly
-            if (neighbor.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK)) {
+            if (neighbor.is(vibraniumGrass)) {
 
-                world.setBlockAndUpdate(pos,
-                        VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.defaultBlockState());
+                world.setBlockAndUpdate(pos, vibraniumGrassState);
                 return;
             }
             if (neighbor.is(Blocks.GRASS_BLOCK)) {
@@ -41,8 +46,7 @@ public class VibraniumBlockActions {
                 // is it is, there's a little chance block turns to grass
                 if (random.nextFloat() < 0.25f) {
 
-                    world.setBlockAndUpdate(pos,
-                            VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.defaultBlockState());
+                    world.setBlockAndUpdate(pos,vibraniumGrassState);
                     return;
                 }
             }
@@ -51,7 +55,8 @@ public class VibraniumBlockActions {
     }
     public static void turnToVibraniumDirt(Entity entity, BlockState state, Level world, BlockPos pos) {
         // Definition of the target state (your custom vibranium dirt block)
-        BlockState newState = VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState();
+        Block vibraniumDirt = VibraniumBlocks.VIBRANIUM_DIRT.get();
+        BlockState newState = vibraniumDirt.defaultBlockState();
 
         // Using the static Block method to handle entity collisions and prevent clipping
         // pushEntitiesUp shifts entities upward if the new block shape would trap them
@@ -122,9 +127,5 @@ public class VibraniumBlockActions {
                     0, 0, 0);
         }
     }
-    ///Safe way to access mod blocks
-    public static Block getBlock(String blockName, Block fallback) {
-        Block block = VibraniumBlocks.BLOCKS.get(Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, blockName));
-        return block!=null? block:fallback;
-    }
+
 }

@@ -13,13 +13,12 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.material.MapColor;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
-import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.PURPLE_TALL_GRASS;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.VIBRANIUM_GRASS_BLOCK;
 
 
 public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
     //PROPERTIES
-    private static String GROWNSTAGENAME = "purple_tall_grass";
-    private static String SUPPORTBLOCKNAME = "vibranium_grass_block";
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS)
                 .mapColor(MapColor.COLOR_PURPLE)
@@ -41,7 +40,7 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
     //ACTIONS
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if(level.getBlockState(pos.below()).is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK)){
+        if(level.getBlockState(pos.below()).is(VIBRANIUM_GRASS_BLOCK.get())){
             if (random.nextInt(20) == 0) {
                    if (level.getMaxLocalRawBrightness(pos.above()) >= 9 && level.isEmptyBlock(pos.above())) {
                        this.performBonemeal(level, random, pos, state);
@@ -55,7 +54,7 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
         BlockPos groundPos = pos.below();
         BlockState groundState = level.getBlockState(groundPos);
 
-        return groundState.is(getBlock(SUPPORTBLOCKNAME,Blocks.GRASS_BLOCK));
+        return groundState.is(VIBRANIUM_GRASS_BLOCK.get());
     }
 
     @Override
@@ -70,8 +69,8 @@ public class PurpleShortGrass extends BushBlock implements BonemealableBlock{
 
     @Override
     public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
-        level.setBlock(pos, getBlock(GROWNSTAGENAME,Blocks.TALL_GRASS).defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 3);
-        level.setBlock(pos.above(), getBlock(GROWNSTAGENAME,Blocks.TALL_GRASS).defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER), 3);
+        level.setBlock(pos, PURPLE_TALL_GRASS.get().defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.LOWER), 3);
+        level.setBlock(pos.above(), PURPLE_TALL_GRASS.get().defaultBlockState().setValue(DoublePlantBlock.HALF, DoubleBlockHalf.UPPER), 3);
     }
 
 }

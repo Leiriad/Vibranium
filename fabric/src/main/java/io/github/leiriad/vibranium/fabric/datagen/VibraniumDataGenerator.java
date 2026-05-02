@@ -1,5 +1,7 @@
 package io.github.leiriad.vibranium.fabric.datagen;
 
+import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.RegistrySetBuilder;
@@ -15,6 +17,9 @@ public class VibraniumDataGenerator implements DataGeneratorEntrypoint {
 	}
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
+		try {
+			Class.forName(VibraniumBlocks.class.getName());
+		} catch (ClassNotFoundException e) { e.printStackTrace(); }
 		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
 		//Add world generation data

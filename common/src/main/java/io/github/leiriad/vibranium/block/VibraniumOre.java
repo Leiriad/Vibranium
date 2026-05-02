@@ -24,7 +24,7 @@ public class VibraniumOre extends Block {
     }
     @Override
     protected MapCodec<? extends Block> codec() {
-        return CODEC;
+        return simpleCodec(VibraniumOre::new);
     }
 
     //CONSTRUCTOR

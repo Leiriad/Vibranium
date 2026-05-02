@@ -22,11 +22,10 @@ public class VibraniumTreeDecorators {
     public static void register() {
         Identifier id = Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "gradient_decorator");
 
-        // On enregistre et on récupère l'instance créée par le jeu
         GRADIENT_DECORATOR = (RegistrySupplier<TreeDecoratorType<VibraniumGradientDecorator>>) (Object) DECORATORS.register(id,
                 () -> new TreeDecoratorType<>(CODEC)
         );
 
-        VibraniumMod.LOGGER.info("Vibranium Tree Decorator est enregistré !");
+        VibraniumMod.LOGGER.info("Vibranium Tree has been registered !");
     }
 }

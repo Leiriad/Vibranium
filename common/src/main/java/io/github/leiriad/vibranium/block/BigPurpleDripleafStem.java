@@ -19,11 +19,11 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
-import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM;
 
 public class BigPurpleDripleafStem extends BigDripleafStemBlock {
     //PROPERTIES
-    private static String BLOCKNAME = "big_purple_dripleaf_stem";
     public static final MapCodec<BigDripleafStemBlock> CODEC = simpleCodec(BigPurpleDripleafStem::new);
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
@@ -48,10 +48,7 @@ public class BigPurpleDripleafStem extends BigDripleafStemBlock {
 
     //ACTIONS
     protected static boolean place(LevelAccessor levelAccessor, BlockPos blockPos, FluidState fluidState, Direction direction) {
-        BlockState blockState = getBlock(BLOCKNAME, Blocks.AIR)
-                .defaultBlockState()
-                .setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER))
-                .setValue(FACING, direction);
+        BlockState blockState = BIG_PURPLE_DRIPLEAF_STEM.get().defaultBlockState().setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, direction);
         return levelAccessor.setBlock(blockPos, blockState, 3);
     }
     @Override
@@ -59,7 +56,7 @@ public class BigPurpleDripleafStem extends BigDripleafStemBlock {
         BlockPos blockPos2 = blockPos.below();
         BlockState blockState2 = levelReader.getBlockState(blockPos2);
         BlockState blockState3 = levelReader.getBlockState(blockPos.above());
-        return (blockState2.is(this) || blockState2.is(BlockTags.BIG_DRIPLEAF_PLACEABLE)) && (blockState3.is(this) || blockState3.is(VibraniumBlocks.BIG_PURPLE_DRIPLEAF));
+        return (blockState2.is(this) || blockState2.is(BlockTags.BIG_DRIPLEAF_PLACEABLE)) && (blockState3.is(this) || blockState3.is(BIG_PURPLE_DRIPLEAF.get()));
     }
 
 }

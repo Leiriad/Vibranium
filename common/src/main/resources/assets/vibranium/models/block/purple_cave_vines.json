@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "particle": "vibranium:block/purple_cave_vines",
-    "cross": "vibranium:block/purple_cave_vines"
-  },
-  "render_type": "minecraft:cutout"
-}

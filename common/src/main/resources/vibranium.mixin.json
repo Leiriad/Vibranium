@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "package": "io.github.leiriad.vibranium.mixin.common",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

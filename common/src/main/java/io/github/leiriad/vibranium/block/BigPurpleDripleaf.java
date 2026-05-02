@@ -20,13 +20,12 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 
-import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM;
 
 public class BigPurpleDripleaf extends BigDripleafBlock {
 
     //PROPERTIES
-    private static String BLOCKNAME = "big_purple_dripleaf";
-    private static String BLOCKPARENTNAME = "big_purple_dripleaf_stem";
     ///To define block properties
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF)
@@ -72,18 +71,18 @@ public class BigPurpleDripleaf extends BigDripleafBlock {
         return !levelHeightAccessor.isOutsideBuildHeight(blockPos) && canReplace(blockState);
     }
     private static boolean canReplace(BlockState blockState) {
-        return blockState.isAir() || blockState.is(Blocks.WATER) || blockState.is(getBlock(BLOCKNAME,Blocks.BIG_DRIPLEAF));
+        return blockState.isAir() || blockState.is(Blocks.WATER) || blockState.is(BIG_PURPLE_DRIPLEAF);
     }
 
     protected static boolean place(LevelAccessor levelAccessor, BlockPos blockPos, FluidState fluidState, Direction direction) {
-        BlockState blockState = getBlock(BLOCKNAME,Blocks.BIG_DRIPLEAF).defaultBlockState().setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, direction);
+        BlockState blockState = BIG_PURPLE_DRIPLEAF.get().defaultBlockState().setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, direction);
         return levelAccessor.setBlock(blockPos, blockState, 3);
     }
     @Override
     protected boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
         BlockPos blockPos2 = blockPos.below();
         BlockState blockState2 = levelReader.getBlockState(blockPos2);
-        return blockState2.is(this) || blockState2.is(getBlock(BLOCKPARENTNAME,Blocks.BIG_DRIPLEAF_STEM)) || blockState2.is(BlockTags.BIG_DRIPLEAF_PLACEABLE);
+        return blockState2.is(this) || blockState2.is(BIG_PURPLE_DRIPLEAF_STEM) || blockState2.is(BlockTags.BIG_DRIPLEAF_PLACEABLE);
     }
     @Override
     protected BlockState updateShape(
@@ -105,7 +104,7 @@ public class BigPurpleDripleaf extends BigDripleafBlock {
 
             if (direction == Direction.UP && blockState2.is(this)) {
                 // We manually copy properties to the Stem block to keep the plant's orientation
-                return getBlock(BLOCKPARENTNAME,Blocks.BIG_DRIPLEAF_STEM).defaultBlockState()
+                return BIG_PURPLE_DRIPLEAF_STEM.get().defaultBlockState()
                         .setValue(FACING, blockState.getValue(FACING))
                         .setValue(WATERLOGGED, blockState.getValue(WATERLOGGED));
             }
@@ -117,7 +116,7 @@ public class BigPurpleDripleaf extends BigDripleafBlock {
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
         BlockState blockState = blockPlaceContext.getLevel().getBlockState(blockPlaceContext.getClickedPos().below());
         FluidState fluidState = blockPlaceContext.getLevel().getFluidState(blockPlaceContext.getClickedPos());
-        boolean bl = blockState.is(getBlock(BLOCKNAME,Blocks.BIG_DRIPLEAF)) || blockState.is(getBlock(BLOCKPARENTNAME,Blocks.BIG_DRIPLEAF_STEM));
+        boolean bl = blockState.is(BIG_PURPLE_DRIPLEAF) || blockState.is(BIG_PURPLE_DRIPLEAF_STEM);
         return this.defaultBlockState()
                 .setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER))
                 .setValue(FACING, bl ? (Direction)blockState.getValue(FACING) : blockPlaceContext.getHorizontalDirection().getOpposite());

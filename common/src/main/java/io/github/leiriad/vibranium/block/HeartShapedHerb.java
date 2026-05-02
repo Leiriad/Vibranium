@@ -17,11 +17,10 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 
-import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.VIBRANIUM_GRASS_BLOCK;
 
 public class HeartShapedHerb extends BushBlock {
     //PROPERTIES
-    private static String SUPPORTBLOCK = "vibranium_grass_block";
     public static final IntegerProperty AGE = IntegerProperty.create("age",0,2);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final MapCodec<BushBlock> CODEC = simpleCodec(HeartShapedHerb::new);
@@ -51,7 +50,7 @@ public class HeartShapedHerb extends BushBlock {
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int age = state.getValue(AGE);
         //Depending on the plant's age it will grow with time even if Vibranium grass blocks fertilizes more, it grows slowly
-        if(level.getBlockState(pos.below()).is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK)){
+        if(level.getBlockState(pos.below()).is(VIBRANIUM_GRASS_BLOCK)){
             if (age < 2 && level.getMaxLocalRawBrightness(pos) >= 9) {
                 if (random.nextInt(40) == 0) {
                     level.setBlock(pos, state.setValue(AGE, age + 1), 2);
@@ -70,7 +69,7 @@ public class HeartShapedHerb extends BushBlock {
         BlockPos groundPos = pos.below();
         BlockState groundState = level.getBlockState(groundPos);
 
-        return groundState.is(getBlock(SUPPORTBLOCK, Blocks.GRASS_BLOCK));
+        return groundState.is(VIBRANIUM_GRASS_BLOCK);
     }
     ///Direction when the player plants the herb
     @Override

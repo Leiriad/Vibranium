@@ -18,21 +18,6 @@ dependencies {
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 }
 loom {
-    runs {
-        // On définit le profil de lancement
-        datagen {
-            inherit server // On hérite de la config serveur (pas besoin de fenêtre graphique)
-            name "Fabric Data Generation"
-            runDir "build/datagen"
 
-            // On injecte les propriétés manuellement
-            property "fabric-api.datagen"
-            property "fabric-api.datagen.output-dir", "${project(":common").file("src/main/generated")}"
-            property "fabric-api.datagen.modid", "vibranium"
-
-            // On s'assure que les ressources communes sont présentes
-            runDir "run"
-        }
-    }
     accessWidenerPath = file("src/main/resources/vibranium.accesswidener")
 }

@@ -2,18 +2,13 @@ package io.github.leiriad.vibranium.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CaveVinesBlock;
 import net.minecraft.world.level.block.CaveVinesPlantBlock;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
-import java.util.HashMap;
-
-import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.PURPLE_CAVE_VINES;
 
 public class PurpleCaveVinesPlant extends CaveVinesPlantBlock {
     //PROPERTIES
-    private static String HEADBLOCK = "purple_cave_vines";
     ///Copies vanilla Cave Vines properties
     public static Properties getProperties(Properties settings){
         return  Properties.ofFullCopy(Blocks.CAVE_VINES_PLANT);
@@ -33,6 +28,6 @@ public class PurpleCaveVinesPlant extends CaveVinesPlantBlock {
     ///Tells the body(plant) which head to follow
     @Override
     protected GrowingPlantHeadBlock getHeadBlock() {
-        return (GrowingPlantHeadBlock) getBlock(HEADBLOCK,Blocks.CAVE_VINES);
+        return (GrowingPlantHeadBlock)PURPLE_CAVE_VINES.get();
     }
 }

@@ -26,11 +26,10 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.utils.VibraniumBlockActions;
 
 import static io.github.leiriad.vibranium.block.VibraniumCommonDirtProperties.baseVibraniumDirtSettings;
-import static io.github.leiriad.vibranium.utils.VibraniumBlockActions.getBlock;
+import static io.github.leiriad.vibranium.init.VibraniumBlocks.VIBRANIUM_DIRT;
 
 public class VibraniumFarmland extends FarmBlock {
     //PROPERTIES
-    private static String DECAYBLOCKNAME ="vibranium_dirt";
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return baseVibraniumDirtSettings();
     }
@@ -83,7 +82,8 @@ public class VibraniumFarmland extends FarmBlock {
 
     ///Prevents block to turn into vanilla dirt
     public static void turnToDirt(@Nullable Entity entity, BlockState blockState, Level level, BlockPos blockPos) {
-        BlockState blockState2 = pushEntitiesUp(blockState, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState(), level, blockPos);
+        BlockState targetState = VIBRANIUM_DIRT.get().defaultBlockState();
+        BlockState blockState2 = pushEntitiesUp(blockState, targetState, level, blockPos);
         level.setBlockAndUpdate(blockPos, blockState2);
         level.gameEvent(GameEvent.BLOCK_CHANGE, blockPos, GameEvent.Context.of(entity, blockState2));
     }
@@ -93,7 +93,7 @@ public class VibraniumFarmland extends FarmBlock {
     protected BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess scheduledTickAccess, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
 
         if (direction == Direction.UP && !state.canSurvive(world, pos)) {
-            return getBlock(DECAYBLOCKNAME, Blocks.DIRT).defaultBlockState();
+            return VIBRANIUM_DIRT.get().defaultBlockState();
         }
         return super.updateShape(state, world, scheduledTickAccess, pos, direction, neighborPos, neighborState, random);
     }

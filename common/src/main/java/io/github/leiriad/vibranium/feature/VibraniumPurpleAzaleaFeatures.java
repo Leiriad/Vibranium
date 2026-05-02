@@ -30,13 +30,15 @@ public class VibraniumPurpleAzaleaFeatures {
             ResourceKey.create(Registries.CONFIGURED_FEATURE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "flowering_purple_azalea_tree"));
 
     public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+        Block darkBlueLeaves = VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE.get();
+        Block floweringDarkBlueLeaves = VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE.get();
         // Registers the normal tree
         register(context, PURPLE_AZALEA_TREE_KEY, Feature.TREE,
-                createAzaleaTree(VibraniumBlocks.PURPLE_AZALEA_LEAVES_DARK_BLUE).build());
+                createAzaleaTree(darkBlueLeaves).build());
 
         // Registers the flowering tree
         register(context, FLOWERING_PURPLE_AZALEA_TREE_KEY, Feature.TREE,
-                createAzaleaTree(VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE).build());
+                createAzaleaTree(floweringDarkBlueLeaves).build());
     }
 
 

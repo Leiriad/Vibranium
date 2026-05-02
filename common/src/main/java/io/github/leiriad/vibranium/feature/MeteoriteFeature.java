@@ -134,7 +134,8 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         //Meteorites should have at least 2 ores (forced placement)
         if (vibraniumOreCounter[0] < 2) {
             BlockState centerState = world.getBlockState(finalOrigin);
-            BlockState ore = VibraniumBlocks.VIBRANIUM_ORE.defaultBlockState();
+            Block vibraniumOre = VibraniumBlocks.VIBRANIUM_ORE.get();
+            BlockState ore = vibraniumOre.defaultBlockState();
 
             //Place ore in the center if possible
             if (centerState.is(Blocks.BLACKSTONE)) {
@@ -225,7 +226,8 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         //ore patches (the closest to 3 the rarest)
         boolean isInnerShell = distortedDistance < (radius - 1.5) && distortedDistance > (radius - 2.5);
         if (oreNoise > 2.4 || (isInnerShell && random.nextFloat() < 0.2f)) {// 0.2f means we keep only 20% of the blocks
-            safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_ORE.defaultBlockState());
+            Block vibraniumOre = VibraniumBlocks.VIBRANIUM_ORE.get();
+            safeSetBlock(world, target, vibraniumOre.defaultBlockState());
             return 1;
         } else {
             generateShell(world, target, isAtSurface, 0.2f, random);
@@ -254,15 +256,15 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         // sediments (underwater)
         if (target.getY() < waterLevel) {
             if (patchNoise > 0.3) {
-                safeSetBlock(world, target, VibraniumBlocks.BLACKGRAVEL.defaultBlockState());
+                safeSetBlock(world, target, VibraniumBlocks.BLACKGRAVEL.get().defaultBlockState());
             } else if (patchNoise > -0.1) {
-                safeSetBlock(world, target, VibraniumBlocks.BLACKCLAY.defaultBlockState());
+                safeSetBlock(world, target, VibraniumBlocks.BLACKCLAY.get().defaultBlockState());
             } else {
-                safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_DIRT.defaultBlockState());
+                safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_DIRT.get().defaultBlockState());
             }
         }
         else { //Grass or moss
-            safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.defaultBlockState());
+            safeSetBlock(world, target, VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get().defaultBlockState());
         }
 
     }
@@ -286,27 +288,27 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         }
         //add dripleaves and moss carpets
         BlockState floorState = world.getBlockState(target.below());
-        boolean isValidFloor = floorState.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK) ||
-                floorState.is(VibraniumBlocks.VIBRANIUM_DIRT);
+        boolean isValidFloor = floorState.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get()) ||
+                floorState.is(VibraniumBlocks.VIBRANIUM_DIRT.get());
         if (isValidFloor) {
             if (world.getFluidState(target).is(FluidTags.WATER)) {
                 if (random.nextFloat() < 0.30f) placeSmallDripleaf(world, target, random);
             } else if (world.isEmptyBlock(target)) {
                 float r = random.nextFloat();
                 if (r < 0.15f) {
-                    safeSetBlock(world, target.below(), VibraniumBlocks.PURPLE_MOSS_BLOCK.defaultBlockState());
+                    safeSetBlock(world, target.below(), VibraniumBlocks.PURPLE_MOSS_BLOCK.get().defaultBlockState());
                     if (random.nextBoolean()) {
-                        safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_CARPET.defaultBlockState());
+                        safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_CARPET.get().defaultBlockState());
                     }
                 }
                 else if (r < 0.25f) {
                     Direction randomFacing = Direction.Plane.HORIZONTAL.getRandomDirection(random);
-                    BlockState bigDripleafState =  VibraniumBlocks.BIG_PURPLE_DRIPLEAF.defaultBlockState()
+                    BlockState bigDripleafState =  VibraniumBlocks.BIG_PURPLE_DRIPLEAF.get().defaultBlockState()
                             .setValue(SmallDripleafBlock.FACING, randomFacing);
                     safeSetBlock(world, target, bigDripleafState);
                 }
                 else if (r < 0.40f) {
-                    safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_CARPET.defaultBlockState());
+                    safeSetBlock(world, target, VibraniumBlocks.PURPLE_MOSS_CARPET.get().defaultBlockState());
                 }
             }
         }
@@ -341,7 +343,7 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
     private void placeSmallDripleaf(WorldGenLevel world, BlockPos target, RandomSource random) {
         // Define direction
         Direction randomFacing = Direction.Plane.HORIZONTAL.getRandomDirection(random);
-        BlockState lowerState = VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.defaultBlockState()
+        BlockState lowerState = VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get().defaultBlockState()
                 .setValue(SmallDripleafBlock.HALF, DoubleBlockHalf.LOWER)
                 .setValue(SmallDripleafBlock.FACING, randomFacing) // On applique l'orientation
                 .setValue(BlockStateProperties.WATERLOGGED, world.getFluidState(target).is(FluidTags.WATER));
@@ -351,7 +353,7 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos upperPos = target.above();
         if (world.isEmptyBlock(upperPos) || world.getFluidState(upperPos).is(FluidTags.WATER)) {
             // Create upper bloc
-            BlockState upperState = VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.defaultBlockState()
+            BlockState upperState = VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get().defaultBlockState()
                     .setValue(SmallDripleafBlock.HALF, DoubleBlockHalf.UPPER)
                     .setValue(SmallDripleafBlock.FACING, randomFacing)
                     .setValue(BlockStateProperties.WATERLOGGED, world.getFluidState(upperPos).is(FluidTags.WATER));
@@ -364,7 +366,7 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         boolean placed = false;
         if (world.getBlockState(target.above()).isFaceSturdy(world, target.above(), Direction.DOWN)) {
             // Add Age and Berries to ensure it stays as PurpleCaveVines
-            BlockState head = VibraniumBlocks.PURPLE_CAVE_VINES.defaultBlockState()
+            BlockState head = VibraniumBlocks.PURPLE_CAVE_VINES.get().defaultBlockState()
                     .setValue(CaveVinesBlock.AGE, random.nextInt(25))
                     .setValue(CaveVinesBlock.BERRIES, random.nextFloat() < 0.15f);
             safeSetBlock(world, target, head);
@@ -372,7 +374,7 @@ public class MeteoriteFeature extends Feature<NoneFeatureConfiguration> {
         }
 
         if (!placed) {
-            BlockState wallVine = VibraniumBlocks.PURPLE_VINE.defaultBlockState();
+            BlockState wallVine = VibraniumBlocks.PURPLE_VINE.get().defaultBlockState();
             boolean wallFound = false;
             for (Direction dir : Direction.Plane.HORIZONTAL) {
                 BlockPos neighbor = target.relative(dir);
