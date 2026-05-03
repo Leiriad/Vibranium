@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/template_farmland",
+  "textures": {
+    "dirt": "vibranium:block/vibranium_dirt",
+    "top": "vibranium:block/vibranium_farmland",
+    "particle": "vibranium:block/vibranium_dirt"
+  },
+  "render_type": "solid"
+}

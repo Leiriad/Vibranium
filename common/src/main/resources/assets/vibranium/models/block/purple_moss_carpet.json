@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/carpet",
+  "textures": {
+    "particle": "vibranium:block/purple_moss_block",
+    "wool": "vibranium:block/purple_moss_block"
+  }
+}

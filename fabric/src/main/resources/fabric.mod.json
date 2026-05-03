@@ -4,14 +4,15 @@
   "version": "${version}",
   "name": "Vibranium",
   "description": "Brings the power of vibranium to Minecraft",
+  "icon": "icon.png",
   "authors": [
-    "Me!"
+    "Leiriad"
   ],
   "contact": {
     "homepage": "https://github.com/Leiriad/Vibranium",
     "sources": "https://github.com/Leiriad/Vibranium"
   },
-  "license": "CC0-1.0",
+  "license": "Apache-2.0",
   "environment": "*",
   "entrypoints": {
     "main": [

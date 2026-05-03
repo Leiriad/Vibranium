@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "age=0,facing=north": {"model": "vibranium:block/heart_shaped_herb_sprout" },
+    "age=0,facing=east": {"model": "vibranium:block/heart_shaped_herb_sprout", "y": 90 },
+    "age=0,facing=west": {"model": "vibranium:block/heart_shaped_herb_sprout", "y": 180 },
+    "age=0,facing=south": {"model": "vibranium:block/heart_shaped_herb_sprout", "y": 270 },
+
+    "age=1,facing=north": {"model": "vibranium:block/heart_shaped_herb_bud"},
+    "age=1,facing=east": {"model": "vibranium:block/heart_shaped_herb_bud", "y": 90 },
+    "age=1,facing=west": {"model": "vibranium:block/heart_shaped_herb_bud", "y": 180 },
+    "age=1,facing=south": {"model": "vibranium:block/heart_shaped_herb_bud", "y": 270 },
+
+    "age=2,facing=north": {"model": "vibranium:block/heart_shaped_herb_flower"},
+    "age=2,facing=east": {"model": "vibranium:block/heart_shaped_herb_flower", "y": 90 },
+    "age=2,facing=west": {"model": "vibranium:block/heart_shaped_herb_flower", "y": 180 },
+    "age=2,facing=south": {"model": "vibranium:block/heart_shaped_herb_flower", "y": 270 }
+  }
+}

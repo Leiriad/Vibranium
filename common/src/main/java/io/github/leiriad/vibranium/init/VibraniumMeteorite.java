@@ -1,5 +1,8 @@
 package io.github.leiriad.vibranium.init;
 
+import dev.architectury.registry.registries.Registrar;
+import dev.architectury.registry.registries.RegistrarManager;
+import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.leiriad.vibranium.VibraniumMod;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,22 +16,15 @@ import io.github.leiriad.vibranium.feature.MeteoriteFeature;
 
 public class VibraniumMeteorite {
 
-    public static Feature<NoneFeatureConfiguration> METEORITE;
+    public static final Registrar<Feature<?>> FEATURES = RegistrarManager.get(VibraniumMod.MOD_ID).get(Registries.FEATURE);
 
+    public static final RegistrySupplier<Feature<NoneFeatureConfiguration>> METEORITE = FEATURES.register(
+            Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "meteorite"),
+            () -> new MeteoriteFeature(NoneFeatureConfiguration.CODEC)
+    );
 
     public static void registerFeatures() {
-        METEORITE = register("meteorite", new MeteoriteFeature(NoneFeatureConfiguration.CODEC));
+        VibraniumMod.LOGGER.info("Worldgen features registering...");
     }
 
-    private static Feature<NoneFeatureConfiguration> register(String name, Feature<NoneFeatureConfiguration> feature) {
-        ResourceKey<Feature<?>> key = keyOfFeature(name);
-        return Registry.register(BuiltInRegistries.FEATURE, key, feature);
-    }
-
-    private static ResourceKey<Feature<?>> keyOfFeature(String name) {
-        return ResourceKey.create(
-                Registries.FEATURE,
-                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, name)
-        );
-    }
 }

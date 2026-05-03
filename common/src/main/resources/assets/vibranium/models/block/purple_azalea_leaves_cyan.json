@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "vibranium:block/purple_azalea_leaves_dark_blue",
+    "bottom": "vibranium:block/purple_azalea_leaves_cyan_bottom",
+    "side": "vibranium:block/purple_azalea_leaves_cyan_side",
+    "particle": "vibranium:block/purple_azalea_leaves_cyan_side"
+  },
+  "render_type": "minecraft:cutout"
+}

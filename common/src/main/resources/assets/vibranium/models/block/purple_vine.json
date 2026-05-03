@@ -1,0 +1,19 @@
+{
+  "render_type": "minecraft:cutout",
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "vibranium:block/purple_vine",
+    "vine": "vibranium:block/purple_vine"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0.8],
+      "to": [16, 16, 0.8],
+      "shade": false,
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#vine"},
+        "south": {"uv": [0, 0, 16, 16], "texture": "#vine"}
+      }
+    }
+  ]
+}

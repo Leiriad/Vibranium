@@ -26,7 +26,7 @@ public final class VibraniumModFabric implements ModInitializer {
         // World Generation Placement
         // This links the JSON file at data/vibranium/worldgen/placed_feature/meteorite_placed.json
         // to the overworld biomes.
-        BiomeModifications.addFeature(
+        /*BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS,
                 METEORITE_PLACED_KEY
@@ -35,7 +35,7 @@ public final class VibraniumModFabric implements ModInitializer {
                 BiomeSelectors.foundInTheEnd(),
                 GenerationStep.Decoration.LOCAL_MODIFICATIONS,
                 METEORITE_END_KEY
-        );
+        );*/
 
     }
 

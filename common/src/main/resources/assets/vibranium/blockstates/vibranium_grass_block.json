@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "snowy=false": {
+      "model": "vibranium:block/vibranium_grass_block"
+    },
+    "snowy=true": {
+      "model": "vibranium:block/vibranium_grass_block_snowy"
+    }
+  }
+}

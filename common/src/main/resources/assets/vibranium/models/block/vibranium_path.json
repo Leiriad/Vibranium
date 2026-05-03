@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/dirt_path",
+  "textures": {
+    "top": "vibranium:block/vibranium_path_top",
+    "bottom": "vibranium:block/vibranium_dirt",
+    "side": "vibranium:block/vibranium_path_side",
+    "particle": "vibranium:block/vibranium_dirt"
+  },
+  "render_type": "solid"
+}

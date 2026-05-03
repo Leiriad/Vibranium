@@ -1,9 +1,12 @@
 package io.github.leiriad.vibranium;
 
 import dev.architectury.event.events.common.LifecycleEvent;
+import dev.architectury.registry.level.biome.BiomeModifications;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +46,28 @@ public class VibraniumMod {
 		VibraniumMeteorite.registerFeatures();
 		VibraniumBlocks.addItemsToTabs();
 
+		// World Generation Placement
+		// This links the JSON file at data/vibranium/worldgen/placed_feature/meteorite_placed.json
+		// to the overworld biomes.
+		BiomeModifications.addProperties(
+				context -> context.hasTag(BiomeTags.IS_OVERWORLD),
+				(context, mutable) -> {
+					mutable.getGenerationProperties().addFeature(
+							GenerationStep.Decoration.LOCAL_MODIFICATIONS,
+							METEORITE_PLACED_KEY
+					);
+				}
+		);
+
+		BiomeModifications.addProperties(
+				context -> context.hasTag(BiomeTags.IS_END),
+				(context, mutable) -> {
+					mutable.getGenerationProperties().addFeature(
+							GenerationStep.Decoration.LOCAL_MODIFICATIONS,
+							METEORITE_END_KEY
+					);
+				}
+		);
 	}
 
 }
