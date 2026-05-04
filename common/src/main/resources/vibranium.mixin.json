@@ -3,6 +3,7 @@
   "package": "io.github.leiriad.vibranium.mixin.common",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "CropBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

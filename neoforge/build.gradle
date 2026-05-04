@@ -2,6 +2,10 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
 architectury {
     platformSetupLoomIde()
     neoForge()
