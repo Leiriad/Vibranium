@@ -1,30 +1,13 @@
 package io.github.leiriad.vibranium;
 
-import dev.architectury.event.events.common.LifecycleEvent;
-import dev.architectury.registry.level.biome.BiomeModifications;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.BiomeTags;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import io.github.leiriad.vibranium.init.VibraniumStructures;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
-import io.github.leiriad.vibranium.init.VibraniumMeteorite;
 import io.github.leiriad.vibranium.init.VibraniumTreeDecorators;
 
 public class VibraniumMod {
 	public static final String MOD_ID = "vibranium";
-	//key to identify data/vibranium/worldgen/placed_feature/meteorite_placed.json
-	public static final ResourceKey<PlacedFeature> METEORITE_PLACED_KEY = ResourceKey.create(
-			Registries.PLACED_FEATURE,
-			Identifier.fromNamespaceAndPath(MOD_ID, "meteorite_placed")
-	);
-	public static final ResourceKey<PlacedFeature> METEORITE_END_KEY = ResourceKey.create(
-			Registries.PLACED_FEATURE,
-			Identifier.fromNamespaceAndPath(MOD_ID, "meteorite_end_placed")
-	);
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -42,32 +25,9 @@ public class VibraniumMod {
 		//Initialize Registry Content
 		VibraniumBlocks.registerModBlocks();
 		VibraniumTreeDecorators.register();
-		// Register the Meteorite Feature logic
-		VibraniumMeteorite.registerFeatures();
+		// Register the Meteorite Structure logics
+		VibraniumStructures.register();
 		VibraniumBlocks.addItemsToTabs();
-
-		// World Generation Placement
-		// This links the JSON file at data/vibranium/worldgen/placed_feature/meteorite_placed.json
-		// to the overworld biomes.
-		BiomeModifications.addProperties(
-				context -> context.hasTag(BiomeTags.IS_OVERWORLD),
-				(context, mutable) -> {
-					mutable.getGenerationProperties().addFeature(
-							GenerationStep.Decoration.LOCAL_MODIFICATIONS,
-							METEORITE_PLACED_KEY
-					);
-				}
-		);
-
-		BiomeModifications.addProperties(
-				context -> context.hasTag(BiomeTags.IS_END),
-				(context, mutable) -> {
-					mutable.getGenerationProperties().addFeature(
-							GenerationStep.Decoration.LOCAL_MODIFICATIONS,
-							METEORITE_END_KEY
-					);
-				}
-		);
 	}
 
 }
