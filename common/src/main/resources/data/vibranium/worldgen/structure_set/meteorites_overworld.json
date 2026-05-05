@@ -1,0 +1,14 @@
+{
+  "structures": [
+    { "structure": "vibranium:meteorite_small", "weight": 10 },
+    { "structure": "vibranium:meteorite_medium", "weight": 5 },
+    { "structure": "vibranium:meteorite_big", "weight": 2 },
+    { "structure": "vibranium:meteorite_huge", "weight": 1 }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 4,
+    "separation": 2,
+    "salt": 12345678
+  }
+}

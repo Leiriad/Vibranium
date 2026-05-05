@@ -1,0 +1,20 @@
+{
+  "type": "vibranium:meteorite_big",
+  "min_radius": 10,
+  "max_radius": 15,
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": -64
+    },
+    "max_inclusive": {
+      "absolute": 120
+    }
+  },
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "biomes": "#vibranium:has_meteorites",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {},
+  "settings": {}
+}

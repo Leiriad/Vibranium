@@ -1,7 +1,0 @@
-{
-  "type": "vibranium:meteorite",
-  "biomes": "#minecraft:is_end",
-  "step": "local_modifications",
-  "spawn_overrides": {},
-  "terrain_adaptation": "none"
-}

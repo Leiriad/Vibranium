@@ -1,11 +1,13 @@
 package io.github.leiriad.vibranium.structure;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.leiriad.vibranium.init.VibraniumStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -19,17 +21,42 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class MeteoriteStructure extends Structure {
+    //PROPERTIES
     // Codec is used to register parameters
     public static final MapCodec<MeteoriteStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
-                    Structure.settingsCodec(instance)
-            ).apply(instance, MeteoriteStructure::new)
+                    settingsCodec(instance),
+                    Codec.INT.fieldOf("min_radius").forGetter(s -> s.minRadius),
+                    Codec.INT.fieldOf("max_radius").forGetter(s -> s.maxRadius)
+            ).apply(instance, (settings, min, max) -> {
+                return new MeteoriteStructure(settings, min, max, null);
+            })
     );
 
-    public MeteoriteStructure(Structure.StructureSettings settings) {
+    private final StructureType<MeteoriteStructure> type;
+    private final int minRadius;
+    private final int maxRadius;
+
+    //CONSTRUCTOR
+    public MeteoriteStructure(StructureSettings settings, int minRadius, int maxRadius, StructureType<MeteoriteStructure> type) {
         super(settings);
+        this.minRadius = minRadius;
+        this.maxRadius = maxRadius;
+        this.type = type;
+    }
+
+    public static MapCodec<MeteoriteStructure> directCodec(Supplier<StructureType<MeteoriteStructure>> typeSupplier) {
+        return RecordCodecBuilder.mapCodec(instance ->
+                instance.group(
+                        settingsCodec(instance),
+                        Codec.INT.fieldOf("min_radius").forGetter(s -> s.minRadius),
+                        Codec.INT.fieldOf("max_radius").forGetter(s -> s.maxRadius)
+                ).apply(instance, (settings, min, max) ->
+                        new MeteoriteStructure(settings, min, max, typeSupplier.get()))
+        );
     }
 
     @Override
@@ -40,59 +67,47 @@ public class MeteoriteStructure extends Structure {
         int checkX = chunkPos.getMiddleBlockX();
         int checkZ = chunkPos.getMiddleBlockZ();
 
-        int radius = getRadius(random);
+        int radius = minRadius + random.nextInt(maxRadius - minRadius + 1);
 
-
-        //Check ground under origin if close to surface, origin is surface minus half the radius
-        //Position center, the geode's origin is calculated relatively to the chunk's center, with a vertical offset to bury it in the ground
-        int surfaceY = context.chunkGenerator().getFirstOccupiedHeight(
-                checkX,
-                checkZ,
-                Heightmap.Types.OCEAN_FLOOR_WG,
-                context.heightAccessor(),
-                context.randomState()
-        );
+        int surfaceY = context.chunkGenerator().getFirstOccupiedHeight(checkX, checkZ, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
         int minY = context.heightAccessor().getMinY();
-        int maxSpawnY = surfaceY;
 
-        //Insure floor support
-        int range = Math.max(1, maxSpawnY - minY);
+        //Choose random Y position between surface and bedrock. The geode's X origin is calculated relatively to the chunk's center, with a vertical offset to bury it in the ground
+        int range = Math.max(1, surfaceY - minY);
         int originY = minY + random.nextInt(range);
+
+        BlockPos tempOrigin;
         NoiseColumn column = context.chunkGenerator().getBaseColumn(checkX, checkZ, context.heightAccessor(), context.randomState());
         BlockState groundState = column.getBlock(surfaceY - 1);
-        BlockPos finalOrigin;
 
-        //Meteorite positioning
-        if(originY>= surfaceY - 30){ //Surface meteorite
-            int targetSurfaceY = surfaceY - (int)(radius * 0.75); // we must have at least 75% of the meteorite buried in the ground
-            int finalY = Math.min(originY, targetSurfaceY);
-            finalOrigin = new BlockPos(checkX, finalY, checkZ);
-            BlockPos groundPos = new BlockPos(checkX, surfaceY - 1, checkZ);
-            //End dimension generation specifics
-            Holder<Biome> biome = context.biomeSource().getNoiseBiome(
-                    QuartPos.fromBlock(checkX), QuartPos.fromBlock(finalY), QuartPos.fromBlock(checkZ),
-                    context.randomState().sampler()
-            );
-            boolean isEnd = biome.is(BiomeTags.IS_END);
-            if (isEnd) {
-                if (surfaceY < 15 || groundState.isAir()) { return Optional.empty();}
-            } else { //Overworld
-                if (groundState.isAir() || groundState.is(Blocks.WATER) || groundState.is(BlockTags.REPLACEABLE)) {
-                    return Optional.empty();
-                }
+        // Erosion logics
+        if (originY >= surfaceY - radius) {
+            // Meteorites that are at the surface are buried at 75%
+            int finalY = surfaceY - (int)(radius * 0.75);
+            tempOrigin = new BlockPos(checkX, finalY, checkZ);
+
+            // Specifics for End
+            Holder<Biome> biome = context.biomeSource().getNoiseBiome(QuartPos.fromBlock(checkX), QuartPos.fromBlock(finalY), QuartPos.fromBlock(checkZ), context.randomState().sampler());
+            if (biome.is(BiomeTags.IS_END)) {
+                if (surfaceY < 15 || groundState.isAir()) return Optional.empty();
+            } else {
+                if (groundState.isAir() || groundState.is(Blocks.WATER) || groundState.is(BlockTags.REPLACEABLE)) return Optional.empty();
             }
         }
-        //Underground meteorites
-        else{
-            finalOrigin = new BlockPos(checkX, originY, checkZ);
+        // Underground
+        else {
+            tempOrigin = new BlockPos(checkX, originY, checkZ);
         }
 
-        //Validity check
+        // Avoiding Bedrock
+        if (tempOrigin.getY() - radius < minY) {
+            tempOrigin = new BlockPos(checkX, minY + radius, checkZ);
+        }
+
+        //Final validity check
+        final BlockPos finalOrigin = tempOrigin;
         BlockState stateAtOrigin = column.getBlock(finalOrigin.getY());
         if (stateAtOrigin.isAir() || stateAtOrigin.is(Blocks.WATER)) {
-            return Optional.empty();
-        }
-        if (!context.heightAccessor().isInsideBuildHeight(finalOrigin.getY())) {
             return Optional.empty();
         }
 
@@ -101,16 +116,8 @@ public class MeteoriteStructure extends Structure {
             builder.addPiece(new MeteoritePiece(random, finalOrigin, radius));
         }));
     }
-
     @Override
     public StructureType<?> type() {
-        return VibraniumStructures.METEORITE.get();
-    }
-    private static int getRadius(RandomSource random) {
-        float roll = random.nextFloat();
-        if (roll < 0.10f) return 3 + random.nextInt(3);// 10% very small meteorite
-        if (roll < 0.60f) return 6 + random.nextInt(6);//50% standard 6 to 9 blocs radius - 1 to 2 players
-        if (roll < 0.90f) return 10 + random.nextInt(6); //30% Massive 10 to 15 blocs
-        return 20 + random.nextInt(11);//10% huge (20 to 30)
+        return this.type;
     }
 }
