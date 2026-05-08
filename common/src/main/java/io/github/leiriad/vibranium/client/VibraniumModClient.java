@@ -4,6 +4,7 @@ import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 
 public class VibraniumModClient {
@@ -36,5 +37,6 @@ public class VibraniumModClient {
                 (state, world, pos, tintIndex) -> 0xFFFFFF,
                 VibraniumBlocks.PURPLE_VINE
         );
+
     }
 }

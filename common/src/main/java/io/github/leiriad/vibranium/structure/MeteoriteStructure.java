@@ -55,30 +55,41 @@ public class MeteoriteStructure extends Structure {
 
         // 1. HEIGHT DETECTION: Get land and ocean floor heights
         int landSurfaceY = context.chunkGenerator().getFirstOccupiedHeight(checkX, checkZ, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, context.heightAccessor(), context.randomState());
-        int oceanFloorY = context.chunkGenerator().getFirstOccupiedHeight(checkX, checkZ, Heightmap.Types.OCEAN_FLOOR, context.heightAccessor(), context.randomState());
+        int oceanFloorY = context.chunkGenerator().getFirstOccupiedHeight(checkX, checkZ, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
 
-        // 2. TRUE SURFACE: Target the lowest point (handles water bodies correctly)
-        int surfaceY = Math.min(landSurfaceY, oceanFloorY);
-        int absoluteMinY = context.heightAccessor().getMinY() + 5 + radius;
+        // 2. TRUE SURFACE: Target the medium point
+        int delta = landSurfaceY - oceanFloorY;
+        int surfaceY;
 
-        boolean isSurface = random.nextFloat() < 0.35f;
+        if (delta > 4) {          //underwater we stay 2 blocs above the floor to avoid sand submersion
+            surfaceY = oceanFloorY + 2;
+        } else {
+            surfaceY = landSurfaceY;
+        }
+
+        //Bedrock spawn fix
+        int minY = context.heightAccessor().getMinY();
+        int safetyBuffer = 12;
+        int absoluteMinY = minY + safetyBuffer + radius;
+
+        boolean isSurface = random.nextFloat() < 1f;
         BlockPos finalOrigin;
 
         if (isSurface) {
             // Anchor partially buried in the surface
             int offset = (int) (radius * (0.5 + random.nextFloat() * 0.2));
-            finalOrigin = new BlockPos(checkX, Math.max(absoluteMinY, surfaceY - offset), checkZ);
+            finalOrigin = new BlockPos(checkX, surfaceY - offset, checkZ);
         } else {
             // UNDERGROUND ANCHORING LOGIC: Find a random height and verify contact with terrain
             int originY = absoluteMinY + random.nextInt(Math.max(1, surfaceY - absoluteMinY - radius));
             finalOrigin = new BlockPos(checkX, originY, checkZ);
-
-            // Fail generation if floating in a giant air pocket (e.g., Lush Caves)
-            if (!isAnchored(context, finalOrigin, radius)) return Optional.empty();
         }
 
+        // Fail generation if floating in a giant air pocket (e.g., Lush Caves)
+        if (!isAnchored(context, finalOrigin, radius)) return Optional.empty();
+
         return Optional.of(new Structure.GenerationStub(finalOrigin, (builder) -> {
-            builder.addPiece(new MeteoritePiece(random, finalOrigin, radius, isSurface, surfaceY));
+            builder.addPiece(new MeteoritePiece(random, finalOrigin, radius, isSurface));
         }));
     }
 
@@ -93,12 +104,14 @@ public class MeteoriteStructure extends Structure {
         if (column.getBlock(pos.getY() - radius).isSolid() || column.getBlock(pos.getY() + radius).isSolid()) return true;
 
         // Horizontal Check (Walls)
-        int[] offsets = {-radius, radius};
+        int checkDist = (int)(radius * 0.8);
+        int[] offsets = {-checkDist, checkDist};
+
         for (int ox : offsets) {
-            if (context.chunkGenerator().getBaseColumn(pos.getX() + ox, pos.getZ(), context.heightAccessor(), context.randomState()).getBlock(pos.getY()).isSolid()) return true;
+            if (!context.chunkGenerator().getBaseColumn(pos.getX() + ox, pos.getZ(), context.heightAccessor(), context.randomState()).getBlock(pos.getY()).isAir()) return true;
         }
         for (int oz : offsets) {
-            if (context.chunkGenerator().getBaseColumn(pos.getX(), pos.getZ() + oz, context.heightAccessor(), context.randomState()).getBlock(pos.getY()).isSolid()) return true;
+            if (!context.chunkGenerator().getBaseColumn(pos.getX(), pos.getZ() + oz, context.heightAccessor(), context.randomState()).getBlock(pos.getY()).isAir()) return true;
         }
 
         return false;

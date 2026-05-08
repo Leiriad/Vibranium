@@ -10,6 +10,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BigDripleafStemBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -22,7 +23,7 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF;
 import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM;
 
-public class BigPurpleDripleafStem extends BigDripleafStemBlock {
+public class BigPurpleDripleafStem extends BigDripleafStemBlock implements SimpleWaterloggedBlock {
     //PROPERTIES
     public static final MapCodec<BigDripleafStemBlock> CODEC = simpleCodec(BigPurpleDripleafStem::new);
     private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -50,6 +51,10 @@ public class BigPurpleDripleafStem extends BigDripleafStemBlock {
     protected static boolean place(LevelAccessor levelAccessor, BlockPos blockPos, FluidState fluidState, Direction direction) {
         BlockState blockState = BIG_PURPLE_DRIPLEAF_STEM.get().defaultBlockState().setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, direction);
         return levelAccessor.setBlock(blockPos, blockState, 3);
+    }
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
     @Override
     protected boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
