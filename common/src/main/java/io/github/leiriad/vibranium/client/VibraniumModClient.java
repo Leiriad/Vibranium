@@ -12,8 +12,8 @@ public class VibraniumModClient {
     public static void init() {
 
             RenderTypeRegistry.register(ChunkSectionLayer.CUTOUT,
-                    VibraniumBlocks.BIG_PURPLE_DRIPLEAF.get(),
-                    VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(),
+                    /*VibraniumBlocks.BIG_PURPLE_DRIPLEAF.get(),
+                    VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(),*/
                     VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN.get(),
                     VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE.get(),
                     VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET.get(),
@@ -27,16 +27,24 @@ public class VibraniumModClient {
                     VibraniumBlocks.POTTED_PURPLE_AZALEA_BUSH.get(),
                     VibraniumBlocks.POTTED_FLOWERING_PURPLE_AZALEA_BUSH.get(),
                     VibraniumBlocks.PURPLE_VINE.get(),
-                    VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(),
+                    //VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(),
                     VibraniumBlocks.PURPLE_SHORT_GRASS.get(),
                     VibraniumBlocks.PURPLE_TALL_GRASS.get(),
                     VibraniumBlocks.HEART_SHAPED_HERB.get()
             );
+        RenderTypeRegistry.register(ChunkSectionLayer.TRANSLUCENT,
+                VibraniumBlocks.BIG_PURPLE_DRIPLEAF.get(),
+                VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(),
+                VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get()
+        );
         //vine color fix
         ColorHandlerRegistry.registerBlockColors(
                 (state, world, pos, tintIndex) -> 0xFFFFFF,
                 VibraniumBlocks.PURPLE_VINE
         );
-
+        ColorHandlerRegistry.registerBlockColors(
+                (state, world, pos, tintIndex) -> 0xFFFFFF,
+                VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get()
+        );
     }
 }

@@ -7,6 +7,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -22,14 +25,10 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.Nullable;
 
-public class SmallPurpleDripleaf extends SmallDripleafBlock implements SimpleWaterloggedBlock {
+public class SmallPurpleDripleaf extends SmallDripleafBlock {
     //PROPERTIES
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_DRIPLEAF)
-                .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, level, pos) -> {return true;})
-                .hasPostProcess((state, level, pos) -> {return true;})
-                .lightLevel((state) -> 1);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.SMALL_DRIPLEAF);
     }
 
     public static final MapCodec<SmallDripleafBlock> CODEC = simpleCodec(SmallPurpleDripleaf::new);
@@ -41,44 +40,30 @@ public class SmallPurpleDripleaf extends SmallDripleafBlock implements SimpleWat
     //CONSTRUCTOR
     public SmallPurpleDripleaf(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(HALF, DoubleBlockHalf.LOWER)
-                .setValue(BlockStateProperties.WATERLOGGED, false)
-                .setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(
+                this.defaultBlockState()
+                        .setValue(HALF, DoubleBlockHalf.LOWER)
+                        .setValue(BlockStateProperties.WATERLOGGED, false)
+                        .setValue(FACING, Direction.NORTH)
+        );
     }
 
     //ACTIONS
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HALF, FACING, BlockStateProperties.WATERLOGGED);
-    }
-    @Override
-    public FluidState getFluidState(BlockState state) {
-        return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
-    }
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockState state = super.getStateForPlacement(context);
-        if (state != null) {
-            FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
-            return state.setValue(BlockStateProperties.WATERLOGGED, fluidState.getType() == Fluids.WATER);
-        }
-        return null;
-    }
-    @Override
     public void performBonemeal(ServerLevel serverLevel, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
         Direction currentFacing = blockState.getValue(FACING);
 
-        if (blockState.getValue(SmallDripleafBlock.HALF) == DoubleBlockHalf.LOWER) {
-            BlockPos upperPos = blockPos.above();
-            serverLevel.setBlock(upperPos, serverLevel.getFluidState(upperPos).createLegacyBlock(), 18);
+        BlockPos basePos = blockState.getValue(SmallDripleafBlock.HALF) == DoubleBlockHalf.LOWER ? blockPos : blockPos.below();
+        BlockPos topPos = basePos.above();
 
-            BigPurpleDripleaf.placeWithRandomHeight(serverLevel, randomSource, blockPos, currentFacing);
-        } else {
-            BlockPos lowerPos = blockPos.below();
-            this.performBonemeal(serverLevel, randomSource, lowerPos, serverLevel.getBlockState(lowerPos));
-        }
+        serverLevel.removeBlock(topPos, false);
+        serverLevel.removeBlock(basePos, false);
+
+        int height = randomSource.nextInt(3) + 2;
+
+        BigPurpleDripleaf.placeWithSpecificHeight(serverLevel, basePos, currentFacing, height);
     }
+
+
 
 }

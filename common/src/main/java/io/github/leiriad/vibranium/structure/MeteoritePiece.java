@@ -24,11 +24,9 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MeteoritePiece extends StructurePiece {
@@ -65,7 +63,7 @@ public class MeteoritePiece extends StructurePiece {
     @Override
     public void postProcess(WorldGenLevel world, StructureManager structureManager, ChunkGenerator generator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos origin) {
         //Using a buffer to insure piece quality
-        Map<BlockPos, BlockState> blocksToPlace = new HashMap<>();
+        Map<BlockPos, BlockState> blocksToPlace = new LinkedHashMap<>();
 
         //BUFFER GENERATION
         //create shape
@@ -107,13 +105,9 @@ public class MeteoritePiece extends StructurePiece {
         //PLACE PIECE
         blocksToPlace.forEach((pos, state) -> {
             if (!world.getBlockState(pos).is(Blocks.BEDROCK)) {
-                world.setBlock(pos, state, 1);
+                world.setBlock(pos, state, 3);
             }
-            if (state.is(VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get()) && state.getValue(BlockStateProperties.WATERLOGGED)) {
-                // On force le monde à reconnaître qu'il y a un changement de fluide ici
-                // sans pour autant bloquer le thread de génération
-                world.getLightEngine().checkBlock(pos);
-            }
+            world.getChunk(pos).markUnsaved();
         });
 
     }
@@ -443,7 +437,7 @@ public class MeteoritePiece extends StructurePiece {
 
         //bottom
         BlockState currentState = getEffectiveState(world, target, blocksToPlace);
-        boolean lowerIsWater = currentState.getFluidState().is(FluidTags.WATER) || currentState.is(Blocks.WATER);
+        boolean lowerIsWater = currentState.getFluidState().is(FluidTags.WATER);
 
         safeSetBlock(target, VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get().defaultBlockState()
                 .setValue(SmallDripleafBlock.HALF, DoubleBlockHalf.LOWER)

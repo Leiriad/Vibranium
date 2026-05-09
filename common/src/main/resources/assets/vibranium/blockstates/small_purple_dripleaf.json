@@ -1,6 +1,35 @@
 {
   "variants": {
-    "half=lower": { "model": "vibranium:block/small_purple_dripleaf_bottom" },
-    "half=upper": { "model": "vibranium:block/small_purple_dripleaf_top" }
+    "facing=north,half=lower": {
+      "model": "vibranium:block/small_purple_dripleaf_bottom"
+    },
+    "facing=east,half=lower": {
+      "model": "vibranium:block/small_purple_dripleaf_bottom",
+      "y": 90
+    },
+    "facing=south,half=lower": {
+      "model": "vibranium:block/small_purple_dripleaf_bottom",
+      "y": 180
+    },
+    "facing=west,half=lower": {
+      "model": "vibranium:block/small_purple_dripleaf_bottom",
+      "y": 270
+    },
+
+    "facing=north,half=upper": {
+      "model": "vibranium:block/small_purple_dripleaf_top"
+    },
+    "facing=east,half=upper": {
+      "model": "vibranium:block/small_purple_dripleaf_top",
+      "y": 90
+    },
+    "facing=south,half=upper": {
+      "model": "vibranium:block/small_purple_dripleaf_top",
+      "y": 180
+    },
+    "facing=west,half=upper": {
+      "model": "vibranium:block/small_purple_dripleaf_top",
+      "y": 270
+    }
   }
 }

@@ -24,19 +24,14 @@ import net.minecraft.world.level.material.MapColor;
 import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF;
 import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM;
 
-public class BigPurpleDripleaf extends BigDripleafBlock implements SimpleWaterloggedBlock {
+public class BigPurpleDripleaf extends BigDripleafBlock {
 
     //PROPERTIES
     ///To define block properties
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF)
-                .emissiveRendering((state, level, pos) -> {return true;})//Rendering must always be lazy loaded
-                .hasPostProcess((state, level, pos) -> {return true;})
-                .mapColor(MapColor.COLOR_PURPLE)
-                .lightLevel((state) -> 1);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF);
     }
     public static final MapCodec<BigDripleafBlock> CODEC = simpleCodec(BigPurpleDripleaf::new);
-    private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     @Override
     public MapCodec<BigDripleafBlock> codec() {
         return CODEC;
@@ -48,26 +43,26 @@ public class BigPurpleDripleaf extends BigDripleafBlock implements SimpleWaterlo
     }
 
     //ACTIONS
-    public static void placeWithRandomHeight(LevelAccessor levelAccessor, RandomSource randomSource, BlockPos blockPos, Direction direction) {
-        int i = Mth.nextInt(randomSource, 2, 5);
+    public static void placeWithSpecificHeight(LevelAccessor levelAccessor, BlockPos blockPos, Direction direction, int height) {
         BlockPos.MutableBlockPos mutableBlockPos = blockPos.mutable();
-        int j = 0;
+        int actualHeight = 0;
 
-        while (j < i && canPlaceAt(levelAccessor, mutableBlockPos, levelAccessor.getBlockState(mutableBlockPos))) {
-            j++;
+        while (actualHeight < height && canPlaceAt(levelAccessor, mutableBlockPos, levelAccessor.getBlockState(mutableBlockPos))) {
+            actualHeight++;
             mutableBlockPos.move(Direction.UP);
         }
 
-        int k = blockPos.getY() + j - 1;
-        mutableBlockPos.setY(blockPos.getY());
+        if (actualHeight == 0) return;
 
-        while (mutableBlockPos.getY() < k) {
+        mutableBlockPos.set(blockPos);
+
+        for (int k = 0; k < actualHeight - 1; k++) {
             BigPurpleDripleafStem.place(levelAccessor, mutableBlockPos, levelAccessor.getFluidState(mutableBlockPos), direction);
             mutableBlockPos.move(Direction.UP);
         }
-
         place(levelAccessor, mutableBlockPos, levelAccessor.getFluidState(mutableBlockPos), direction);
     }
+
     protected static boolean canPlaceAt(LevelHeightAccessor levelHeightAccessor, BlockPos blockPos, BlockState blockState) {
         return !levelHeightAccessor.isOutsideBuildHeight(blockPos) && canReplace(blockState);
     }
@@ -76,7 +71,7 @@ public class BigPurpleDripleaf extends BigDripleafBlock implements SimpleWaterlo
     }
 
     protected static boolean place(LevelAccessor levelAccessor, BlockPos blockPos, FluidState fluidState, Direction direction) {
-        BlockState blockState = BIG_PURPLE_DRIPLEAF.get().defaultBlockState().setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, direction);
+        BlockState blockState = BIG_PURPLE_DRIPLEAF.get().defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, direction);
         return levelAccessor.setBlock(blockPos, blockState, 3);
     }
     @Override
@@ -103,7 +98,7 @@ public class BigPurpleDripleaf extends BigDripleafBlock implements SimpleWaterlo
         if (direction == Direction.DOWN && !blockState.canSurvive(levelReader, blockPos)) {
             return Blocks.AIR.defaultBlockState();
         } else {
-            if ((Boolean)blockState.getValue(WATERLOGGED)) {
+            if ((Boolean)blockState.getValue(BlockStateProperties.WATERLOGGED)) {
                 scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
             }
 
@@ -111,7 +106,7 @@ public class BigPurpleDripleaf extends BigDripleafBlock implements SimpleWaterlo
                 // We manually copy properties to the Stem block to keep the plant's orientation
                 return BIG_PURPLE_DRIPLEAF_STEM.get().defaultBlockState()
                         .setValue(FACING, blockState.getValue(FACING))
-                        .setValue(WATERLOGGED, blockState.getValue(WATERLOGGED));
+                        .setValue(BlockStateProperties.WATERLOGGED, blockState.getValue(BlockStateProperties.WATERLOGGED));
             }
 
             return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
@@ -123,7 +118,7 @@ public class BigPurpleDripleaf extends BigDripleafBlock implements SimpleWaterlo
         FluidState fluidState = blockPlaceContext.getLevel().getFluidState(blockPlaceContext.getClickedPos());
         boolean bl = blockState.is(BIG_PURPLE_DRIPLEAF) || blockState.is(BIG_PURPLE_DRIPLEAF_STEM);
         return this.defaultBlockState()
-                .setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER))
+                .setValue(BlockStateProperties.WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER))
                 .setValue(FACING, bl ? (Direction)blockState.getValue(FACING) : blockPlaceContext.getHorizontalDirection().getOpposite());
     }
     @Override

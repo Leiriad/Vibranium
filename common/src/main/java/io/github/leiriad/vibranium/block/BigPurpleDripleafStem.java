@@ -23,16 +23,11 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF;
 import static io.github.leiriad.vibranium.init.VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM;
 
-public class BigPurpleDripleafStem extends BigDripleafStemBlock implements SimpleWaterloggedBlock {
+public class BigPurpleDripleafStem extends BigDripleafStemBlock{
     //PROPERTIES
     public static final MapCodec<BigDripleafStemBlock> CODEC = simpleCodec(BigPurpleDripleafStem::new);
-    private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF_STEM)
-                .mapColor(MapColor.COLOR_PURPLE)
-                .emissiveRendering((state, level, pos) -> {return true;})
-                .hasPostProcess((state, level, pos) -> {return true;})
-                .lightLevel((state) -> 1);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.BIG_DRIPLEAF_STEM);
     }
     @Override
     public MapCodec<BigDripleafStemBlock> codec() {
@@ -42,14 +37,11 @@ public class BigPurpleDripleafStem extends BigDripleafStemBlock implements Simpl
     //CONSTRUCTOR
     public BigPurpleDripleafStem(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(WATERLOGGED, false)
-                .setValue(FACING, Direction.NORTH));
     }
 
     //ACTIONS
     protected static boolean place(LevelAccessor levelAccessor, BlockPos blockPos, FluidState fluidState, Direction direction) {
-        BlockState blockState = BIG_PURPLE_DRIPLEAF_STEM.get().defaultBlockState().setValue(WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, direction);
+        BlockState blockState = BIG_PURPLE_DRIPLEAF_STEM.get().defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, fluidState.isSourceOfType(Fluids.WATER)).setValue(FACING, direction);
         return levelAccessor.setBlock(blockPos, blockState, 3);
     }
     @Override
