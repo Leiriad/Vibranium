@@ -1,0 +1,77 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 12000,
+        "min_delay": 24000,
+        "sound": "minecraft:music.overworld.stronghold",
+        "replace_current_music": true
+      }
+    },
+    "minecraft:gameplay/snow_golem_melts": true
+  },
+  "carvers": [],
+  "creature_spawn_probability": 0.05,
+  "downfall": 0.0,
+  "effects": {
+    "ambient_sound": "minecraft:ambient.underwater.loop.ultra_warm",
+    "mood_sound": {
+      "sound": "minecraft:block.conduit.ambient",
+      "tick_delay": 2000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    },
+    "additions_sound": {
+      "sound": "minecraft:ambient.underwater.loop.additions",
+      "tick_chance": 0.011
+    },
+    "water_color": "#0087ff"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "has_precipitation": false,
+  "spawn_costs": {},
+  "spawners": {
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 10
+      }
+    ],
+    "axolotls": [],
+    "creature": [],
+    "misc": [],
+    "monster": [
+      {
+        "type": "minecraft:enderman",
+        "maxCount": 4,
+        "minCount": 1,
+        "weight": 50
+      }
+    ],
+    "underground_water_creature": [
+      {
+        "type": "minecraft:glow_squid",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 10
+      }
+    ],
+    "water_ambient": [],
+    "water_creature": []
+  },
+  "temperature": 0.5
+}
