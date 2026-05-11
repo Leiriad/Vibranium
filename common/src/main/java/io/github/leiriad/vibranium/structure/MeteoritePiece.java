@@ -305,7 +305,7 @@ public class MeteoritePiece extends StructurePiece {
         if (biomeHolder.isPresent()) {
             Holder<Biome> holder = biomeHolder.get();
 
-            // On boucle sur la zone par pas de 4 (taille d'une cellule de biome)
+            //Loop on area by 4 to 4 steps
             for (int x = box.minX(); x <= box.maxX(); x += 4) {
                 for (int z = box.minZ(); z <= box.maxZ(); z += 4) {
                     for (int y = box.minY(); y <= box.maxY(); y += 4) {
@@ -317,16 +317,15 @@ public class MeteoritePiece extends StructurePiece {
                         if (sectionIdx >= 0 && sectionIdx < chunk.getSections().length) {
                             var section = chunk.getSection(sectionIdx);
 
-                            // On accède au conteneur
+                            //Access container
                             PalettedContainer<Holder<Biome>> container = (PalettedContainer<Holder<Biome>>) section.getBiomes();
 
-                            // CALCULS DES INDEX LOCAUX (0 à 3)
-                            // On récupère la position relative dans la section (0-15) puis on convertit en Quart (0-3)
+                            // LOCAL INDEX CALCULATIONS (0 to 3)
+                            // Get the relative position within the section (0-15) then convert to Quarter (0-3)
                             int localX = (x & 15) >> 2;
                             int localY = (y & 15) >> 2;
                             int localZ = (z & 15) >> 2;
 
-                            // On utilise set au lieu de getAndSet pour éviter les calculs inutiles
                             container.set(localX, localY, localZ, holder);
                         }
                     }
@@ -574,7 +573,7 @@ public class MeteoritePiece extends StructurePiece {
         BlockState currentState = getEffectiveState(world, target, blocksToPlace);
         boolean isUnderWater = target.getY() <= waterLevel;
 
-        // On ne décore que si l'espace est libre (air ou eau)
+        // No decoration on occupied space
         if (!currentState.isAir() && !currentState.is(Blocks.WATER)) return;
 
         if (!isUnderWater) {
@@ -648,12 +647,12 @@ public class MeteoritePiece extends StructurePiece {
         return caveVinesCount;
     }
     private void placeDripstoneColumn(WorldGenLevel world, BlockPos pos, RandomSource random, BoundingBox box, Map<BlockPos, BlockState> blocksToPlace) {
-        // 1. On place TOUJOURS un Dripstone Block au plafond comme base solide
+        // Solid base placed everytime
         safeSetBlock(pos.above(), Blocks.DRIPSTONE_BLOCK.defaultBlockState(), box, blocksToPlace);
 
-        // 2. Déterminer une longueur aléatoire (0 = juste la base, 1 = une petite pointe, 2-3 = stalactite)
-        int length = random.nextInt(4); // 0, 1, 2 ou 3
-        if (length == 0) return; // On a juste posé le bloc de base au-dessus, on s'arrête.
+        //choose a random length
+        int length = random.nextInt(4); // 0, 1, 2 or 3
+        if (length == 0) return;// 0 = base only
 
         for (int i = 0; i < length; i++) {
             BlockPos currentPos = pos.below(i);
@@ -661,9 +660,9 @@ public class MeteoritePiece extends StructurePiece {
 
             DripstoneThickness thickness;
             if (length == 1) {
-                thickness = DripstoneThickness.TIP; // Une seule petite pointe
+                thickness = DripstoneThickness.TIP; //1 = base + tip
             } else {
-                // Logique de forme pour stalactites plus longues
+                // Longer ones
                 if (i == 0) thickness = DripstoneThickness.BASE;
                 else if (i == length - 1) thickness = DripstoneThickness.TIP;
                 else thickness = DripstoneThickness.FRUSTUM;
@@ -676,13 +675,11 @@ public class MeteoritePiece extends StructurePiece {
             safeSetBlock(currentPos, state, box, blocksToPlace);
         }
 
-        // 3. Effet de CLUSTER : Chance de générer des petites pointes à côté
-        if (random.nextFloat() < 0.3f) { // 30% de chance d'avoir des voisins
+        // cluster effect
+        if (random.nextFloat() < 0.3f) { // 30% neighbor chance
             for (Direction dir : Direction.Plane.HORIZONTAL) {
                 if (random.nextBoolean()) {
                     BlockPos neighborPos = pos.relative(dir);
-                    // Appel récursif limité ou placement simple pour éviter les boucles infinies
-                    // Ici on place juste une petite pointe simple pour le cluster
                     safeSetBlock(neighborPos.above(), Blocks.DRIPSTONE_BLOCK.defaultBlockState(), box, blocksToPlace);
                     safeSetBlock(neighborPos, Blocks.POINTED_DRIPSTONE.defaultBlockState()
                             .setValue(PointedDripstoneBlock.TIP_DIRECTION, Direction.DOWN)
@@ -698,7 +695,7 @@ public class MeteoritePiece extends StructurePiece {
         if (stateAbove.is(BlockTags.STONE_ORE_REPLACEABLES)||stateAbove.is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)||
                 stateAbove.is(Blocks.BLACKSTONE)||stateAbove.is(Blocks.MOSSY_COBBLESTONE)||stateAbove.is(Blocks.END_STONE)
                 ||stateAbove.is(VibraniumBlocks.VIBRANIUM_ORE.get())) {
-            int length = random.nextInt(4) + 1; // Longueur de 1 à 4 blocs
+            int length = random.nextInt(4) + 1; // length
 
             for (int i = 0; i < length; i++) {
                 BlockPos currentPos = target.below(i);

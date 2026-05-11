@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 public class VibraniumBlocks {
     public static DeferredRegister<Block>BLOCKS = DeferredRegister.create(VibraniumMod.MOD_ID, Registries.BLOCK);
-    private static DeferredRegister<Item>ITEMS = DeferredRegister.create(VibraniumMod.MOD_ID, Registries.ITEM);
+    private static DeferredRegister<Item> BLOCKITEMS = DeferredRegister.create(VibraniumMod.MOD_ID, Registries.ITEM);
 
     //CUSTOM BLOCKS & JOINED ITEMS
     //GROUND
@@ -68,8 +68,8 @@ public class VibraniumBlocks {
     );
 
     //VINES
-    public static final RegistrySupplier<Block> PURPLE_CAVE_VINES_PLANT = register("purple_cave_vines_plant", PurpleCaveVinesPlant::new, () -> PurpleCaveVinesPlant.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> PURPLE_CAVE_VINES = register("purple_cave_vines", PurpleCaveVines::new, () -> PurpleCaveVines.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> PURPLE_CAVE_VINES_PLANT = register("purple_cave_vines_plant", PurpleCaveVinesPlant::new, () -> PurpleCaveVinesPlant.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> PURPLE_CAVE_VINES = register("purple_cave_vines", PurpleCaveVines::new, () -> PurpleCaveVines.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> PURPLE_VINE = register("purple_vine", PurpleVine::new, () -> PurpleVine.getProperties(BlockBehaviour.Properties.of()), true);
 
     //DRIP LEAVES AND SPECIALS
@@ -78,10 +78,24 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> SMALL_PURPLE_DRIPLEAF = register("small_purple_dripleaf", SmallPurpleDripleaf::new, () -> SmallPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> HEART_SHAPED_HERB = register("heart_shaped_herb", HeartShapedHerb::new, () -> HeartShapedHerb.getProperties(BlockBehaviour.Properties.of()), true);
 
+    //BLOCKITEMS
+    public static final RegistrySupplier<Item> BLUE_GLOW_BERRIES = BLOCKITEMS.register("blue_glow_berries",
+            () -> {
+                // Create id
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "blue_glow_berries"));
+
+                return new BlueGlowBerries(
+                        PURPLE_CAVE_VINES.get(),
+                        BlueGlowBerries.getProperties().setId(itemKey)
+                );
+            }
+    );
+
     ///Registers block in the game
     public static void registerModBlocks() {
         BLOCKS.register();
-        ITEMS.register();
+        BLOCKITEMS.register();
     }
 
     private static <T extends Block> RegistrySupplier<T> register(String name, Function<BlockBehaviour.Properties, T> blockFactory, Supplier<BlockBehaviour.Properties> propertiesSupplier, boolean shouldRegisterItem) {
@@ -100,7 +114,7 @@ public class VibraniumBlocks {
 
         // BlockItem registering
         if (shouldRegisterItem) {
-            ITEMS.register(id, () -> new BlockItem(
+            BLOCKITEMS.register(id, () -> new BlockItem(
                     blockSupplier.get(),
                     new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id))
             ));
@@ -109,7 +123,9 @@ public class VibraniumBlocks {
         return blockSupplier;
     }
 
-    public static void addItemsToTabs() {
+    public static void addBlocksToTabs() {
+
+        //NATURAL BLOCKS
         //Add objets to creative tabs
         List.of(
                 VIBRANIUM_ORE,
@@ -136,6 +152,9 @@ public class VibraniumBlocks {
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.NATURAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
+
+        //BlockItem alone
+        CreativeTabRegistry.appendStack(CreativeModeTabs.NATURAL_BLOCKS, () -> new ItemStack(BLUE_GLOW_BERRIES.get()));
     }
 
 }

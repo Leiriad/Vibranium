@@ -2,9 +2,9 @@
   "attributes": {
     "minecraft:audio/background_music": {
       "default": {
-        "max_delay": 12000,
-        "min_delay": 24000,
-        "sound": "minecraft:music.overworld.stronghold",
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.overworld.deep_dark",
         "replace_current_music": true
       }
     },

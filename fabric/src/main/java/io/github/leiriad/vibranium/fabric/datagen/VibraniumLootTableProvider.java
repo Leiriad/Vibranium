@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.fabric.datagen;
 
 
+import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.advancements.criterion.ItemPredicate;
@@ -28,7 +29,6 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
 
 
 public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
@@ -81,7 +81,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         if(VIBRANIUM_ORE != null){
             this.add(VIBRANIUM_ORE, (block) ->
                     createSilkTouchDispatchTable(block,
-                            this.applyExplosionDecay(block, LootItem.lootTableItem(VIBRANIUM_ORE)))
+                            this.applyExplosionDecay(block, LootItem.lootTableItem(VibraniumItems.VIBRANIUM_DUST.get())))
             );
         }
     }
@@ -192,18 +192,16 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                     this.createSingleItemTable(mossblock));
         }
     }
-    private void createPurpleCaveVinesLoot(Block vinesblock) {
-        if(vinesblock != null){
-            this.add(vinesblock, (vines) ->
+    private void createPurpleCaveVinesLoot(Block vinesBlock) {
+        if (vinesBlock != null) {
+            this.add(vinesBlock, (block) ->
                     LootTable.lootTable().withPool(
                             LootPool.lootPool()
-                                    .add(LootItem.lootTableItem(VibraniumBlocks.PURPLE_CAVE_VINES.get())) // Loots cave vine
-                    ).withPool(
-                            LootPool.lootPool()
-                                    .add(LootItem.lootTableItem(Items.GLOW_BERRIES)) // Loots droppable item (berries)
-                                    .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(vines)
+                                    // On ne donne l'item BLUE_GLOW_BERRIES que si l'état BERRIES est true
+                                    .add(LootItem.lootTableItem(VibraniumBlocks.BLUE_GLOW_BERRIES.get()))
+                                    .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
                                             .setProperties(StatePropertiesPredicate.Builder.properties()
-                                                    .hasProperty(CaveVines.BERRIES, true))) // only if the vine contains berries
+                                                    .hasProperty(CaveVines.BERRIES, true)))
                     )
             );
         }
