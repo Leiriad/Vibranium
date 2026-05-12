@@ -4,7 +4,6 @@ import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 
 public class VibraniumModClient {
@@ -30,7 +29,7 @@ public class VibraniumModClient {
                     //VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(),
                     VibraniumBlocks.PURPLE_SHORT_GRASS.get(),
                     VibraniumBlocks.PURPLE_TALL_GRASS.get(),
-                    VibraniumBlocks.HEART_SHAPED_HERB.get()
+                    VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get()
             );
         RenderTypeRegistry.register(ChunkSectionLayer.TRANSLUCENT,
                 VibraniumBlocks.BIG_PURPLE_DRIPLEAF.get(),

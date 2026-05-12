@@ -30,8 +30,8 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> VIBRANIUM_PATH = register("vibranium_path", VibraniumPathBlock::new, () -> VibraniumPathBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> VIBRANIUM_FARMLAND = register("vibranium_farmland", VibraniumFarmland::new, () -> VibraniumFarmland.getProperties(BlockBehaviour.Properties.of()), true);
 
-    public static final RegistrySupplier<Block> BLACKGRAVEL = register("blackgravel", BlackGravel::new, () -> BlackGravel.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> BLACKCLAY = register("blackclay", BlackClay::new, () -> BlackClay.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> BLACK_GRAVEL = register("black_gravel", BlackGravel::new, () -> BlackGravel.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> BLACK_CLAY = register("black_clay", BlackClay::new, () -> BlackClay.getProperties(BlockBehaviour.Properties.of()), true);
 
     //GRASS
     public static final RegistrySupplier<Block> PURPLE_SHORT_GRASS = register("purple_short_grass", PurpleShortGrass::new, () -> PurpleShortGrass.getProperties(BlockBehaviour.Properties.of()), true);
@@ -76,7 +76,7 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> BIG_PURPLE_DRIPLEAF_STEM = register("big_purple_dripleaf_stem", BigPurpleDripleafStem::new, () -> BigPurpleDripleafStem.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> BIG_PURPLE_DRIPLEAF = register("big_purple_dripleaf", BigPurpleDripleaf::new, () -> BigPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> SMALL_PURPLE_DRIPLEAF = register("small_purple_dripleaf", SmallPurpleDripleaf::new, () -> SmallPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> HEART_SHAPED_HERB = register("heart_shaped_herb", HeartShapedHerb::new, () -> HeartShapedHerb.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> HEART_SHAPED_HERB_FLOWER = register("heart_shaped_herb_flower", HeartShapedHerbFlower::new, () -> HeartShapedHerbFlower.getProperties(BlockBehaviour.Properties.of()), true);
 
     //BLOCKITEMS
     public static final RegistrySupplier<Item> BLUE_GLOW_BERRIES = BLOCKITEMS.register("blue_glow_berries",
@@ -131,8 +131,8 @@ public class VibraniumBlocks {
                 VIBRANIUM_ORE,
                 VIBRANIUM_DIRT,
                 VIBRANIUM_GRASS_BLOCK,
-                BLACKGRAVEL,
-                BLACKCLAY,
+                BLACK_GRAVEL,
+                BLACK_CLAY,
                 PURPLE_SHORT_GRASS,
                 PURPLE_TALL_GRASS,
                 PURPLE_AZALEA,
@@ -148,7 +148,7 @@ public class VibraniumBlocks {
                 BIG_PURPLE_DRIPLEAF,
                 SMALL_PURPLE_DRIPLEAF,
                 PURPLE_VINE,
-                HEART_SHAPED_HERB
+                HEART_SHAPED_HERB_FLOWER
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.NATURAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });

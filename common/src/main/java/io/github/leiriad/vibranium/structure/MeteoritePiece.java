@@ -1,21 +1,17 @@
 package io.github.leiriad.vibranium.structure;
 
 import io.github.leiriad.vibranium.VibraniumMod;
-import io.github.leiriad.vibranium.block.SmallPurpleDripleaf;
+import io.github.leiriad.vibranium.block.HeartShapedHerbFlower;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumStructures;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.Mth;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -33,7 +29,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.*;
@@ -115,6 +110,32 @@ public class MeteoritePiece extends StructurePiece {
                 repairWater(blocksToPlace, random);
             }
         }
+        //ACTIVATE VEGETATION GROWTH
+        Map<BlockPos, BlockState> vegetation = new HashMap<>();
+
+        blocksToPlace.forEach((pos, state) -> {
+            if (state.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get())) {
+
+                BlockPos above = pos.above();
+                if (!blocksToPlace.containsKey(above) || blocksToPlace.get(above).isAir()) {
+
+                    if (random.nextFloat() < 0.20f) {
+                        BlockState plantState = getRandomVibraniumPlant(world, random);
+
+                        if (plantState != null) {
+                            vegetation.put(above, plantState);
+                            if (plantState.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
+                                BlockPos topPos = above.above();
+                                if (box.isInside(topPos)) {
+                                    vegetation.put(topPos, plantState.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.UPPER));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        blocksToPlace.putAll(vegetation);
 
         //PLACE PIECE
         blocksToPlace.forEach((pos, state) -> {
@@ -295,6 +316,47 @@ public class MeteoritePiece extends StructurePiece {
         counts[0] = dirtCount;
         counts[1] = cavevinesCount;
         return  counts;
+    }
+    private BlockState getRandomVibraniumPlant(WorldGenLevel world, RandomSource random) {
+        //Use list if tag is unavailable
+        List<Block> backupPlants = List.of(
+                VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(),
+                VibraniumBlocks.PURPLE_AZALEA.get(),
+                VibraniumBlocks.PURPLE_TALL_GRASS.get(),
+                VibraniumBlocks.PURPLE_SHORT_GRASS.get(),
+                VibraniumBlocks.FLOWERING_PURPLE_AZALEA.get(),
+                Blocks.ALLIUM,
+                Blocks.PINK_TULIP,
+                Blocks.LILAC,
+                Blocks.CORNFLOWER,
+                Blocks.TORCHFLOWER,
+                Blocks.PINK_PETALS
+        );
+
+        var registry = world.registryAccess().lookupOrThrow(Registries.BLOCK);
+        var tagKey = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_vegetation"));
+
+        // Get tag
+        BlockState state = registry.get(tagKey)
+                .flatMap(tag -> {
+                    if (tag.size() > 0) {
+                        return Optional.of(tag.get(random.nextInt(tag.size())).value().defaultBlockState());
+                    }
+                    return Optional.empty();
+                })
+                .orElseGet(() -> backupPlants.get(random.nextInt(backupPlants.size())).defaultBlockState());
+
+        //Make various ages for heart shaped herb
+        if (state.is(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get())) {
+            return state.setValue(HeartShapedHerbFlower.AGE, random.nextInt(3));
+        }
+
+        //Double blocks
+        if (state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
+            return state.setValue(BlockStateProperties.DOUBLE_BLOCK_HALF, DoubleBlockHalf.LOWER);
+        }
+
+        return state;
     }
     public void setMeteoriteBiome(WorldGenLevel level, BoundingBox box) {
         HolderLookup<Biome> biomeLookup = level.holderLookup(Registries.BIOME);
@@ -535,12 +597,12 @@ public class MeteoritePiece extends StructurePiece {
         if (target.getY() < waterLevel) {
             //Lake bottom
             if (patchNoise > 1.0) {
-                floorState = VibraniumBlocks.BLACKCLAY.get().defaultBlockState();
+                floorState = VibraniumBlocks.BLACK_CLAY.get().defaultBlockState();
             } else if (patchNoise > -1.5) {
                 if (detailNoise > 0.3) {
                     floorState = VibraniumBlocks.VIBRANIUM_DIRT.get().defaultBlockState();
                 } else {
-                    floorState = VibraniumBlocks.BLACKGRAVEL.get().defaultBlockState();
+                    floorState = VibraniumBlocks.BLACK_GRAVEL.get().defaultBlockState();
                 }
             } else {
                 // Leave Blackstone once in a while
@@ -550,9 +612,9 @@ public class MeteoritePiece extends StructurePiece {
         //Bank
         else if (isBank) {
             if (patchNoise > 1.3) {
-                floorState = VibraniumBlocks.BLACKCLAY.get().defaultBlockState();
+                floorState = VibraniumBlocks.BLACK_CLAY.get().defaultBlockState();
             } else if (detailNoise > 0.4) {
-                floorState = VibraniumBlocks.BLACKGRAVEL.get().defaultBlockState();
+                floorState = VibraniumBlocks.BLACK_GRAVEL.get().defaultBlockState();
             } else {
                 floorState = VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get().defaultBlockState();
                 dirtCount++;
@@ -581,7 +643,7 @@ public class MeteoritePiece extends StructurePiece {
             float r = random.nextFloat();
 
             // Clay
-            if (floorState.is(VibraniumBlocks.BLACKCLAY.get())) {
+            if (floorState.is(VibraniumBlocks.BLACK_CLAY.get())) {
                 if (r < 0.50f) { // 50% dripleaf rate
                     placeSmallDripleaf(world, target, random, box, blocksToPlace);
                 }
@@ -608,7 +670,7 @@ public class MeteoritePiece extends StructurePiece {
             }
         } else {
             //underwater
-            if ((floorState.is(VibraniumBlocks.BLACKCLAY.get()) || floorState.is(VibraniumBlocks.VIBRANIUM_DIRT.get())) && random.nextFloat() < 0.30f) {
+            if ((floorState.is(VibraniumBlocks.BLACK_CLAY.get()) || floorState.is(VibraniumBlocks.VIBRANIUM_DIRT.get())) && random.nextFloat() < 0.30f) {
                 placeSmallDripleaf(world, target, random, box, blocksToPlace);
             }
         }
@@ -695,7 +757,7 @@ public class MeteoritePiece extends StructurePiece {
         if (stateAbove.is(BlockTags.STONE_ORE_REPLACEABLES)||stateAbove.is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)||
                 stateAbove.is(Blocks.BLACKSTONE)||stateAbove.is(Blocks.MOSSY_COBBLESTONE)||stateAbove.is(Blocks.END_STONE)
                 ||stateAbove.is(VibraniumBlocks.VIBRANIUM_ORE.get())) {
-            int length = random.nextInt(4) + 1; // length
+            int length = random.nextInt(8) + 1; // length
 
             for (int i = 0; i < length; i++) {
                 BlockPos currentPos = target.below(i);

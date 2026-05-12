@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "vibranium:block/blackgravel"
+    "all": "vibranium:block/black_clay"
   },
   "render_type": "solid"
 }

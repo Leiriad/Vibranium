@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.fabric.datagen;
 
 
+import io.github.leiriad.vibranium.block.HeartShapedHerbFlower;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
@@ -86,13 +87,13 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         }
     }
     private void createBlackClayLoot() {
-        // Blackclay mimics vanilla clay
-        Block BLACKCLAY = VibraniumBlocks.BLACKCLAY.get();
-        if(BLACKCLAY != null){
-            this.add(BLACKCLAY, (block) ->
+        // Black clay mimics vanilla clay
+        Block BLACK_CLAY = VibraniumBlocks.BLACK_CLAY.get();
+        if(BLACK_CLAY != null){
+            this.add(BLACK_CLAY, (block) ->
                     createSilkTouchDispatchTable(block,
                             this.applyExplosionDecay(block,
-                                    LootItem.lootTableItem(Items.CLAY_BALL)
+                                    LootItem.lootTableItem(VibraniumItems.BLACK_CLAY_BALL.get())
                                             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(4)))))
             );
         }
@@ -109,10 +110,10 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         );
     }
     private void createBlackGravelLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
-        // Blackgravel mimics vanilla gravel
-        Block BLACKGRAVEL = VibraniumBlocks.BLACKGRAVEL.get();
-        if(BLACKGRAVEL != null){
-            this.add(BLACKGRAVEL, (block) ->
+        // Black gravel mimics vanilla gravel
+        Block BLACK_GRAVEL = VibraniumBlocks.BLACK_GRAVEL.get();
+        if(BLACK_GRAVEL != null){
+            this.add(BLACK_GRAVEL, (block) ->
                     createSilkTouchDispatchTable(block,
                             this.applyExplosionCondition(block,
                                     LootItem.lootTableItem(Items.FLINT)
@@ -243,9 +244,20 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         }
     }
     private void createHeartShapedHerbLoot(){
-        Block HEART_SHAPED_HERB = VibraniumBlocks.HEART_SHAPED_HERB.get();
-        if (HEART_SHAPED_HERB != null){
-            this.add(HEART_SHAPED_HERB, this::createSilkTouchOnlyTable);
+        Block flower = VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get();
+        if (flower != null) {
+            this.add(flower, (block) ->
+                    // If silktouch, drop flower
+                    createSilkTouchDispatchTable(block,
+                            //Else if mature -> fruit or plant is broken
+                            this.applyExplosionDecay(block,
+                                    LootItem.lootTableItem(VibraniumItems.HEART_SHAPED_HERB.get())
+                                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                                    .setProperties(StatePropertiesPredicate.Builder.properties()
+                                                            .hasProperty(HeartShapedHerbFlower.AGE, 2)))
+                            )
+                    )
+            );
         }
     }
 }

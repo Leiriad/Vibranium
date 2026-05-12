@@ -33,8 +33,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get(), "Herbe vibranisée");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_PATH.get(), "Chemin de terre vibranisée");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_FARMLAND.get(), "Terre vibranisée labourée");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACKGRAVEL.get(), "Gravier noir");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACKCLAY.get(), "Argile noire");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_GRAVEL.get(), "Gravier noir");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_CLAY.get(), "Argile noire");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_SHORT_GRASS.get(), "Herbe courte pourpre");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_TALL_GRASS.get(), "Herbe haute pourpre");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_AZALEA.get(), "Azalée pourpre");
@@ -53,12 +53,15 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(), "Tige de grande foliogoutte pourpre");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(), "Petite foliogoutte pourpre");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_VINE.get(), "Liane pourpre");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.HEART_SHAPED_HERB.get(), "Pousse d'herbe cœur");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Fleur d'herbe cœur");
 
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Liane des cavernes pourpre");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.get(), "Liane des cavernes pourpre");
+
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baies lumineuses bleues");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Poudre de vibranium");
+                translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Boule d'argile noire");
+                translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Herbe coeur");
                 break;
             case "es_es":
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Mineral de vibranio");
@@ -66,8 +69,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get(), "Hierba vibranizada");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_PATH.get(), "Camino de tierra vibranizada");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_FARMLAND.get(), "Tierra vibranizada de cultivo");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACKGRAVEL.get(), "Grava negra");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACKCLAY.get(), "Arcilla negra");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_GRAVEL.get(), "Grava negra");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_CLAY.get(), "Arcilla negra");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_SHORT_GRASS.get(), "Hierba corta morada");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_TALL_GRASS.get(), "Hierba alta morada");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_AZALEA.get(), "Azalea morada");
@@ -86,12 +89,14 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(), "Tallo de plantaforma morada grande");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(), "Plantaforma morada pequeña");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_VINE.get(), "Enredadera morada");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.HEART_SHAPED_HERB.get(), "Hierba en forma de corazón");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "FLor de hierba en forma de corazón");
 
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Lianas de cueva moradas");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.get(), "Enredaderas de cueva moradas");
+
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baya luminosas azules");
-                translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Polvo de vibranio");
+                translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Bola de arcilla negra");
+                translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Hierba en forma de corazón");
                 break;
             default:
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Vibranium Ore");
@@ -99,8 +104,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get(), "Vibranized Grass ");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_PATH.get(), "Vibranized Dirt Path");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_FARMLAND.get(), "Vibranised Farmland");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACKGRAVEL.get(), "Black Gravel");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACKCLAY.get(), "Black Clay");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_GRAVEL.get(), "Black Gravel");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_CLAY.get(), "Black Clay");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_SHORT_GRASS.get(), "Purple Short Grass");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_TALL_GRASS.get(), "Purple tall Grass");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_AZALEA.get(), "Purple Azalea");
@@ -119,12 +124,15 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(), "Big Purple Dripleaf Stem");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(), "Small Purple Dripleaf");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_VINE.get(), "Purple Vine");
-                addBlockWithItem(translationBuilder,VibraniumBlocks.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Heart-shaped Herb Flower");
 
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Purple Cave Vines");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.get(), "Purple Cave Vines");
+
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Blue Glow Berries");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Vibranium Dust");
+                translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Black Clay Ball");
+                translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
         }
 
     }

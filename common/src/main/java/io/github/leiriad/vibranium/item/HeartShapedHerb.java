@@ -1,16 +1,14 @@
-package io.github.leiriad.vibranium.block;
+package io.github.leiriad.vibranium.item;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
-import net.minecraft.world.level.block.Block;
 
-public class BlueGlowBerries extends BlockItem {
+public class HeartShapedHerb extends Item {
     public static Item.Properties getProperties() {
         return new Item.Properties()
                 .food(new FoodProperties.Builder()
@@ -21,8 +19,8 @@ public class BlueGlowBerries extends BlockItem {
 
                 .component(DataComponents.CONSUMABLE, Consumables.defaultFood()
                         .consumeSeconds(0.8f)
-                        .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.NAUSEA, 200, 0), 1.0f))
+                        .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.POISON, 400, 0), 1.0f))
                         .build());
     }
-    public BlueGlowBerries(Block block, Properties properties) {super(block, properties);}
+    public HeartShapedHerb(Properties properties) {super(properties);}
 }

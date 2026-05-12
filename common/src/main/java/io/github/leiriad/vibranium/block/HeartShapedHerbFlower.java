@@ -1,7 +1,6 @@
 package io.github.leiriad.vibranium.block;
 
 import com.mojang.serialization.MapCodec;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -15,15 +14,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.MapColor;
 
 import static io.github.leiriad.vibranium.init.VibraniumBlocks.VIBRANIUM_GRASS_BLOCK;
 
-public class HeartShapedHerb extends BushBlock {
+public class HeartShapedHerbFlower extends BushBlock {
     //PROPERTIES
     public static final IntegerProperty AGE = IntegerProperty.create("age",0,2);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final MapCodec<BushBlock> CODEC = simpleCodec(HeartShapedHerb::new);
+    public static final MapCodec<BushBlock> CODEC = simpleCodec(HeartShapedHerbFlower::new);
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.RED_TULIP).randomTicks()
                 .emissiveRendering((state, level, pos) -> {return true;})
@@ -37,7 +35,7 @@ public class HeartShapedHerb extends BushBlock {
 
     //CONSTRUCTOR
     ///The herb as 3 growth stages sprout, bud, flower and spawns in random directions
-    public HeartShapedHerb(Properties properties) {
+    public HeartShapedHerbFlower(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any()
                 .setValue(AGE,0)
