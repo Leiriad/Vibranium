@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
-      "model": "vibranium:block/vibranium_ore"
-    }
+    "facing=up":    { "model": "vibranium:block/vibranium_ore" },
+    "facing=down":  { "model": "vibranium:block/vibranium_ore", "x": 180 },
+    "facing=north": { "model": "vibranium:block/vibranium_ore", "x": 90 },
+    "facing=south": { "model": "vibranium:block/vibranium_ore", "x": 270 },
+    "facing=east":  { "model": "vibranium:block/vibranium_ore", "x": 90, "y": 90 },
+    "facing=west":  { "model": "vibranium:block/vibranium_ore", "x": 90, "y": 270 }
   }
 }

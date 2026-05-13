@@ -5,11 +5,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.flag.FeatureFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import io.github.leiriad.vibranium.utils.VibraniumBlockActions;
 import net.minecraft.world.level.material.Fluids;
@@ -18,6 +22,7 @@ import net.minecraft.world.level.redstone.Orientation;
 public class VibraniumOre extends Block {
     //PROPERTIES
     public static final MapCodec<Block> CODEC = simpleCodec(VibraniumOre::new);
+    public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE)
                 .strength(50f, 1200f)
@@ -34,9 +39,18 @@ public class VibraniumOre extends Block {
     //CONSTRUCTOR
     public VibraniumOre(Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     //ACTIONS
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+    }
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+    }
     @Override
     public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource source) {
         VibraniumBlockActions.showVibraniumParticles(world,source,pos);

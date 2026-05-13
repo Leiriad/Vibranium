@@ -561,6 +561,7 @@ public class MeteoritePiece extends StructurePiece {
         for (BlockPos target : currentPositions) {
             BlockState currentState = blocksToPlace.get(target);
 
+
             if (currentState.is(Blocks.BLACKSTONE)) {
                 double distortedDistance = Math.sqrt(target.distSqr(origin));
                 boolean isInnerShell = distortedDistance < (radius - 0.5) && distortedDistance > (radius - 2.5);
@@ -569,7 +570,12 @@ public class MeteoritePiece extends StructurePiece {
                     double oreNoise = Math.sin(target.getX() * 0.5) + Math.sin(target.getY() * 0.5) + Math.sin(target.getZ() * 0.5);
 
                     if (oreNoise > 2.2 || random.nextFloat() < 0.15f) {
-                        blocksToPlace.put(target, VibraniumBlocks.VIBRANIUM_ORE.get().defaultBlockState());
+                        Direction[] allowedDirections = {Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
+                        Direction randomDirection = allowedDirections[random.nextInt(allowedDirections.length)];
+
+                        BlockState vibraniumState = VibraniumBlocks.VIBRANIUM_ORE.get().defaultBlockState()
+                                .setValue(DirectionalBlock.FACING, randomDirection);
+                        blocksToPlace.put(target, vibraniumState);
                         oreCount++;
                     }
                 }
