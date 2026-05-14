@@ -1,6 +1,8 @@
 package io.github.leiriad.vibranium.fabric;
 
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.fabric.block.entity.VibraniumEntitiesFabric;
+import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.fabricmc.api.ModInitializer;
 
 
@@ -15,6 +17,7 @@ public final class VibraniumModFabric implements ModInitializer {
         // Proceed with mild caution.
         VibraniumMod.init();
         VibraniumToolEventsFabric.register();
+        VibraniumEntitiesFabric.init();
     }
 
 }

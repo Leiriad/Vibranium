@@ -1,11 +1,8 @@
 package io.github.leiriad.vibranium;
 
-import io.github.leiriad.vibranium.init.VibraniumItems;
-import io.github.leiriad.vibranium.init.VibraniumStructures;
+import io.github.leiriad.vibranium.init.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
-import io.github.leiriad.vibranium.init.VibraniumTreeDecorators;
 
 public class VibraniumMod {
 	public static final String MOD_ID = "vibranium";
@@ -27,6 +24,7 @@ public class VibraniumMod {
 		VibraniumBlocks.registerModBlocks();
 		VibraniumItems.registerModItems();
 		VibraniumTreeDecorators.register();
+
 		// Register the Meteorite Structure logics
 		VibraniumStructures.register();
 		VibraniumBlocks.addBlocksToTabs();

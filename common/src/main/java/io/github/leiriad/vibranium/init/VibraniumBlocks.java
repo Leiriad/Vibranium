@@ -78,6 +78,8 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> SMALL_PURPLE_DRIPLEAF = register("small_purple_dripleaf", SmallPurpleDripleaf::new, () -> SmallPurpleDripleaf.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> HEART_SHAPED_HERB_FLOWER = register("heart_shaped_herb_flower", HeartShapedHerbFlower::new, () -> HeartShapedHerbFlower.getProperties(BlockBehaviour.Properties.of()), true);
 
+    //INDUSTRIAL
+    public static final RegistrySupplier<Block> REACTOR_CORE = register("reactor_core", ReactorCore::new, () -> ReactorCore.getProperties(BlockBehaviour.Properties.of()), true);
     //BLOCKITEMS
     public static final RegistrySupplier<Item> BLUE_GLOW_BERRIES = BLOCKITEMS.register("blue_glow_berries",
             () -> {
@@ -125,8 +127,8 @@ public class VibraniumBlocks {
 
     public static void addBlocksToTabs() {
 
-        //NATURAL BLOCKS
         //Add objets to creative tabs
+        //NATURAL BLOCKS
         List.of(
                 VIBRANIUM_ORE,
                 VIBRANIUM_DIRT,
@@ -155,6 +157,13 @@ public class VibraniumBlocks {
 
         //BlockItem alone
         CreativeTabRegistry.appendStack(CreativeModeTabs.NATURAL_BLOCKS, () -> new ItemStack(BLUE_GLOW_BERRIES.get()));
+
+        //FUNCTIONAL BLOCKS
+        List.of(
+                REACTOR_CORE
+        ).forEach(blockSupplier -> {
+            CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
+        });
     }
 
 }

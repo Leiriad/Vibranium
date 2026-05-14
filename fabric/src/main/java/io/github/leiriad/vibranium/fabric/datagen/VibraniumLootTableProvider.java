@@ -74,6 +74,10 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createDripleavesLoot();
         createVineLoot();
         createHeartShapedHerbLoot();
+
+        //Industrial blocks
+
+        createIndustrialBlocksLoot(VibraniumBlocks.REACTOR_CORE.get());
     }
 
     private void createVibraniumOreLoot() {
@@ -258,6 +262,12 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                             )
                     )
             );
+        }
+    }
+    private void createIndustrialBlocksLoot( Block industrialBlock) {
+        if(industrialBlock != null){
+            this.add(industrialBlock, (block) ->
+                    this.createSingleItemTable(industrialBlock));
         }
     }
 }
