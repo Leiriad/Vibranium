@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium;
 
+import dev.architectury.registry.menu.MenuRegistry;
 import io.github.leiriad.vibranium.init.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ public class VibraniumMod {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Vibranium est chargé!");
+		LOGGER.info("Vibranium is loaded!");
 
 		//Initialize Registry Content
 		VibraniumBlocks.registerModBlocks();
@@ -28,6 +29,7 @@ public class VibraniumMod {
 		// Register the Meteorite Structure logics
 		VibraniumStructures.register();
 		VibraniumBlocks.addBlocksToTabs();
+		VibraniumMenus.registerModMenus();
 	}
 
 }

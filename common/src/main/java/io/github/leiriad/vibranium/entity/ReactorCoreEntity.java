@@ -1,11 +1,12 @@
 package io.github.leiriad.vibranium.entity;
 
+import io.github.leiriad.vibranium.block.ReactorCoreBlock;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
-import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,6 +32,9 @@ public class ReactorCoreEntity extends BlockEntity {
     }
 
     //METHODS
+    private boolean hasCoolant() {
+        return this.waterAmount >= 10; //Water consumtion per tick
+    }
     // Game saving
     @Override
     protected void saveAdditional(ValueOutput valueOutput) {
@@ -61,28 +65,98 @@ public class ReactorCoreEntity extends BlockEntity {
     public static void tick(Level level, BlockPos pos, BlockState state, ReactorCoreEntity blockEntity) {
         if (level.isClientSide()) return;
 
-        if (blockEntity.canProcess()) {
-            blockEntity.process();
+        // 1. On vérifie l'état des fours adjacents et on récupère la demande en chaleur
+        boolean aFurnaceIsCooking = blockEntity.checkAndBoostAdjacentFurnaces(level, pos, state);
+
+        // 2. Gestion de la température
+        if (aFurnaceIsCooking && blockEntity.hasCoolant()) {
+            // Si les fours fonctionnent et qu'on a de l'eau, le réacteur produit de l'énergie et de la chaleur
+            blockEntity.processReaction();
         } else {
-            blockEntity.coolDown();
+            // Sinon (pas de four actif, ou plus d'eau), le réacteur refroidit
+            // On lui passe le paramètre 'aFurnaceIsCooking' car si un four est chaud mais non alimenté, 
+            // il peut dissiper la chaleur du réacteur plus vite !
+            blockEntity.coolDown(aFurnaceIsCooking);
         }
     }
 
-    private void coolDown() {
+    private void processReaction() {
+        // The reaction in the reactor makes the temperature rise
+        if (this.temperature < 1000) {
+            this.temperature += 5;
+        }
+
+        // Water turns into hot water
+        this.waterAmount -= 10;
+        this.hotWaterAmount += 10;
+
+        // The reactor emits energy
+        this.energyStored += (this.temperature / 10);
     }
 
-    private boolean canProcess() {
-        return inventory.getItem(0).is(VibraniumItems.VIBRANIUM_DUST.get()) && waterAmount >= 100;
+    private boolean checkAndBoostAdjacentFurnaces(Level level, BlockPos pos, BlockState state) {
+        BlockPos targetPos = pos.relative(state.getValue(ReactorCoreBlock.FACING).getOpposite());
+        BlockEntity be = level.getBlockEntity(targetPos);
+
+        if (be instanceof AbstractFurnaceBlockEntity furnace) {
+            ItemStack inputStack = furnace.getItem(0); // SLOT_INPUT
+
+            if (!inputStack.isEmpty() && this.temperature > 100) {
+
+                int currentLitTime = furnace.dataAccess.get(0); // 0 = litTimeRemaining
+                int currentCookingProgress = furnace.dataAccess.get(2); // 2 = cookingTimer
+                int totalCookTime = furnace.dataAccess.get(3); // 3 = cookingTotalTime
+
+                //Fuel the oven with the reactor's heat
+                if (currentLitTime < 200) {
+                    furnace.dataAccess.set(0, 200);//keep it lit with 10 sec of virtual fuel
+                    furnace.dataAccess.set(1, 200); // litTotalTime
+                }
+
+                //Overclock the cooking
+                if (!furnace.getItem(0).isEmpty() && this.temperature > 100) {
+                    // +4 bonus progression per tick makes it cook 5 times quicker
+                    int newProgress = Math.min(totalCookTime, currentCookingProgress + 4);
+                    furnace.dataAccess.set(2, newProgress);
+                }
+
+                //Validate changes
+                furnace.setChanged();
+
+                return true; // reactor boosts oven
+            }
+        }
+        return false;
     }
 
-    private void process() {
-        // Logique de transformation ici
-        this.temperature += 5;
-        this.energyStored += calculateEnergyOutput();
-        // Consommation et production...
+    private void coolDown(boolean aFurnaceIsCooking) {
+        int targetTemp = 20; // The reactor attempts to reach it's normal temperature
+
+        if (this.temperature > targetTemp) {
+            // Oven finishing cooking or off uses residual heat
+            int coolingRate = aFurnaceIsCooking ? 4 : 2;
+
+            this.temperature = Math.max(targetTemp, this.temperature - coolingRate);
+        }
     }
 
-    private int calculateEnergyOutput() {
-        return 0;
+    public int getTemperature() {
+        return this.temperature;
+    }
+
+    public int getEnergyStored() {
+        return this.energyStored;
+    }
+
+    public long getWaterAmount() {
+        return this.waterAmount;
+    }
+
+    public long getHotWaterAmount() {
+        return this.hotWaterAmount;
+    }
+
+    public void addWater(long amount) {
+        this.waterAmount = Math.min(10000L, this.waterAmount + amount); // Max capacity 10 buckets
     }
 }

@@ -2,7 +2,8 @@ accessWidener v1 named
 
 # BlockEntityType Builder
 accessible class net/minecraft/world/level/block/entity/BlockEntityType
-
+#BlockEntity Furnace
+accessible field net/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity dataAccess Lnet/minecraft/world/inventory/ContainerData;
 
 # TreeDecorator
 accessible method net/minecraft/world/level/levelgen/feature/treedecorators/TreeDecoratorType <init> (Lcom/mojang/serialization/MapCodec;)V

@@ -55,6 +55,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_VINE.get(), "Liane pourpre");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Fleur d'herbe cœur");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CORE.get(), "Cœur de réacteur");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Panneau de Contrôle de réacteur");
 
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Liane des cavernes pourpre");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.get(), "Liane des cavernes pourpre");
@@ -92,6 +93,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_VINE.get(), "Enredadera morada");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "FLor de hierba en forma de corazón");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CORE.get(), "Núcleo del reactor");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Panel de control del reactor");
 
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Lianas de cueva moradas");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.get(), "Enredaderas de cueva moradas");
@@ -136,6 +138,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Vibranium Dust");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Black Clay Ball");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Reactor Control Panel");
         }
 
     }

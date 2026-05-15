@@ -2,7 +2,6 @@ package io.github.leiriad.vibranium.block;
 
 import com.mojang.serialization.MapCodec;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
-import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -17,10 +16,10 @@ import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.Nullable;
 
 
-public class ReactorCore extends BaseEntityBlock {
+public class ReactorCoreBlock extends BaseEntityBlock {
 
     //PROPERTIES
-    public static final MapCodec<ReactorCore> CODEC = simpleCodec(ReactorCore::new);
+    public static final MapCodec<ReactorCoreBlock> CODEC = simpleCodec(ReactorCoreBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
     public static Properties getProperties (Properties settings){
@@ -37,7 +36,7 @@ public class ReactorCore extends BaseEntityBlock {
     }
 
     //CONSTRUCTOR
-    public ReactorCore(Properties properties) {
+    public ReactorCoreBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
     }
@@ -60,4 +59,5 @@ public class ReactorCore extends BaseEntityBlock {
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
+
 }
