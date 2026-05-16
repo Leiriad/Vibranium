@@ -3,7 +3,6 @@ package io.github.leiriad.vibranium.client;
 import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
-import dev.architectury.registry.menu.MenuRegistry;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;

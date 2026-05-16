@@ -45,12 +45,22 @@ public class VibraniumItems {
 
     public static void addItemsToTabs() {
         //Add objets to creative tabs
+        //INGREDIENTS
         List.of(
                 VIBRANIUM_DUST,
                 BLACK_CLAY_BALL,
                 HEART_SHAPED_HERB
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.INGREDIENTS, () -> new ItemStack(supplier.get()));
+        });
+
+        //VIBRANIUM TAB
+        List.of(
+                VIBRANIUM_DUST,
+                BLACK_CLAY_BALL,
+                HEART_SHAPED_HERB
+        ).forEach(supplier -> {
+            CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(supplier.get()));
         });
     }
 }

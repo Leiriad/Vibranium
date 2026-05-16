@@ -21,6 +21,8 @@
   "block.vibranium.purple_short_grass": "Hierba corta morada",
   "block.vibranium.purple_tall_grass": "Hierba alta morada",
   "block.vibranium.purple_vine": "Enredadera morada",
+  "block.vibranium.reactor_control_panel": "Panel de control del reactor",
+  "block.vibranium.reactor_core": "Núcleo del reactor",
   "block.vibranium.small_purple_dripleaf": "Plantaforma morada pequeña",
   "block.vibranium.vibranium_dirt": "Tierra vibranizada",
   "block.vibranium.vibranium_farmland": "Tierra vibranizada de cultivo",
@@ -48,10 +50,13 @@
   "item.vibranium.purple_short_grass": "Hierba corta morada",
   "item.vibranium.purple_tall_grass": "Hierba alta morada",
   "item.vibranium.purple_vine": "Enredadera morada",
+  "item.vibranium.reactor_control_panel": "Panel de control del reactor",
+  "item.vibranium.reactor_core": "Núcleo del reactor",
   "item.vibranium.small_purple_dripleaf": "Plantaforma morada pequeña",
   "item.vibranium.vibranium_dirt": "Tierra vibranizada",
   "item.vibranium.vibranium_farmland": "Tierra vibranizada de cultivo",
   "item.vibranium.vibranium_grass_block": "Hierba vibranizada",
   "item.vibranium.vibranium_ore": "Mineral de vibranio",
-  "item.vibranium.vibranium_path": "Camino de tierra vibranizada"
+  "item.vibranium.vibranium_path": "Camino de tierra vibranizada",
+  "itemGroup.vibranium.vibranium_tab": "Vibranio"
 }

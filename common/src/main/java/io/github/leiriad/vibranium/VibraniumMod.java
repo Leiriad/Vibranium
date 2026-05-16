@@ -24,12 +24,18 @@ public class VibraniumMod {
 		//Initialize Registry Content
 		VibraniumBlocks.registerModBlocks();
 		VibraniumItems.registerModItems();
+		VibraniumCreativeTabs.registerModTabs();
+		VibraniumMenus.registerModMenus();
+
+		//Register features
 		VibraniumTreeDecorators.register();
 
 		// Register the Meteorite Structure logics
 		VibraniumStructures.register();
+
+		//Creative tabs
 		VibraniumBlocks.addBlocksToTabs();
-		VibraniumMenus.registerModMenus();
+		VibraniumItems.addItemsToTabs();
 	}
 
 }

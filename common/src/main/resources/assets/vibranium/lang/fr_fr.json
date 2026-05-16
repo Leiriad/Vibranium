@@ -21,6 +21,8 @@
   "block.vibranium.purple_short_grass": "Herbe courte pourpre",
   "block.vibranium.purple_tall_grass": "Herbe haute pourpre",
   "block.vibranium.purple_vine": "Liane pourpre",
+  "block.vibranium.reactor_control_panel": "Panneau de Contrôle de réacteur",
+  "block.vibranium.reactor_core": "Cœur de réacteur",
   "block.vibranium.small_purple_dripleaf": "Petite foliogoutte pourpre",
   "block.vibranium.vibranium_dirt": "Terre vibranisée",
   "block.vibranium.vibranium_farmland": "Terre vibranisée labourée",
@@ -48,11 +50,14 @@
   "item.vibranium.purple_short_grass": "Herbe courte pourpre",
   "item.vibranium.purple_tall_grass": "Herbe haute pourpre",
   "item.vibranium.purple_vine": "Liane pourpre",
+  "item.vibranium.reactor_control_panel": "Panneau de Contrôle de réacteur",
+  "item.vibranium.reactor_core": "Cœur de réacteur",
   "item.vibranium.small_purple_dripleaf": "Petite foliogoutte pourpre",
   "item.vibranium.vibranium_dirt": "Terre vibranisée",
   "item.vibranium.vibranium_dust": "Poudre de vibranium",
   "item.vibranium.vibranium_farmland": "Terre vibranisée labourée",
   "item.vibranium.vibranium_grass_block": "Herbe vibranisée",
   "item.vibranium.vibranium_ore": "Minerai de vibranium",
-  "item.vibranium.vibranium_path": "Chemin de terre vibranisée"
+  "item.vibranium.vibranium_path": "Chemin de terre vibranisée",
+  "itemGroup.vibranium.vibranium_tab": "Vibranium"
 }

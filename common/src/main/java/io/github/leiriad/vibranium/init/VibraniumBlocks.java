@@ -166,6 +166,35 @@ public class VibraniumBlocks {
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
+
+        //VIBRANIUM TAB
+        List.of(
+                VIBRANIUM_ORE,
+                VIBRANIUM_DIRT,
+                VIBRANIUM_GRASS_BLOCK,
+                BLACK_GRAVEL,
+                BLACK_CLAY,
+                PURPLE_SHORT_GRASS,
+                PURPLE_TALL_GRASS,
+                PURPLE_AZALEA,
+                PURPLE_AZALEA_LEAVES_CYAN,
+                PURPLE_AZALEA_LEAVES_DARK_BLUE,
+                PURPLE_AZALEA_LEAVES_VIOLET,
+                FLOWERING_PURPLE_AZALEA,
+                FLOWERING_PURPLE_AZALEA_LEAVES_CYAN,
+                FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE,
+                FLOWERING_PURPLE_AZALEA_LEAVES_VIOLET,
+                PURPLE_MOSS_BLOCK,
+                PURPLE_MOSS_CARPET,
+                BIG_PURPLE_DRIPLEAF,
+                SMALL_PURPLE_DRIPLEAF,
+                PURPLE_VINE,
+                HEART_SHAPED_HERB_FLOWER,
+                REACTOR_CORE,
+                REACTOR_CONTROL_PANEL
+        ).forEach(blockSupplier -> {
+            CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
+        });
     }
 
 }

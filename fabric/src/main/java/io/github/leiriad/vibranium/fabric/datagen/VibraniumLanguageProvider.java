@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.fabric.datagen;
 
+import io.github.leiriad.vibranium.init.VibraniumCreativeTabs;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -64,6 +65,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Poudre de vibranium");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Boule d'argile noire");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Herbe coeur");
+
+                translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
                 break;
             case "es_es":
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Mineral de vibranio");
@@ -101,6 +104,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baya luminosas azules");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Bola de arcilla negra");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Hierba en forma de corazón");
+
+                translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranio");
                 break;
             default:
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Vibranium Ore");
@@ -139,6 +144,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Black Clay Ball");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Reactor Control Panel");
+
+                translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
         }
 
     }

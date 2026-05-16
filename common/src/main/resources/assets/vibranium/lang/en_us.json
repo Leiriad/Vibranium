@@ -21,6 +21,8 @@
   "block.vibranium.purple_short_grass": "Purple Short Grass",
   "block.vibranium.purple_tall_grass": "Purple tall Grass",
   "block.vibranium.purple_vine": "Purple Vine",
+  "block.vibranium.reactor_control_panel": "Reactor Control Panel",
+  "block.vibranium.reactor_core": "Reactor Core",
   "block.vibranium.small_purple_dripleaf": "Small Purple Dripleaf",
   "block.vibranium.vibranium_dirt": "Vibranized Dirt",
   "block.vibranium.vibranium_farmland": "Vibranised Farmland",
@@ -48,11 +50,14 @@
   "item.vibranium.purple_short_grass": "Purple Short Grass",
   "item.vibranium.purple_tall_grass": "Purple tall Grass",
   "item.vibranium.purple_vine": "Purple Vine",
+  "item.vibranium.reactor_control_panel": "Reactor Control Panel",
+  "item.vibranium.reactor_core": "Reactor Core",
   "item.vibranium.small_purple_dripleaf": "Small Purple Dripleaf",
   "item.vibranium.vibranium_dirt": "Vibranized Dirt",
   "item.vibranium.vibranium_dust": "Vibranium Dust",
   "item.vibranium.vibranium_farmland": "Vibranised Farmland",
   "item.vibranium.vibranium_grass_block": "Vibranized Grass ",
   "item.vibranium.vibranium_ore": "Vibranium Ore",
-  "item.vibranium.vibranium_path": "Vibranized Dirt Path"
+  "item.vibranium.vibranium_path": "Vibranized Dirt Path",
+  "itemGroup.vibranium.vibranium_tab": "Vibranium"
 }
