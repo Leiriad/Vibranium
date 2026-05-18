@@ -1,6 +1,24 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vibranium:item/vibranium_dust"
-  }
+    "layer0": "vibranium:item/vibranium_dust",
+    "layer1": "vibranium:item/vibranium_dust_e"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 1],
+      "faces": {
+        "south": {"texture": "#layer0", "uv": [0, 0, 16, 16]}
+      }
+    },
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 1],
+      "faces": {
+        "south": {"texture": "#layer1", "uv": [0, 0, 16, 16]}
+      },
+      "light_emission": 15
+    }
+  ]
 }

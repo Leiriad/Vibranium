@@ -29,7 +29,8 @@ public class VibraniumOre extends Block {
                 .requiresCorrectToolForDrops()
                 .instrument(NoteBlockInstrument.CHIME)
                 .emissiveRendering((state, world, pos) -> true)
-                .hasPostProcess((state, world, pos) -> true);
+                .hasPostProcess((state, world, pos) -> true)
+                .lightLevel(state -> 3);
     }
     @Override
     protected MapCodec<? extends Block> codec() {

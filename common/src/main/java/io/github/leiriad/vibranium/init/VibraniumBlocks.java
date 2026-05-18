@@ -151,13 +151,11 @@ public class VibraniumBlocks {
                 BIG_PURPLE_DRIPLEAF,
                 SMALL_PURPLE_DRIPLEAF,
                 PURPLE_VINE,
-                HEART_SHAPED_HERB_FLOWER
+                HEART_SHAPED_HERB_FLOWER,
+                BLUE_GLOW_BERRIES
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.NATURAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
-
-        //BlockItem alone
-        CreativeTabRegistry.appendStack(CreativeModeTabs.NATURAL_BLOCKS, () -> new ItemStack(BLUE_GLOW_BERRIES.get()));
 
         //FUNCTIONAL BLOCKS
         List.of(
@@ -190,6 +188,7 @@ public class VibraniumBlocks {
                 SMALL_PURPLE_DRIPLEAF,
                 PURPLE_VINE,
                 HEART_SHAPED_HERB_FLOWER,
+                BLUE_GLOW_BERRIES,
                 REACTOR_CORE,
                 REACTOR_CONTROL_PANEL
         ).forEach(blockSupplier -> {
