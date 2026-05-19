@@ -3,24 +3,95 @@
   "credit": "Made with Blockbench",
   "parent": "block/block",
   "textures": {
-    "4": "vibranium:block/big_purple_dripleaf_side",
-    "5": "vibranium:block/big_purple_dripleaf_stem",
-    "6": "vibranium:block/big_purple_dripleaf_tip",
-    "7": "vibranium:block/big_purple_dripleaf_top"
+    "4": "vibranium:block/big_purple_dripleaf_side_e",
+    "5": "vibranium:block/big_purple_dripleaf_top_e",
+    "6": "vibranium:block/big_purple_dripleaf_tip_e",
+    "7": "vibranium:block/big_purple_dripleaf_stem_e",
+    "8": "vibranium:block/big_purple_dripleaf_side",
+    "9": "vibranium:block/big_purple_dripleaf_stem",
+    "10": "vibranium:block/big_purple_dripleaf_tip",
+    "11": "vibranium:block/big_purple_dripleaf_top",
+    "particle": "vibranium:block/big_purple_dripleaf_top"
   },
   "elements": [
     {
+      "name": "big_purple_dripleaf_0",
       "from": [0, 15, 0],
       "to": [16, 15, 16],
       "shade": false,
       "faces": {
-        "up": {"uv": [0, 0, 16, 16], "texture": "#7"},
-        "down": {"uv": [0, 16, 16, 0], "texture": "#7"}
+        "up": {"uv": [0, 0, 16, 16], "texture": "#11"},
+        "down": {"uv": [0, 16, 16, 0], "texture": "#11"}
       }
     },
     {
+      "name": "big_purple_dripleaf_1",
       "from": [0, 11, 0],
       "to": [16, 15, 0.002],
+      "shade": false,
+      "faces": {
+        "north": {"uv": [0, 0, 16, 4], "texture": "#10", "cullface": "north"},
+        "south": {"uv": [16, 0, 0, 4], "texture": "#10"}
+      }
+    },
+    {
+      "name": "big_purple_dripleaf_2",
+      "from": [0, 11, 0],
+      "to": [0.002, 15, 16],
+      "shade": false,
+      "faces": {
+        "east": {"uv": [16, 0, 0, 4], "texture": "#8"},
+        "west": {"uv": [0, 0, 16, 4], "texture": "#8", "cullface": "west"}
+      }
+    },
+    {
+      "name": "big_purple_dripleaf_3",
+      "from": [15.998, 11, 0],
+      "to": [16, 15, 16],
+      "shade": false,
+      "faces": {
+        "east": {"uv": [16, 0, 0, 4], "texture": "#8", "cullface": "east"},
+        "west": {"uv": [0, 0, 16, 4], "texture": "#8"}
+      }
+    },
+    {
+      "name": "big_purple_dripleaf_4",
+      "from": [5, 0, 12],
+      "to": [11, 15, 12],
+      "shade": false,
+      "rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 12], "rescale": true},
+      "faces": {
+        "north": {"uv": [3, 0, 14, 16], "texture": "#9"},
+        "south": {"uv": [3, 0, 14, 16], "texture": "#9"}
+      }
+    },
+    {
+      "name": "big_purple_dripleaf_5",
+      "from": [5, 0, 12],
+      "to": [11, 15, 12],
+      "shade": false,
+      "rotation": {"angle": -45, "axis": "y", "origin": [8, 8, 12], "rescale": true},
+      "faces": {
+        "north": {"uv": [3, 0, 14, 16], "texture": "#9"},
+        "south": {"uv": [3, 0, 14, 16], "texture": "#9"}
+      }
+    },
+    {
+      "name": "big_purple_dripleaf_e_0",
+      "from": [0, 15, 0],
+      "to": [16, 15, 16],
+      "light_emission": 15,
+      "shade": false,
+      "faces": {
+        "up": {"uv": [0, 0, 16, 16], "texture": "#5"},
+        "down": {"uv": [0, 16, 16, 0], "texture": "#5"}
+      }
+    },
+    {
+      "name": "big_purple_dripleaf_e_1",
+      "from": [0, 11, 0],
+      "to": [16, 15, 0.002],
+      "light_emission": 15,
       "shade": false,
       "faces": {
         "north": {"uv": [0, 0, 16, 4], "texture": "#6", "cullface": "north"},
@@ -28,8 +99,10 @@
       }
     },
     {
+      "name": "big_purple_dripleaf_e_2",
       "from": [0, 11, 0],
       "to": [0.002, 15, 16],
+      "light_emission": 15,
       "shade": false,
       "faces": {
         "east": {"uv": [16, 0, 0, 4], "texture": "#4"},
@@ -37,8 +110,10 @@
       }
     },
     {
+      "name": "big_purple_dripleaf_e_3",
       "from": [15.998, 11, 0],
       "to": [16, 15, 16],
+      "light_emission": 15,
       "shade": false,
       "faces": {
         "east": {"uv": [16, 0, 0, 4], "texture": "#4", "cullface": "east"},
@@ -46,24 +121,44 @@
       }
     },
     {
+      "name": "big_purple_dripleaf_e_4",
       "from": [5, 0, 12],
       "to": [11, 15, 12],
+      "light_emission": 15,
       "shade": false,
       "rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 12], "rescale": true},
       "faces": {
-        "north": {"uv": [3, 0, 14, 16], "texture": "#5"},
-        "south": {"uv": [3, 0, 14, 16], "texture": "#5"}
+        "north": {"uv": [3, 0, 14, 16], "texture": "#7"},
+        "south": {"uv": [3, 0, 14, 16], "texture": "#7"}
       }
     },
     {
+      "name": "big_purple_dripleaf_e_5",
       "from": [5, 0, 12],
       "to": [11, 15, 12],
+      "light_emission": 15,
       "shade": false,
       "rotation": {"angle": -45, "axis": "y", "origin": [8, 8, 12], "rescale": true},
       "faces": {
-        "north": {"uv": [3, 0, 14, 16], "texture": "#5"},
-        "south": {"uv": [3, 0, 14, 16], "texture": "#5"}
+        "north": {"uv": [3, 0, 14, 16], "texture": "#7"},
+        "south": {"uv": [3, 0, 14, 16], "texture": "#7"}
       }
+    }
+  ],
+  "groups": [
+    {
+      "name": "big_purple_dripleaf",
+      "origin": [8, 8, 12],
+      "scope": 0,
+      "color": 0,
+      "children": [0, 1, 2, 3, 4, 5]
+    },
+    {
+      "name": "big_purple_dripleaf_e",
+      "origin": [8, 8, 12],
+      "scope": 0,
+      "color": 0,
+      "children": [6, 7, 8, 9, 10, 11]
     }
   ]
 }

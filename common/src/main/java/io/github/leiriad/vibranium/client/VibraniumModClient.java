@@ -3,11 +3,18 @@ package io.github.leiriad.vibranium.client;
 import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
+import dev.architectury.utils.EnvExecutor;
+import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
+import io.github.leiriad.vibranium.init.VibraniumItems;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+
+import java.util.List;
 
 
 public class VibraniumModClient {
@@ -53,6 +60,7 @@ public class VibraniumModClient {
         var menuType = VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get();
         System.out.println("-> Tentative d'enregistrement pour l'ID : " + BuiltInRegistries.MENU.getKey(menuType));
         MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);
+
 
     }
 }

@@ -1,8 +1,74 @@
 {
-  "parent": "minecraft:block/small_dripleaf_bottom",
-
+  "format_version": "1.21.11",
+  "credit": "Made with Blockbench",
+  "parent": "block/block",
   "textures": {
+    "2": "vibranium:block/small_purple_dripleaf_stem_bottom_e",
     "stem": "vibranium:block/small_purple_dripleaf_stem_bottom",
-    "particle": "vibranium:block/small_purple_dripleaf_top"
-  }
+    "particle": "vibranium:block/big_purple_dripleaf_stem"
+  },
+  "elements": [
+    {
+      "name": "small_purple_dripleaf_stem_bottom_1",
+      "from": [4.5, 0, 8],
+      "to": [11.5, 16, 8],
+      "shade": false,
+      "rotation": {"angle": -45, "axis": "y", "origin": [8, 8, 8]},
+      "faces": {
+        "north": {"uv": [5, 0, 12, 16], "texture": "#stem"},
+        "south": {"uv": [5, 0, 12, 16], "texture": "#stem"}
+      }
+    },
+    {
+      "name": "small_purple_dripleaf_stem_bottom_0",
+      "from": [4.5, 0, 8],
+      "to": [11.5, 16, 8],
+      "shade": false,
+      "rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+      "faces": {
+        "north": {"uv": [5, 0, 12, 16], "texture": "#stem"},
+        "south": {"uv": [5, 0, 12, 16], "texture": "#stem"}
+      }
+    },
+    {
+      "name": "small_purple_dripleaf_stem_bottom_e_0",
+      "from": [4.5, 0, 8],
+      "to": [11.5, 16, 8],
+      "light_emission": 15,
+      "shade": false,
+      "rotation": {"angle": -45, "axis": "y", "origin": [8, 8, 8]},
+      "faces": {
+        "north": {"uv": [5, 0, 12, 16], "texture": "#2"},
+        "south": {"uv": [5, 0, 12, 16], "texture": "#2"}
+      }
+    },
+    {
+      "name": "small_purple_dripleaf_stem_bottom_e_1",
+      "from": [4.5, 0, 8],
+      "to": [11.5, 16, 8],
+      "light_emission": 15,
+      "shade": false,
+      "rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+      "faces": {
+        "north": {"uv": [5, 0, 12, 16], "texture": "#2"},
+        "south": {"uv": [5, 0, 12, 16], "texture": "#2"}
+      }
+    }
+  ],
+  "groups": [
+    {
+      "name": "small_purple_dripleaf_stem_bottom",
+      "origin": [8, 8, 8],
+      "scope": 0,
+      "color": 0,
+      "children": [0, 1]
+    },
+    {
+      "name": "small_purple_dripleaf_stem_bottom_e",
+      "origin": [8, 8, 8],
+      "scope": 0,
+      "color": 0,
+      "children": [2, 3]
+    }
+  ]
 }
