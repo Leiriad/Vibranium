@@ -1,8 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vibranium:item/blue_glow_berries",
-    "layer1": "vibranium:item/blue_glow_berries_e"
-  },
-  "render_type": "minecraft:translucent"
+    "layer0": "vibranium:item/blue_glow_berries"
+  }
 }
