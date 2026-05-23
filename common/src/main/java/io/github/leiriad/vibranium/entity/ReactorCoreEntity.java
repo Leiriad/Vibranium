@@ -2,6 +2,7 @@ package io.github.leiriad.vibranium.entity;
 
 import io.github.leiriad.vibranium.block.ReactorCoreBlock;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
+import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -17,10 +18,12 @@ public class ReactorCoreEntity extends BlockEntity {
     //PROPERTIES
     private int temperature = 20; // Ambiante
     private int energyStored = 0;
-    private final int MAX_ENERGY = 100000;
-    public final SimpleContainer inventory = new SimpleContainer(2);
+    private int vibraniumAmount = 0;
     private long waterAmount=0;
     private long hotWaterAmount=0;
+    private static final int TICKS_PER_POWDER = 24000;
+    private final int MAX_ENERGY = 100000;
+    public final SimpleContainer inventory = new SimpleContainer(2);
 
     public ReactorCoreEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -35,10 +38,27 @@ public class ReactorCoreEntity extends BlockEntity {
     private boolean hasCoolant() {
         return this.waterAmount >= 10; //Water consumtion per tick
     }
+    private boolean hasFuel() {
+        return this.vibraniumAmount > 0 || this.canRefuel();
+    }
+    private boolean canRefuel() {
+        ItemStack fuelStack = this.inventory.getItem(0);
+        return !fuelStack.isEmpty() && fuelStack.is(VibraniumItems.VIBRANIUM_DUST);
+    }
+    private void refuel() {
+        if (this.canRefuel()) {
+            ItemStack fuelStack = this.inventory.getItem(0);
+            fuelStack.shrink(1); // On réduit de 1 la quantité dans le slot
+            this.vibraniumAmount = TICKS_PER_POWDER; // On recharge la jauge de ticks
+            this.setChanged(); // On notifie Minecraft du changement d'inventaire
+        }
+    }
+
     // Game saving
     @Override
     protected void saveAdditional(ValueOutput valueOutput) {
         valueOutput.putInt("energy", energyStored);
+        valueOutput.putInt("vibranium", vibraniumAmount);
         valueOutput.putInt("temperature", temperature);
         valueOutput.putLong("water", waterAmount);
         valueOutput.putLong("hot_water", hotWaterAmount);
@@ -50,6 +70,7 @@ public class ReactorCoreEntity extends BlockEntity {
     public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
         this.energyStored = valueInput.getInt("energy").orElse(0);
+        this.vibraniumAmount = valueInput.getInt("vibranium").orElse(0);
         this.temperature = valueInput.getInt("temperature").orElse(this.temperature);
         this.waterAmount = valueInput.getLong("water").orElse(0l);
         this.hotWaterAmount = valueInput.getLong("hot_water").orElse(0l);
@@ -65,33 +86,40 @@ public class ReactorCoreEntity extends BlockEntity {
     public static void tick(Level level, BlockPos pos, BlockState state, ReactorCoreEntity blockEntity) {
         if (level.isClientSide()) return;
 
-        // 1. On vérifie l'état des fours adjacents et on récupère la demande en chaleur
+        //Send heat order
         boolean aFurnaceIsCooking = blockEntity.checkAndBoostAdjacentFurnaces(level, pos, state);
 
-        // 2. Gestion de la température
-        if (aFurnaceIsCooking && blockEntity.hasCoolant()) {
-            // Si les fours fonctionnent et qu'on a de l'eau, le réacteur produit de l'énergie et de la chaleur
+        //Temperature management
+        if (aFurnaceIsCooking && blockEntity.hasCoolant() && blockEntity.hasFuel()) {
             blockEntity.processReaction();
         } else {
-            // Sinon (pas de four actif, ou plus d'eau), le réacteur refroidit
-            // On lui passe le paramètre 'aFurnaceIsCooking' car si un four est chaud mais non alimenté, 
-            // il peut dissiper la chaleur du réacteur plus vite !
             blockEntity.coolDown(aFurnaceIsCooking);
         }
     }
 
     private void processReaction() {
-        // The reaction in the reactor makes the temperature rise
-        if (this.temperature < 1000) {
-            this.temperature += 5;
+        //Check fuel
+        if (this.vibraniumAmount <= 0) {
+            this.refuel(); // If gauge is empty burn one item
         }
+        if (this.vibraniumAmount > 0) {
+            this.vibraniumAmount--; // Burn one fuel tick per game tick
 
-        // Water turns into hot water
-        this.waterAmount -= 10;
-        this.hotWaterAmount += 10;
+            // The reaction in the reactor makes the temperature rise
+            if (this.temperature < 1000) {
+                this.temperature += 5;
+            }
 
-        // The reactor emits energy
-        this.energyStored += (this.temperature / 10);
+            // Water turns into hot water
+            this.waterAmount -= 10;
+            this.hotWaterAmount += 10;
+
+            // The reactor emits energy
+            this.energyStored = Math.min(MAX_ENERGY, this.energyStored + (this.temperature / 10));
+
+            //Signals entity change
+            this.setChanged();
+        }
     }
 
     private boolean checkAndBoostAdjacentFurnaces(Level level, BlockPos pos, BlockState state) {
@@ -135,28 +163,29 @@ public class ReactorCoreEntity extends BlockEntity {
         if (this.temperature > targetTemp) {
             // Oven finishing cooking or off uses residual heat
             int coolingRate = aFurnaceIsCooking ? 4 : 2;
-
             this.temperature = Math.max(targetTemp, this.temperature - coolingRate);
+            this.setChanged();
         }
     }
 
     public int getTemperature() {
         return this.temperature;
     }
-
-    public int getEnergyStored() {
+    public int getEnergy() {
         return this.energyStored;
     }
-
     public long getWaterAmount() {
         return this.waterAmount;
     }
-
     public long getHotWaterAmount() {
         return this.hotWaterAmount;
     }
-
+    public int getVibraniumAmount() {
+        return this.vibraniumAmount;
+    }
     public void addWater(long amount) {
         this.waterAmount = Math.min(10000L, this.waterAmount + amount); // Max capacity 10 buckets
     }
+
+    public int getMaxVibraniumTicks() { return TICKS_PER_POWDER; }
 }

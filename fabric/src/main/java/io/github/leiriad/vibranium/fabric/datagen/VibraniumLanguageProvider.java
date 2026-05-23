@@ -68,6 +68,14 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Herbe coeur");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
+
+                translationBuilder.add("container.vibranium.reactor_control_panel", "Panneau de Contrôle du Réacteur");
+
+                translationBuilder.add("gui.vibranium.energy_tooltip", "Énergie : %d / 100000 FE");
+                translationBuilder.add("gui.vibranium.heat_tooltip", "Température : %d°C / 1000°C");
+                translationBuilder.add("gui.vibranium.water_tooltip", "Eau : %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Eau Chaude : %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
                 break;
             case "es_es":
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Mineral de vibranio");
@@ -108,6 +116,14 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Hierba en forma de corazón");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranio");
+
+                translationBuilder.add("container.vibranium.reactor_control_panel", "Panel de Control del Reactor");
+
+                translationBuilder.add("gui.vibranium.energy_tooltip", "Energía: %d / 100000 FE");
+                translationBuilder.add("gui.vibranium.heat_tooltip", "Temperatura: %d°C / 1000°C");
+                translationBuilder.add("gui.vibranium.water_tooltip", "Agua: %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Agua Caliente: %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranio: quedan %ds");
                 break;
             default:
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Vibranium Ore");
@@ -149,6 +165,14 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
+
+                translationBuilder.add("container.vibranium.reactor_control_panel", "Reactor Control Panel");
+
+                translationBuilder.add("gui.vibranium.energy_tooltip", "Energy : %d / 100000 FE");
+                translationBuilder.add("gui.vibranium.heat_tooltip", "Temperature : %d°C / 1000°C");
+                translationBuilder.add("gui.vibranium.water_tooltip", "Water : %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Hot Water : %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
         }
 
     }

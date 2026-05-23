@@ -13,8 +13,7 @@ public class VibraniumMenus {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(VibraniumMod.MOD_ID, Registries.MENU);
     public static final RegistrySupplier<MenuType<ReactorControlPanelMenu>> REACTOR_CONTROL_PANEL_MENU =
             MENUS.register("reactor_control_panel", () -> MenuRegistry.ofExtended((id, inv, buf) -> {
-                BlockPos pos = buf.readBlockPos();
-                return new ReactorControlPanelMenu(id, inv, pos);
+                return new ReactorControlPanelMenu(id, inv, buf);
             }));
 
     public static void registerModMenus() {
