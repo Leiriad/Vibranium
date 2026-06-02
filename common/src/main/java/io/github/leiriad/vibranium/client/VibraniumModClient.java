@@ -44,7 +44,8 @@ public class VibraniumModClient {
                 VibraniumBlocks.BIG_PURPLE_DRIPLEAF.get(),
                 VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(),
                 VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(),
-                VibraniumBlocks.REACTOR_HATCH.get()
+                VibraniumBlocks.REACTOR_HATCH.get(),
+                VibraniumBlocks.VIBRANIUM_GLASS.get()
         );
 
         //Vine & dripleaf color fix
