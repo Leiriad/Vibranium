@@ -9,6 +9,7 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
+import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -42,7 +43,8 @@ public class VibraniumModClient {
         RenderTypeRegistry.register(ChunkSectionLayer.TRANSLUCENT,
                 VibraniumBlocks.BIG_PURPLE_DRIPLEAF.get(),
                 VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(),
-                VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get()
+                VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(),
+                VibraniumBlocks.REACTOR_HATCH.get()
         );
 
         //Vine & dripleaf color fix
@@ -56,11 +58,14 @@ public class VibraniumModClient {
         );
 
         //Screens init
-        System.out.println("-> ENREGISTREMENT DE L'ÉCRAN DU PANNEAU !");
+        System.out.println("-> Registering CONTROL PANEL screen !");
         var menuType = VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get();
-        System.out.println("-> Tentative d'enregistrement pour l'ID : " + BuiltInRegistries.MENU.getKey(menuType));
+        System.out.println("-> Trying to register screen id : " + BuiltInRegistries.MENU.getKey(menuType));
         MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);
-
+        System.out.println("-> Registering HATCH screen !");
+        var menuType2 = VibraniumMenus.REACTOR_HATCH_MENU.get();
+        System.out.println("-> Trying to register screen id : " + BuiltInRegistries.MENU.getKey(menuType2));
+        MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_HATCH_MENU.get(), ReactorHatchScreen::new);
 
     }
 }

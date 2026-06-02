@@ -1,0 +1,126 @@
+package io.github.leiriad.vibranium.block;
+
+import com.mojang.serialization.MapCodec;
+import dev.architectury.registry.menu.MenuRegistry;
+import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
+import io.github.leiriad.vibranium.entity.ReactorHatchEntity;
+import io.github.leiriad.vibranium.menu.ReactorHatchMenu;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.WorldlyContainerHolder;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.BlockHitResult;
+import org.jspecify.annotations.Nullable;
+
+
+public class ReactorHatchBlock extends BaseEntityBlock implements WorldlyContainerHolder {
+
+    //PROPERTIES
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    public static final MapCodec<ReactorHatchBlock> CODEC = simpleCodec(ReactorHatchBlock::new);
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
+
+    public static Properties getProperties (Properties settings){
+        return Properties.of()
+                .mapColor(MapColor.COLOR_CYAN)
+                .instrument(NoteBlockInstrument.CHIME);
+    }
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    //CONSTRUCTOR
+    public ReactorHatchBlock(Properties properties) {
+        super(properties);
+        this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
+    }
+
+    //METHODS
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new ReactorHatchEntity(blockPos, blockState);
+    }
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+        builder.add(LIT);
+    }
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+    }
+
+    @Override
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+
+    @Override
+    public WorldlyContainer getContainer(BlockState blockState, LevelAccessor levelAccessor, BlockPos blockPos) {
+        BlockEntity be = levelAccessor.getBlockEntity(blockPos);
+        if (be instanceof ReactorHatchEntity hatch) {
+            return hatch.getConnectedCore(levelAccessor);
+        }
+        return null;
+    }
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (!level.isClientSide()) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof ReactorHatchEntity hatch) {
+                ReactorCoreEntity core = (ReactorCoreEntity) hatch.getConnectedCore(level);
+
+                if (core != null) {
+                    dev.architectury.registry.menu.MenuRegistry.openExtendedMenu(
+                            (net.minecraft.server.level.ServerPlayer) player,
+                            new dev.architectury.registry.menu.ExtendedMenuProvider() {
+                                @Override
+                                public void saveExtraData(net.minecraft.network.FriendlyByteBuf buf) {
+                                    buf.writeBlockPos(pos);
+                                }
+
+                                @Override
+                                public Component getDisplayName() {
+                                    return Component.translatable("block.vibranium.reactor_hatch");
+                                }
+
+                                @Override
+                                public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
+                                    return new ReactorHatchMenu(id, playerInv, core);
+                                }
+                            }
+                    );
+                    return InteractionResult.SUCCESS;
+                } else {
+                    player.displayClientMessage(Component.translatable("message.vibranium.hatch_no_core"), true);
+                    return InteractionResult.FAIL;
+                }
+            }
+        }
+        return InteractionResult.CONSUME;
+    }
+}

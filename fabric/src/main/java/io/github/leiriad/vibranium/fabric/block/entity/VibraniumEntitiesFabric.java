@@ -3,6 +3,7 @@ package io.github.leiriad.vibranium.fabric.block.entity;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.leiriad.vibranium.entity.ReactorControlPanelEntity;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
+import io.github.leiriad.vibranium.entity.ReactorHatchEntity;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -13,6 +14,7 @@ public class VibraniumEntitiesFabric extends VibraniumEntities {
         //registers block entity types
         REACTOR_CORE_ENTITY = (RegistrySupplier<BlockEntityType<ReactorCoreEntity>>) register("reactor_core", ()-> FabricBlockEntityTypeBuilder.create(ReactorCoreEntity::new, VibraniumBlocks.REACTOR_CORE.get()).build());
         REACTOR_CONTROL_PANEL_ENTITY = (RegistrySupplier<BlockEntityType<ReactorControlPanelEntity>>) register("reactor_control_panel", ()-> FabricBlockEntityTypeBuilder.create(ReactorControlPanelEntity::new, VibraniumBlocks.REACTOR_CONTROL_PANEL.get()).build());
+        REACTOR_HATCH_ENTITY = (RegistrySupplier<BlockEntityType<ReactorHatchEntity>>) register("reactor_hatch", ()-> FabricBlockEntityTypeBuilder.create(ReactorHatchEntity::new, VibraniumBlocks.REACTOR_HATCH.get()).build());
         registerModEntities();
     }
 }

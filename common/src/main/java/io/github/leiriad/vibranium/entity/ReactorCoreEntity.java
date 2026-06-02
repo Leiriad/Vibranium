@@ -4,7 +4,10 @@ import io.github.leiriad.vibranium.block.ReactorCoreBlock;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -13,47 +16,32 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
 
-public class ReactorCoreEntity extends BlockEntity {
+public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
     //PROPERTIES
-    private int temperature = 20; // Ambiante
+    private int temperature = 20; // Ambiant temperature
     private int energyStored = 0;
     private int vibraniumAmount = 0;
     private long waterAmount=0;
     private long hotWaterAmount=0;
     private static final int TICKS_PER_POWDER = 24000;
     private final int MAX_ENERGY = 100000;
-    public final SimpleContainer inventory = new SimpleContainer(2);
 
+    //Inventory
+    public final SimpleContainer inventory = new SimpleContainer(2);
+    private static final int[] SLOTS_FOR_INPUT = new int[]{0}; //Vibranium dust input
+    private static final int[] SLOTS_FOR_OUTPUT = new int[]{1}; //Depleted Vibranium
+
+    // CONSTRUCTOR
     public ReactorCoreEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
-
-    // CONSTRUCTOR
     public ReactorCoreEntity(BlockPos pos, BlockState state) {
         this(VibraniumEntities.REACTOR_CORE_ENTITY.get(), pos, state);
     }
 
     //METHODS
-    private boolean hasCoolant() {
-        return this.waterAmount >= 10; //Water consumtion per tick
-    }
-    private boolean hasFuel() {
-        return this.vibraniumAmount > 0 || this.canRefuel();
-    }
-    private boolean canRefuel() {
-        ItemStack fuelStack = this.inventory.getItem(0);
-        return !fuelStack.isEmpty() && fuelStack.is(VibraniumItems.VIBRANIUM_DUST);
-    }
-    private void refuel() {
-        if (this.canRefuel()) {
-            ItemStack fuelStack = this.inventory.getItem(0);
-            fuelStack.shrink(1); // On réduit de 1 la quantité dans le slot
-            this.vibraniumAmount = TICKS_PER_POWDER; // On recharge la jauge de ticks
-            this.setChanged(); // On notifie Minecraft du changement d'inventaire
-        }
-    }
-
     // Game saving
     @Override
     protected void saveAdditional(ValueOutput valueOutput) {
@@ -65,7 +53,6 @@ public class ReactorCoreEntity extends BlockEntity {
         valueOutput.store("Inventory", ItemStack.OPTIONAL_CODEC.listOf(), this.inventory.getItems());
         super.saveAdditional(valueOutput);
     }
-
     @Override
     public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
@@ -96,7 +83,24 @@ public class ReactorCoreEntity extends BlockEntity {
             blockEntity.coolDown(aFurnaceIsCooking);
         }
     }
-
+    private boolean hasCoolant() {
+        return this.waterAmount >= 10; //Water consumtion per tick
+    }
+    private boolean hasFuel() {
+        return this.vibraniumAmount > 0 || this.canRefuel();
+    }
+    private boolean canRefuel() {
+        ItemStack fuelStack = this.inventory.getItem(0);
+        return !fuelStack.isEmpty() && fuelStack.is(VibraniumItems.VIBRANIUM_DUST);
+    }
+    private void refuel() {
+        if (this.canRefuel()) {
+            ItemStack fuelStack = this.inventory.getItem(0);
+            fuelStack.shrink(1); // On réduit de 1 la quantité dans le slot
+            this.vibraniumAmount = TICKS_PER_POWDER; // On recharge la jauge de ticks
+            this.setChanged(); // On notifie Minecraft du changement d'inventaire
+        }
+    }
     private void processReaction() {
         //Check fuel
         if (this.vibraniumAmount <= 0) {
@@ -121,7 +125,6 @@ public class ReactorCoreEntity extends BlockEntity {
             this.setChanged();
         }
     }
-
     private boolean checkAndBoostAdjacentFurnaces(Level level, BlockPos pos, BlockState state) {
         BlockPos targetPos = pos.relative(state.getValue(ReactorCoreBlock.FACING).getOpposite());
         BlockEntity be = level.getBlockEntity(targetPos);
@@ -156,7 +159,6 @@ public class ReactorCoreEntity extends BlockEntity {
         }
         return false;
     }
-
     private void coolDown(boolean aFurnaceIsCooking) {
         int targetTemp = 20; // The reactor attempts to reach it's normal temperature
 
@@ -167,7 +169,12 @@ public class ReactorCoreEntity extends BlockEntity {
             this.setChanged();
         }
     }
+    public void addWater(long amount) {
+        this.waterAmount = Math.min(10000L, this.waterAmount + amount); // Max capacity 10 buckets
+    }
+    public int getMaxVibraniumTicks() { return TICKS_PER_POWDER; }
 
+    //Screen
     public int getTemperature() {
         return this.temperature;
     }
@@ -183,9 +190,54 @@ public class ReactorCoreEntity extends BlockEntity {
     public int getVibraniumAmount() {
         return this.vibraniumAmount;
     }
-    public void addWater(long amount) {
-        this.waterAmount = Math.min(10000L, this.waterAmount + amount); // Max capacity 10 buckets
+
+    //Worldly Container
+    @Override
+    public int[] getSlotsForFace(Direction direction) {
+        return new int[2];
+    }
+    @Override
+    public boolean canPlaceItemThroughFace(int i, ItemStack itemStack, @Nullable Direction direction) {
+        return false;
+    }
+    @Override
+    public boolean canTakeItemThroughFace(int i, ItemStack itemStack, Direction direction) {
+        return false;
+    }
+    @Override
+    public int getContainerSize() {
+        return this.inventory.getContainerSize();
+    }
+    @Override
+    public boolean isEmpty() {
+        return this.inventory.isEmpty();
+    }
+    @Override
+    public ItemStack getItem(int slot) {
+        return this.inventory.getItem(slot);
+    }
+    @Override
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack stack = this.inventory.removeItem(slot, amount);
+        this.setChanged();
+        return stack;
+    }
+    @Override
+    public ItemStack removeItemNoUpdate(int slot) {
+        return this.inventory.removeItemNoUpdate(slot);
+    }
+    @Override
+    public void setItem(int slot, ItemStack itemStack) {
+        this.inventory.setItem(slot, itemStack);
+        this.setChanged();
+    }
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
+    }
+    @Override
+    public void clearContent() {
+        this.inventory.clearContent();
     }
 
-    public int getMaxVibraniumTicks() { return TICKS_PER_POWDER; }
 }

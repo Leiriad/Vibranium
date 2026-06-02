@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "vibranium:block/reactor_hatch"
+    },
+    "lit=true": {
+      "model": "vibranium:block/reactor_hatch_lit"
+    }
+  }
+}

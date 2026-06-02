@@ -56,6 +56,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_VINE.get(), "Liane pourpre");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CORE.get(), "Cœur de réacteur");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Panneau de Contrôle de réacteur");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Trappe d'alimentation de réacteur");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Fleur d'herbe cœur");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Liane des cavernes pourpre");
@@ -69,13 +70,18 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
 
-                translationBuilder.add("container.vibranium.reactor_control_panel", "Panneau de Contrôle du Réacteur");
+                translationBuilder.add("container.vibranium.reactor_control_panel", "Panneau de contrôle du réacteur");
+                translationBuilder.add("container.vibranium.reactor_hatch", "Trappe d'alimentation du réacteur");
 
                 translationBuilder.add("gui.vibranium.energy_tooltip", "Énergie : %d / 100000 FE");
                 translationBuilder.add("gui.vibranium.heat_tooltip", "Température : %d°C / 1000°C");
                 translationBuilder.add("gui.vibranium.water_tooltip", "Eau : %d / 10000 mB");
                 translationBuilder.add("gui.vibranium.hot_water_tooltip", "Eau Chaude : %d / 10000 mB");
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
+                translationBuilder.add("tooltip.vibranium.slot_fuel", "Insérez la poudre de Vibranium ici");
+                translationBuilder.add("tooltip.vibranium.slot_output", "Résidus et scories de combustion");
+
+                translationBuilder.add("message.vibranium.hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
                 break;
             case "es_es":
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Mineral de vibranio");
@@ -105,6 +111,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_VINE.get(), "Enredadera morada");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CORE.get(), "Núcleo del reactor");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Panel de control del reactor");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Escotilla de Alimentación del Reactor");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Flor de hierba en forma de corazón");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Lianas de cueva moradas");
@@ -117,13 +124,18 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranio");
 
-                translationBuilder.add("container.vibranium.reactor_control_panel", "Panel de Control del Reactor");
+                translationBuilder.add("container.vibranium.reactor_control_panel", "Panel de control del reactor");
+                translationBuilder.add("container.vibranium.reactor_hatch", "Escotilla de alimentación del reactor");
 
                 translationBuilder.add("gui.vibranium.energy_tooltip", "Energía: %d / 100000 FE");
                 translationBuilder.add("gui.vibranium.heat_tooltip", "Temperatura: %d°C / 1000°C");
                 translationBuilder.add("gui.vibranium.water_tooltip", "Agua: %d / 10000 mB");
                 translationBuilder.add("gui.vibranium.hot_water_tooltip", "Agua Caliente: %d / 10000 mB");
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranio: quedan %ds");
+                translationBuilder.add("tooltip.vibranium.slot_fuel", "Inserta el polvo de Vibranium aquí");
+                translationBuilder.add("tooltip.vibranium.slot_output", "Residuos y escorias de combustión");
+
+                translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 break;
             default:
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Vibranium Ore");
@@ -153,6 +165,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.PURPLE_VINE.get(), "Purple Vine");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CORE.get(), "Reactor Core");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Reactor Control Panel");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Reactor Fuel Hatch");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Heart-shaped Herb Flower");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Purple Cave Vines");
@@ -167,12 +180,17 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
 
                 translationBuilder.add("container.vibranium.reactor_control_panel", "Reactor Control Panel");
+                translationBuilder.add("container.vibranium.reactor_hatch", "Reactor fuel hatch");
 
                 translationBuilder.add("gui.vibranium.energy_tooltip", "Energy : %d / 100000 FE");
                 translationBuilder.add("gui.vibranium.heat_tooltip", "Temperature : %d°C / 1000°C");
                 translationBuilder.add("gui.vibranium.water_tooltip", "Water : %d / 10000 mB");
                 translationBuilder.add("gui.vibranium.hot_water_tooltip", "Hot Water : %d / 10000 mB");
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
+                translationBuilder.add("tooltip.vibranium.slot_fuel", "Insert Vibranium powder here");
+                translationBuilder.add("tooltip.vibranium.slot_output", "Combustion waste and slag");
+
+                translationBuilder.add("message.vibranium.hatch_no_core", "This hatch is not connected to any reactor core!");
         }
 
     }

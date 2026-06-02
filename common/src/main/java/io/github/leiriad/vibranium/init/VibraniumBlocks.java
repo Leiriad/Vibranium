@@ -81,6 +81,7 @@ public class VibraniumBlocks {
     //INDUSTRIAL
     public static final RegistrySupplier<Block> REACTOR_CORE = register("reactor_core", ReactorCoreBlock::new, () -> ReactorCoreBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REACTOR_CONTROL_PANEL = register("reactor_control_panel", ReactorControlPanelBlock::new, () -> ReactorControlPanelBlock.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> REACTOR_HATCH = register("reactor_hatch", ReactorHatchBlock::new, () -> ReactorHatchBlock.getProperties(BlockBehaviour.Properties.of()), true);
     //BLOCKITEMS
     public static final RegistrySupplier<Item> BLUE_GLOW_BERRIES = BLOCKITEMS.register("blue_glow_berries",
             () -> {
@@ -160,7 +161,8 @@ public class VibraniumBlocks {
         //FUNCTIONAL BLOCKS
         List.of(
                 REACTOR_CORE,
-                REACTOR_CONTROL_PANEL
+                REACTOR_CONTROL_PANEL,
+                REACTOR_HATCH
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
@@ -190,7 +192,8 @@ public class VibraniumBlocks {
                 HEART_SHAPED_HERB_FLOWER,
                 BLUE_GLOW_BERRIES,
                 REACTOR_CORE,
-                REACTOR_CONTROL_PANEL
+                REACTOR_CONTROL_PANEL,
+                REACTOR_HATCH
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
         });

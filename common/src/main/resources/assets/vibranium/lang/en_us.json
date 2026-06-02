@@ -23,6 +23,7 @@
   "block.vibranium.purple_vine": "Purple Vine",
   "block.vibranium.reactor_control_panel": "Reactor Control Panel",
   "block.vibranium.reactor_core": "Reactor Core",
+  "block.vibranium.reactor_hatch": "Reactor Fuel Hatch",
   "block.vibranium.small_purple_dripleaf": "Small Purple Dripleaf",
   "block.vibranium.vibranium_dirt": "Vibranized Dirt",
   "block.vibranium.vibranium_farmland": "Vibranised Farmland",
@@ -30,6 +31,7 @@
   "block.vibranium.vibranium_ore": "Vibranium Ore",
   "block.vibranium.vibranium_path": "Vibranized Dirt Path",
   "container.vibranium.reactor_control_panel": "Reactor Control Panel",
+  "container.vibranium.reactor_htach": "Reactor fuel hatch",
   "gui.vibranium.energy_tooltip": "Energy : %d / 100000 FE",
   "gui.vibranium.fuel_tooltip": "Vibranium : %ds restants",
   "gui.vibranium.heat_tooltip": "Temperature : %d°C / 1000°C",
@@ -58,6 +60,7 @@
   "item.vibranium.purple_vine": "Purple Vine",
   "item.vibranium.reactor_control_panel": "Reactor Control Panel",
   "item.vibranium.reactor_core": "Reactor Core",
+  "item.vibranium.reactor_hatch": "Reactor Fuel Hatch",
   "item.vibranium.small_purple_dripleaf": "Small Purple Dripleaf",
   "item.vibranium.vibranium_dirt": "Vibranized Dirt",
   "item.vibranium.vibranium_dust": "Vibranium Dust",
@@ -65,5 +68,8 @@
   "item.vibranium.vibranium_grass_block": "Vibranized Grass ",
   "item.vibranium.vibranium_ore": "Vibranium Ore",
   "item.vibranium.vibranium_path": "Vibranized Dirt Path",
-  "itemGroup.vibranium.vibranium_tab": "Vibranium"
+  "itemGroup.vibranium.vibranium_tab": "Vibranium",
+  "message.vibranium.hatch_no_core": "This hatch is not connected to any reactor core!",
+  "tooltip.vibranium.slot_fuel": "Insert Vibranium powder here",
+  "tooltip.vibranium.slot_output": "Combustion waste and slag"
 }
