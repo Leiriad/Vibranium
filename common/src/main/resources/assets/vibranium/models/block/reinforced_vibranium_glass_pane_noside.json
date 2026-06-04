@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_glass_pane_noside",
+  "textures": {
+    "pane": "vibranium:block/reinforced_vibranium_glass",
+    "edge": "vibranium:block/reinforced_vibranium_glass_pane_top"
+  }
+}

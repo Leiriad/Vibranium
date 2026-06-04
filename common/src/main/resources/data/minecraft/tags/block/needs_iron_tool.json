@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "vibranium:vibranium_ore",
     "vibranium:reinforced_vibranium_glass",
     "vibranium:reinforced_vibranium_glass_pane"
   ]

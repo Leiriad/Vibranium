@@ -2,7 +2,8 @@
   "format_version": "1.21.11",
   "credit": "Made with Blockbench",
   "textures": {
-    "1": "vibranium:block/purple_short_grass_e"
+    "1": "vibranium:block/purple_short_grass_e",
+    "particle": "vibranium:block/purple_short_grass"
   },
   "elements": [
     {

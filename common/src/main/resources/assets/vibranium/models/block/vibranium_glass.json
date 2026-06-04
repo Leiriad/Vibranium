@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "vibranium:block/vibranium_glass"
+    "all": "vibranium:block/vibranium_glass",
+    "particle": "vibranium:block/vibranium_glass"
   }
 }

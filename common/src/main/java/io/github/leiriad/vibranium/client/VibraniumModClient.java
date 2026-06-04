@@ -3,19 +3,12 @@ package io.github.leiriad.vibranium.client;
 import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
-import dev.architectury.utils.EnvExecutor;
-import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
-import io.github.leiriad.vibranium.init.VibraniumItems;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
-
-import java.util.List;
 
 
 public class VibraniumModClient {
@@ -45,7 +38,10 @@ public class VibraniumModClient {
                 VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get(),
                 VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get(),
                 VibraniumBlocks.REACTOR_HATCH.get(),
-                VibraniumBlocks.VIBRANIUM_GLASS.get()
+                VibraniumBlocks.VIBRANIUM_GLASS.get(),
+                VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(),
+                VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(),
+                VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get()
         );
 
         //Vine & dripleaf color fix

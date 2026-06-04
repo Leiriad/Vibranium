@@ -58,6 +58,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Panneau de Contrôle de réacteur");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Trappe d'alimentation de réacteur");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS.get(), "Verre de vibranium");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(), "Verre de vibranium renforcé");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Vitre de vibranium");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Vitre de vibranium renforcée");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Fleur d'herbe cœur");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Liane des cavernes pourpre");
@@ -114,6 +117,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Panel de control del reactor");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Escotilla de Alimentación del Reactor");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS.get(), "Vidrio de vibranio");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(), "Vidrio de vibranio reforzado");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Panel de cristal de vibranio");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Panel de cristal de vibranio reforzado");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Flor de hierba en forma de corazón");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Lianas de cueva moradas");
@@ -169,6 +175,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Reactor Control Panel");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Reactor Fuel Hatch");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS.get(), "Vibranium Glass");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(), "Reinforced Vibranium Glass");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Vibranium Glass Pane");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Reinforced Vibranium Glass Pane");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Heart-shaped Herb Flower");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Purple Cave Vines");

@@ -6,12 +6,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.MapColor;
 
 
-public class VibraniumGlass extends Block {
+public class ReinforcedVibraniumGlass extends Block {
 
     //PROPERTIES
-    public static final MapCodec<Block> CODEC = simpleCodec(VibraniumGlass::new);
+    public static final MapCodec<Block> CODEC = simpleCodec(ReinforcedVibraniumGlass::new);
     public static Properties getProperties (Properties settings){
-        return Properties.ofFullCopy(Blocks.GLASS).mapColor(MapColor.COLOR_PINK);
+        return Properties.ofFullCopy(Blocks.GLASS)
+                .strength(1.5f,6.0f)
+                .mapColor(MapColor.COLOR_BLACK);
     }
     @Override
     protected MapCodec<? extends Block> codec() {
@@ -19,7 +21,7 @@ public class VibraniumGlass extends Block {
     }
 
     //CONSTRUCTOR
-    public VibraniumGlass(Properties properties) {
+    public ReinforcedVibraniumGlass(Properties properties) {
         super(properties);
     }
 }

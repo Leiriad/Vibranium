@@ -83,8 +83,11 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> REACTOR_CONTROL_PANEL = register("reactor_control_panel", ReactorControlPanelBlock::new, () -> ReactorControlPanelBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REACTOR_HATCH = register("reactor_hatch", ReactorHatchBlock::new, () -> ReactorHatchBlock.getProperties(BlockBehaviour.Properties.of()), true);
 
-    //BUILDING
+    //COLORED
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS = register("vibranium_glass", VibraniumGlass::new, () -> VibraniumGlass.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS = register("reinforced_vibranium_glass", ReinforcedVibraniumGlass::new, () -> ReinforcedVibraniumGlass.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> VIBRANIUM_GLASS_PANE = register("vibranium_glass_pane", VibraniumGlassPane::new, () -> VibraniumGlassPane.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS_PANE = register("reinforced_vibranium_glass_pane", ReinforcedVibraniumGlassPane::new, () -> ReinforcedVibraniumGlassPane.getProperties(BlockBehaviour.Properties.of()), true);
 
     //BLOCKITEMS
     public static final RegistrySupplier<Item> BLUE_GLOW_BERRIES = BLOCKITEMS.register("blue_glow_berries",
@@ -171,11 +174,14 @@ public class VibraniumBlocks {
             CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
 
-        //BUILDING BLOCKS
+        //COLORED BLOCKS
         List.of(
-                VIBRANIUM_GLASS
+                VIBRANIUM_GLASS,
+                REINFORCED_VIBRANIUM_GLASS,
+                VIBRANIUM_GLASS_PANE,
+                REINFORCED_VIBRANIUM_GLASS_PANE
         ).forEach(blockSupplier -> {
-            CreativeTabRegistry.appendStack(CreativeModeTabs.BUILDING_BLOCKS, () -> new ItemStack(blockSupplier.get()));
+            CreativeTabRegistry.appendStack(CreativeModeTabs.COLORED_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
 
         //VIBRANIUM TAB
@@ -205,7 +211,10 @@ public class VibraniumBlocks {
                 REACTOR_CORE,
                 REACTOR_CONTROL_PANEL,
                 REACTOR_HATCH,
-                VIBRANIUM_GLASS
+                VIBRANIUM_GLASS,
+                REINFORCED_VIBRANIUM_GLASS,
+                VIBRANIUM_GLASS_PANE,
+                REINFORCED_VIBRANIUM_GLASS_PANE
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
         });
