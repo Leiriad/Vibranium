@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "vibranium:block/fluid_tank" }
+  }
+}

@@ -82,6 +82,7 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> REACTOR_CORE = register("reactor_core", ReactorCoreBlock::new, () -> ReactorCoreBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REACTOR_CONTROL_PANEL = register("reactor_control_panel", ReactorControlPanelBlock::new, () -> ReactorControlPanelBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REACTOR_HATCH = register("reactor_hatch", ReactorHatchBlock::new, () -> ReactorHatchBlock.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> FLUID_TANK = register("fluid_tank", FluidTankBlock::new, () -> FluidTankBlock.getProperties(BlockBehaviour.Properties.of()), true);
 
     //COLORED
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS = register("vibranium_glass", VibraniumGlass::new, () -> VibraniumGlass.getProperties(BlockBehaviour.Properties.of()), true);
@@ -169,7 +170,8 @@ public class VibraniumBlocks {
         List.of(
                 REACTOR_CORE,
                 REACTOR_CONTROL_PANEL,
-                REACTOR_HATCH
+                REACTOR_HATCH,
+                FLUID_TANK
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
@@ -214,7 +216,8 @@ public class VibraniumBlocks {
                 VIBRANIUM_GLASS,
                 REINFORCED_VIBRANIUM_GLASS,
                 VIBRANIUM_GLASS_PANE,
-                REINFORCED_VIBRANIUM_GLASS_PANE
+                REINFORCED_VIBRANIUM_GLASS_PANE,
+                FLUID_TANK
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
         });

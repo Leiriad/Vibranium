@@ -4,14 +4,22 @@ import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
+import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.material.Fluid;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class VibraniumModClient {
+    // A platform-agnostic color cache for your custom renderers to query
+    private static final Map<Fluid, Integer> FLUID_COLORS = new HashMap<>();
 
     public static void init() {
 
@@ -41,7 +49,8 @@ public class VibraniumModClient {
                 VibraniumBlocks.VIBRANIUM_GLASS.get(),
                 VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(),
                 VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(),
-                VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get()
+                VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(),
+                VibraniumBlocks.FLUID_TANK.get()
         );
 
         //Vine & dripleaf color fix
@@ -64,5 +73,22 @@ public class VibraniumModClient {
         System.out.println("-> Trying to register screen id : " + BuiltInRegistries.MENU.getKey(menuType2));
         MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_HATCH_MENU.get(), ReactorHatchScreen::new);
 
+        //Fluid milk for tank
+        // Solid Milk white tint mask representation (ARGB hex format)
+        int milkColorHex = 0xFFFFFFFF;
+
+        // Register your fluid colors locally inside the common client module
+        FLUID_COLORS.put(VibraniumFluids.VANILLA_MILK_STILL.get(), milkColorHex);
+        FLUID_COLORS.put(VibraniumFluids.VANILLA_MILK_FLOWING.get(), milkColorHex);
+    }
+    /**
+     * Safely retrieves the client-side tint color for any registered fluid.
+     * Fallback to full opaque white (0xFFFFFFFF) if not explicitly mapped.
+     */
+    public static int getFluidColor(Fluid fluid) {
+        return FLUID_COLORS.getOrDefault(fluid, 0xFFFFFFFF);
+    }
+    public static boolean hasColorOverride(Fluid fluid) {
+        return FLUID_COLORS.containsKey(fluid);
     }
 }
