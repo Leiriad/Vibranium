@@ -1,7 +1,9 @@
 package io.github.leiriad.vibranium.entity;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.leiriad.vibranium.block.ReactorCoreBlock;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
+import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,9 +16,16 @@ import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
     //PROPERTIES
@@ -27,6 +36,11 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
     private long hotWaterAmount=0;
     private static final int TICKS_PER_POWDER = 24000;
     private final int MAX_ENERGY = 100000;
+
+    private Map<Pair<Integer, Integer>, List<FluidTankEntity>> waterColumns = new HashMap<>();
+    private final List<FluidTankEntity> waterTanks = new ArrayList<>();
+    private final List<FluidTankEntity> hotWaterTanks = new ArrayList<>();
+    private ReactorHatchEntity hatch = null;
 
     //Inventory
     public final SimpleContainer inventory = new SimpleContainer(2);
@@ -72,7 +86,8 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
     //Process
     public static void tick(Level level, BlockPos pos, BlockState state, ReactorCoreEntity blockEntity) {
         if (level.isClientSide()) return;
-
+        blockEntity.scanForComponents(level, pos);
+        blockEntity.updateFluidLevels();
         //Send heat order
         boolean aFurnaceIsCooking = blockEntity.checkAndBoostAdjacentFurnaces(level, pos, state);
 
@@ -80,7 +95,89 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
         if (aFurnaceIsCooking && blockEntity.hasCoolant() && blockEntity.hasFuel()) {
             blockEntity.processReaction();
         } else {
-            blockEntity.coolDown(aFurnaceIsCooking);
+            blockEntity.furnaceCoolDown(aFurnaceIsCooking);
+        }
+
+    }
+    private void scanForComponents(Level level, BlockPos centerPos) {
+        this.waterColumns.clear();
+        this.hatch = null;
+
+        // Scan 3x3x3 cube centered on core
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                Pair<Integer, Integer> key = new Pair<>(x, z);
+
+                for (int y = -1; y <= 1; y++) {
+                    mutablePos.set(centerPos.getX() + x, centerPos.getY() + y, centerPos.getZ() + z);
+                    if (mutablePos.equals(centerPos)) continue;
+
+                    BlockEntity be = level.getBlockEntity(mutablePos);
+
+                    // Fluid tanks
+                    if (be instanceof FluidTankEntity tank) {
+                        Fluid fluid = tank.getStoredFluid();
+
+                        if (fluid == Fluids.WATER || fluid == VibraniumFluids.HOT_WATER_STILL.get() || fluid == Fluids.EMPTY) {
+                            waterColumns.computeIfAbsent(key, k -> new ArrayList<>()).add(tank);
+                        }
+                    }
+                    // Hatch
+                    else if (be instanceof ReactorHatchEntity hatch) {
+                        this.hatch = hatch;
+                    }
+                }
+            }
+        }
+        assignRolesToColumns();
+    }
+    private void assignRolesToColumns() {
+        // Clear existing lists to start fresh
+        this.waterTanks.clear();
+        this.hotWaterTanks.clear();
+
+        // Iterate through all columns identified in the scan
+        for (Map.Entry<Pair<Integer, Integer>, List<FluidTankEntity>> entry : waterColumns.entrySet()) {
+            List<FluidTankEntity> column = entry.getValue();
+            if (column.isEmpty()) continue;
+
+            Fluid detectedFluid = Fluids.EMPTY;
+            boolean isPolluted = false;
+
+            // Check for consistency across the column
+            for (FluidTankEntity tank : column) {
+                Fluid tankFluid = tank.getStoredFluid();
+
+                if (tankFluid != Fluids.EMPTY) {
+                    if (detectedFluid == Fluids.EMPTY) {
+                        detectedFluid = tankFluid;
+                    } else if (detectedFluid != tankFluid) {
+                        isPolluted = true; // Fluid mismatch detected in column
+                        break;
+                    }
+                }
+            }
+
+            // Ignore polluted columns entirely
+            if (isPolluted) {
+                continue;
+            }
+
+            // Assign valid columns to their respective roles
+            if (detectedFluid == Fluids.WATER) {
+                waterTanks.addAll(column);
+            } else if (detectedFluid == VibraniumFluids.HOT_WATER_STILL.get()) {
+                hotWaterTanks.addAll(column);
+            } else {
+                // Assign empty columns based on what we currently need
+                if (waterTanks.isEmpty()) {
+                    waterTanks.addAll(column);
+                } else {
+                    hotWaterTanks.addAll(column);
+                }
+            }
         }
     }
     private boolean hasCoolant() {
@@ -96,9 +193,9 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
     private void refuel() {
         if (this.canRefuel()) {
             ItemStack fuelStack = this.inventory.getItem(0);
-            fuelStack.shrink(1); // On réduit de 1 la quantité dans le slot
-            this.vibraniumAmount = TICKS_PER_POWDER; // On recharge la jauge de ticks
-            this.setChanged(); // On notifie Minecraft du changement d'inventaire
+            fuelStack.shrink(1); // Reduce quantity
+            this.vibraniumAmount = TICKS_PER_POWDER; // Change gauge
+            this.setChanged();
         }
     }
     private void processReaction() {
@@ -114,9 +211,31 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
                 this.temperature += 5;
             }
 
-            // Water turns into hot water
-            this.waterAmount -= 10;
-            this.hotWaterAmount += 10;
+            // Water is consummed
+            long waterNeeded = 10;
+            for (FluidTankEntity tank : this.waterTanks) {
+                long drained = tank.drain(waterNeeded);
+                waterNeeded -= drained;
+                if (waterNeeded <= 0) break;
+            }
+
+            //Reaction produces hot water
+            if (waterNeeded <= 0) { // Cold water found
+                long waterToProduce = 10;
+                for (FluidTankEntity tank : this.hotWaterTanks) {
+                    long filled = tank.fill(waterToProduce, VibraniumFluids.HOT_WATER_STILL.get()); // TO DO
+                    waterToProduce -= filled;
+                    if (waterToProduce <= 0) break;
+                }
+
+                if (waterToProduce > 0) {
+                    // Emergency procedure: no room left for hat water
+                    //this.handlePressureBuildUp();
+                }
+            } else {
+                // Emergency procedure : no cold water left
+                //this.handleOverheat();
+            }
 
             // The reactor emits energy
             this.energyStored = Math.min(MAX_ENERGY, this.energyStored + (this.temperature / 10));
@@ -124,6 +243,21 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
             //Signals entity change
             this.setChanged();
         }
+    }
+    private void updateFluidLevels() {
+        this.waterAmount = 0;
+        this.hotWaterAmount = 0;
+
+        for (FluidTankEntity tank : this.waterTanks) {
+            this.waterAmount += tank.getFluidAmount();
+        }
+        for (FluidTankEntity tank : this.hotWaterTanks) {
+            this.hotWaterAmount += tank.getFluidAmount();
+        }
+    }
+    public boolean isReactorFunctioningCorrectly() {
+        // Check if we have at least one valid water column and one hot water column
+        return !waterTanks.isEmpty() && !hotWaterTanks.isEmpty();
     }
     private boolean checkAndBoostAdjacentFurnaces(Level level, BlockPos pos, BlockState state) {
         BlockPos targetPos = pos.relative(state.getValue(ReactorCoreBlock.FACING).getOpposite());
@@ -159,7 +293,7 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
         }
         return false;
     }
-    private void coolDown(boolean aFurnaceIsCooking) {
+    private void furnaceCoolDown(boolean aFurnaceIsCooking) {
         int targetTemp = 20; // The reactor attempts to reach it's normal temperature
 
         if (this.temperature > targetTemp) {
@@ -194,15 +328,18 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
     //Worldly Container
     @Override
     public int[] getSlotsForFace(Direction direction) {
-        return new int[2];
+        // Returns every available slot for every face
+        return new int[]{SLOTS_FOR_INPUT[0], SLOTS_FOR_OUTPUT[0]};
     }
     @Override
-    public boolean canPlaceItemThroughFace(int i, ItemStack itemStack, @Nullable Direction direction) {
-        return false;
+    public boolean canPlaceItemThroughFace(int slot, ItemStack itemStack, @Nullable Direction direction) {
+        //Allows insertion in vibranium slot
+        return slot == SLOTS_FOR_INPUT[0];
     }
     @Override
-    public boolean canTakeItemThroughFace(int i, ItemStack itemStack, Direction direction) {
-        return false;
+    public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction direction) {
+        //Allows insertion in waste slot
+        return slot == SLOTS_FOR_OUTPUT[0];
     }
     @Override
     public int getContainerSize() {

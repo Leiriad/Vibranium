@@ -18,11 +18,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class MilkFluidAttributes implements ArchitecturyFluidAttributes {
+public class HotWaterFluidAttributes implements ArchitecturyFluidAttributes {
     private final Supplier<? extends Fluid> stillFluid;
     private final Supplier<? extends Fluid> flowingFluid;
-
-    public MilkFluidAttributes(Supplier<? extends Fluid> stillFluid, Supplier<? extends Fluid> flowingFluid) {
+    public HotWaterFluidAttributes(Supplier<? extends Fluid> stillFluid, Supplier<? extends Fluid> flowingFluid) {
         this.stillFluid = stillFluid;
         this.flowingFluid = flowingFluid;
     }
@@ -90,14 +89,17 @@ public class MilkFluidAttributes implements ArchitecturyFluidAttributes {
     @SuppressWarnings("removal")
     @Override
     public int getColor(@Nullable FluidStack stack, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos) {
-        // Returns pure solid opaque white (0xFFFFFFFF)
-        return 0xFFFFFFFF;
+        if (level != null && pos != null) {
+            //Use biome color
+            return net.minecraft.client.renderer.BiomeColors.getAverageWaterColor(level, pos);
+        }
+        return 0x3F76E4; // Use usual water color
     }
 
     // Technical Specifications
     @Override
     public int getLuminosity(@Nullable FluidStack stack, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos) {
-        return 0; // Milk does not emit light
+        return 0; // Hot water does not emit light
     }
 
     @Override
@@ -106,7 +108,7 @@ public class MilkFluidAttributes implements ArchitecturyFluidAttributes {
     }
 
     public int getTemperature(@Nullable FluidStack stack, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos) {
-            return 310; // Around 37°C (body temperature for cow's milk)
+        return 3000; // Around 300 °C
     }
 
     @Override
@@ -138,6 +140,6 @@ public class MilkFluidAttributes implements ArchitecturyFluidAttributes {
     // Localization
     @Override
     public @Nullable String getTranslationKey(@Nullable FluidStack stack) {
-        return "block.vibranium.vanilla_milk"; // Will read from your lang JSON file
+        return "block.vibranium.hot_water"; // Will read from your lang JSON file
     }
 }

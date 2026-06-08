@@ -1,4 +1,4 @@
-package io.github.leiriad.vibranium.fluid;
+package io.github.leiriad.vibranium.block;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;

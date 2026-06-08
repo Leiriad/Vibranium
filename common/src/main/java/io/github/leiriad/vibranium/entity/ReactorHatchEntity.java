@@ -88,7 +88,6 @@ public class ReactorHatchEntity extends BlockEntity{
     public void updateLitState(boolean isFuelPresent) {
         if (this.level != null && !this.level.isClientSide()) {
             BlockState currentState = this.level.getBlockState(this.worldPosition);
-            // Si l'état actuel ne correspond pas à la réalité, on le change
             if (currentState.hasProperty(ReactorHatchBlock.LIT) && currentState.getValue(ReactorHatchBlock.LIT) != isFuelPresent) {
                 this.level.setBlock(this.worldPosition, currentState.setValue(ReactorHatchBlock.LIT, isFuelPresent), 3);
             }

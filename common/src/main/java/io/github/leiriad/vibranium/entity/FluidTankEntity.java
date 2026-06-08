@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.entity;
 
 import io.github.leiriad.vibranium.init.VibraniumEntities;
+import io.github.leiriad.vibranium.init.VibraniumFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -9,6 +10,8 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -51,6 +54,48 @@ public class FluidTankEntity extends BlockEntity {
         }
     }
 
+    public long getAvailableAmount() {
+        return this.fluidAmount;
+    }
+
+    public long drain(long maxAmount) {
+        long toDrain = Math.min(this.fluidAmount, maxAmount);
+        this.fluidAmount -= toDrain;
+        this.setChanged();
+        if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        return toDrain;
+    }
+
+    //METHODS
+    public void tick(Level level, BlockPos pos) {
+        if (!level.isClientSide() && getStoredFluid().isSame(VibraniumFluids.HOT_WATER_STILL.get())) {
+            // The tank is hot it impacts it's neighbor blocks
+            BlockPos.betweenClosedStream(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))
+                    .forEach(p -> {
+                        BlockState voisinState = level.getBlockState(p);
+                        // Make ice melt
+                        if (voisinState.is(Blocks.ICE)) {
+                            level.setBlockAndUpdate(p, Blocks.WATER.defaultBlockState());
+                        }
+                    });
+        }
+    }
+    public long fill(long amount, Fluid fluid) {
+        // If tank is empty accept new fluid
+        if (this.storedFluid == Fluids.EMPTY) {
+            this.storedFluid = fluid;
+        }
+
+        // If right fluid, fill
+        if (this.storedFluid == fluid) {
+            long canFill = Math.min(amount, this.capacity - this.fluidAmount);
+            this.fluidAmount += canFill;
+            this.setChanged();
+            if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+            return canFill;
+        }
+        return 0; // Wrong fluid or full tank
+    }
     // NBT Data Management
     @Override
     protected void saveAdditional(ValueOutput valueOutput) {
