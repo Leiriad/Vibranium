@@ -33,8 +33,11 @@ public class HotWaterLiquidBlock extends LiquidBlock {
         super.entityInside(state, level, pos, entity, applier, bool);
         if (!level.isClientSide() && entity instanceof LivingEntity living) {
             // Apply damages to entity
-            if (level.getGameTime() % 10 == 0) {
-                living.hurt(level.damageSources().hotFloor(), 1.0F);
+            if (level.getGameTime() % 20 == 0) {
+                living.hurt(level.damageSources().inFire(), 1.0F);
+            }
+            if (!living.fireImmune()) {
+                living.igniteForTicks(20);
             }
         }
     }

@@ -54,7 +54,7 @@ public class FluidTankRenderer implements BlockEntityRenderer<FluidTankEntity, F
         long capacity = state.capacity;
 
         // Do not render anything if the tank has no fluid
-        if (fluid == Fluids.EMPTY || amount <= 0 || capacity <= 0) {
+        if (fluid == null || fluid == Fluids.EMPTY || amount <= 0 || capacity <= 0) {
             return;
         }
 
@@ -76,23 +76,17 @@ public class FluidTankRenderer implements BlockEntityRenderer<FluidTankEntity, F
         // Fetch fluid textures and colors using the proper Architectury Hook from your files
         FluidStack fluidStack = FluidStack.create(fluid, amount);
 
+        // Fallback to the missing texture sprite if the atlas hasn't finished loading yet
         TextureAtlasSprite sprite = null;
-
-        if (fluid != VibraniumFluids.VANILLA_MILK_STILL.get() && fluid != VibraniumFluids.VANILLA_MILK_FLOWING.get()) {
-            sprite = ClientFluidStackHooks.getStillTexture(fluidStack);
-        }
-
-        if (sprite == null || sprite.atlasLocation() == null) {
-            // Fallback to the missing texture sprite if the atlas hasn't finished loading yet
-            TextureAtlas blocksAtlas = Minecraft.getInstance()
+        TextureAtlas blocksAtlas = Minecraft.getInstance()
                     .getTextureManager()
                     .getTexture(TextureAtlas.LOCATION_BLOCKS) instanceof TextureAtlas atlas ? atlas : null;
 
-            // Ensure blocksAtlas is not null before using it
-            if (blocksAtlas != null) {
-                sprite = blocksAtlas.getSprite(Identifier.fromNamespaceAndPath("minecraft", "block/water_still"));
-            }
+        // Ensure blocksAtlas is not null before using it
+        if (blocksAtlas != null) {
+            sprite = blocksAtlas.getSprite(Identifier.fromNamespaceAndPath("minecraft", "block/water_still"));
         }
+
         if (sprite == null) {
             return;
         }

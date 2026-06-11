@@ -42,7 +42,7 @@ public class VibraniumItems {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
                 Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "hot_water_bucket"));
 
-        return new HotWaterBucket(HotWaterBucket.getProperties().setId(key));
+        return new HotWaterBucket(VibraniumFluids.HOT_WATER_STILL, HotWaterBucket.getProperties().setId(key));
     });
 
     ///Registers items in the game

@@ -7,6 +7,7 @@ import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
+public class ReactorCoreEntity extends BlockEntity {
     //PROPERTIES
     private int temperature = 20; // Ambiant temperature
     private int energyStored = 0;
@@ -40,12 +41,7 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
     private Map<Pair<Integer, Integer>, List<FluidTankEntity>> waterColumns = new HashMap<>();
     private final List<FluidTankEntity> waterTanks = new ArrayList<>();
     private final List<FluidTankEntity> hotWaterTanks = new ArrayList<>();
-    private ReactorHatchEntity hatch = null;
-
-    //Inventory
-    public final SimpleContainer inventory = new SimpleContainer(2);
-    private static final int[] SLOTS_FOR_INPUT = new int[]{0}; //Vibranium dust input
-    private static final int[] SLOTS_FOR_OUTPUT = new int[]{1}; //Depleted Vibranium
+    private ReactorHatchEntity cachedHatch = null;
 
     // CONSTRUCTOR
     public ReactorCoreEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -64,7 +60,6 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
         valueOutput.putInt("temperature", temperature);
         valueOutput.putLong("water", waterAmount);
         valueOutput.putLong("hot_water", hotWaterAmount);
-        valueOutput.store("Inventory", ItemStack.OPTIONAL_CODEC.listOf(), this.inventory.getItems());
         super.saveAdditional(valueOutput);
     }
     @Override
@@ -75,24 +70,27 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
         this.temperature = valueInput.getInt("temperature").orElse(this.temperature);
         this.waterAmount = valueInput.getLong("water").orElse(0l);
         this.hotWaterAmount = valueInput.getLong("hot_water").orElse(0l);
-        valueInput.read("Inventory", ItemStack.OPTIONAL_CODEC.listOf()).ifPresent(items -> {
-            this.inventory.clearContent();
-            for (int i = 0; i < items.size() && i < this.inventory.getContainerSize(); i++) {
-                this.inventory.setItem(i, items.get(i));
-            }
-        });
     }
 
     //Process
     public static void tick(Level level, BlockPos pos, BlockState state, ReactorCoreEntity blockEntity) {
         if (level.isClientSide()) return;
+        if (level.getGameTime() % 100 == 0) {
+            System.out.println("Eau: " + blockEntity.waterAmount + " | Hatch trouvé: " + (blockEntity.getHatch() != null));
+        }
         blockEntity.scanForComponents(level, pos);
         blockEntity.updateFluidLevels();
+        if (blockEntity.vibraniumAmount <= 0) {
+            blockEntity.refuel();
+        }
+
+        boolean hasCoolant = blockEntity.hasCoolant();
+        boolean hasFuel = blockEntity.hasFuel();
         //Send heat order
         boolean aFurnaceIsCooking = blockEntity.checkAndBoostAdjacentFurnaces(level, pos, state);
 
         //Temperature management
-        if (aFurnaceIsCooking && blockEntity.hasCoolant() && blockEntity.hasFuel()) {
+        if (hasCoolant && hasFuel) {
             blockEntity.processReaction();
         } else {
             blockEntity.furnaceCoolDown(aFurnaceIsCooking);
@@ -101,7 +99,6 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
     }
     private void scanForComponents(Level level, BlockPos centerPos) {
         this.waterColumns.clear();
-        this.hatch = null;
 
         // Scan 3x3x3 cube centered on core
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
@@ -124,14 +121,23 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
                             waterColumns.computeIfAbsent(key, k -> new ArrayList<>()).add(tank);
                         }
                     }
-                    // Hatch
-                    else if (be instanceof ReactorHatchEntity hatch) {
-                        this.hatch = hatch;
-                    }
                 }
             }
         }
         assignRolesToColumns();
+    }
+    private ReactorHatchEntity getHatch() {
+        if (this.cachedHatch == null || this.cachedHatch.isRemoved() || !isNear(this.cachedHatch)) {
+            this.cachedHatch = findHatchInWorld();
+        }
+        return this.cachedHatch;
+    }
+    private ReactorHatchEntity findHatchInWorld() {
+        for (Direction dir : Direction.values()) {
+            BlockEntity be = level.getBlockEntity(this.worldPosition.relative(dir));
+            if (be instanceof ReactorHatchEntity hatch) return hatch;
+        }
+        return null;
     }
     private void assignRolesToColumns() {
         // Clear existing lists to start fresh
@@ -184,18 +190,34 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
         return this.waterAmount >= 10; //Water consumtion per tick
     }
     private boolean hasFuel() {
-        return this.vibraniumAmount > 0 || this.canRefuel();
+        return this.vibraniumAmount > 0;
     }
     private boolean canRefuel() {
-        ItemStack fuelStack = this.inventory.getItem(0);
-        return !fuelStack.isEmpty() && fuelStack.is(VibraniumItems.VIBRANIUM_DUST);
+        ReactorHatchEntity hatch = getHatch();
+        if (hatch == null) return false;
+        ItemStack fuelStack = hatch.inventory.getItem(0);
+        System.out.println("Le Core voit dans le slot 0 : " + fuelStack.getItem() + " (Quantité: " + fuelStack.getCount() + ")");
+        boolean isEmpty = fuelStack.isEmpty();
+        boolean isVibraniumDust = fuelStack.getItem() == VibraniumItems.VIBRANIUM_DUST.get();
+        return !isEmpty && isVibraniumDust;
     }
     private void refuel() {
+        System.out.println("Tentative de refuel...");
+        ReactorHatchEntity hatch = getHatch();
+        if (hatch == null) {
+            System.out.println("ERREUR : Hatch est null !");
+            return;
+        }
         if (this.canRefuel()) {
-            ItemStack fuelStack = this.inventory.getItem(0);
-            fuelStack.shrink(1); // Reduce quantity
-            this.vibraniumAmount = TICKS_PER_POWDER; // Change gauge
+            ItemStack fuelStack = hatch.inventory.getItem(0);
+            System.out.println("Vibranium détecté : " + fuelStack.getCount());
+            fuelStack.shrink(1);
+            this.vibraniumAmount = TICKS_PER_POWDER;
+            hatch.setChanged();
             this.setChanged();
+            if (level != null && !level.isClientSide()) {
+                level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+            }
         }
     }
     private void processReaction() {
@@ -212,7 +234,7 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
             }
 
             // Water is consummed
-            long waterNeeded = 10;
+            long waterNeeded = 1;
             for (FluidTankEntity tank : this.waterTanks) {
                 long drained = tank.drain(waterNeeded);
                 waterNeeded -= drained;
@@ -221,7 +243,7 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
 
             //Reaction produces hot water
             if (waterNeeded <= 0) { // Cold water found
-                long waterToProduce = 10;
+                long waterToProduce = 1;
                 for (FluidTankEntity tank : this.hotWaterTanks) {
                     long filled = tank.fill(waterToProduce, VibraniumFluids.HOT_WATER_STILL.get()); // TO DO
                     waterToProduce -= filled;
@@ -242,6 +264,9 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
 
             //Signals entity change
             this.setChanged();
+            if (level != null && !level.isClientSide()) {
+                level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+            }
         }
     }
     private void updateFluidLevels() {
@@ -251,9 +276,11 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
         for (FluidTankEntity tank : this.waterTanks) {
             this.waterAmount += tank.getFluidAmount();
         }
+        System.out.println("Eau détectée : " + waterAmount);
         for (FluidTankEntity tank : this.hotWaterTanks) {
             this.hotWaterAmount += tank.getFluidAmount();
         }
+        System.out.println("Eau chaude détectée : " + hotWaterAmount);
     }
     public boolean isReactorFunctioningCorrectly() {
         // Check if we have at least one valid water column and one hot water column
@@ -301,80 +328,46 @@ public class ReactorCoreEntity extends BlockEntity implements WorldlyContainer {
             int coolingRate = aFurnaceIsCooking ? 4 : 2;
             this.temperature = Math.max(targetTemp, this.temperature - coolingRate);
             this.setChanged();
+            if (level != null && !level.isClientSide()) {
+                level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+            }
         }
     }
-    public void addWater(long amount) {
-        this.waterAmount = Math.min(10000L, this.waterAmount + amount); // Max capacity 10 buckets
-    }
     public int getMaxVibraniumTicks() { return TICKS_PER_POWDER; }
-
+    private boolean isNear(ReactorHatchEntity hatch) {
+        return hatch.getBlockPos().distManhattan(this.worldPosition) <= 2;
+    }
     //Screen
     public int getTemperature() {
+        System.out.println("this.temperature : " + this.temperature);
         return this.temperature;
     }
     public int getEnergy() {
+        System.out.println("this.energyStored : " + this.energyStored);
         return this.energyStored;
     }
     public long getWaterAmount() {
+        System.out.println("this.waterAmount : " + this.waterAmount);
         return this.waterAmount;
     }
     public long getHotWaterAmount() {
+        System.out.println("this.hotWaterAmount : " + this.hotWaterAmount);
         return this.hotWaterAmount;
     }
     public int getVibraniumAmount() {
+        System.out.println("this.vibraniumAmount : " + this.vibraniumAmount);
+        System.out.println("Valeur lue côté : " + (level != null && level.isClientSide() ? "CLIENT" : "SERVEUR") + " | Valeur : " + this.vibraniumAmount);
         return this.vibraniumAmount;
     }
 
-    //Worldly Container
+    //Server sync
     @Override
-    public int[] getSlotsForFace(Direction direction) {
-        // Returns every available slot for every face
-        return new int[]{SLOTS_FOR_INPUT[0], SLOTS_FOR_OUTPUT[0]};
-    }
-    @Override
-    public boolean canPlaceItemThroughFace(int slot, ItemStack itemStack, @Nullable Direction direction) {
-        //Allows insertion in vibranium slot
-        return slot == SLOTS_FOR_INPUT[0];
-    }
-    @Override
-    public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction direction) {
-        //Allows insertion in waste slot
-        return slot == SLOTS_FOR_OUTPUT[0];
-    }
-    @Override
-    public int getContainerSize() {
-        return this.inventory.getContainerSize();
-    }
-    @Override
-    public boolean isEmpty() {
-        return this.inventory.isEmpty();
-    }
-    @Override
-    public ItemStack getItem(int slot) {
-        return this.inventory.getItem(slot);
-    }
-    @Override
-    public ItemStack removeItem(int slot, int amount) {
-        ItemStack stack = this.inventory.removeItem(slot, amount);
-        this.setChanged();
-        return stack;
-    }
-    @Override
-    public ItemStack removeItemNoUpdate(int slot) {
-        return this.inventory.removeItemNoUpdate(slot);
-    }
-    @Override
-    public void setItem(int slot, ItemStack itemStack) {
-        this.inventory.setItem(slot, itemStack);
-        this.setChanged();
-    }
-    @Override
-    public boolean stillValid(Player player) {
-        return true;
-    }
-    @Override
-    public void clearContent() {
-        this.inventory.clearContent();
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    @Override
+    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
+        return this.saveWithoutMetadata(provider);
+    }
 }

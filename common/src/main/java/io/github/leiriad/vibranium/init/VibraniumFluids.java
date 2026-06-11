@@ -55,7 +55,9 @@ public class VibraniumFluids {
 
         BlockBehaviour.Properties props = BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
                 .noCollision()
-                .noOcclusion();
+                .noOcclusion()
+                .liquid()
+                .strength(100.0F);
         props.setId(blockKey);
 
         // CRITICAL: Must use VANILLA_MILK_FLOWING because standard LiquidBlock demands a fluid with the 'LEVEL' property!
@@ -67,7 +69,9 @@ public class VibraniumFluids {
 
         BlockBehaviour.Properties props = BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
                 .noCollision()
-                .noOcclusion();
+                .noOcclusion()
+                .liquid()
+                .strength(100.0F);
         props.setId(blockKey);
 
         return new LiquidBlock(VibraniumFluids.HOT_WATER_FLOWING.get(), props);

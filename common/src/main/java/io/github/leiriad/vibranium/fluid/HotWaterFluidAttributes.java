@@ -3,6 +3,7 @@ package io.github.leiriad.vibranium.fluid;
 import dev.architectury.core.fluid.ArchitecturyFluidAttributes;
 import dev.architectury.fluid.FluidStack;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
+import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
@@ -39,12 +40,12 @@ public class HotWaterFluidAttributes implements ArchitecturyFluidAttributes {
 
     @Override
     public LiquidBlock getBlock() {
-        return VibraniumFluids.VANILLA_MILK_BLOCK.get();
+        return VibraniumFluids.HOT_WATER_BLOCK.get();
     }
 
     @Override
     public Item getBucketItem() {
-        return Items.MILK_BUCKET;
+        return VibraniumItems.HOT_WATER_BUCKET.get();
     }
 
     // Physics & Mechanics (Standard values matching Water)

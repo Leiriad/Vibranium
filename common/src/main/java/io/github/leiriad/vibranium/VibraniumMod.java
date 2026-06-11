@@ -23,8 +23,8 @@ public class VibraniumMod {
 
 		//Initialize Registry Content
 		VibraniumBlocks.registerModBlocks();
-		VibraniumItems.registerModItems();
 		VibraniumFluids.register();
+		VibraniumItems.registerModItems();
 		VibraniumCreativeTabs.registerModTabs();
 		VibraniumMenus.registerModMenus();
 

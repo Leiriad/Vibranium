@@ -20,17 +20,7 @@ public class ReactorControlPanelMenu extends AbstractContainerMenu {
 
     //PROPERTIES
     private final ReactorCoreEntity reactor;
-    private final DataSlot energySlot = DataSlot.standalone();
-    private final DataSlot heatSlot = DataSlot.standalone();
-    private final DataSlot vibraniumSlot = DataSlot.standalone();
-
-    //long values are split in two slots
-    private final DataSlot waterLowSlot = DataSlot.standalone();
-    private final DataSlot waterHighSlot = DataSlot.standalone();
-
-    private final DataSlot hotWaterLowSlot = DataSlot.standalone();
-    private final DataSlot hotWaterHighSlot = DataSlot.standalone();
-
+    private final ContainerData data;
 
     //CONSTRUCTORS
     //Client
@@ -42,55 +32,51 @@ public class ReactorControlPanelMenu extends AbstractContainerMenu {
     public ReactorControlPanelMenu(int id, Inventory inv, ReactorCoreEntity reactor) {
         super(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), id);
         this.reactor = reactor;
-        this.addDataSlot(energySlot);
-        this.addDataSlot(heatSlot);
-        this.addDataSlot(vibraniumSlot);
-        this.addDataSlot(waterLowSlot);
-        this.addDataSlot(waterHighSlot);
-        this.addDataSlot(hotWaterLowSlot);
-        this.addDataSlot(hotWaterHighSlot);
+        this.data = new ContainerData() {
+            @Override
+            public int get(int index) {
+                if (reactor == null) return 0;
+                return switch (index) {
+                    case 0 -> reactor.getEnergy();
+                    case 1 -> reactor.getTemperature();
+                    case 2 -> reactor.getVibraniumAmount();
+                    case 3 -> (int) (reactor.getWaterAmount() & 0xFFFFFFFFL);
+                    case 4 -> (int) (reactor.getWaterAmount() >> 32);
+                    case 5 -> (int) (reactor.getHotWaterAmount() & 0xFFFFFFFFL);
+                    case 6 -> (int) (reactor.getHotWaterAmount() >> 32);
+                    default -> 0;
+                };
+            }
+            @Override
+            public void set(int index, int value) { }
+            @Override
+            public int getCount() { return 7; }
+        };
+        this.addDataSlots(this.data);
     }
 
     //METHODS
-    ///Server values injection
-    @Override
-    public void broadcastChanges() {
-        if (this.reactor != null) {
-            int energy = this.reactor.getEnergy();
-            int heat = this.reactor.getTemperature();
-            int vibranium = this.reactor.getVibraniumAmount();
-            long water = this.reactor.getWaterAmount();
-            long hotWater = this.reactor.getHotWaterAmount();
-
-            this.energySlot.set((int) energy);
-            this.heatSlot.set((int) heat);
-            this.vibraniumSlot.set((int) vibranium);
-            this.waterLowSlot.set((int) (water & 0xFFFFFFFFL));
-            this.waterHighSlot.set((int) (water >> 32));
-            this.hotWaterLowSlot.set((int) (hotWater & 0xFFFFFFFFL));
-            this.hotWaterHighSlot.set((int) (hotWater >> 32));
-        }
-        super.broadcastChanges();
-    }
-
     @Override
     public ItemStack quickMoveStack(Player player, int i) {
         return null;
     }
 
     // Screen getters
-    public int getEnergy() { return this.energySlot.get(); }
-    public int getHeat() { return this.heatSlot.get(); }
-    public int getVibranium() { return this.vibraniumSlot.get(); }
+    public int getEnergy() { System.out.println("Energie : " + this.data.get(0)); return this.data.get(0); }
+    public int getHeat() { System.out.println("Chaleur : " + this.data.get(1)); return this.data.get(1); }
+    public int getVibranium() {System.out.println("Vibranium : " + this.data.get(2)); return this.data.get(2); }
+
     public long getWater() {
-        long low = this.waterLowSlot.get() & 0xFFFFFFFFL;
-        long high = (long) this.waterHighSlot.get() << 32;
+        long low = this.data.get(3) & 0xFFFFFFFFL;// Long values are split on two memory spaces
+        long high = (long) this.data.get(4) << 32;
+        System.out.println("Eau : " + high +"|"+low);
         return high | low;
     }
 
     public long getHotWater() {
-        long low = this.hotWaterLowSlot.get() & 0xFFFFFFFFL;
-        long high = (long) this.hotWaterHighSlot.get() << 32;
+        long low = this.data.get(5) & 0xFFFFFFFFL;
+        long high = (long) this.data.get(6) << 32;
+        System.out.println("Eau chaude : " + high +"|"+low);
         return high | low;
     }
 

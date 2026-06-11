@@ -76,10 +76,13 @@ public class VibraniumModClient {
         //Fluid milk for tank
         // Solid Milk white tint mask representation (ARGB hex format)
         int milkColorHex = 0xFFFFFFFF;
+        int hotWaterColorHex = 0xFF3F76E4;
 
         // Register your fluid colors locally inside the common client module
         FLUID_COLORS.put(VibraniumFluids.VANILLA_MILK_STILL.get(), milkColorHex);
         FLUID_COLORS.put(VibraniumFluids.VANILLA_MILK_FLOWING.get(), milkColorHex);
+        FLUID_COLORS.put(VibraniumFluids.HOT_WATER_STILL.get(), hotWaterColorHex);
+        FLUID_COLORS.put(VibraniumFluids.HOT_WATER_FLOWING.get(), hotWaterColorHex);
     }
     /**
      * Safely retrieves the client-side tint color for any registered fluid.

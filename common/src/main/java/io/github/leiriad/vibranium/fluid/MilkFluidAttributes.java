@@ -51,7 +51,7 @@ public class MilkFluidAttributes implements ArchitecturyFluidAttributes {
     // Physics & Mechanics (Standard values matching Water)
     @Override
     public boolean canConvertToSource() {
-        return false; // Milk shouldn't create infinite pools like water
+        return false;
     }
 
     @Override

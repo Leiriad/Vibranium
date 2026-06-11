@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.block;
 
 import com.mojang.serialization.MapCodec;
+import dev.architectury.registry.menu.ExtendedMenuProvider;
 import dev.architectury.registry.menu.MenuRegistry;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
 import io.github.leiriad.vibranium.entity.ReactorHatchEntity;
@@ -24,6 +25,8 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -83,44 +86,57 @@ public class ReactorHatchBlock extends BaseEntityBlock implements WorldlyContain
     public WorldlyContainer getContainer(BlockState blockState, LevelAccessor levelAccessor, BlockPos blockPos) {
         BlockEntity be = levelAccessor.getBlockEntity(blockPos);
         if (be instanceof ReactorHatchEntity hatch) {
-            return hatch.getConnectedCore(levelAccessor);
+            return hatch;
         }
         return null;
     }
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide()) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof ReactorHatchEntity hatch) {
-                ReactorCoreEntity core = (ReactorCoreEntity) hatch.getConnectedCore(level);
-
-                if (core != null) {
-                    dev.architectury.registry.menu.MenuRegistry.openExtendedMenu(
-                            (net.minecraft.server.level.ServerPlayer) player,
-                            new dev.architectury.registry.menu.ExtendedMenuProvider() {
-                                @Override
-                                public void saveExtraData(net.minecraft.network.FriendlyByteBuf buf) {
-                                    buf.writeBlockPos(pos);
-                                }
-
-                                @Override
-                                public Component getDisplayName() {
-                                    return Component.translatable("block.vibranium.reactor_hatch");
-                                }
-
-                                @Override
-                                public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
-                                    return new ReactorHatchMenu(id, playerInv, core);
-                                }
-                            }
-                    );
-                    return InteractionResult.SUCCESS;
-                } else {
-                    player.displayClientMessage(Component.translatable("message.vibranium.hatch_no_core"), true);
-                    return InteractionResult.FAIL;
-                }
-            }
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS; // Once client has clicked the server manages
         }
+
+        // Get Hatch entity
+        BlockEntity be = level.getBlockEntity(pos);
+        if (!(be instanceof ReactorHatchEntity hatch)) {
+            return InteractionResult.FAIL;
+        }
+
+        // Check if core is linked
+        if (hatch.getConnectedCore(level) == null) {
+            player.displayClientMessage(Component.translatable("message.vibranium.hatch_no_core"), true);
+            return InteractionResult.FAIL;
+        }
+
+        // Open menu with hatch location
+        MenuRegistry.openExtendedMenu(
+                (ServerPlayer) player,
+                new ExtendedMenuProvider() {
+                    @Override
+                    public void saveExtraData(FriendlyByteBuf buf) {
+                        buf.writeBlockPos(pos);
+                    }
+
+                    @Override
+                    public Component getDisplayName() {
+                        return Component.translatable("block.vibranium.reactor_hatch");
+                    }
+
+                    @Override
+                    public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
+                        return new ReactorHatchMenu(id, playerInv, pos);
+                    }
+                }
+        );
+
         return InteractionResult.CONSUME;
+    }
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return (level1, pos, state1, blockEntity) -> {
+            if (blockEntity instanceof ReactorHatchEntity hatch) {
+                ReactorHatchEntity.tick(level1, pos, state1, hatch);
+            }
+        };
     }
 }

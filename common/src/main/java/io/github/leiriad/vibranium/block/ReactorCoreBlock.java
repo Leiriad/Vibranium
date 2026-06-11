@@ -5,8 +5,11 @@ import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -39,6 +42,16 @@ public class ReactorCoreBlock extends BaseEntityBlock {
     public ReactorCoreBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
+    }
+
+    //TICKER
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return (level1, pos, state1, blockEntity) -> {
+            if (blockEntity instanceof ReactorCoreEntity reactor) {
+                ReactorCoreEntity.tick(level1, pos, state1, reactor);
+            }
+        };
     }
 
     //METHODS
