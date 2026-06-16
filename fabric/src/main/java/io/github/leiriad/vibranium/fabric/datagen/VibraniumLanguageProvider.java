@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.fabric.datagen;
 
 import io.github.leiriad.vibranium.init.VibraniumCreativeTabs;
+import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -72,6 +73,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Poudre de vibranium");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Boule d'argile noire");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Herbe coeur");
+                translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
+
+                translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Eau chaude");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
 
@@ -131,6 +135,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baya luminosas azules");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Bola de arcilla negra");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Hierba en forma de corazón");
+                translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
+
+                translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Agua caliente");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranio");
 
@@ -191,6 +198,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Vibranium Dust");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Black Clay Ball");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
+
+                translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Hot Water Bucket");
+
+                translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Hot Water");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
 
