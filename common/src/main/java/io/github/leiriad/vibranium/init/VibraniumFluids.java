@@ -74,7 +74,7 @@ public class VibraniumFluids {
                 .strength(100.0F);
         props.setId(blockKey);
 
-        return new LiquidBlock(VibraniumFluids.HOT_WATER_FLOWING.get(), props);
+        return new HotWaterLiquidBlock(VibraniumFluids.HOT_WATER_FLOWING, props);
     });
 
 

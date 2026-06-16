@@ -13,33 +13,43 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.redstone.Orientation;
 
 import java.util.function.Supplier;
 
 public class HotWaterLiquidBlock extends LiquidBlock {
+    public static final IntegerProperty TEMPERATURE = IntegerProperty.create("temperature", 0, 300);
     public HotWaterLiquidBlock(Supplier<? extends FlowingFluid> fluid, Properties properties) {
         super(fluid.get(), properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0).setValue(TEMPERATURE, 300));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         // Enforce the inclusion of the LEVEL property so the block state definition matches vanilla liquid requirements
         super.createBlockStateDefinition(builder);
+        builder.add(TEMPERATURE);
     }
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier applier, boolean bool) {
-        super.entityInside(state, level, pos, entity, applier, bool);
+        //adds damage to player inside block
+        int temp = state.getValue(TEMPERATURE);
+
         if (!level.isClientSide() && entity instanceof LivingEntity living) {
-            // Apply damages to entity
+            // The hotter the more damages
+            float damage = (temp > 200) ? 2.0F : 1.0F;
+
             if (level.getGameTime() % 20 == 0) {
-                living.hurt(level.damageSources().inFire(), 1.0F);
+                living.hurt(level.damageSources().inFire(), damage);
             }
-            if (!living.fireImmune()) {
+            // No burning if water already cold
+            if (temp > 100 && !living.fireImmune()) {
                 living.igniteForTicks(20);
             }
         }
+        super.entityInside(state, level, pos, entity, applier, bool);
     }
 
     @Override
@@ -49,27 +59,52 @@ public class HotWaterLiquidBlock extends LiquidBlock {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // 1 on 10 chances to get cold per tick
-        if (random.nextInt(10) == 0) {
-            // Check is upper block is air
-            if (level.getBlockState(pos.above()).isAir()) {
-                level.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
-
-                // Or play a fizz sound
-                level.levelEvent(1501, pos, 0);
+        // Ice melting process
+        if (state.getValue(TEMPERATURE) > 50) {
+            BlockPos randomNeighbor = pos.offset(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
+            if (level.getBlockState(randomNeighbor).is(Blocks.ICE)) {
+                level.setBlockAndUpdate(randomNeighbor, Blocks.WATER.defaultBlockState());
+                // Water temperature goes down
+                level.setBlockAndUpdate(pos, state.setValue(TEMPERATURE, Math.max(0, state.getValue(TEMPERATURE) - 20)));
+                return;
             }
         }
+
+        // Usual cool down
+        int currentTemp = state.getValue(TEMPERATURE);
+        if (currentTemp > 20) {
+            if (random.nextInt(3) == 0) {
+                level.setBlockAndUpdate(pos, state.setValue(TEMPERATURE, Math.max(20, currentTemp - 10)));
+                level.levelEvent(2000, pos, 0);
+            }
+        } else {
+            // If completely cold, turns into vanilla water
+            level.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
+            return; //Block has changed do not call super
+        }
+
+        // Call super if block is still hot water
+        super.randomTick(state, level, pos, random);
     }
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, Orientation orientation, boolean isMoving) {
-        // Check if neighbor is ice
-        for (Direction dir : Direction.values()) {
-            if (level.getBlockState(pos.relative(dir)).is(Blocks.ICE)) {
-                level.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
-                return;
+        super.neighborChanged(state, level, pos, block, orientation, isMoving);
+
+        // Check if block is still hot
+        if (state.getValue(TEMPERATURE) > 50) {
+            for (Direction dir : Direction.values()) {
+                BlockPos neighborPos = pos.relative(dir);
+                BlockState neighborState = level.getBlockState(neighborPos);
+
+                // If neighbor is ice
+                if (neighborState.is(Blocks.ICE)) {
+                    level.setBlockAndUpdate(neighborPos, Blocks.WATER.defaultBlockState());
+
+                    // Fizz sound effect
+                    level.levelEvent(1501, neighborPos, 0);
+                }
             }
         }
-        super.neighborChanged(state, level, pos, block, orientation, isMoving);
     }
 }
