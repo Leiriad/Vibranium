@@ -2,6 +2,7 @@ package io.github.leiriad.vibranium.entity;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.leiriad.vibranium.block.ReactorCoreBlock;
+import io.github.leiriad.vibranium.block.ReactorHatchBlock;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumItems;
@@ -261,11 +262,21 @@ public class ReactorCoreEntity extends BlockEntity {
 
             // The reactor emits energy
             this.energyStored = Math.min(MAX_ENERGY, this.energyStored + (this.temperature / 10));
+            boolean isEnergyStored = this.energyStored > 0;
+            updateLitState(isEnergyStored);
 
             //Signals entity change
             this.setChanged();
             if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+            }
+        }
+    }
+    public void updateLitState(boolean isEnergyStored) {
+        if (this.level != null && !this.level.isClientSide()) {
+            BlockState currentState = this.level.getBlockState(this.worldPosition);
+            if (currentState.hasProperty(ReactorCoreBlock.LIT) && currentState.getValue(ReactorCoreBlock.LIT) != isEnergyStored) {
+                this.level.setBlock(this.worldPosition, currentState.setValue(ReactorHatchBlock.LIT, isEnergyStored), 3);
             }
         }
     }

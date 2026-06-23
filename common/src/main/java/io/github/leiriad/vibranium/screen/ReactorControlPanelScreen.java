@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.screen;
 
+import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.menu.ReactorControlPanelMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,13 +13,12 @@ import net.minecraft.world.entity.player.Inventory;
 import java.util.List;
 
 public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorControlPanelMenu> implements MenuAccess<ReactorControlPanelMenu> {
-    private static final Identifier VANILLA_TEXTURE = Identifier.withDefaultNamespace("textures/gui/container/dispenser.png");
-    //Identifier texture = Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "textures/gui/reactor_control_panel.png");
+    Identifier texture = Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "textures/gui/reactor_control_panel_screen_gui.png");
 
     public ReactorControlPanelScreen(ReactorControlPanelMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
-        this.imageWidth = 176;
-        this.imageHeight = 166;
+        this.imageWidth = 1920;
+        this.imageHeight = 1080;
     }
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -42,7 +42,7 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
                 (float)this.imageHeight       // Height to cup (m)
         );*/
         guiGraphics.blit(
-                VANILLA_TEXTURE,
+                texture,
                 x, y, x + this.imageWidth, y + this.imageHeight,
                 0.0f, 0.0f, (176f / 256f), (166f / 256f)
         );
@@ -80,7 +80,7 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
         float v2 = (texturePixelY + yOffset + renderedPixels) / 256.0f;
         if (renderedPixels > 0) {
             guiGraphics.blit(
-                    VANILLA_TEXTURE,
+                    texture,
                     x, y + yOffset,
                     x + width, y + yOffset + renderedPixels,
                     u1, v1, u2, v2

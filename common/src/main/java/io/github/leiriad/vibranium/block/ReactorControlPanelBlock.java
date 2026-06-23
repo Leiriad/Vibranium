@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -22,19 +23,19 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class ReactorControlPanelBlock extends BaseEntityBlock {
     //PROPERTIES
     public static final MapCodec<ReactorControlPanelBlock> CODEC = simpleCodec(ReactorControlPanelBlock::new);
-    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static Properties getProperties(Properties of) {
         return Properties.of()
                 .mapColor(MapColor.COLOR_CYAN)
                 .instrument(NoteBlockInstrument.CHIME)
-                .emissiveRendering((state, world, pos) -> true)
-                .hasPostProcess((state, world, pos) -> true)
-                .lightLevel((state) -> 7);
+                .noOcclusion();
     }
 
     //CONSTRUCTOR

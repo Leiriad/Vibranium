@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -23,6 +24,7 @@ public class ReactorCoreBlock extends BaseEntityBlock {
 
     //PROPERTIES
     public static final MapCodec<ReactorCoreBlock> CODEC = simpleCodec(ReactorCoreBlock::new);
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
     public static Properties getProperties (Properties settings){
@@ -42,6 +44,7 @@ public class ReactorCoreBlock extends BaseEntityBlock {
     public ReactorCoreBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
     }
 
     //TICKER
@@ -62,6 +65,7 @@ public class ReactorCoreBlock extends BaseEntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
+        builder.add(LIT);
     }
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {

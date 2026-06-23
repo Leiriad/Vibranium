@@ -1,7 +1,76 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "format_version": "1.21.11",
+  "credit": "Made with Blockbench",
   "textures": {
-    "all": "vibranium:block/reactor_control_panel"
+    "0": "vibranium:block/reactor_control_panel_base_side",
+    "2": "vibranium:block/reactor_control_panel_base_top",
+    "3": "vibranium:block/reactor_control_panel_screen",
+    "particle": "vibranium:block/reactor_control_panel_base_side"
   },
-  "render_type": "solid"
+  "elements": [
+    {
+      "name": "base",
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 2], "texture": "#0"},
+        "east": {"uv": [0, 0, 16, 2], "texture": "#0"},
+        "south": {"uv": [0, 0, 16, 2], "texture": "#0"},
+        "west": {"uv": [0, 0, 16, 2], "texture": "#0"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#2"},
+        "down": {"uv": [0, 0, 16, 16], "texture": "#2"}
+      }
+    },
+    {
+      "name": "screen",
+      "from": [16, 10, 5.5],
+      "to": [32, 10, 21.5],
+      "light_emission": 15,
+      "rotation": {"x": 50, "y": -180, "z": 0, "origin": [16, 3, 14]},
+      "faces": {
+        "north": {"uv": [1, 2, 16, 2], "texture": "#missing"},
+        "east": {"uv": [1, 2, 16, 2], "texture": "#missing"},
+        "south": {"uv": [0, 2, 15, 2], "texture": "#missing"},
+        "west": {"uv": [0, 2, 15, 2], "texture": "#missing"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#3"},
+        "down": {"uv": [0, 16, 16, 0], "texture": "#3"}
+      }
+    }
+  ],
+  "gui_light": "front",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [58, -180, 0],
+      "translation": [0, 4.25, 0.5],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [58, -180, 0],
+      "translation": [0, 4.25, 0.5],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "firstperson_righthand": {
+      "rotation": [-15, -180, 0],
+      "translation": [0.75, 1.5, -1],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "firstperson_lefthand": {
+      "rotation": [-15, -180, 0],
+      "translation": [0.75, 1.5, -1],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "ground": {
+      "translation": [0, 2, 0],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "head": {
+      "translation": [0, 14, 0]
+    },
+    "fixed": {
+      "translation": [0, 0, -3.25]
+    },
+    "on_shelf": {
+      "rotation": [0, -180, 0]
+    }
+  }
 }
