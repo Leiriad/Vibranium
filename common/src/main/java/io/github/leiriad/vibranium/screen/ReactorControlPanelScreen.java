@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.menu.ReactorControlPanelMenu;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,12 +18,11 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
 
     public ReactorControlPanelScreen(ReactorControlPanelMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
-        this.imageWidth = 1920;
-        this.imageHeight = 1080;
+        this.imageWidth = 256;
+        this.imageHeight = 256;
     }
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
@@ -30,39 +30,35 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         // Menu position
         int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2;
+        int y = (this.height - this.imageHeight) / 2+5;
 
         //Menu design
-        /*guiGraphics.blit(
-                texture,
-                x, y,                         // Position
-                this.imageWidth, this.imageHeight, // Size
-                0.0f, 0.0f,                   // UV Coordinates (f,g) in the png file
-                (float)this.imageWidth,       // Width to cut (h)
-                (float)this.imageHeight       // Height to cup (m)
-        );*/
         guiGraphics.blit(
+                net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, // Render pipeline
                 texture,
-                x, y, x + this.imageWidth, y + this.imageHeight,
-                0.0f, 0.0f, (176f / 256f), (166f / 256f)
+                x, y,                                                      // Screen position
+                0.0f, 0.0f,                                                // U, V Starting coordinates (in pixels)
+                this.imageWidth, this.imageHeight,                         // Length, Height to draw
+                256, 256,                                               // PNG file size
+                0xFFFFFFFF
         );
 
         //Gauges
-        int maxHeight = 60;
+        int maxHeight = 78;
         //Energy (Max 100000)
-        drawVerticalGauge(guiGraphics, x + 25, y + 40, this.menu.getEnergy(), 100000, maxHeight, 0, 0, 10);
+        drawVerticalGauge(guiGraphics, x + 28, y + 77, this.menu.getEnergy(), 100000, maxHeight, 0, 0, 30);
 
         //Heat (Max 1000)
-        drawVerticalGauge(guiGraphics, x + 55, y + 40, this.menu.getHeat(), 1000, maxHeight, 0, 0, 10);
+        drawVerticalGauge(guiGraphics, x + 67, y + 77, this.menu.getHeat(), 1000, maxHeight, 0, 0, 30);
 
         //Water (Max 10000)
-        drawVerticalGauge(guiGraphics, x + 85, y + 40, this.menu.getWater(), 10000, maxHeight, 0, 0, 10);
+        drawVerticalGauge(guiGraphics, x + 106, y + 77, this.menu.getWater(), 10000, maxHeight, 0, 0, 30);
 
         //Hot Water (Max 10000)
-        drawVerticalGauge(guiGraphics, x + 115, y + 40, this.menu.getHotWater(), 10000, maxHeight, 0, 0, 10);
+        drawVerticalGauge(guiGraphics, x + 144, y + 77, this.menu.getHotWater(), 10000, maxHeight, 0, 0, 30);
 
         //Vibranium (Burn ticks left, max 24000)
-        drawVerticalGauge(guiGraphics, x + 145, y + 40, this.menu.getVibranium(), 24000, maxHeight, 0, 0, 10);
+        drawVerticalGauge(guiGraphics, x + 183, y + 77, this.menu.getVibranium(), 24000, maxHeight, 0, 0, 30);
     }
     private void drawVerticalGauge(GuiGraphics guiGraphics, int x, int y, long currentValue, long maxValue, int maxHeight, int texturePixelX, int texturePixelY, int width) {
         if (maxValue <= 0) return;
@@ -73,17 +69,16 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
 
         int yOffset = maxHeight - renderedPixels;
 
-        // Conversion des coordonnées pixels en FLOAT pour l'UV mapping (sur une texture de 256x256)
-        float u1 = texturePixelX / 256.0f;
-        float v1 = (texturePixelY + yOffset) / 256.0f;
-        float u2 = (texturePixelX + width) / 256.0f;
-        float v2 = (texturePixelY + yOffset + renderedPixels) / 256.0f;
+
         if (renderedPixels > 0) {
             guiGraphics.blit(
+                    net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED,
                     texture,
                     x, y + yOffset,
-                    x + width, y + yOffset + renderedPixels,
-                    u1, v1, u2, v2
+                    (float) texturePixelX, (float) (texturePixelY + yOffset),
+                    width, renderedPixels,
+                    256, 256,
+                    0xFFFFFFFF
             );
         }
     }
