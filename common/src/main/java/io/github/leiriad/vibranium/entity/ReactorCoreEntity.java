@@ -88,17 +88,21 @@ public class ReactorCoreEntity extends BlockEntity {
         boolean hasCoolant = blockEntity.hasCoolant();
         boolean hasFuel = blockEntity.hasFuel();
         //Send heat order
+        boolean isStructureValid = blockEntity.isReactorFunctioningCorrectly();
         boolean aFurnaceIsCooking = blockEntity.checkAndBoostAdjacentFurnaces(level, pos, state);
 
         //Temperature management
-        if (hasCoolant && hasFuel) {
-            blockEntity.processReaction();
+        if (hasFuel && isStructureValid) {
+            // The reactor has fuel and a valid structure, it can process
+            blockEntity.processReaction(hasCoolant);
         } else {
+            // No fuel or invalid setup: standard cooldown due to inactivity
             blockEntity.furnaceCoolDown(aFurnaceIsCooking);
         }
-
+        boolean shouldBeLit = blockEntity.energyStored > 0;
+        blockEntity.updateLitState(shouldBeLit);
     }
-    private void scanForComponents(Level level, BlockPos centerPos) {
+    public void scanForComponents(Level level, BlockPos centerPos) {
         this.waterColumns.clear();
 
         // Scan 3x3x3 cube centered on core
@@ -145,7 +149,10 @@ public class ReactorCoreEntity extends BlockEntity {
         this.waterTanks.clear();
         this.hotWaterTanks.clear();
 
-        // Iterate through all columns identified in the scan
+        // List to keep track of columns that are completely empty
+        List<List<FluidTankEntity>> emptyColumns = new ArrayList<>();
+
+        // First Pass: Identify polluted columns, assign defined fluids, and collect empty columns
         for (Map.Entry<Pair<Integer, Integer>, List<FluidTankEntity>> entry : waterColumns.entrySet()) {
             List<FluidTankEntity> column = entry.getValue();
             if (column.isEmpty()) continue;
@@ -172,23 +179,29 @@ public class ReactorCoreEntity extends BlockEntity {
                 continue;
             }
 
-            // Assign valid columns to their respective roles
+            // Assign valid columns with fluids, or save empty ones for the second pass
             if (detectedFluid == Fluids.WATER) {
                 waterTanks.addAll(column);
             } else if (detectedFluid == VibraniumFluids.HOT_WATER_STILL.get()) {
                 hotWaterTanks.addAll(column);
             } else {
-                // Assign empty columns based on what we currently need
-                if (waterTanks.isEmpty()) {
-                    waterTanks.addAll(column);
-                } else {
-                    hotWaterTanks.addAll(column);
-                }
+                // The column is completely empty, defer its assignment
+                emptyColumns.add(column);
+            }
+        }
+
+        // Second Pass: Smartly distribute empty columns based on current counts
+        for (List<FluidTankEntity> column : emptyColumns) {
+            // Assign to whoever has fewer tanks to keep a balance, prioritizing water if equal
+            if (waterTanks.size() <= hotWaterTanks.size()) {
+                waterTanks.addAll(column);
+            } else {
+                hotWaterTanks.addAll(column);
             }
         }
     }
     private boolean hasCoolant() {
-        return this.waterAmount >= 10; //Water consumtion per tick
+        return this.waterAmount >= 1; //Water consumtion per tick
     }
     private boolean hasFuel() {
         return this.vibraniumAmount > 0;
@@ -221,51 +234,53 @@ public class ReactorCoreEntity extends BlockEntity {
             }
         }
     }
-    private void processReaction() {
-        //Check fuel
+    private void processReaction(boolean hasCoolant) {
         if (this.vibraniumAmount <= 0) {
-            this.refuel(); // If gauge is empty burn one item
+            this.refuel();
         }
+
         if (this.vibraniumAmount > 0) {
             this.vibraniumAmount--; // Burn one fuel tick per game tick
 
-            // The reaction in the reactor makes the temperature rise
-            if (this.temperature < 1000) {
-                this.temperature += 5;
-            }
-
-            // Water is consummed
-            long waterNeeded = 1;
-            for (FluidTankEntity tank : this.waterTanks) {
-                long drained = tank.drain(waterNeeded);
-                waterNeeded -= drained;
-                if (waterNeeded <= 0) break;
-            }
-
-            //Reaction produces hot water
-            if (waterNeeded <= 0) { // Cold water found
-                long waterToProduce = 1;
-                for (FluidTankEntity tank : this.hotWaterTanks) {
-                    long filled = tank.fill(waterToProduce, VibraniumFluids.HOT_WATER_STILL.get()); // TO DO
-                    waterToProduce -= filled;
-                    if (waterToProduce <= 0) break;
+            if (hasCoolant) {
+                // NORMAL OPERATION: Temperature rises steadily up to working levels
+                if (this.temperature < 2000) {
+                    this.temperature += 5;
                 }
 
-                if (waterToProduce > 0) {
-                    // Emergency procedure: no room left for hat water
-                    //this.handlePressureBuildUp();
+                // Water consumption logic
+                long waterNeeded = 1;
+                for (FluidTankEntity tank : this.waterTanks) {
+                    long drained = tank.drain(waterNeeded);
+                    waterNeeded -= drained;
+                    if (waterNeeded <= 0) break;
                 }
+
+                // Hot water production logic
+                if (waterNeeded <= 0) {
+                    long waterToProduce = 1;
+                    for (FluidTankEntity tank : this.hotWaterTanks) {
+                        long filled = tank.fill(waterToProduce, VibraniumFluids.HOT_WATER_STILL.get());
+                        waterToProduce -= filled;
+                        if (waterToProduce <= 0) break;
+                    }
+                }
+
+                // The reactor emits energy normally when cooled
+                this.energyStored = Math.min(MAX_ENERGY, this.energyStored + (this.temperature / 10));
+
             } else {
-                // Emergency procedure : no cold water left
-                //this.handleOverheat();
+                // CRITICAL MELTDOWN STATE: No water to cool the reactor!
+                // Temperature skyrockets because there is no coolant to absorb heat
+                if (this.temperature < 3000) { // Higher safety limit or danger zone
+                    this.temperature += 15; // Rises much faster!
+                }
+
+                // Optional: call emergency procedure
+                // this.handleOverheat();
             }
 
-            // The reactor emits energy
-            this.energyStored = Math.min(MAX_ENERGY, this.energyStored + (this.temperature / 10));
-            boolean isEnergyStored = this.energyStored > 0;
-            updateLitState(isEnergyStored);
-
-            //Signals entity change
+            // Signals entity change
             this.setChanged();
             if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
@@ -280,7 +295,7 @@ public class ReactorCoreEntity extends BlockEntity {
             }
         }
     }
-    private void updateFluidLevels() {
+    public void updateFluidLevels() {
         this.waterAmount = 0;
         this.hotWaterAmount = 0;
 
@@ -332,15 +347,27 @@ public class ReactorCoreEntity extends BlockEntity {
         return false;
     }
     private void furnaceCoolDown(boolean aFurnaceIsCooking) {
-        int targetTemp = 20; // The reactor attempts to reach it's normal temperature
+        int targetTemp = 20; // Ambient temperature
 
         if (this.temperature > targetTemp) {
-            // Oven finishing cooking or off uses residual heat
-            int coolingRate = aFurnaceIsCooking ? 4 : 2;
-            this.temperature = Math.max(targetTemp, this.temperature - coolingRate);
-            this.setChanged();
-            if (level != null && !level.isClientSide()) {
-                level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+            boolean temperatureChanged = false;
+
+            if (aFurnaceIsCooking) {
+                // Active heat extraction by an adjacent furnace (fast cooldown)
+                this.temperature = Math.max(targetTemp, this.temperature - 4);
+                temperatureChanged = true;
+            } else if (level != null && level.getGameTime() % 40 == 0) {
+                // Passive ambient cooling (very slow: 2 degrees every 2 seconds)
+                this.temperature = Math.max(targetTemp, this.temperature - 2);
+                temperatureChanged = true;
+            }
+
+            // If the temperature actually changed, save and sync with the client
+            if (temperatureChanged) {
+                this.setChanged();
+                if (level != null && !level.isClientSide()) {
+                    level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+                }
             }
         }
     }

@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import org.jspecify.annotations.Nullable;
 
 
@@ -75,6 +76,20 @@ public class ReactorCoreBlock extends BaseEntityBlock {
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Override
+    protected void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, @Nullable Orientation orientation, boolean bl) {
+        super.neighborChanged(blockState, level, blockPos, block, orientation, bl);
+
+        if (!level.isClientSide()) {
+            BlockEntity be = level.getBlockEntity(blockPos);
+            if (be instanceof ReactorCoreEntity core) {
+                //Makes reactor scan its neighbors
+                core.scanForComponents(level, blockPos);
+                core.updateFluidLevels();
+            }
+        }
     }
 
 }
