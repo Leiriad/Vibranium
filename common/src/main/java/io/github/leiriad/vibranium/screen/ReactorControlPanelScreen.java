@@ -46,23 +46,23 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
         //Gauges
         int maxHeight = 78;
         //Energy (Max 100000)
-        drawVerticalGauge(guiGraphics, x + 28, y + 77, this.menu.getEnergy(), 100000, maxHeight, 0, 0, 30);
+        drawVerticalGauge(guiGraphics, x + 44, y + 77, this.menu.getEnergy(), 100000, maxHeight, 0, 0, 14);
 
         //Heat (Max 1000)
-        drawVerticalGauge(guiGraphics, x + 67, y + 77, this.menu.getHeat(), 1000, maxHeight, 0, 0, 30);
+        drawVerticalGauge(guiGraphics, x + 83, y + 77, this.menu.getHeat(), 1000, maxHeight, 0, 0, 14);
 
         //Water (Max 10000)
-        drawVerticalGauge(guiGraphics, x + 106, y + 77, this.menu.getWater(), 10000, maxHeight, 0, 0, 30);
+        drawVerticalGauge(guiGraphics, x + 121, y + 77, this.menu.getWater(), 10000, maxHeight, 0, 0, 14);
 
         //Hot Water (Max 10000)
-        drawVerticalGauge(guiGraphics, x + 144, y + 77, this.menu.getHotWater(), 10000, maxHeight, 0, 0, 30);
+        drawVerticalGauge(guiGraphics, x + 160, y + 77, this.menu.getHotWater(), 10000, maxHeight, 0, 0, 14);
 
         //Vibranium (Burn ticks left, max 24000)
-        drawVerticalGauge(guiGraphics, x + 183, y + 77, this.menu.getVibranium(), 24000, maxHeight, 0, 0, 30);
+        drawVerticalGauge(guiGraphics, x + 199, y + 77, this.menu.getVibranium(), 24000, maxHeight, 0, 0, 14);
     }
     private void drawVerticalGauge(GuiGraphics guiGraphics, int x, int y, long currentValue, long maxValue, int maxHeight, int texturePixelX, int texturePixelY, int width) {
         if (maxValue <= 0) return;
-
+        Identifier gauge_texture = Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "textures/gui/reactor_control_panel_screen_gui_gauge.png");
         // Calculation is done using longs to prevent any scaling or overflow issues
         int renderedPixels = (int) ((currentValue * maxHeight) / maxValue);
         if (renderedPixels > maxHeight) renderedPixels = maxHeight;
@@ -73,11 +73,11 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
         if (renderedPixels > 0) {
             guiGraphics.blit(
                     net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED,
-                    texture,
+                    gauge_texture,
                     x, y + yOffset,
                     (float) texturePixelX, (float) (texturePixelY + yOffset),
                     width, renderedPixels,
-                    256, 256,
+                    13, 78,
                     0xFFFFFFFF
             );
         }
@@ -98,9 +98,9 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
 
-        int jaugeTop = y + 40;
-        int jaugeBottom = y + 40 + 60;
-        int jaugeLargeur = 10;
+        int jaugeTop = y + 77;
+        int jaugeBottom = y + 77 + 78;
+        int jaugeLargeur = 30;
 
         var positioner = net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner.INSTANCE;
 
