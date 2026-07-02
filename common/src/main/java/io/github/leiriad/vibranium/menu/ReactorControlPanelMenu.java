@@ -11,53 +11,109 @@ import net.minecraft.world.item.ItemStack;
 
 public class ReactorControlPanelMenu extends AbstractContainerMenu {
 
-    //PROPERTIES
+    // PROPERTIES
     private final ReactorCoreEntity reactor;
 
-    // Modern DataSlots to bypass the 16-bit short limitation of ContainerData
-    private final DataSlot energySlot;
-    private final DataSlot heatSlot;
-    private final DataSlot vibraniumSlot;
-    private final DataSlot waterSlot;
-    private final DataSlot hotWaterSlot;
-    private final DataSlot maxWaterSlot;
-    private final DataSlot maxHotWaterSlot;
+    // Splitting 32-bit integers into two 16-bit short slots to bypass vanilla networking limitations
+    private final DataSlot energyLowerSlot;
+    private final DataSlot energyUpperSlot;
 
-    //CONSTRUCTORS
-    //Client
+    private final DataSlot heatLowerSlot;
+    private final DataSlot heatUpperSlot;
+
+    private final DataSlot vibraniumLowerSlot;
+    private final DataSlot vibraniumUpperSlot;
+
+    // Splitting 64-bit longs into four 16-bit short slots for fluid storage sync
+    private final DataSlot water1, water2, water3, water4;
+    private final DataSlot hotWater1, hotWater2, hotWater3, hotWater4;
+    private final DataSlot maxWater1, maxWater2, maxWater3, maxWater4;
+    private final DataSlot maxHotWater1, maxHotWater2, maxHotWater3, maxHotWater4;
+
+    // CONSTRUCTORS
+    // Client side
     public ReactorControlPanelMenu(int id, Inventory inv, FriendlyByteBuf buf) {
         this(id, inv, (ReactorCoreEntity) inv.player.level().getBlockEntity(buf.readBlockPos()));
     }
 
-    //Server
+    // Server side
     public ReactorControlPanelMenu(int id, Inventory inv, ReactorCoreEntity reactor) {
         super(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), id);
         this.reactor = reactor;
 
-        // We create full-int and full-long responsive DataSlots
-        this.energySlot = this.addDataSlot(DataSlot.shared(new int[]{0}, 0));
-        this.heatSlot = this.addDataSlot(DataSlot.shared(new int[]{0}, 0));
-        this.vibraniumSlot = this.addDataSlot(DataSlot.shared(new int[]{0}, 0));
+        // Registering paired short slots for integers
+        this.energyLowerSlot = this.addDataSlot(DataSlot.standalone());
+        this.energyUpperSlot = this.addDataSlot(DataSlot.standalone());
 
-        // Using custom long data slots or standalone int providers that network packets sync correctly
-        this.waterSlot = this.addDataSlot(new LongDataSlot());
-        this.hotWaterSlot = this.addDataSlot(new LongDataSlot());
-        this.maxWaterSlot = this.addDataSlot(new LongDataSlot());
-        this.maxHotWaterSlot = this.addDataSlot(new LongDataSlot());
+        this.heatLowerSlot = this.addDataSlot(DataSlot.standalone());
+        this.heatUpperSlot = this.addDataSlot(DataSlot.standalone());
+
+        this.vibraniumLowerSlot = this.addDataSlot(DataSlot.standalone());
+        this.vibraniumUpperSlot = this.addDataSlot(DataSlot.standalone());
+
+        // Registering quadrupled short slots for longs
+        this.water1 = this.addDataSlot(DataSlot.standalone());
+        this.water2 = this.addDataSlot(DataSlot.standalone());
+        this.water3 = this.addDataSlot(DataSlot.standalone());
+        this.water4 = this.addDataSlot(DataSlot.standalone());
+
+        this.hotWater1 = this.addDataSlot(DataSlot.standalone());
+        this.hotWater2 = this.addDataSlot(DataSlot.standalone());
+        this.hotWater3 = this.addDataSlot(DataSlot.standalone());
+        this.hotWater4 = this.addDataSlot(DataSlot.standalone());
+
+        this.maxWater1 = this.addDataSlot(DataSlot.standalone());
+        this.maxWater2 = this.addDataSlot(DataSlot.standalone());
+        this.maxWater3 = this.addDataSlot(DataSlot.standalone());
+        this.maxWater4 = this.addDataSlot(DataSlot.standalone());
+
+        this.maxHotWater1 = this.addDataSlot(DataSlot.standalone());
+        this.maxHotWater2 = this.addDataSlot(DataSlot.standalone());
+        this.maxHotWater3 = this.addDataSlot(DataSlot.standalone());
+        this.maxHotWater4 = this.addDataSlot(DataSlot.standalone());
     }
 
-    // Server-side update check called during container tracking
+    // METHODS
     @Override
     public void broadcastChanges() {
         if (this.reactor != null) {
-            this.energySlot.set(this.reactor.getEnergy());
-            this.heatSlot.set(this.reactor.getTemperature());
-            this.vibraniumSlot.set(this.reactor.getVibraniumAmount());
+            // Split integers into two 16-bit chunks
+            int energy = this.reactor.getEnergy();
+            this.energyLowerSlot.set(energy & 0xFFFF);
+            this.energyUpperSlot.set((energy >> 16) & 0xFFFF);
 
-            ((LongDataSlot) this.waterSlot).setLong(this.reactor.getWaterAmount());
-            ((LongDataSlot) this.hotWaterSlot).setLong(this.reactor.getHotWaterAmount());
-            ((LongDataSlot) this.maxWaterSlot).setLong(this.reactor.getMaxWaterCapacity());
-            ((LongDataSlot) this.maxHotWaterSlot).setLong(this.reactor.getMaxHotWaterCapacity());
+            int heat = this.reactor.getTemperature();
+            this.heatLowerSlot.set(heat & 0xFFFF);
+            this.heatUpperSlot.set((heat >> 16) & 0xFFFF);
+
+            int vibranium = this.reactor.getVibraniumAmount();
+            this.vibraniumLowerSlot.set(vibranium & 0xFFFF);
+            this.vibraniumUpperSlot.set((vibranium >> 16) & 0xFFFF);
+
+            // Split longs into four 16-bit chunks
+            long water = this.reactor.getWaterAmount();
+            this.water1.set((int) (water & 0xFFFF));
+            this.water2.set((int) ((water >> 16) & 0xFFFF));
+            this.water3.set((int) ((water >> 32) & 0xFFFF));
+            this.water4.set((int) ((water >> 48) & 0xFFFF));
+
+            long hotWater = this.reactor.getHotWaterAmount();
+            this.hotWater1.set((int) (hotWater & 0xFFFF));
+            this.hotWater2.set((int) ((hotWater >> 16) & 0xFFFF));
+            this.hotWater3.set((int) ((hotWater >> 32) & 0xFFFF));
+            this.hotWater4.set((int) ((hotWater >> 48) & 0xFFFF));
+
+            long maxWater = this.reactor.getMaxWaterCapacity();
+            this.maxWater1.set((int) (maxWater & 0xFFFF));
+            this.maxWater2.set((int) ((maxWater >> 16) & 0xFFFF));
+            this.maxWater3.set((int) ((maxWater >> 32) & 0xFFFF));
+            this.maxWater4.set((int) ((maxWater >> 48) & 0xFFFF));
+
+            long maxHotWater = this.reactor.getMaxHotWaterCapacity();
+            this.maxHotWater1.set((int) (maxHotWater & 0xFFFF));
+            this.maxHotWater2.set((int) ((maxHotWater >> 16) & 0xFFFF));
+            this.maxHotWater3.set((int) ((maxHotWater >> 32) & 0xFFFF));
+            this.maxHotWater4.set((int) ((maxHotWater >> 48) & 0xFFFF));
         }
         super.broadcastChanges();
     }
@@ -67,46 +123,50 @@ public class ReactorControlPanelMenu extends AbstractContainerMenu {
         return ItemStack.EMPTY;
     }
 
-    // Screen getters
-    public int getEnergy() { return this.energySlot.get(); }
-    public int getHeat() { return this.heatSlot.get(); }
-    public int getVibranium() { return this.vibraniumSlot.get(); }
+    // Screen getters recombining 16-bit data pieces into complete types
+    public int getEnergy() {
+        return (this.energyLowerSlot.get() & 0xFFFF) | ((this.energyUpperSlot.get() & 0xFFFF) << 16);
+    }
 
-    public long getWater() { return ((LongDataSlot) this.waterSlot).getLong(); }
-    public long getHotWater() { return ((LongDataSlot) this.hotWaterSlot).getLong(); }
-    public long getMaxWater() { return ((LongDataSlot) this.maxWaterSlot).getLong(); }
-    public long getMaxHotWater() { return ((LongDataSlot) this.maxHotWaterSlot).getLong(); }
+    public int getHeat() {
+        return (this.heatLowerSlot.get() & 0xFFFF) | ((this.heatUpperSlot.get() & 0xFFFF) << 16);
+    }
+
+    public int getVibranium() {
+        return (this.vibraniumLowerSlot.get() & 0xFFFF) | ((this.vibraniumUpperSlot.get() & 0xFFFF) << 16);
+    }
+
+    public long getWater() {
+        return (this.water1.get() & 0xFFFFL) |
+                ((this.water2.get() & 0xFFFFL) << 16) |
+                ((this.water3.get() & 0xFFFFL) << 32) |
+                ((this.water4.get() & 0xFFFFL) << 48);
+    }
+
+    public long getHotWater() {
+        return (this.hotWater1.get() & 0xFFFFL) |
+                ((this.hotWater2.get() & 0xFFFFL) << 16) |
+                ((this.hotWater3.get() & 0xFFFFL) << 32) |
+                ((this.hotWater4.get() & 0xFFFFL) << 48);
+    }
+
+    public long getMaxWater() {
+        return (this.maxWater1.get() & 0xFFFFL) |
+                ((this.maxWater2.get() & 0xFFFFL) << 16) |
+                ((this.maxWater3.get() & 0xFFFFL) << 32) |
+                ((this.maxWater4.get() & 0xFFFFL) << 48);
+    }
+
+    public long getMaxHotWater() {
+        return (this.maxHotWater1.get() & 0xFFFFL) |
+                ((this.maxHotWater2.get() & 0xFFFFL) << 16) |
+                ((this.maxHotWater3.get() & 0xFFFFL) << 32) |
+                ((this.maxHotWater4.get() & 0xFFFFL) << 48);
+    }
 
     @Override
     public boolean stillValid(Player player) {
         if (this.reactor == null || this.reactor.isRemoved()) return false;
         return player.distanceToSqr(reactor.getBlockPos().getCenter()) < 100.0;
-    }
-
-    /**
-     * Inner helper to serialize longs properly across DataSlots without bit shifting inside container arrays
-     */
-    private static class LongDataSlot extends DataSlot {
-        private long value;
-
-        public void setLong(long value) {
-            this.value = value;
-        }
-
-        public long getLong() {
-            return this.value;
-        }
-
-        @Override
-        public int get() {
-            // Unused fallback for traditional int tracking
-            return (int) this.value;
-        }
-
-        @Override
-        public void set(int value) {
-            // Used by incoming networking packets to sync client states
-            this.value = value;
-        }
     }
 }

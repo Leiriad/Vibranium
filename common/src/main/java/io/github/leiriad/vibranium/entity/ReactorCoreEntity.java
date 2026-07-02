@@ -2,15 +2,24 @@ package io.github.leiriad.vibranium.entity;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.leiriad.vibranium.block.ReactorCoreBlock;
-import io.github.leiriad.vibranium.block.ReactorHatchBlock;
+import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,6 +28,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 
 import java.util.*;
 
@@ -36,6 +46,7 @@ public class ReactorCoreEntity extends BlockEntity {
     private final List<FluidTankEntity> waterTanks = new ArrayList<>();
     private final List<FluidTankEntity> hotWaterTanks = new ArrayList<>();
     private ReactorHatchEntity cachedHatch = null;
+    private boolean structureBlocksValid = false;
 
     // CONSTRUCTOR
     public ReactorCoreEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -59,19 +70,17 @@ public class ReactorCoreEntity extends BlockEntity {
     @Override
     public void loadAdditional(ValueInput valueInput) {
         super.loadAdditional(valueInput);
-        this.energyStored = valueInput.getInt("energy").orElse(0);
-        this.vibraniumAmount = valueInput.getInt("vibranium").orElse(0);
-        this.temperature = valueInput.getInt("temperature").orElse(this.temperature);
-        this.waterAmount = valueInput.getLong("water").orElse(0l);
-        this.hotWaterAmount = valueInput.getLong("hot_water").orElse(0l);
+        this.energyStored = valueInput.getIntOr("energy",0);
+        this.vibraniumAmount = valueInput.getIntOr("vibranium",0);
+        this.temperature = valueInput.getIntOr("temperature",this.temperature);
+        this.waterAmount = valueInput.getLongOr("water",0L);
+        this.hotWaterAmount = valueInput.getLongOr("hot_water",0L);
     }
 
     //Process
     public static void tick(Level level, BlockPos pos, BlockState state, ReactorCoreEntity blockEntity) {
         if (level.isClientSide()) return;
-        if (level.getGameTime() % 100 == 0) {
-            System.out.println("Eau: " + blockEntity.waterAmount + " | Hatch trouvé: " + (blockEntity.getHatch() != null));
-        }
+
         blockEntity.scanForComponents(level, pos);
         blockEntity.updateFluidLevels();
         if (blockEntity.vibraniumAmount <= 0) {
@@ -80,14 +89,15 @@ public class ReactorCoreEntity extends BlockEntity {
 
         boolean hasCoolant = blockEntity.hasCoolant();
         boolean hasFuel = blockEntity.hasFuel();
-        //Send heat order
         boolean isStructureValid = blockEntity.isReactorFunctioningCorrectly();
+
+        //Send heat order
         boolean aFurnaceIsCooking = blockEntity.checkAndBoostAdjacentFurnaces(level, pos, state);
 
         //Temperature management
         if (hasFuel && isStructureValid) {
             // The reactor has fuel and a valid structure, it can process
-            blockEntity.processReaction(hasCoolant);
+            blockEntity.processReaction(hasCoolant, aFurnaceIsCooking);
         } else {
             // No fuel or invalid setup: standard cooldown due to inactivity
             blockEntity.furnaceCoolDown(aFurnaceIsCooking);
@@ -97,28 +107,36 @@ public class ReactorCoreEntity extends BlockEntity {
     }
     public void scanForComponents(Level level, BlockPos centerPos) {
         this.waterColumns.clear();
+        this.structureBlocksValid = true; // Assume true, invalidate if an incorrect block is found
 
-        // Scan 3x3x3 cube centered on core
+        // Scan the strict 3x3x3 cube centered on the core
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
         for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++) {
-                Pair<Integer, Integer> key = new Pair<>(x, z);
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    // Skip the core itself
+                    if (x == 0 && y == 0 && z == 0) continue;
 
-                for (int y = -1; y <= 1; y++) {
                     mutablePos.set(centerPos.getX() + x, centerPos.getY() + y, centerPos.getZ() + z);
-                    if (mutablePos.equals(centerPos)) continue;
-
+                    BlockState blockState = level.getBlockState(mutablePos);
                     BlockEntity be = level.getBlockEntity(mutablePos);
 
-                    // Fluid tanks
-                    if (be instanceof FluidTankEntity tank) {
-                        Fluid fluid = tank.getStoredFluid();
-
-                        // Accept any column composition to let FluidTank handle internal sorting
-                        if (fluid == Fluids.WATER || fluid == VibraniumFluids.HOT_WATER_STILL.get() || fluid == Fluids.EMPTY) {
-                            waterColumns.computeIfAbsent(key, k -> new ArrayList<>()).add(tank);
+                    // 1. Check if it's a valid functional component (Hatch or Tank)
+                    if (be instanceof ReactorHatchEntity || be instanceof FluidTankEntity) {
+                        if (be instanceof FluidTankEntity tank) {
+                            Fluid fluid = tank.getStoredFluid();
+                            if (fluid == Fluids.WATER || fluid == VibraniumFluids.HOT_WATER_STILL.get() || fluid == Fluids.EMPTY) {
+                                waterColumns.computeIfAbsent(new Pair<>(x, z), k -> new ArrayList<>()).add(tank);
+                            }
                         }
+                        continue; // Valid component, move to the next block
+                    }
+
+                    // 2. If it's not a BlockEntity component, it MUST be the Reinforced Glass
+                    // Replace VibraniumBlocks.REINFORCED_GLASS.get() with your actual block registry object
+                    if (!blockState.is(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())) {
+                        this.structureBlocksValid = false; // Invalid block found in the 3x3x3 shell
                     }
                 }
             }
@@ -204,21 +222,17 @@ public class ReactorCoreEntity extends BlockEntity {
         ReactorHatchEntity hatch = getHatch();
         if (hatch == null) return false;
         ItemStack fuelStack = hatch.inventory.getItem(0);
-        System.out.println("Le Core voit dans le slot 0 : " + fuelStack.getItem() + " (Quantité: " + fuelStack.getCount() + ")");
         boolean isEmpty = fuelStack.isEmpty();
         boolean isVibraniumDust = fuelStack.getItem() == VibraniumItems.VIBRANIUM_DUST.get();
         return !isEmpty && isVibraniumDust;
     }
     private void refuel() {
-        System.out.println("Tentative de refuel...");
         ReactorHatchEntity hatch = getHatch();
         if (hatch == null) {
-            System.out.println("ERREUR : Hatch est null !");
             return;
         }
         if (this.canRefuel()) {
             ItemStack fuelStack = hatch.inventory.getItem(0);
-            System.out.println("Vibranium détecté : " + fuelStack.getCount());
             fuelStack.shrink(1);
             this.vibraniumAmount = TICKS_PER_POWDER;
             hatch.setChanged();
@@ -228,53 +242,71 @@ public class ReactorCoreEntity extends BlockEntity {
             }
         }
     }
-    private void processReaction(boolean hasCoolant) {
+    private void processReaction(boolean hasCoolant, boolean aFurnaceIsCooking) {
+        // GAME DESIGN: If energy buffer is completely full, we safety-stop the reaction (SCRAM)
+        // This saves fuel and prevents overheating when the power is not being used.
+        if (this.energyStored >= MAX_ENERGY) {
+            // The reactor behaves like it's cooling down naturally because no new heat is generated
+            this.furnaceCoolDown(aFurnaceIsCooking);
+            return;
+        }
+
         if (this.vibraniumAmount <= 0) {
             this.refuel();
         }
 
+        // REACTION STARTS: If there is fuel, the reaction HAPPENS, no matter what
         if (this.vibraniumAmount > 0) {
-            this.vibraniumAmount--; // Burn one fuel tick per game tick
+            this.vibraniumAmount--; // Burn fuel
 
+            // Core reaction always produces energy and heat
+            int energyGenerated = 100; // Fixed base production
+            this.energyStored = Math.clamp(this.energyStored + energyGenerated, 0, MAX_ENERGY);
+
+            // Base heat generation from fission
+            this.temperature += 40;
+
+            // COOLING: Water only acts as a heat sink
             if (hasCoolant) {
-                // NORMAL OPERATION: Temperature rises steadily up to working levels
-                if (this.temperature < 2000) {
-                    this.temperature += 5;
-                }
+                long waterNeeded = 1; // How much water we want to use to cool down
+                long actualDrained = 0;
 
-                // Water consumption logic
-                long waterNeeded = 1;
+                // Drain water from tanks
                 for (FluidTankEntity tank : this.waterTanks) {
-                    long drained = tank.drain(waterNeeded);
-                    waterNeeded -= drained;
-                    if (waterNeeded <= 0) break;
+                    long drained = tank.drain(waterNeeded - actualDrained);
+                    actualDrained += drained;
+                    if (actualDrained >= waterNeeded) break;
                 }
 
-                // Hot water production logic
-                if (waterNeeded <= 0) {
-                    long waterToProduce = 1;
+                // If we successfully used water, reduce temperature and produce hot water
+                if (actualDrained > 0) {
+                    // Dynamic cooling: Water absorbs a percentage of the CURRENT heat above room temperature
+                    int roomTemperature = 20;
+                    int heatSurplus = this.temperature - roomTemperature;
+
+                    if (heatSurplus > 0) {
+                        // 1 mB of water cools down around 35 degrees instead of instantly freezing the core.
+                        // This allows the stable operational temperature to sit around 1100°C - 1300°C.
+                        double coolingFactor = 1.0 - (actualDrained * 0.03); // 5 water = 25% heat reduction
+                        this.temperature = roomTemperature + (int)(heatSurplus * coolingFactor);
+                    }
+
+                    // Convert the used water into hot water
+                    long hotWaterToProduce = actualDrained;
                     for (FluidTankEntity tank : this.hotWaterTanks) {
-                        long filled = tank.fill(waterToProduce, VibraniumFluids.HOT_WATER_STILL.get());
-                        waterToProduce -= filled;
-                        if (waterToProduce <= 0) break;
+                        long filled = tank.fill(hotWaterToProduce, VibraniumFluids.HOT_WATER_STILL.get());
+                        hotWaterToProduce -= filled;
+                        if (hotWaterToProduce <= 0) break;
                     }
                 }
-
-                // The reactor emits energy normally when cooled
-                this.energyStored = Math.min(MAX_ENERGY, this.energyStored + (this.temperature / 10));
-
             } else {
-                // CRITICAL MELTDOWN STATE: No water to cool the reactor!
-                // Temperature skyrockets because there is no coolant to absorb heat
-                if (this.temperature < 3000) { // Higher safety limit or danger zone
-                    this.temperature += 15; // Rises much faster!
+                // MELTDOWN SCENARIO: No coolant means temperature keeps building up exponentially
+                if (this.temperature > 3000) {
+                    this.handleStepByStepMeltdown(this.level, this.worldPosition);
                 }
-
-                // Optional: call emergency procedure
-                // this.handleOverheat();
             }
 
-            // Signals entity change
+            // SAVE & SYNC
             this.setChanged();
             if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
@@ -285,7 +317,7 @@ public class ReactorCoreEntity extends BlockEntity {
         if (this.level != null && !this.level.isClientSide()) {
             BlockState currentState = this.level.getBlockState(this.worldPosition);
             if (currentState.hasProperty(ReactorCoreBlock.LIT) && currentState.getValue(ReactorCoreBlock.LIT) != isEnergyStored) {
-                this.level.setBlock(this.worldPosition, currentState.setValue(ReactorHatchBlock.LIT, isEnergyStored), 3);
+                this.level.setBlock(this.worldPosition, currentState.setValue(ReactorCoreBlock.LIT, isEnergyStored), 3);
             }
         }
     }
@@ -296,49 +328,71 @@ public class ReactorCoreEntity extends BlockEntity {
         for (FluidTankEntity tank : this.waterTanks) {
             this.waterAmount += tank.getFluidAmount();
         }
-        System.out.println("Eau détectée : " + waterAmount);
         for (FluidTankEntity tank : this.hotWaterTanks) {
             this.hotWaterAmount += tank.getFluidAmount();
         }
-        System.out.println("Eau chaude détectée : " + hotWaterAmount);
     }
     public boolean isReactorFunctioningCorrectly() {
-        // Check if we have at least one valid water column and one hot water column
-        return !waterTanks.isEmpty() && !hotWaterTanks.isEmpty();
+        // The reactor is valid only if fluid tanks are present AND the outer shell is made of reinforced glass
+        return !waterTanks.isEmpty() && !hotWaterTanks.isEmpty() && this.structureBlocksValid;
     }
-    private boolean checkAndBoostAdjacentFurnaces(Level level, BlockPos pos, BlockState state) {
-        BlockPos targetPos = pos.relative(state.getValue(ReactorCoreBlock.FACING).getOpposite());
-        BlockEntity be = level.getBlockEntity(targetPos);
+    private boolean checkAndBoostAdjacentFurnaces(Level level, BlockPos centerPos, BlockState state) {
+        if (level == null) return false;
 
-        if (be instanceof AbstractFurnaceBlockEntity furnace) {
-            ItemStack inputStack = furnace.getItem(0); // SLOT_INPUT
+        boolean atLeastOneFurnaceBoosted = false;
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
-            if (!inputStack.isEmpty() && this.temperature > 100) {
+        // Scan the 5x5x5 area around the core
+        for (int x = -2; x <= 2; x++) {
+            for (int y = -2; y <= 2; y++) {
+                for (int z = -2; z <= 2; z++) {
+                    if (x == 0 && y == 0 && z == 0) continue;
 
-                int currentLitTime = furnace.dataAccess.get(0); // 0 = litTimeRemaining
-                int currentCookingProgress = furnace.dataAccess.get(2); // 2 = cookingTimer
-                int totalCookTime = furnace.dataAccess.get(3); // 3 = cookingTotalTime
+                    mutablePos.set(centerPos.getX() + x, centerPos.getY() + y, centerPos.getZ() + z);
+                    BlockEntity be = level.getBlockEntity(mutablePos);
 
-                //Fuel the oven with the reactor's heat
-                if (currentLitTime < 200) {
-                    furnace.dataAccess.set(0, 200);//keep it lit with 10 sec of virtual fuel
-                    furnace.dataAccess.set(1, 200); // litTotalTime
+                    if (be instanceof AbstractFurnaceBlockEntity furnace) {
+                        ItemStack inputStack = furnace.getItem(0); // SLOT_INPUT
+
+                        if (!inputStack.isEmpty()) {
+                            boolean isVibranium = inputStack.getItem() == VibraniumItems.VIBRANIUM_DUST.get();
+
+                            // Rule 1: Vibranium demands extreme heat, freeze it if core is too cold
+                            if (isVibranium && this.temperature < 1000) {
+                                furnace.dataAccess.set(2, 0); // Reset cooking progress
+                                furnace.setChanged();
+                                continue; // This furnace is not absorbing usable heat right now
+                            }
+
+                            // Rule 2: The core must be hot enough (> 100°C) to transfer energy to vanilla items
+                            if (this.temperature > 100) {
+                                // Provide virtual fuel using the reactor's residual heat
+                                int currentLitTime = furnace.dataAccess.get(0);
+                                if (currentLitTime < 200) {
+                                    furnace.dataAccess.set(0, 200); // 10 seconds buffer
+                                    furnace.dataAccess.set(1, 200);
+                                }
+
+                                // Overclocking progression calculation
+                                int currentCookingProgress = furnace.dataAccess.get(2);
+                                int totalCookTime = furnace.dataAccess.get(3);
+                                int heatBonus = Math.max(1, this.temperature / 200);
+
+
+                                // CRITICAL FIX: Cap our custom progress at (totalCookTime - 1).
+                                // This allows vanilla furnace tick to add the final +1 and trigger the recipe output.
+                                int newProgress = Math.min(totalCookTime - 1, currentCookingProgress + heatBonus);
+                                furnace.dataAccess.set(2, newProgress);
+
+                                furnace.setChanged();
+                                atLeastOneFurnaceBoosted = true; // Heat is officially being drawn out
+                            }
+                        }
+                    }
                 }
-
-                //Overclock the cooking
-                if (!furnace.getItem(0).isEmpty() && this.temperature > 100) {
-                    // +4 bonus progression per tick makes it cook 5 times quicker
-                    int newProgress = Math.min(totalCookTime, currentCookingProgress + 4);
-                    furnace.dataAccess.set(2, newProgress);
-                }
-
-                //Validate changes
-                furnace.setChanged();
-
-                return true; // reactor boosts oven
             }
         }
-        return false;
+        return atLeastOneFurnaceBoosted;
     }
     private void furnaceCoolDown(boolean aFurnaceIsCooking) {
         int targetTemp = 20; // Ambient temperature
@@ -365,44 +419,102 @@ public class ReactorCoreEntity extends BlockEntity {
             }
         }
     }
-    public int getMaxVibraniumTicks() { return TICKS_PER_POWDER; }
     private boolean isNear(ReactorHatchEntity hatch) {
         return hatch.getBlockPos().distManhattan(this.worldPosition) <= 2;
     }
+    private void handleStepByStepMeltdown(Level level, BlockPos pos) {
+        if (level == null || level.isClientSide()) return;
+
+        // PHASE 1: Warning Sign (2000°C - 2499°C) -> Structural damage & panic sounds
+        if (this.temperature >= 2000 && this.temperature < 2500) {
+            if (level.getGameTime() % 20 == 0) { // Every second
+                // Play a metallic creaking or warning sound near the core
+                level.playSound(null, pos, SoundEvents.LIGHTNING_BOLT_THUNDER,
+                        SoundSource.BLOCKS, 0.5F, 2.0F);
+            }
+
+            // Spawn heavy smoke particles escaping from the reactor frame
+            double px = pos.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 2.0;
+            double py = pos.getY() + 1.2;
+            double pz = pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 2.0;
+            ((ServerLevel) level).sendParticles(
+                    ParticleTypes.LARGE_SMOKE,
+                    px, py, pz, 3, 0.0, 0.1, 0.0, 0.02
+            );
+        }
+
+        // PHASE 2: Containment Breach (2500°C - 2999°C) -> Glass melts into lava, fire spreads
+        else if (this.temperature >= 2500 && this.temperature < 3000) {
+            if (level.getGameTime() % 10 == 0) {
+                // Play alarm sound (Using the Elder Guardian ghost sound for maximum dread)
+                level.playSound(null, pos, SoundEvents.ELDER_GUARDIAN_CURSE,
+                        SoundSource.BLOCKS, 1.0F, 0.5F);
+            }
+
+            // Randomly melt a block of the 3x3x3 outer structure into lava
+            BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+            int rx = level.random.nextInt(3) - 1;
+            int ry = level.random.nextInt(3) - 1;
+            int rz = level.random.nextInt(3) - 1;
+
+            if (!(rx == 0 && ry == 0 && rz == 0)) { // Do not replace the core itself yet
+                mutablePos.set(pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz);
+                BlockState state = level.getBlockState(mutablePos);
+
+                // If it's reinforced glass or a component, it breaks open!
+                if (!state.isAir() && !state.is(Blocks.LAVA)) {
+                    level.setBlockAndUpdate(mutablePos, Blocks.LAVA.defaultBlockState());
+                    level.levelEvent(2001, mutablePos, Block.getId(state)); // Break particles
+                }
+            }
+        }
+
+        // PHASE 3: Total Core Liquefaction (3000°C+) -> The core explodes and leaves a sea of lava
+        else if (this.temperature >= 3000) {
+            // Trigger a medium blast to rupture remaining blocks cleanly
+            level.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    4.0F, true, Level.ExplosionInteraction.BLOCK);
+
+            // Turn the entire 3x3x3 core area into a pocket of flowing lava
+            BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -1; z <= 1; z++) {
+                        mutablePos.set(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
+                        level.setBlockAndUpdate(mutablePos, Blocks.LAVA.defaultBlockState());
+                    }
+                }
+            }
+
+            // Give the Poison effect to any nearby player due to heavy toxic/vibranium fumes
+            AABB area = new AABB(pos).inflate(10.0);
+            for (Player player : level.getEntitiesOfClass(Player.class, area)) {
+                player.addEffect(new MobEffectInstance(
+                        MobEffects.POISON, 3600, 2 // Poison 2 for 10 seconds
+                ));
+            }
+
+            // Safely discard the core entity to prevent further tick evaluation
+            this.setRemoved();
+        }
+    }
+
     //Screen
     public int getTemperature() {
-        System.out.println("this.temperature : " + this.temperature);
-        return this.temperature;
+       return this.temperature;
     }
     public int getEnergy() {
-        System.out.println("this.energyStored : " + this.energyStored);
-        return this.energyStored;
+        return Math.max(0, this.energyStored);//security to avoid false result due to client server desync
     }
     public long getWaterAmount() {
-        System.out.println("this.waterAmount : " + this.waterAmount);
         return this.waterAmount;
     }
     public long getHotWaterAmount() {
-        System.out.println("this.hotWaterAmount : " + this.hotWaterAmount);
         return this.hotWaterAmount;
     }
     public int getVibraniumAmount() {
-        System.out.println("this.vibraniumAmount : " + this.vibraniumAmount);
-        System.out.println("Valeur lue côté : " + (level != null && level.isClientSide() ? "CLIENT" : "SERVEUR") + " | Valeur : " + this.vibraniumAmount);
         return this.vibraniumAmount;
     }
-
-    //Server sync
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
-        return this.saveWithoutMetadata(provider);
-    }
-
     public long getMaxWaterCapacity() {
         long totalCapacity = 0;
         // Map to keep track of columns we already counted (using their unique X/Z key)
@@ -417,10 +529,8 @@ public class ReactorCoreEntity extends BlockEntity {
                 }
             }
         }
-        System.out.println("Max water capacity (via columns) : " + totalCapacity + " mB");
         return totalCapacity;
     }
-
     public long getMaxHotWaterCapacity() {
         long totalCapacity = 0;
         // Map to keep track of columns we already counted (using their unique X/Z key)
@@ -435,7 +545,18 @@ public class ReactorCoreEntity extends BlockEntity {
                 }
             }
         }
-        System.out.println("Max hot water capacity (via columns) : " + totalCapacity + " mB");
         return totalCapacity;
     }
+
+    //Server sync
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+    @Override
+    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
+        return this.saveWithoutMetadata(provider);
+    }
+
+
 }
