@@ -47,6 +47,7 @@ public class ReactorCoreEntity extends BlockEntity {
     private final List<FluidTankEntity> hotWaterTanks = new ArrayList<>();
     private ReactorHatchEntity cachedHatch = null;
     private boolean structureBlocksValid = false;
+    private boolean isStructurePowered = false;
 
     // CONSTRUCTOR
     public ReactorCoreEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -104,10 +105,26 @@ public class ReactorCoreEntity extends BlockEntity {
         }
         boolean shouldBeLit = blockEntity.energyStored > 0;
         blockEntity.updateLitState(shouldBeLit);
+
+        //Discharge system
+        if (blockEntity.isStructurePowered && blockEntity.energyStored > 0) {
+            // Energy evacuation (2000 FE/RF per tick)
+            int energyToVanish = Math.min(blockEntity.energyStored, 2000);
+            blockEntity.energyStored -= energyToVanish;
+
+            // Visual/sound effect
+            if (level.getGameTime() % 10 == 0) {
+                level.playSound(null, blockEntity.worldPosition, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 1.5F);
+                ((ServerLevel) level).sendParticles(ParticleTypes.SMOKE,
+                        blockEntity.worldPosition.getX() + 0.5, blockEntity.worldPosition.getY() + 1.1, blockEntity.worldPosition.getZ() + 0.5,
+                        5, 0.1, 0.1, 0.1, 0.05);
+            }
+        }
     }
     public void scanForComponents(Level level, BlockPos centerPos) {
         this.waterColumns.clear();
         this.structureBlocksValid = true; // Assume true, invalidate if an incorrect block is found
+        this.isStructurePowered = false;
 
         // Scan the strict 3x3x3 cube centered on the core
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
@@ -121,8 +138,12 @@ public class ReactorCoreEntity extends BlockEntity {
                     mutablePos.set(centerPos.getX() + x, centerPos.getY() + y, centerPos.getZ() + z);
                     BlockState blockState = level.getBlockState(mutablePos);
                     BlockEntity be = level.getBlockEntity(mutablePos);
+                    // Check if we have a lever
+                    if (level.hasNeighborSignal(mutablePos)) {
+                        this.isStructurePowered = true;
+                    }
 
-                    // 1. Check if it's a valid functional component (Hatch or Tank)
+                    // Check if it's a valid functional component (Hatch or Tank)
                     if (be instanceof ReactorHatchEntity || be instanceof FluidTankEntity) {
                         if (be instanceof FluidTankEntity tank) {
                             Fluid fluid = tank.getStoredFluid();
@@ -133,7 +154,7 @@ public class ReactorCoreEntity extends BlockEntity {
                         continue; // Valid component, move to the next block
                     }
 
-                    // 2. If it's not a BlockEntity component, it MUST be the Reinforced Glass
+                    // If it's not a BlockEntity component, it MUST be the Reinforced Glass
                     // Replace VibraniumBlocks.REINFORCED_GLASS.get() with your actual block registry object
                     if (!blockState.is(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())) {
                         this.structureBlocksValid = false; // Invalid block found in the 3x3x3 shell
@@ -558,5 +579,34 @@ public class ReactorCoreEntity extends BlockEntity {
         return this.saveWithoutMetadata(provider);
     }
 
+    // --- ENERGY MANAGEMENT FOR EXTERNAL MODS COMPATIBILITY ---
 
+    /**
+     * Extracts energy from the reactor storage core.
+     * @param maxExtract Maximum amount of energy (RF/FE) to extract.
+     * @param simulate If true, the extraction will only be simulated.
+     * @return The amount of energy actually extracted.
+     */
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        int energyExtracted = Math.min(this.energyStored, maxExtract);
+        if (!simulate && energyExtracted > 0) {
+            this.energyStored -= energyExtracted;
+            this.setChanged();
+        }
+        return energyExtracted;
+    }
+
+    /**
+     * Gets the current amount of energy stored in the reactor core.
+     */
+    public int getEnergyStored() {
+        return this.energyStored;
+    }
+
+    /**
+     * Gets the maximum energy capacity of the reactor core.
+     */
+    public int getMaxEnergyStored() {
+        return this.MAX_ENERGY;
+    }
 }
