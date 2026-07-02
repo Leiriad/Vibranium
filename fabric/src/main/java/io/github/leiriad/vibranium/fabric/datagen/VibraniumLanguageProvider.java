@@ -83,9 +83,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("container.vibranium.reactor_hatch", "Trappe d'alimentation du réacteur");
 
                 translationBuilder.add("gui.vibranium.energy_tooltip", "Énergie : %d / 100000 FE");
-                translationBuilder.add("gui.vibranium.heat_tooltip", "Température : %d°C / 1000°C");
-                translationBuilder.add("gui.vibranium.water_tooltip", "Eau : %d / 10000 mB");
-                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Eau Chaude : %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.heat_tooltip", "Température : %d°C / 3000°C");
+                translationBuilder.add("gui.vibranium.water_tooltip", "Eau : %d / %d mB");
+                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Eau Chaude : %d / %d mB");
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Insérez la poudre de Vibranium ici");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Résidus et scories de combustion");
@@ -145,9 +145,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("container.vibranium.reactor_hatch", "Escotilla de alimentación del reactor");
 
                 translationBuilder.add("gui.vibranium.energy_tooltip", "Energía: %d / 100000 FE");
-                translationBuilder.add("gui.vibranium.heat_tooltip", "Temperatura: %d°C / 1000°C");
-                translationBuilder.add("gui.vibranium.water_tooltip", "Agua: %d / 10000 mB");
-                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Agua Caliente: %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.heat_tooltip", "Temperatura: %d°C / 3000°C");
+                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Aqua Caliente: %d / %d mB");
+                translationBuilder.add("gui.vibranium.water_tooltip", "Aqua: %d / %d mB");
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranio: quedan %ds");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Inserta el polvo de Vibranium aquí");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Residuos y escorias de combustión");
@@ -209,9 +209,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("container.vibranium.reactor_hatch", "Reactor fuel hatch");
 
                 translationBuilder.add("gui.vibranium.energy_tooltip", "Energy : %d / 100000 FE");
-                translationBuilder.add("gui.vibranium.heat_tooltip", "Temperature : %d°C / 1000°C");
-                translationBuilder.add("gui.vibranium.water_tooltip", "Water : %d / 10000 mB");
-                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Hot Water : %d / 10000 mB");
+                translationBuilder.add("gui.vibranium.heat_tooltip", "Temperature : %d°C / 3000°C");
+                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Hot Water: %d / %d mB");
+                translationBuilder.add("gui.vibranium.water_tooltip", "Water: %d / %d mB");
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Insert Vibranium powder here");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Combustion waste and slag");

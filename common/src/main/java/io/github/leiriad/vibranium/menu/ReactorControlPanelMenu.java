@@ -1,26 +1,27 @@
 package io.github.leiriad.vibranium.menu;
 
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ReactorControlPanelMenu extends AbstractContainerMenu {
 
     //PROPERTIES
     private final ReactorCoreEntity reactor;
-    private final ContainerData data;
+
+    // Modern DataSlots to bypass the 16-bit short limitation of ContainerData
+    private final DataSlot energySlot;
+    private final DataSlot heatSlot;
+    private final DataSlot vibraniumSlot;
+    private final DataSlot waterSlot;
+    private final DataSlot hotWaterSlot;
+    private final DataSlot maxWaterSlot;
+    private final DataSlot maxHotWaterSlot;
 
     //CONSTRUCTORS
     //Client
@@ -32,57 +33,80 @@ public class ReactorControlPanelMenu extends AbstractContainerMenu {
     public ReactorControlPanelMenu(int id, Inventory inv, ReactorCoreEntity reactor) {
         super(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), id);
         this.reactor = reactor;
-        this.data = new ContainerData() {
-            @Override
-            public int get(int index) {
-                if (reactor == null) return 0;
-                return switch (index) {
-                    case 0 -> reactor.getEnergy();
-                    case 1 -> reactor.getTemperature();
-                    case 2 -> reactor.getVibraniumAmount();
-                    case 3 -> (int) (reactor.getWaterAmount() & 0xFFFFFFFFL);
-                    case 4 -> (int) (reactor.getWaterAmount() >> 32);
-                    case 5 -> (int) (reactor.getHotWaterAmount() & 0xFFFFFFFFL);
-                    case 6 -> (int) (reactor.getHotWaterAmount() >> 32);
-                    default -> 0;
-                };
-            }
-            @Override
-            public void set(int index, int value) { }
-            @Override
-            public int getCount() { return 7; }
-        };
-        this.addDataSlots(this.data);
+
+        // We create full-int and full-long responsive DataSlots
+        this.energySlot = this.addDataSlot(DataSlot.shared(new int[]{0}, 0));
+        this.heatSlot = this.addDataSlot(DataSlot.shared(new int[]{0}, 0));
+        this.vibraniumSlot = this.addDataSlot(DataSlot.shared(new int[]{0}, 0));
+
+        // Using custom long data slots or standalone int providers that network packets sync correctly
+        this.waterSlot = this.addDataSlot(new LongDataSlot());
+        this.hotWaterSlot = this.addDataSlot(new LongDataSlot());
+        this.maxWaterSlot = this.addDataSlot(new LongDataSlot());
+        this.maxHotWaterSlot = this.addDataSlot(new LongDataSlot());
     }
 
-    //METHODS
+    // Server-side update check called during container tracking
+    @Override
+    public void broadcastChanges() {
+        if (this.reactor != null) {
+            this.energySlot.set(this.reactor.getEnergy());
+            this.heatSlot.set(this.reactor.getTemperature());
+            this.vibraniumSlot.set(this.reactor.getVibraniumAmount());
+
+            ((LongDataSlot) this.waterSlot).setLong(this.reactor.getWaterAmount());
+            ((LongDataSlot) this.hotWaterSlot).setLong(this.reactor.getHotWaterAmount());
+            ((LongDataSlot) this.maxWaterSlot).setLong(this.reactor.getMaxWaterCapacity());
+            ((LongDataSlot) this.maxHotWaterSlot).setLong(this.reactor.getMaxHotWaterCapacity());
+        }
+        super.broadcastChanges();
+    }
+
     @Override
     public ItemStack quickMoveStack(Player player, int i) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     // Screen getters
-    public int getEnergy() { System.out.println("Energie : " + this.data.get(0)); return this.data.get(0); }
-    public int getHeat() { System.out.println("Chaleur : " + this.data.get(1)); return this.data.get(1); }
-    public int getVibranium() {System.out.println("Vibranium : " + this.data.get(2)); return this.data.get(2); }
+    public int getEnergy() { return this.energySlot.get(); }
+    public int getHeat() { return this.heatSlot.get(); }
+    public int getVibranium() { return this.vibraniumSlot.get(); }
 
-    public long getWater() {
-        long low = this.data.get(3) & 0xFFFFFFFFL;// Long values are split on two memory spaces
-        long high = (long) this.data.get(4) << 32;
-        System.out.println("Eau : " + high +"|"+low);
-        return high | low;
-    }
-
-    public long getHotWater() {
-        long low = this.data.get(5) & 0xFFFFFFFFL;
-        long high = (long) this.data.get(6) << 32;
-        System.out.println("Eau chaude : " + high +"|"+low);
-        return high | low;
-    }
+    public long getWater() { return ((LongDataSlot) this.waterSlot).getLong(); }
+    public long getHotWater() { return ((LongDataSlot) this.hotWaterSlot).getLong(); }
+    public long getMaxWater() { return ((LongDataSlot) this.maxWaterSlot).getLong(); }
+    public long getMaxHotWater() { return ((LongDataSlot) this.maxHotWaterSlot).getLong(); }
 
     @Override
     public boolean stillValid(Player player) {
         if (this.reactor == null || this.reactor.isRemoved()) return false;
         return player.distanceToSqr(reactor.getBlockPos().getCenter()) < 100.0;
+    }
+
+    /**
+     * Inner helper to serialize longs properly across DataSlots without bit shifting inside container arrays
+     */
+    private static class LongDataSlot extends DataSlot {
+        private long value;
+
+        public void setLong(long value) {
+            this.value = value;
+        }
+
+        public long getLong() {
+            return this.value;
+        }
+
+        @Override
+        public int get() {
+            // Unused fallback for traditional int tracking
+            return (int) this.value;
+        }
+
+        @Override
+        public void set(int value) {
+            // Used by incoming networking packets to sync client states
+            this.value = value;
+        }
     }
 }

@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -48,14 +49,14 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
         //Energy (Max 100000)
         drawVerticalGauge(guiGraphics, x + 44, y + 77, this.menu.getEnergy(), 100000, maxHeight, 0, 0, 14);
 
-        //Heat (Max 1000)
-        drawVerticalGauge(guiGraphics, x + 83, y + 77, this.menu.getHeat(), 1000, maxHeight, 0, 0, 14);
+        //Heat (Max 3000)
+        drawVerticalGauge(guiGraphics, x + 83, y + 77, this.menu.getHeat(), 3000, maxHeight, 0, 0, 14);
 
         //Water (Max 10000)
-        drawVerticalGauge(guiGraphics, x + 121, y + 77, this.menu.getWater(), 10000, maxHeight, 0, 0, 14);
+        drawVerticalGauge(guiGraphics, x + 121, y + 77, this.menu.getWater(), this.menu.getMaxWater(), maxHeight, 0, 0, 14);
 
         //Hot Water (Max 10000)
-        drawVerticalGauge(guiGraphics, x + 160, y + 77, this.menu.getHotWater(), 10000, maxHeight, 0, 0, 14);
+        drawVerticalGauge(guiGraphics, x + 160, y + 77, this.menu.getHotWater(), this.menu.getMaxHotWater(), maxHeight, 0, 0, 14);
 
         //Vibranium (Burn ticks left, max 24000)
         drawVerticalGauge(guiGraphics, x + 199, y + 77, this.menu.getVibranium(), 24000, maxHeight, 0, 0, 14);
@@ -94,72 +95,71 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
     protected void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         super.renderTooltip(guiGraphics, mouseX, mouseY);
 
-        //Start position of the menu
+        // Start position of the menu (Must exactly match renderBg, including the +5 offset!)
         int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2;
+        int y = (this.height - this.imageHeight) / 2 + 5;
 
         int jaugeTop = y + 77;
         int jaugeBottom = y + 77 + 78;
-        int jaugeLargeur = 30;
+        int jaugeLargeur = 14; // Matches the width parameter in drawVerticalGauge
 
-        var positioner = net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner.INSTANCE;
+        var positioner = DefaultTooltipPositioner.INSTANCE;
 
-        //Energy
-        if (mouseX >= x + 25 && mouseX < x + 25 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
+        // Energy (Rendered at x + 44)
+        if (mouseX >= x + 44 && mouseX < x + 44 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
             Component text = Component.translatable("gui.vibranium.energy_tooltip", this.menu.getEnergy());
             guiGraphics.renderTooltip(
                     this.font,
-                    List.of(net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent.create(text.getVisualOrderText())),
+                    List.of(ClientTooltipComponent.create(text.getVisualOrderText())),
                     mouseX, mouseY,
                     positioner,
-                    null ///TO DO: Replace by new texture
+                    null
             );
         }
 
-        //Heat
-        if (mouseX >= x + 55 && mouseX < x + 55 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
+        // Heat (Rendered at x + 83)
+        if (mouseX >= x + 83 && mouseX < x + 83 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
             Component text = Component.translatable("gui.vibranium.heat_tooltip", this.menu.getHeat());
             guiGraphics.renderTooltip(
                     this.font,
-                    List.of(net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent.create(text.getVisualOrderText())),
+                    List.of(ClientTooltipComponent.create(text.getVisualOrderText())),
                     mouseX, mouseY,
                     positioner,
                     null
             );
         }
 
-        //Water
-        if (mouseX >= x + 85 && mouseX < x + 85 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
-            Component text = Component.translatable("gui.vibranium.water_tooltip", this.menu.getWater());
+        // Water (Rendered at x + 121) - Also fixed getting water instead of hot water!
+        if (mouseX >= x + 121 && mouseX < x + 121 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
+            Component text = Component.translatable("gui.vibranium.water_tooltip", this.menu.getWater(), this.menu.getMaxWater());
             guiGraphics.renderTooltip(
                     this.font,
-                    List.of(net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent.create(text.getVisualOrderText())),
+                    List.of(ClientTooltipComponent.create(text.getVisualOrderText())),
                     mouseX, mouseY,
                     positioner,
                     null
             );
         }
 
-        //Hot water
-        if (mouseX >= x + 115 && mouseX < x + 115 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
-            Component text = Component.translatable("gui.vibranium.hot_water_tooltip", this.menu.getHotWater());
+        // Hot water (Rendered at x + 160)
+        if (mouseX >= x + 160 && mouseX < x + 160 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
+            Component text = Component.translatable("gui.vibranium.hot_water_tooltip", this.menu.getHotWater(), this.menu.getMaxHotWater());
             guiGraphics.renderTooltip(
                     this.font,
-                    List.of(net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent.create(text.getVisualOrderText())),
+                    List.of(ClientTooltipComponent.create(text.getVisualOrderText())),
                     mouseX, mouseY,
                     positioner,
                     null
             );
         }
 
-        //Vibranium
-        //Percentage or time
-        if (mouseX >= x + 145 && mouseX < x + 145 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
+        // Vibranium (Rendered at x + 199)
+        if (mouseX >= x + 199 && mouseX < x + 199 + jaugeLargeur && mouseY >= jaugeTop && mouseY < jaugeBottom) {
             int secondsRemaining = this.menu.getVibranium() / 20;
             Component text = Component.translatable("gui.vibranium.fuel_tooltip", secondsRemaining);
             guiGraphics.renderTooltip(
                     this.font,
-                    List.of(net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent.create(text.getVisualOrderText())),
+                    List.of(ClientTooltipComponent.create(text.getVisualOrderText())),
                     mouseX, mouseY,
                     positioner,
                     null
