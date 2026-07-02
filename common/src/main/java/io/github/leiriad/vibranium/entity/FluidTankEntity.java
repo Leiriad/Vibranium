@@ -43,7 +43,6 @@ public class FluidTankEntity extends BlockEntity {
     public Fluid getStoredFluid() { return this.storedFluid; }
     public long getFluidAmount() { return this.fluidAmount; }
     public long getCapacity() { return this.capacity; }
-
     public void setFluid(Fluid fluid, long amount) {
         // Fallback to EMPTY if fluid is null or explicit
         this.storedFluid = fluid != null ? fluid : Fluids.EMPTY;
@@ -57,21 +56,6 @@ public class FluidTankEntity extends BlockEntity {
         if (this.level != null) {
             this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
         }
-    }
-
-    public long getAvailableAmount() {
-        return this.fluidAmount;
-    }
-
-    public long drain(long maxAmount) {
-        long toDrain = Math.min(this.fluidAmount, maxAmount);
-        this.fluidAmount -= toDrain;
-        if (this.fluidAmount <= 0) {
-            this.storedFluid = Fluids.EMPTY;
-        }
-        this.setChanged();
-        if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
-        return toDrain;
     }
 
     //METHODS
@@ -93,7 +77,6 @@ public class FluidTankEntity extends BlockEntity {
                     });
         }
     }
-
     /**
      * Handles falling fluids and vertical overflow independently of the fluid type.
      */
@@ -127,7 +110,6 @@ public class FluidTankEntity extends BlockEntity {
             }
         }
     }
-
     public long fill(long amount, Fluid fluid) {
         if (amount <= 0 || fluid == Fluids.EMPTY) return 0;
 
@@ -169,6 +151,16 @@ public class FluidTankEntity extends BlockEntity {
             }
         }
         return 0; // Wrong fluid or column is completely full
+    }
+    public long drain(long maxAmount) {
+        long toDrain = Math.min(this.fluidAmount, maxAmount);
+        this.fluidAmount -= toDrain;
+        if (this.fluidAmount <= 0) {
+            this.storedFluid = Fluids.EMPTY;
+        }
+        this.setChanged();
+        if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        return toDrain;
     }
 
     // NBT Data Management
