@@ -9,9 +9,6 @@ import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -22,12 +19,8 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ReactorCoreEntity extends BlockEntity {
     //PROPERTIES
@@ -122,6 +115,7 @@ public class ReactorCoreEntity extends BlockEntity {
                     if (be instanceof FluidTankEntity tank) {
                         Fluid fluid = tank.getStoredFluid();
 
+                        // Accept any column composition to let FluidTank handle internal sorting
                         if (fluid == Fluids.WATER || fluid == VibraniumFluids.HOT_WATER_STILL.get() || fluid == Fluids.EMPTY) {
                             waterColumns.computeIfAbsent(key, k -> new ArrayList<>()).add(tank);
                         }
@@ -407,5 +401,41 @@ public class ReactorCoreEntity extends BlockEntity {
     @Override
     public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
         return this.saveWithoutMetadata(provider);
+    }
+
+    public long getMaxWaterCapacity() {
+        long totalCapacity = 0;
+        // Map to keep track of columns we already counted (using their unique X/Z key)
+        Set<Pair<Integer, Integer>> processedColumns = new HashSet<>();
+
+        for (Map.Entry<Pair<Integer, Integer>, List<FluidTankEntity>> entry : waterColumns.entrySet()) {
+            List<FluidTankEntity> column = entry.getValue();
+            if (!column.isEmpty() && waterTanks.contains(column.get(0))) {
+                // If this column is assigned to water and not processed yet, query its stats
+                if (processedColumns.add(entry.getKey())) {
+                    totalCapacity += column.get(0).getColumnStats().getSecond();
+                }
+            }
+        }
+        System.out.println("Max water capacity (via columns) : " + totalCapacity + " mB");
+        return totalCapacity;
+    }
+
+    public long getMaxHotWaterCapacity() {
+        long totalCapacity = 0;
+        // Map to keep track of columns we already counted (using their unique X/Z key)
+        Set<Pair<Integer, Integer>> processedColumns = new HashSet<>();
+
+        for (Map.Entry<Pair<Integer, Integer>, List<FluidTankEntity>> entry : waterColumns.entrySet()) {
+            List<FluidTankEntity> column = entry.getValue();
+            if (!column.isEmpty() && hotWaterTanks.contains(column.get(0))) {
+                // If this column is assigned to hot water and not processed yet, query its stats
+                if (processedColumns.add(entry.getKey())) {
+                    totalCapacity += column.get(0).getColumnStats().getSecond();
+                }
+            }
+        }
+        System.out.println("Max hot water capacity (via columns) : " + totalCapacity + " mB");
+        return totalCapacity;
     }
 }

@@ -8,6 +8,7 @@ import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.utils.VibraniumTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -95,20 +96,18 @@ public class FluidTankBlock extends BaseEntityBlock {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (!(blockEntity instanceof FluidTankEntity tank)) return InteractionResult.PASS;
 
-        // CASE: Player has a Fluid Bucket -> Fill the tank
+        // CASE: Player has a Fluid Bucket -> Fill the tank (or the column above)
         Fluid heldFluid = FluidHelper.getFluidFromItem(heldItem);
         if (heldFluid != Fluids.EMPTY) {
-            if (tank.getStoredFluid() == Fluids.EMPTY || tank.getStoredFluid().isSame(heldFluid)) {
-                long capacity = tank.getCapacity();
-                if (capacity - tank.getFluidAmount() >= 1000) {
-                    tank.setFluid(heldFluid, tank.getFluidAmount() + 1000);
+            // Use our cascade fill method! It returns how much fluid was actually accepted.
+            long accepted = tank.fill(1000, heldFluid);
 
-                    if (!player.getAbilities().instabuild) {
-                        heldItem.shrink(1);
-                        player.getInventory().add(new ItemStack(Items.BUCKET));
-                    }
-                    return InteractionResult.SUCCESS;
+            if (accepted > 0) {
+                if (!player.getAbilities().instabuild) {
+                    heldItem.shrink(1);
+                    player.getInventory().add(new ItemStack(Items.BUCKET));
                 }
+                return InteractionResult.SUCCESS;
             }
         }
 
@@ -116,8 +115,8 @@ public class FluidTankBlock extends BaseEntityBlock {
         if (heldItem.is(Items.BUCKET)) {
             Fluid storedFluid = tank.getStoredFluid();
             if (storedFluid != Fluids.EMPTY && tank.getFluidAmount() >= 1000) {
-                long newAmount = tank.getFluidAmount() - 1000;
-                tank.setFluid(newAmount <= 0 ? Fluids.EMPTY : storedFluid, newAmount <= 0 ? 0L : newAmount);
+                // Use our drain method to ensure NBT updates properly
+                tank.drain(1000);
 
                 ItemStack fullBucket = new ItemStack(FluidHelper.getBucketFromFluid(storedFluid));
                 heldItem.shrink(1);
@@ -130,6 +129,41 @@ public class FluidTankBlock extends BaseEntityBlock {
         return InteractionResult.PASS;
     }
 
+    //Update when changed
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        super.onPlace(state, level, pos, oldState, isMoving);
+        if (!level.isClientSide()) {
+            this.notifyAdjacentReactor(level, pos);
+        }
+    }
+
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean isMoving) {
+        super.affectNeighborsAfterRemoval(state, level, pos, isMoving);
+        this.notifyAdjacentReactor(level, pos);
+    }
+
+    private void notifyAdjacentReactor(Level level, BlockPos tankPos) {
+        // Scan a 3x3x3 area around the tank to find the Reactor Core
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    mutablePos.set(tankPos.getX() + x, tankPos.getY() + y, tankPos.getZ() + z);
+
+                    BlockEntity be = level.getBlockEntity(mutablePos);
+                    if (be instanceof ReactorCoreEntity core) {
+                        // Force the reactor to rescan and recalculate capacities immediately
+                        core.scanForComponents(level, mutablePos);
+                        core.updateFluidLevels();
+                        return; // Core found and updated, we can stop searching
+                    }
+                }
+            }
+        }
+    }
 
     //Render
     @Override

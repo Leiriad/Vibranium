@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.entity;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
 import net.minecraft.core.BlockPos;
@@ -21,11 +22,12 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public class FluidTankEntity extends BlockEntity {
     //PROPERTIES
-    // Capacity of the tank (e.g., 8000 mB / Fabric drops units)
-    private final long capacity = 8000;
+    // Capacity of the tank (10000 mB)
+    private final long capacity = 10000;
     private Fluid storedFluid = Fluids.EMPTY;
     private long fluidAmount = 0;
 
@@ -46,6 +48,9 @@ public class FluidTankEntity extends BlockEntity {
         // Fallback to EMPTY if fluid is null or explicit
         this.storedFluid = fluid != null ? fluid : Fluids.EMPTY;
         this.fluidAmount = Math.min(amount, capacity);
+        if (this.fluidAmount <= 0) {
+            this.storedFluid = Fluids.EMPTY;
+        }
         setChanged(); // Marks the block entity for saving
 
         // Synchronize data from server to client render thread
@@ -61,6 +66,9 @@ public class FluidTankEntity extends BlockEntity {
     public long drain(long maxAmount) {
         long toDrain = Math.min(this.fluidAmount, maxAmount);
         this.fluidAmount -= toDrain;
+        if (this.fluidAmount <= 0) {
+            this.storedFluid = Fluids.EMPTY;
+        }
         this.setChanged();
         if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
         return toDrain;
@@ -68,7 +76,12 @@ public class FluidTankEntity extends BlockEntity {
 
     //METHODS
     public void tick(Level level, BlockPos pos) {
-        if (!level.isClientSide() && getStoredFluid().isSame(VibraniumFluids.HOT_WATER_STILL.get())) {
+        if (level.isClientSide()) return;
+
+        // Handle generic vertical column logic (falling down and overflowing up)
+        this.handleColumnLogic(level, pos);
+
+        if (getStoredFluid().isSame(VibraniumFluids.HOT_WATER_STILL.get())) {
             // The tank is hot it impacts it's neighbor blocks
             BlockPos.betweenClosedStream(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))
                     .forEach(p -> {
@@ -80,22 +93,84 @@ public class FluidTankEntity extends BlockEntity {
                     });
         }
     }
+
+    /**
+     * Handles falling fluids and vertical overflow independently of the fluid type.
+     */
+    private void handleColumnLogic(Level level, BlockPos pos) {
+        if (this.fluidAmount <= 0 || this.storedFluid == Fluids.EMPTY) return;
+
+        // 1. Try to push fluid downwards (falling logic)
+        BlockEntity belowBE = level.getBlockEntity(pos.below());
+        if (belowBE instanceof FluidTankEntity tankBelow) {
+            if (tankBelow.storedFluid == Fluids.EMPTY || tankBelow.storedFluid == this.storedFluid) {
+                long accepted = tankBelow.fill(this.fluidAmount, this.storedFluid);
+                if (accepted > 0) {
+                    this.drain(accepted);
+                }
+            }
+        }
+
+        // 2. Try to push overflow upwards if this tank exceeds its capacity (overflow logic)
+        if (this.fluidAmount > this.capacity) {
+            BlockEntity aboveBE = level.getBlockEntity(pos.above());
+            if (aboveBE instanceof FluidTankEntity tankAbove) {
+                if (tankAbove.storedFluid == Fluids.EMPTY || tankAbove.storedFluid == this.storedFluid) {
+                    long overflow = this.fluidAmount - this.capacity;
+                    long accepted = tankAbove.fill(overflow, this.storedFluid);
+                    if (accepted > 0) {
+                        this.fluidAmount -= accepted;
+                        this.setChanged();
+                        level.sendBlockUpdated(pos, getBlockState(), getBlockState(), 3);
+                    }
+                }
+            }
+        }
+    }
+
     public long fill(long amount, Fluid fluid) {
+        if (amount <= 0 || fluid == Fluids.EMPTY) return 0;
+
         // If tank is empty accept new fluid
         if (this.storedFluid == Fluids.EMPTY) {
             this.storedFluid = fluid;
         }
 
-        // If right fluid, fill
+        // If right fluid, handle filling and potential overflow cascading
         if (this.storedFluid == fluid) {
-            long canFill = Math.min(amount, this.capacity - this.fluidAmount);
-            this.fluidAmount += canFill;
-            this.setChanged();
-            if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
-            return canFill;
+            long spaceLeft = this.capacity - this.fluidAmount;
+
+            if (spaceLeft > 0) {
+                // There is space in this tank
+                long toFill = Math.min(amount, spaceLeft);
+                this.fluidAmount += toFill;
+                this.setChanged();
+                if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+
+                long remaining = amount - toFill;
+                // If there's still fluid left after filling this tank, pass it to the top tank
+                if (remaining > 0 && this.level != null) {
+                    BlockEntity aboveBE = this.level.getBlockEntity(this.worldPosition.above());
+                    if (aboveBE instanceof FluidTankEntity tankAbove) {
+                        return toFill + tankAbove.fill(remaining, fluid);
+                    }
+                }
+                return toFill;
+            } else {
+                // This tank is already full, directly try to fill the tank above
+                if (this.level != null) {
+                    BlockEntity aboveBE = this.level.getBlockEntity(this.worldPosition.above());
+                    if (aboveBE instanceof FluidTankEntity tankAbove) {
+                        if (tankAbove.getStoredFluid() == Fluids.EMPTY || tankAbove.getStoredFluid() == fluid) {
+                            return tankAbove.fill(amount, fluid);
+                        }
+                    }
+                }
+            }
         }
-        return 0; // Wrong fluid or full tank
+        return 0; // Wrong fluid or column is completely full
     }
+
     // NBT Data Management
     @Override
     protected void saveAdditional(ValueOutput valueOutput) {
@@ -133,6 +208,40 @@ public class FluidTankEntity extends BlockEntity {
         // Read amount from NBT, fallback to 0L if missing
         this.fluidAmount = valueInput.getLongOr("FluidAmount", 0L);
     }
+    /**
+     * Calculates the total capacity and fluid amount of the entire vertical column this tank belongs to.
+     * @return A pair containing L: Total Fluid Amount, R: Total Capacity of the column.
+     */
+    public Pair<Long, Long> getColumnStats() {
+        long totalAmount = this.fluidAmount;
+        long totalCapacity = this.capacity;
+
+        // Scan upwards
+        BlockPos.MutableBlockPos nextPos = new BlockPos.MutableBlockPos().set(this.worldPosition);
+        while (this.level != null) {
+            nextPos.move(net.minecraft.core.Direction.UP);
+            if (this.level.getBlockEntity(nextPos) instanceof FluidTankEntity tank) {
+                totalAmount += tank.getFluidAmount();
+                totalCapacity += tank.getCapacity();
+            } else {
+                break; // Hit a non-tank block, end of column
+            }
+        }
+
+        // Scan downwards
+        nextPos.set(this.worldPosition);
+        while (this.level != null) {
+            nextPos.move(net.minecraft.core.Direction.DOWN);
+            if (this.level.getBlockEntity(nextPos) instanceof FluidTankEntity tank) {
+                totalAmount += tank.getFluidAmount();
+                totalCapacity += tank.getCapacity();
+            } else {
+                break; // Hit a non-tank block, end of column
+            }
+        }
+
+        return new Pair<>(totalAmount, totalCapacity);
+    }
 
     // --- Network Synchronization for BER ---
 
@@ -151,11 +260,9 @@ public class FluidTankEntity extends BlockEntity {
         return tag;
     }
 
-
-
     // --- Common internal method to write data ---
-    private void writeFluidData(java.util.function.BiConsumer<String, String> stringWriter,
-                                java.util.function.BiConsumer<String, Long> longWriter) {
+    private void writeFluidData(BiConsumer<String, String> stringWriter,
+                                BiConsumer<String, Long> longWriter) {
         Identifier fluidKey = BuiltInRegistries.FLUID.getKey(this.storedFluid);
         stringWriter.accept("FluidType", fluidKey.toString());
         longWriter.accept("FluidAmount", this.fluidAmount);
