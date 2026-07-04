@@ -76,21 +76,43 @@ public class FluidTankRenderer implements BlockEntityRenderer<FluidTankEntity, F
         // Fetch fluid textures and colors using the proper Architectury Hook from your files
         FluidStack fluidStack = FluidStack.create(fluid, amount);
 
-        // Fallback to the missing texture sprite if the atlas hasn't finished loading yet
         TextureAtlasSprite sprite = null;
-        TextureAtlas blocksAtlas = Minecraft.getInstance()
+
+        // SECURITY: If it's milk, bypass Architectury because its vanilla sprite is broken
+        if (fluid == VibraniumFluids.VANILLA_MILK_STILL.get()) {
+            TextureAtlas blocksAtlas = Minecraft.getInstance()
+                    .getTextureManager()
+                    .getTexture(TextureAtlas.LOCATION_BLOCKS) instanceof TextureAtlas atlas ? atlas : null;
+            if (blocksAtlas != null) {
+                // Use water_still as a baseline layout for milk (it will be colored or textured correctly)
+                sprite = blocksAtlas.getSprite(Identifier.fromNamespaceAndPath("minecraft", "block/water_still"));
+            }
+        } else {
+            // 2. For all other fluids, ask Architectury safely
+            try {
+                sprite = ClientFluidStackHooks.getStillTexture(fluidStack);
+            } catch (Exception e) {
+                sprite = null;
+            }
+        }
+
+        // GLOBAL FALLBACK: If the sprite is null or fundamentally broken, grab a guaranteed vanilla sprite
+        if (sprite == null || sprite.getU0() == sprite.getU1()) {
+            TextureAtlas blocksAtlas = Minecraft.getInstance()
                     .getTextureManager()
                     .getTexture(TextureAtlas.LOCATION_BLOCKS) instanceof TextureAtlas atlas ? atlas : null;
 
-        // Ensure blocksAtlas is not null before using it
-        if (blocksAtlas != null) {
-            sprite = blocksAtlas.getSprite(Identifier.fromNamespaceAndPath("minecraft", "block/water_still"));
+            if (blocksAtlas != null) {
+                Identifier fallbackId = (fluid == Fluids.LAVA)
+                        ? Identifier.fromNamespaceAndPath("minecraft", "block/lava_still")
+                        : Identifier.fromNamespaceAndPath("minecraft", "block/water_still");
+
+                sprite = blocksAtlas.getSprite(fallbackId);
+            }
         }
 
+        //Final safety guard - if we still don't have a sprite, abort rendering to prevent crash
         if (sprite == null) {
-            return;
-        }
-        if (sprite.atlasLocation() == null) {
             return;
         }
 
