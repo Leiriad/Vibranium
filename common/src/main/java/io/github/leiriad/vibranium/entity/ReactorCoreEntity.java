@@ -39,7 +39,7 @@ public class ReactorCoreEntity extends BlockEntity {
     private int vibraniumAmount = 0;
     private long waterAmount=0;
     private long hotWaterAmount=0;
-    private static final int TICKS_PER_POWDER = 24000;
+    private final int TICKS_PER_POWDER = 24000;
     private final int MAX_ENERGY = 100000;
 
     private Map<Pair<Integer, Integer>, List<FluidTankEntity>> waterColumns = new HashMap<>();
@@ -536,6 +536,7 @@ public class ReactorCoreEntity extends BlockEntity {
     public int getVibraniumAmount() {
         return this.vibraniumAmount;
     }
+    public int getTicksPerPowder(){return  this.TICKS_PER_POWDER;}
     public long getMaxWaterCapacity() {
         long totalCapacity = 0;
         // Map to keep track of columns we already counted (using their unique X/Z key)

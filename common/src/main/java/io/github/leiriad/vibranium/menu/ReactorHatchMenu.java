@@ -29,11 +29,11 @@ public class ReactorHatchMenu extends AbstractContainerMenu {
 
         this.hatch = getHatchAtPos(playerInv.player.level(), pos);
 
-        this.data = this.hatch != null ? this.hatch.data : new SimpleContainerData(1);
+        this.data = this.hatch != null ? this.hatch.data : new SimpleContainerData(2);
         this.addDataSlots(this.data);
         if (this.hatch != null) {
-            this.addSlot(new Slot(this.hatch.inventory, 0, 80, 24));
-            this.addSlot(new Slot(this.hatch.inventory, 1, 80, 56));
+            this.addSlot(new Slot(this.hatch.inventory, 0, 44, 34));
+            this.addSlot(new Slot(this.hatch.inventory, 1, 116, 35));
         }
 
         //Add player inventory
@@ -58,6 +58,9 @@ public class ReactorHatchMenu extends AbstractContainerMenu {
     ///Server values injection
     public int getFuelProgress() {
         return this.data.get(0);
+    }
+    public int getMaxFuelDuration() {
+        return this.data.get(1);
     }
     @Override //Shift-click management
     public ItemStack quickMoveStack(Player player, int index) {

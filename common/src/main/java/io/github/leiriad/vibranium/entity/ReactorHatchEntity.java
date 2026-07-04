@@ -26,6 +26,8 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
     //PROPERTIES
     public final SimpleContainer inventory = new SimpleContainer(2);
     private BlockPos corePos = null;
+    private int trackedVibraniumAmount = 0;
+    private int trackedMaxFuelTicks = 24000;
 
     // CONSTRUCTOR
     public ReactorHatchEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -66,21 +68,32 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
         if (level.isClientSide()) return;
 
         ReactorCoreEntity core = hatch.getConnectedCore(level);
+        hatch.trackedVibraniumAmount = core != null ? core.getVibraniumAmount() : 0;
+        if (core != null) {
+            hatch.trackedMaxFuelTicks = core.getTicksPerPowder();
+        }
         boolean hasFuel = !hatch.inventory.getItem(0).isEmpty();
         hatch.updateLitState(core != null && hasFuel);
     }
 
     //Inventory Synchronisation
-    public ContainerData data = new SimpleContainerData(1) {
+    public ContainerData data = new SimpleContainerData(2) {
         @Override
         public int get(int index) {
-            ReactorCoreEntity core = (ReactorCoreEntity) getConnectedCore(level);
-            return core != null ? core.getVibraniumAmount() : 0;
+
+            if(index==1){
+                return ReactorHatchEntity.this.trackedMaxFuelTicks;
+            }
+            return ReactorHatchEntity.this.trackedVibraniumAmount;
         }
         @Override
-        public void set(int index, int value) {}
+        public void set(int index, int value) {
+            if(index==0){
+                ReactorHatchEntity.this.trackedVibraniumAmount = value;
+            }
+        }
         @Override
-        public int getCount() { return 1; }
+        public int getCount() { return 2; }
     };
 
     //Game saving
