@@ -38,6 +38,10 @@ dependencies {
         exclude group: "net.fabricmc.fabric-api"
     }
 
+    // TEAMREBORN ENERGY API
+    modApi "teamreborn:energy:4.1.0"
+    include "teamreborn:energy:4.1.0"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }

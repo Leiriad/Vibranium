@@ -3,8 +3,14 @@ package io.github.leiriad.vibranium.neoforge;
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.client.render.FluidTankRenderer;
 import io.github.leiriad.vibranium.entity.FluidTankEntity;
+import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
+import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
+import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.neoforge.block.entity.VibraniumEntitiesNeoforge;
+import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
+import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -12,6 +18,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
@@ -25,10 +32,13 @@ public final class VibraniumModNeoForge {
         // Add listeners to the NeoForge mod event bus
         modEventBus.addListener(this::registerCapabilities);
         modEventBus.addListener(this::registerRenderers);
+        modEventBus.addListener(this::registerScreens);
     }
 
-    // Expose the fluid tank to NeoForge's Fluid system
+    // Expose the fluid tank to NeoForge's Fluid system & the Reactor to the energy system
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
+
+        // --- REGISTRATION FOR FLUID TANK COMPONENT ---
         event.registerBlockEntity(
                 Capabilities.Fluid.BLOCK,
                 VibraniumEntities.FLUID_TANK_ENTITY.get(),
@@ -127,10 +137,85 @@ public final class VibraniumModNeoForge {
                     };
                 }
         );
+
+        // --- REGISTRATION FOR REINFORCED VIBRANIUM GLASS (ENERGY OUTPUT) ---
+        event.registerBlock(
+                Capabilities.Energy.BLOCK,
+                (level, pos, state, blockEntity, context) -> {
+                    // Scan around the glass block in a 3x3x3 area to locate the Reactor Core
+                    for (BlockPos checkPos : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
+                        if (level.getBlockEntity(checkPos) instanceof ReactorCoreEntity core) {
+
+                            // Return the corrected NeoForge EnergyHandler implementation
+                            return new EnergyHandler() {
+                                @Override
+                                public long getAmountAsLong() {
+                                    return core.getEnergy();
+                                }
+
+                                @Override
+                                public long getCapacityAsLong() {
+                                    return 100000L; // Max energy matching core specification
+                                }
+
+                                @Override
+                                public int insert(int amount, TransactionContext transactionContext) {
+                                    // The reactor generates power, it cannot receive energy from external sources
+                                    return 0;
+                                }
+
+                                @Override
+                                public int extract(int amount, TransactionContext transactionContext) {
+                                    if (amount <= 0) {
+                                        return 0;
+                                    }
+
+                                    // Simulate extraction first to see how much we can actually pull
+                                    int energyExtracted = core.extractEnergy(amount, true);
+                                    if (energyExtracted > 0) {
+
+                                        // Instantiate a SnapshotJournal to safely register rollback logic into NeoForge's system
+                                        new net.neoforged.neoforge.transfer.transaction.SnapshotJournal<Integer>() {
+                                            @Override
+                                            protected Integer createSnapshot() {
+                                                // Capture the current energy level before modification
+                                                return core.getEnergy();
+                                            }
+
+                                            @Override
+                                            protected void revertToSnapshot(Integer snapshot) {
+                                                // If the transaction aborts, we restore the energy back into the core
+                                                // Note: Ensure your core handles changes or you can use a forced addition if needed
+                                                int difference = snapshot - core.getEnergy();
+                                                if (difference > 0) {
+                                                    // Re-inject the extracted energy that was canceled
+                                                    core.extractEnergy(-difference, false);
+                                                }
+                                            }
+                                        }.updateSnapshots(transactionContext); // Bind this rollback rule to the transaction context
+
+                                        // Apply the energy change directly to the core immediately
+                                        return core.extractEnergy(energyExtracted, false);
+                                    }
+                                    return 0;
+                                }
+                            };
+                        }
+                    }
+                    return null;
+                },
+                VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()
+        );
     }
 
     // Register the BER for NeoForge
     private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(VibraniumEntities.FLUID_TANK_ENTITY.get(), FluidTankRenderer::new);
+    }
+
+    //Register screens
+    private void registerScreens(net.neoforged.neoforge.client.event.RegisterMenuScreensEvent event) {
+        event.register(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);
+        event.register(VibraniumMenus.REACTOR_HATCH_MENU.get(), ReactorHatchScreen::new);
     }
 }

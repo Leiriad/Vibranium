@@ -82,6 +82,7 @@
   "item.vibranium.vibranium_path": "Chemin de terre vibranisée",
   "itemGroup.vibranium.vibranium_tab": "Vibranium",
   "message.vibranium.hatch_no_core": "Cette trappe n'est reliée à aucun réacteur !",
+  "subtitles.vibranium.meltdown_alarm": "L'alarme de surchauffe du réacteur sonne !",
   "tooltip.vibranium.slot_fuel": "Insérez la poudre de Vibranium ici",
   "tooltip.vibranium.slot_output": "Résidus et scories de combustion"
 }

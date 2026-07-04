@@ -2,10 +2,7 @@ package io.github.leiriad.vibranium.entity;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.leiriad.vibranium.block.ReactorCoreBlock;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
-import io.github.leiriad.vibranium.init.VibraniumEntities;
-import io.github.leiriad.vibranium.init.VibraniumFluids;
-import io.github.leiriad.vibranium.init.VibraniumItems;
+import io.github.leiriad.vibranium.init.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -92,12 +89,15 @@ public class ReactorCoreEntity extends BlockEntity {
         boolean hasFuel = blockEntity.hasFuel();
         boolean isStructureValid = blockEntity.isReactorFunctioningCorrectly();
 
+        // CRITICAL CHECK: If the reactor is already melting down, it bypasses safety structures
+        boolean isMeltingDown = blockEntity.temperature > 3000;
+
         //Send heat order
         boolean aFurnaceIsCooking = blockEntity.checkAndBoostAdjacentFurnaces(level, pos, state);
 
         //Temperature management
-        if (hasFuel && isStructureValid) {
-            // The reactor has fuel and a valid structure, it can process
+        if ((hasFuel && isStructureValid) || isMeltingDown) {
+            // The reactor processes if setup is valid OR if it has reached a point of no return (meltdown)
             blockEntity.processReaction(hasCoolant, aFurnaceIsCooking);
         } else {
             // No fuel or invalid setup: standard cooldown due to inactivity
@@ -105,6 +105,11 @@ public class ReactorCoreEntity extends BlockEntity {
         }
         boolean shouldBeLit = blockEntity.energyStored > 0;
         blockEntity.updateLitState(shouldBeLit);
+
+        //-- Tough as nail/homeostatic behavior
+        if (level.getGameTime() % 20 == 0) {
+            blockEntity.radiateHeatToPlayers(level, pos);
+        }
 
         //Discharge system
         if (blockEntity.isStructurePowered && blockEntity.energyStored > 0) {
@@ -281,11 +286,11 @@ public class ReactorCoreEntity extends BlockEntity {
             this.vibraniumAmount--; // Burn fuel
 
             // Core reaction always produces energy and heat
-            int energyGenerated = 100; // Fixed base production
+            int energyGenerated = 40; // Fixed base production
             this.energyStored = Math.clamp(this.energyStored + energyGenerated, 0, MAX_ENERGY);
 
             // Base heat generation from fission
-            this.temperature += 40;
+            this.temperature += 5;
 
             // COOLING: Water only acts as a heat sink
             if (hasCoolant) {
@@ -322,7 +327,7 @@ public class ReactorCoreEntity extends BlockEntity {
                 }
             } else {
                 // MELTDOWN SCENARIO: No coolant means temperature keeps building up exponentially
-                if (this.temperature > 3000) {
+                if (this.temperature > 2500) {
                     this.handleStepByStepMeltdown(this.level, this.worldPosition);
                 }
             }
@@ -446,8 +451,19 @@ public class ReactorCoreEntity extends BlockEntity {
     private void handleStepByStepMeltdown(Level level, BlockPos pos) {
         if (level == null || level.isClientSide()) return;
 
-        // PHASE 1: Warning Sign (2000°C - 2499°C) -> Structural damage & panic sounds
-        if (this.temperature >= 2000 && this.temperature < 2500) {
+        // PHASE 0: Raise alarm
+        if(this.temperature > 2500) {
+            this.level.playSound(
+                    null,                           // Player to exclude (null = play for everyone)
+                    this.worldPosition,             // Position of the sound source
+                    VibraniumSounds.MELTDOWN_ALARM.get(),
+                    SoundSource.BLOCKS,             // Sound category
+                    2.0F,                           // Volume (greater than 1.0F increases the audio range)
+                    1.0F                            // Pitch (speed/tone)
+            );
+        }
+        // PHASE 1: Warning Sign (4000°C - 7000°C) -> Structural damage & panic sounds
+        if (this.temperature >= 4000 && this.temperature < 7000) {
             if (level.getGameTime() % 20 == 0) { // Every second
                 // Play a metallic creaking or warning sound near the core
                 level.playSound(null, pos, SoundEvents.LIGHTNING_BOLT_THUNDER,
@@ -464,8 +480,8 @@ public class ReactorCoreEntity extends BlockEntity {
             );
         }
 
-        // PHASE 2: Containment Breach (2500°C - 2999°C) -> Glass melts into lava, fire spreads
-        else if (this.temperature >= 2500 && this.temperature < 3000) {
+        // PHASE 2: Containment Breach (7000°C - 7500°C) -> Glass melts into lava, fire spreads
+        else if (this.temperature >= 7000 && this.temperature < 7500) {
             if (level.getGameTime() % 10 == 0) {
                 // Play alarm sound (Using the Elder Guardian ghost sound for maximum dread)
                 level.playSound(null, pos, SoundEvents.ELDER_GUARDIAN_CURSE,
@@ -490,8 +506,8 @@ public class ReactorCoreEntity extends BlockEntity {
             }
         }
 
-        // PHASE 3: Total Core Liquefaction (3000°C+) -> The core explodes and leaves a sea of lava
-        else if (this.temperature >= 3000) {
+        // PHASE 3: Total Core Liquefaction (7500°C+) -> The core explodes and leaves a sea of lava
+        else if (this.temperature >= 7500) {
             // Trigger a medium blast to rupture remaining blocks cleanly
             level.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                     4.0F, true, Level.ExplosionInteraction.BLOCK);
@@ -517,6 +533,65 @@ public class ReactorCoreEntity extends BlockEntity {
 
             // Safely discard the core entity to prevent further tick evaluation
             this.setRemoved();
+        }
+    }
+    private void radiateHeatToPlayers(Level level, BlockPos pos) {
+        // Calculate safe operational and danger ranges taking the glass casing into account
+        double range = 0.0;
+
+        if (this.temperature >= 1500 && this.temperature < 2500) {
+            range = 3.0; // Warm enough to pass through the glass casing and protect from cold
+        } else if (this.temperature >= 2500 && this.temperature < 5000) {
+            range = 6.0; // Alarm phase: wider heat aura to alert the player during intervention
+        } else if (this.temperature >= 5000 && this.temperature < 6000) {
+            range = 12.0; // Severe overheating: heat leaks heavily through the structure
+        } else if (this.temperature >= 6000) {
+            range = 20.0; // Core liquefaction: extreme thermal radiation
+        }
+
+        // If the core is too cold or perfectly insulated, skip scanning to save performance
+        if (range == 0.0) return;
+
+        AABB area = new AABB(pos).inflate(range);
+        List<Player> nearbyPlayers = level.getEntitiesOfClass(Player.class, area);
+
+        for (Player player : nearbyPlayers) {
+            double distanceSq = player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+            double currentRangeSq = range * range;
+
+            if (distanceSq < currentRangeSq) {
+                // COMFORTING HEAT (1500°C - 2499°C)
+                if (this.temperature < 2500) {
+                    if (level.getGameTime() % 40 == 0) {
+                        // Counteracts Tough As Nails / Homeostatic hypothermia safely outside the casing
+                        player.removeEffect(MobEffects.SLOWNESS);
+                    }
+                }
+                //ALARM & INTERVENTION PHASE (2500°C - 6000°C)
+                else if (this.temperature < 6000) {
+                    if (level.getGameTime() % 40 == 0) {
+                        player.removeEffect(MobEffects.SLOWNESS);
+                    }
+                    // Very minor damage tick to simulate intense sweat/heat stress without killing the player instantly
+                    if (level.random.nextInt(6) == 0) {
+                        player.hurt(level.damageSources().onFire(), 1.0F);
+                    }
+                }
+                //SCENARIO C: CRITICAL MELTDOWN (6000°C+)
+                else {
+                    // High damage scaling: the player must wear protective gear or back away
+                    if (level.random.nextInt(2) == 0) {
+                        float damageIntensity = (float) (this.temperature / 2000.0);
+                        player.hurt(level.damageSources().onFire(), damageIntensity);
+                    }
+
+                    // Spontaneous combustion at extreme containment failure thresholds
+                    if (this.temperature > 6000) {
+                        int fireTicks = (this.temperature > 6000) ? 100 : 40;
+                        player.setRemainingFireTicks(Math.max(player.getRemainingFireTicks(), fireTicks));
+                    }
+                }
+            }
         }
     }
 

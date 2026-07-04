@@ -1,0 +1,11 @@
+{
+  "meltdown_alarm": {
+    "subtitle": "subtitles.vibranium.meltdown_alarm",
+    "sounds": [
+      {
+        "name": "vibranium:block/meltdown_alarm",
+        "stream": true
+      }
+    ]
+  }
+}

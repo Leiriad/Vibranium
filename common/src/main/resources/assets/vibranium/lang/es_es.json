@@ -81,6 +81,7 @@
   "item.vibranium.vibranium_path": "Camino de tierra vibranizada",
   "itemGroup.vibranium.vibranium_tab": "Vibranio",
   "message.vibranium.hatch_no_core": "¡Esta escotilla no está conectada a ningún reactor!",
+  "subtitles.vibranium.meltdown_alarm": "¡Suena la alarma de fusión del reactor!",
   "tooltip.vibranium.slot_fuel": "Inserta el polvo de Vibranium aquí",
   "tooltip.vibranium.slot_output": "Residuos y escorias de combustión"
 }

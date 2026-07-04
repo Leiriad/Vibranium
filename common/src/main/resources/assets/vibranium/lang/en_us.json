@@ -82,6 +82,7 @@
   "item.vibranium.vibranium_path": "Vibranized Dirt Path",
   "itemGroup.vibranium.vibranium_tab": "Vibranium",
   "message.vibranium.hatch_no_core": "This hatch is not connected to any reactor core!",
+  "subtitles.vibranium.meltdown_alarm": "Reactor Meltdown Alarm blares!",
   "tooltip.vibranium.slot_fuel": "Insert Vibranium powder here",
   "tooltip.vibranium.slot_output": "Combustion waste and slag"
 }

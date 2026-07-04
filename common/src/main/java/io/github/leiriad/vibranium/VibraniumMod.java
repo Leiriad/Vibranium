@@ -27,6 +27,7 @@ public class VibraniumMod {
 		VibraniumItems.registerModItems();
 		VibraniumCreativeTabs.registerModTabs();
 		VibraniumMenus.registerModMenus();
+		VibraniumSounds.init();
 
 		//Register features
 		VibraniumTreeDecorators.register();

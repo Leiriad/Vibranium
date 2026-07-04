@@ -1,0 +1,7 @@
+[
+  {
+    "blockId": "vibranium:reactor_core",
+    "radiation": 5.0,
+    "maxDistance": 4
+  }
+]

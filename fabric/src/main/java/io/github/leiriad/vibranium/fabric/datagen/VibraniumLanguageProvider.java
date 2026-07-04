@@ -91,6 +91,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip.vibranium.slot_output", "Résidus et scories de combustion");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
+                translationBuilder.add("subtitles.vibranium.meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
                 break;
             case "es_es":
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Mineral de vibranio");
@@ -153,6 +154,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip.vibranium.slot_output", "Residuos y escorias de combustión");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
+                translationBuilder.add("subtitles.vibranium.meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
                 break;
             default:
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Vibranium Ore");
@@ -217,6 +219,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip.vibranium.slot_output", "Combustion waste and slag");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "This hatch is not connected to any reactor core!");
+                translationBuilder.add("subtitles.vibranium.meltdown_alarm", "Reactor Meltdown Alarm blares!");
         }
 
     }
