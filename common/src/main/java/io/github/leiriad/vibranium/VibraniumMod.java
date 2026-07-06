@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium;
 
 import dev.architectury.registry.menu.MenuRegistry;
+import io.github.leiriad.vibranium.config.VibraniumConfigManager;
 import io.github.leiriad.vibranium.init.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class VibraniumMod {
 		VibraniumCreativeTabs.registerModTabs();
 		VibraniumMenus.registerModMenus();
 		VibraniumSounds.init();
+		VibraniumConfigManager.init();
 
 		//Register features
 		VibraniumTreeDecorators.register();

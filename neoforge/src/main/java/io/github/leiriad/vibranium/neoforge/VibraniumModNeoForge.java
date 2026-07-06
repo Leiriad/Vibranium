@@ -8,15 +8,19 @@ import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.neoforge.block.entity.VibraniumEntitiesNeoforge;
+import io.github.leiriad.vibranium.neoforge.client.NeoForgeVibraniumScreen;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
@@ -28,6 +32,14 @@ public final class VibraniumModNeoForge {
         // Run our common setup.
         VibraniumMod.init();
         VibraniumEntitiesNeoforge.init();
+
+        //Register config screen
+        if (FMLEnvironment.getDist().isClient()) {
+            ModLoadingContext.get().registerExtensionPoint(
+                    IConfigScreenFactory.class,
+                    () -> (minecraft, parent) -> NeoForgeVibraniumScreen.create(parent)
+            );
+        }
 
         // Add listeners to the NeoForge mod event bus
         modEventBus.addListener(this::registerCapabilities);
@@ -218,4 +230,5 @@ public final class VibraniumModNeoForge {
         event.register(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);
         event.register(VibraniumMenus.REACTOR_HATCH_MENU.get(), ReactorHatchScreen::new);
     }
+
 }

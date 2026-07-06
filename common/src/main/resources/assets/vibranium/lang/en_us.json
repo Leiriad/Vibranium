@@ -83,6 +83,13 @@
   "itemGroup.vibranium.vibranium_tab": "Vibranium",
   "message.vibranium.hatch_no_core": "This hatch is not connected to any reactor core!",
   "subtitles.vibranium.meltdown_alarm": "Reactor Meltdown Alarm blares!",
+  "text.vibranium.config.category.end": "Meteorite Generation: The End",
+  "text.vibranium.config.category.overworld": "Meteorite Generation: Overworld",
+  "text.vibranium.config.option.separation": "Separation",
+  "text.vibranium.config.option.spacing": "Spacing",
+  "text.vibranium.config.section.weights": "§6Structure Spawn Weights",
+  "text.vibranium.config.title": "Vibranium Configuration",
+  "text.vibranium.config.weight_for": "Weight for %s",
   "tooltip.vibranium.slot_fuel": "Insert Vibranium powder here",
   "tooltip.vibranium.slot_output": "Combustion waste and slag"
 }

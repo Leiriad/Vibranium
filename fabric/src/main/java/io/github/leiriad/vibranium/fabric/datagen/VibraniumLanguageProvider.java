@@ -92,6 +92,14 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
+
+                translationBuilder.add("text.vibranium.config.title", "Configuration de Vibranium");
+                translationBuilder.add("text.vibranium.config.category.overworld", "Génération de Météorites : Overworld");
+                translationBuilder.add("text.vibranium.config.category.end", "Génération de Météorites : End");
+                translationBuilder.add("text.vibranium.config.option.spacing", "Espacement (Spacing)");
+                translationBuilder.add("text.vibranium.config.option.separation", "Séparation (Separation)");
+                translationBuilder.add("text.vibranium.config.section.weights", "§6Probabilité d'apparition des structures (Weights)");
+                translationBuilder.add("text.vibranium.config.weight_for", "Poids (Weight) pour %s");
                 break;
             case "es_es":
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Mineral de vibranio");
@@ -155,6 +163,14 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
+
+                translationBuilder.add("text.vibranium.config.title", "Configuración de Vibranium");
+                translationBuilder.add("text.vibranium.config.category.overworld", "Generación de Meteoritos: Overworld");
+                translationBuilder.add("text.vibranium.config.category.end", "Generación de Meteoritos: End");
+                translationBuilder.add("text.vibranium.config.option.spacing", "Espaciado (Spacing)");
+                translationBuilder.add("text.vibranium.config.option.separation", "Separación (Separation)");
+                translationBuilder.add("text.vibranium.config.section.weights", "§6Probabilidad de Estructuras (Weights)");
+                translationBuilder.add("text.vibranium.config.weight_for", "Probabilidad (Weight) para %s");
                 break;
             default:
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Vibranium Ore");
@@ -220,6 +236,14 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "This hatch is not connected to any reactor core!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "Reactor Meltdown Alarm blares!");
+
+                translationBuilder.add("text.vibranium.config.title", "Vibranium Configuration");
+                translationBuilder.add("text.vibranium.config.category.overworld", "Meteorite Generation: Overworld");
+                translationBuilder.add("text.vibranium.config.category.end", "Meteorite Generation: The End");
+                translationBuilder.add("text.vibranium.config.option.spacing", "Spacing");
+                translationBuilder.add("text.vibranium.config.option.separation", "Separation");
+                translationBuilder.add("text.vibranium.config.section.weights", "§6Structure Spawn Weights");
+                translationBuilder.add("text.vibranium.config.weight_for", "Weight for %s");
         }
 
     }

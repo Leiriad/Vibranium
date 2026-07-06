@@ -21,7 +21,10 @@
     "client": [
       "io.github.leiriad.vibranium.fabric.client.VibraniumModFabricClient"
     ],
-    "fabric-datagen": [ "io.github.leiriad.vibranium.fabric.datagen.VibraniumDataGenerator" ]
+    "fabric-datagen": [ "io.github.leiriad.vibranium.fabric.datagen.VibraniumDataGenerator" ],
+    "modmenu": [
+      "io.github.leiriad.vibranium.fabric.client.VibraniumModMenuImpl"
+    ]
   },
   "mixins": [
     "vibranium.mixin.json",

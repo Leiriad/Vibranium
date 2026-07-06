@@ -82,6 +82,13 @@
   "itemGroup.vibranium.vibranium_tab": "Vibranio",
   "message.vibranium.hatch_no_core": "¡Esta escotilla no está conectada a ningún reactor!",
   "subtitles.vibranium.meltdown_alarm": "¡Suena la alarma de fusión del reactor!",
+  "text.vibranium.config.category.end": "Generación de Meteoritos: End",
+  "text.vibranium.config.category.overworld": "Generación de Meteoritos: Overworld",
+  "text.vibranium.config.option.separation": "Separación (Separation)",
+  "text.vibranium.config.option.spacing": "Espaciado (Spacing)",
+  "text.vibranium.config.section.weights": "§6Probabilidad de Estructuras (Weights)",
+  "text.vibranium.config.title": "Configuración de Vibranium",
+  "text.vibranium.config.weight_for": "Probabilidad (Weight) para %s",
   "tooltip.vibranium.slot_fuel": "Inserta el polvo de Vibranium aquí",
   "tooltip.vibranium.slot_output": "Residuos y escorias de combustión"
 }

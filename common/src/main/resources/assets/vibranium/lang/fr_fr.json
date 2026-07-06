@@ -83,6 +83,13 @@
   "itemGroup.vibranium.vibranium_tab": "Vibranium",
   "message.vibranium.hatch_no_core": "Cette trappe n'est reliée à aucun réacteur !",
   "subtitles.vibranium.meltdown_alarm": "L'alarme de surchauffe du réacteur sonne !",
+  "text.vibranium.config.category.end": "Génération de Météorites : End",
+  "text.vibranium.config.category.overworld": "Génération de Météorites : Overworld",
+  "text.vibranium.config.option.separation": "Séparation (Separation)",
+  "text.vibranium.config.option.spacing": "Espacement (Spacing)",
+  "text.vibranium.config.section.weights": "§6Probabilité d'apparition des structures (Weights)",
+  "text.vibranium.config.title": "Configuration de Vibranium",
+  "text.vibranium.config.weight_for": "Poids (Weight) pour %s",
   "tooltip.vibranium.slot_fuel": "Insérez la poudre de Vibranium ici",
   "tooltip.vibranium.slot_output": "Résidus et scories de combustion"
 }

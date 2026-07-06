@@ -23,7 +23,15 @@ configurations {
         canBeConsumed = false
     }
 }
-
+repositories {
+    maven {
+        url = "https://maven.terraformersmc.com/releases/"
+    }
+    // Dépôt de Cloth Config au cas où il manquerait aussi à ce module
+    maven {
+        url = "https://maven.shedaniel.me/"
+    }
+}
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
@@ -37,6 +45,10 @@ dependencies {
     modApi ("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"){
         exclude group: "net.fabricmc.fabric-api"
     }
+    include "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
+
+    // ModMenu API
+    modApi "com.terraformersmc:modmenu:17.0.0"
 
     // TEAMREBORN ENERGY API
     modApi "teamreborn:energy:4.1.0"
