@@ -73,6 +73,32 @@ public class ReactorHatchScreen extends AbstractContainerScreen<ReactorHatchMenu
                     14, flamePixels
             );
         }
+        // --- PROGRESS ARROW ANIMATION ---
+        if (maxTicks > 0) {
+            int maxArrowWidth = 24; // Width of the vanilla progress arrow
+
+            // remainingTicks goes from 24000 down to 0.
+            // We want the pixels to go from 0 up to 24.
+            int arrowPixels = ((maxTicks - remainingTicks) * maxArrowWidth) / maxTicks;
+
+            // Clamp values to avoid rendering glitches
+            if (arrowPixels > maxArrowWidth) arrowPixels = maxArrowWidth;
+            if (arrowPixels < 0) arrowPixels = 0;
+
+            // Only draw the arrow fill if we have actually started cooking
+            if (arrowPixels > 0) {
+                Identifier vanillaArrowSprite = Identifier.withDefaultNamespace("container/furnace/burn_progress");
+
+                guiGraphics.blitSprite(
+                        RenderPipelines.GUI_TEXTURED,
+                        vanillaArrowSprite,
+                        maxArrowWidth, 16,     // Full sprite dimensions
+                        0, 0,                  // U, V offset inside the sprite
+                        x + 75, y + 34,        // Screen position (between slots)
+                        arrowPixels, 16        // Width is dynamic (0 to 24), Height is fixed
+                );
+            }
+        }
     }
 
     @Override

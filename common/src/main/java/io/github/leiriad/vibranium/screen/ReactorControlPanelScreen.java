@@ -50,7 +50,7 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
         drawVerticalGauge(guiGraphics, x + 44, y + 77, this.menu.getEnergy(), 100000, maxHeight, 0, 0, 14);
 
         //Heat (Max 3000)
-        drawVerticalGauge(guiGraphics, x + 83, y + 77, this.menu.getHeat(), 3000, maxHeight, 0, 0, 14);
+        drawVerticalGauge(guiGraphics, x + 83, y + 77, this.menu.getHeat(), 2500, maxHeight, 0, 0, 14);
 
         //Water (Max 10000)
         drawVerticalGauge(guiGraphics, x + 121, y + 77, this.menu.getWater(), this.menu.getMaxWater(), maxHeight, 0, 0, 14);

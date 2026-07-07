@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "vibranium:vibranium_dust_to_depleted"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_vibranium_dust": {
+      "conditions": {
+        "items": [
+          {
+            "items": "vibranium:vibranium_dust"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_vibranium_dust"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "vibranium:vibranium_dust_to_depleted"
+    ]
+  }
+}

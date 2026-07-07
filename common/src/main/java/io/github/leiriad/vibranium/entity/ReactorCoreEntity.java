@@ -238,6 +238,28 @@ public class ReactorCoreEntity extends BlockEntity {
             }
         }
     }
+    private boolean isNear(ReactorHatchEntity hatch) {
+        return hatch.getBlockPos().distManhattan(this.worldPosition) <= 2;
+    }
+    public void updateLitState(boolean isEnergyStored) {
+        if (this.level != null && !this.level.isClientSide()) {
+            BlockState currentState = this.level.getBlockState(this.worldPosition);
+            if (currentState.hasProperty(ReactorCoreBlock.LIT) && currentState.getValue(ReactorCoreBlock.LIT) != isEnergyStored) {
+                this.level.setBlock(this.worldPosition, currentState.setValue(ReactorCoreBlock.LIT, isEnergyStored), 3);
+            }
+        }
+    }
+    public void updateFluidLevels() {
+        this.waterAmount = 0;
+        this.hotWaterAmount = 0;
+
+        for (FluidTankEntity tank : this.waterTanks) {
+            this.waterAmount += tank.getFluidAmount();
+        }
+        for (FluidTankEntity tank : this.hotWaterTanks) {
+            this.hotWaterAmount += tank.getFluidAmount();
+        }
+    }
     private boolean hasCoolant() {
         return this.waterAmount >= 1; //Water consumtion per tick
     }
@@ -259,14 +281,33 @@ public class ReactorCoreEntity extends BlockEntity {
         }
         if (this.canRefuel()) {
             ItemStack fuelStack = hatch.inventory.getItem(0);
-            fuelStack.shrink(1);
+            fuelStack.shrink(1);// Consume 1 Vibranium Dust
             this.vibraniumAmount = TICKS_PER_POWDER;
+
             hatch.setChanged();
             this.setChanged();
             if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
             }
         }
+    }
+    private void tryEjectDepletedVibranium(ReactorHatchEntity hatch) {
+        if (hatch == null || hatch.inventory == null) return;
+
+        ItemStack depletedStack = new ItemStack(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get());
+        ItemStack slot1Stack = hatch.inventory.getItem(1); // Target SLOT 1 for outputs
+
+        //Slot 1 is empty, we place the depleted ingot there
+        if (slot1Stack.isEmpty()) {
+            hatch.inventory.setItem(1, depletedStack);
+            hatch.setChanged();
+        }
+        //Slot 1 already holds depleted ingots and has room to stack
+        else if (slot1Stack.is(depletedStack.getItem()) && slot1Stack.getCount() < slot1Stack.getMaxStackSize()) {
+            slot1Stack.grow(1);
+            hatch.setChanged();
+        }
+        // Else slot 1 is full or blocked by something else -> Ejection fails (wasted/burned up completely)
     }
     private void processReaction(boolean hasCoolant, boolean aFurnaceIsCooking) {
         // GAME DESIGN: If energy buffer is completely full, we safety-stop the reaction (SCRAM)
@@ -285,12 +326,32 @@ public class ReactorCoreEntity extends BlockEntity {
         if (this.vibraniumAmount > 0) {
             this.vibraniumAmount--; // Burn fuel
 
+            // --- CYCLE COMPLETION CHECK ---
+            // If the fuel just hit 0, the arrow has completed its progression!
+            if (this.vibraniumAmount == 0) {
+                ReactorHatchEntity hatch = getHatch();
+                if (hatch != null && this.level != null && this.level.random.nextFloat() < 0.40F) {
+                    this.tryEjectDepletedVibranium(hatch);
+                }
+            }
+
             // Core reaction always produces energy and heat
             int energyGenerated = 40; // Fixed base production
             this.energyStored = Math.clamp(this.energyStored + energyGenerated, 0, MAX_ENERGY);
 
-            // Base heat generation from fission
-            this.temperature += 5;
+            // DYNAMIC THERMAL INERTIA
+            if (this.temperature < 1500) {
+                this.temperature += 25; // Fast rushe to operational temperature
+            } else if (this.temperature >= 1500 && this.temperature < 2500) {
+                if (level.getGameTime() % 2 == 0) {
+                    this.temperature += 1; // Faint incubation phase (~78 seconds)
+                }
+            } else {
+                // Above 2500°C (Meltdown active): We heat up at +1°C per tick.
+                // This reduces the 2500°C -> 4000°C phase from 120s down to 75s (approx 1min 15s)
+                this.temperature += 1;
+            }
+            // -------------------------------
 
             // COOLING: Water only acts as a heat sink
             if (hasCoolant) {
@@ -304,18 +365,23 @@ public class ReactorCoreEntity extends BlockEntity {
                     if (actualDrained >= waterNeeded) break;
                 }
 
-                // If we successfully used water, reduce temperature and produce hot water
+                // LINEAR COOLING WITH SOFT CAP
                 if (actualDrained > 0) {
-                    // Dynamic cooling: Water absorbs a percentage of the CURRENT heat above room temperature
-                    int roomTemperature = 20;
-                    int heatSurplus = this.temperature - roomTemperature;
+                    int coolingPower = 0;
 
-                    if (heatSurplus > 0) {
-                        // 1 mB of water cools down around 35 degrees instead of instantly freezing the core.
-                        // This allows the stable operational temperature to sit around 1100°C - 1300°C.
-                        double coolingFactor = 1.0 - (actualDrained * 0.03); // 5 water = 25% heat reduction
-                        this.temperature = roomTemperature + (int)(heatSurplus * coolingFactor);
+                    if (this.temperature < 1200) {
+                        // Under operational temp: water cools very gently (allows fast heating)
+                        coolingPower = 15;
+                    } else if (this.temperature >= 1200 && this.temperature <= 1300) {
+                        // Ideal zone: water perfectly matches the reactor's heat (+25°C) to lock it here
+                        coolingPower = 25;
+                    } else {
+                        // Overheating: water fights to push the temperature back down to the ideal zone
+                        coolingPower = 40;
                     }
+
+                    // Apply the calculated cooling
+                    this.temperature = Math.max(20, this.temperature - coolingPower);
 
                     // Convert the used water into hot water
                     long hotWaterToProduce = actualDrained;
@@ -337,25 +403,6 @@ public class ReactorCoreEntity extends BlockEntity {
             if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
             }
-        }
-    }
-    public void updateLitState(boolean isEnergyStored) {
-        if (this.level != null && !this.level.isClientSide()) {
-            BlockState currentState = this.level.getBlockState(this.worldPosition);
-            if (currentState.hasProperty(ReactorCoreBlock.LIT) && currentState.getValue(ReactorCoreBlock.LIT) != isEnergyStored) {
-                this.level.setBlock(this.worldPosition, currentState.setValue(ReactorCoreBlock.LIT, isEnergyStored), 3);
-            }
-        }
-    }
-    public void updateFluidLevels() {
-        this.waterAmount = 0;
-        this.hotWaterAmount = 0;
-
-        for (FluidTankEntity tank : this.waterTanks) {
-            this.waterAmount += tank.getFluidAmount();
-        }
-        for (FluidTankEntity tank : this.hotWaterTanks) {
-            this.hotWaterAmount += tank.getFluidAmount();
         }
     }
     public boolean isReactorFunctioningCorrectly() {
@@ -383,14 +430,8 @@ public class ReactorCoreEntity extends BlockEntity {
                         if (!inputStack.isEmpty()) {
                             boolean isVibranium = inputStack.getItem() == VibraniumItems.VIBRANIUM_DUST.get();
 
-                            // Rule 1: Vibranium demands extreme heat, freeze it if core is too cold
-                            if (isVibranium && this.temperature < 1000) {
-                                furnace.dataAccess.set(2, 0); // Reset cooking progress
-                                furnace.setChanged();
-                                continue; // This furnace is not absorbing usable heat right now
-                            }
 
-                            // Rule 2: The core must be hot enough (> 100°C) to transfer energy to vanilla items
+                            // The core must be hot enough (> 100°C) to transfer energy to vanilla items
                             if (this.temperature > 100) {
                                 // Provide virtual fuel using the reactor's residual heat
                                 int currentLitTime = furnace.dataAccess.get(0);
@@ -404,6 +445,30 @@ public class ReactorCoreEntity extends BlockEntity {
                                 int totalCookTime = furnace.dataAccess.get(3);
                                 int heatBonus = Math.max(1, this.temperature / 200);
 
+                                // --- HIGH TEMPERATURE INTERCEPTION FOR VIBRANIUM ---
+                                if (isVibranium && this.temperature >= 1200 && (currentCookingProgress + heatBonus) >= (totalCookTime - 1)) {
+                                    ItemStack outputStack = furnace.getItem(2); // SLOT_OUTPUT
+                                    net.minecraft.world.item.Item pureIngot = VibraniumItems.VIBRANIUM_INGOT.get();
+
+                                    // Check if the output slot can accept the pure ingot
+                                    if (outputStack.isEmpty() || (outputStack.is(pureIngot) && outputStack.getCount() < outputStack.getMaxStackSize())) {
+                                        // Consume 1 Vibranium Dust
+                                        inputStack.shrink(1);
+
+                                        // Add 1 Vibranium Ingot to output
+                                        if (outputStack.isEmpty()) {
+                                            furnace.setItem(2, new ItemStack(pureIngot, 1));
+                                        } else {
+                                            outputStack.grow(1);
+                                        }
+
+                                        // Reset progress manually since we bypassed the vanilla completion
+                                        furnace.dataAccess.set(2, 0);
+                                        furnace.setChanged();
+                                        atLeastOneFurnaceBoosted = true;
+                                        continue;
+                                    }
+                                }
 
                                 // CRITICAL FIX: Cap our custom progress at (totalCookTime - 1).
                                 // This allows vanilla furnace tick to add the final +1 and trigger the recipe output.
@@ -445,74 +510,89 @@ public class ReactorCoreEntity extends BlockEntity {
             }
         }
     }
-    private boolean isNear(ReactorHatchEntity hatch) {
-        return hatch.getBlockPos().distManhattan(this.worldPosition) <= 2;
-    }
     private void handleStepByStepMeltdown(Level level, BlockPos pos) {
         if (level == null || level.isClientSide()) return;
 
-        // PHASE 0: Raise alarm
-        if(this.temperature > 2500) {
-            this.level.playSound(
-                    null,                           // Player to exclude (null = play for everyone)
-                    this.worldPosition,             // Position of the sound source
-                    VibraniumSounds.MELTDOWN_ALARM.get(),
-                    SoundSource.BLOCKS,             // Sound category
-                    2.0F,                           // Volume (greater than 1.0F increases the audio range)
-                    1.0F                            // Pitch (speed/tone)
-            );
-        }
-        // PHASE 1: Warning Sign (4000°C - 7000°C) -> Structural damage & panic sounds
-        if (this.temperature >= 4000 && this.temperature < 7000) {
-            if (level.getGameTime() % 20 == 0) { // Every second
-                // Play a metallic creaking or warning sound near the core
-                level.playSound(null, pos, SoundEvents.LIGHTNING_BOLT_THUNDER,
-                        SoundSource.BLOCKS, 0.5F, 2.0F);
+        // PHASE 0 & 1: Siren AND Heavy Smoke (2500°C - 3999°C)
+        if (this.temperature >= 2500) {
+            // Siren loops every 2 seconds
+            if (level.getGameTime() % 40 == 0) {
+                level.playSound(null, pos, VibraniumSounds.MELTDOWN_ALARM.get(), SoundSource.BLOCKS, 2.0F, 1.0F);
             }
 
-            // Spawn heavy smoke particles escaping from the reactor frame
-            double px = pos.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 2.0;
-            double py = pos.getY() + 1.2;
-            double pz = pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 2.0;
-            ((ServerLevel) level).sendParticles(
-                    ParticleTypes.LARGE_SMOKE,
-                    px, py, pz, 3, 0.0, 0.1, 0.0, 0.02
-            );
+            // VISUAL CUE: Smoke starts IMMEDIATELY at 2500°C so the player understands the danger
+            if (this.temperature < 4000 && level.getGameTime() % 6 == 0) {
+                double px = pos.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 1.5;
+                double py = pos.getY() + 1.2;
+                double pz = pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 1.5;
+                ((ServerLevel) level).sendParticles(ParticleTypes.SMOKE, px, py, pz, 2, 0.0, 0.05, 0.0, 0.01);
+            }
         }
 
-        // PHASE 2: Containment Breach (7000°C - 7500°C) -> Glass melts into lava, fire spreads
-        else if (this.temperature >= 7000 && this.temperature < 7500) {
-            if (level.getGameTime() % 10 == 0) {
-                // Play alarm sound (Using the Elder Guardian ghost sound for maximum dread)
-                level.playSound(null, pos, SoundEvents.ELDER_GUARDIAN_CURSE,
-                        SoundSource.BLOCKS, 1.0F, 0.5F);
+        // PHASE 2: Structural Stress (4000°C - 5499°C) -> Heavy thick smoke & thunder creaks
+        if (this.temperature >= 4000 && this.temperature < 5500) {
+            if (level.getGameTime() % 35 == 0) {
+                level.playSound(null, pos, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.BLOCKS, 0.6F, 1.4F);
             }
 
-            // Randomly melt a block of the 3x3x3 outer structure into lava
-            BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-            int rx = level.random.nextInt(3) - 1;
-            int ry = level.random.nextInt(3) - 1;
-            int rz = level.random.nextInt(3) - 1;
+            // Smoke becomes much denser (LARGE_SMOKE)
+            if (level.getGameTime() % 4 == 0) {
+                double px = pos.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 2.0;
+                double py = pos.getY() + 1.2;
+                double pz = pos.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 2.0;
+                ((ServerLevel) level).sendParticles(ParticleTypes.LARGE_SMOKE, px, py, pz, 3, 0.0, 0.08, 0.0, 0.02);
+            }
+        }
 
-            if (!(rx == 0 && ry == 0 && rz == 0)) { // Do not replace the core itself yet
-                mutablePos.set(pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz);
-                BlockState state = level.getBlockState(mutablePos);
+        // PHASE 3: Containment Breach (5500°C - 6499°C) -> Casing melting down
+        else if (this.temperature >= 5500 && this.temperature < 6500) {
+            if (level.getGameTime() % 20 == 0) {
+                level.playSound(null, pos, SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.BLOCKS, 1.0F, 0.5F);
+            }
 
-                // If it's reinforced glass or a component, it breaks open!
-                if (!state.isAir() && !state.is(Blocks.LAVA)) {
-                    level.setBlockAndUpdate(mutablePos, Blocks.LAVA.defaultBlockState());
-                    level.levelEvent(2001, mutablePos, Block.getId(state)); // Break particles
+            if (level.getGameTime() % 60 == 0) { // Slightly faster block melting (every 3 seconds)
+                BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+                int rx = level.random.nextInt(3) - 1;
+                int ry = level.random.nextInt(3) - 1;
+                int rz = level.random.nextInt(3) - 1;
+
+                if (!(rx == 0 && ry == 0 && rz == 0)) {
+                    mutablePos.set(pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz);
+                    BlockState state = level.getBlockState(mutablePos);
+
+                    if (!state.isAir() && !state.is(Blocks.LAVA)) {
+                        level.setBlockAndUpdate(mutablePos, Blocks.LAVA.defaultBlockState());
+                        level.levelEvent(2001, mutablePos, Block.getId(state));
+                    }
                 }
             }
         }
 
-        // PHASE 3: Total Core Liquefaction (7500°C+) -> The core explodes and leaves a sea of lava
-        else if (this.temperature >= 7500) {
-            // Trigger a medium blast to rupture remaining blocks cleanly
-            level.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    4.0F, true, Level.ExplosionInteraction.BLOCK);
+        // PHASE 4: Point of No Return (6500°C - 6999°C)
+        else if (this.temperature >= 6500 && this.temperature < 7000) {
+            if (level.getGameTime() % 10 == 0) {
+                level.playSound(null, pos, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1.0F, 0.6F);
+            }
+            if (level.getGameTime() % 20 == 0) {
+                BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+                int rx = level.random.nextInt(3) - 1;
+                int ry = level.random.nextInt(3) - 1;
+                int rz = level.random.nextInt(3) - 1;
 
-            // Turn the entire 3x3x3 core area into a pocket of flowing lava
+                if (!(rx == 0 && ry == 0 && rz == 0)) {
+                    mutablePos.set(pos.getX() + rx, pos.getY() + ry, pos.getZ() + rz);
+                    BlockState state = level.getBlockState(mutablePos);
+                    if (!state.isAir() && !state.is(Blocks.LAVA)) {
+                        level.setBlockAndUpdate(mutablePos, Blocks.LAVA.defaultBlockState());
+                    }
+                }
+            }
+        }
+
+        // PHASE 5: Liquefaction & Blast (7000°C+)
+        else if (this.temperature >= 7000) {
+            level.explode(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5.0F, true, Level.ExplosionInteraction.BLOCK);
+
             BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
@@ -523,15 +603,11 @@ public class ReactorCoreEntity extends BlockEntity {
                 }
             }
 
-            // Give the Poison effect to any nearby player due to heavy toxic/vibranium fumes
-            AABB area = new AABB(pos).inflate(10.0);
+            AABB area = new AABB(pos).inflate(12.0);
             for (Player player : level.getEntitiesOfClass(Player.class, area)) {
-                player.addEffect(new MobEffectInstance(
-                        MobEffects.POISON, 3600, 2 // Poison 2 for 10 seconds
-                ));
+                player.addEffect(new MobEffectInstance(MobEffects.POISON, 400, 2));
             }
 
-            // Safely discard the core entity to prevent further tick evaluation
             this.setRemoved();
         }
     }

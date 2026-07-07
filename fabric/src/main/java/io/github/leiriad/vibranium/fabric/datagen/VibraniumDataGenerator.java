@@ -26,6 +26,9 @@ public class VibraniumDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(VibraniumWorldGenerator::new);
 		//Adds Loot tables
 		pack.addProvider(VibraniumLootTableProvider::new);
+		//Ads Recipes
+		//Adds Recipes
+		pack.addProvider(VibraniumRecipeProvider::new);
 		//Adds translations
 		pack.addProvider((output, registries) -> new VibraniumLanguageProvider(output, registries));
 		pack.addProvider((output, registries) -> new VibraniumLanguageProvider(output, registries, "fr_fr"));

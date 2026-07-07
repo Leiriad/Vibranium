@@ -4,10 +4,7 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.leiriad.vibranium.VibraniumMod;
-import io.github.leiriad.vibranium.item.BlackClayBall;
-import io.github.leiriad.vibranium.item.HeartShapedHerb;
-import io.github.leiriad.vibranium.item.HotWaterBucket;
-import io.github.leiriad.vibranium.item.VibraniumDust;
+import io.github.leiriad.vibranium.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -38,6 +35,18 @@ public class VibraniumItems {
 
         return new HeartShapedHerb(HeartShapedHerb.getProperties().setId(key));
     });
+    public static final RegistrySupplier<Item> VIBRANIUM_INGOT = ITEMS.register("vibranium_ingot", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_ingot"));
+
+        return new VibraniumIngot(new Item.Properties().setId(key));
+    });
+    public static final RegistrySupplier<Item> DEPLETED_VIBRANIUM_INGOT = ITEMS.register("depleted_vibranium_ingot", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_ingot"));
+
+        return new DepletedVibraniumIngot(new Item.Properties().setId(key));
+    });
     public static final RegistrySupplier<Item> HOT_WATER_BUCKET = ITEMS.register("hot_water_bucket", () -> {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
                 Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "hot_water_bucket"));
@@ -56,9 +65,18 @@ public class VibraniumItems {
         List.of(
                 VIBRANIUM_DUST,
                 BLACK_CLAY_BALL,
-                HEART_SHAPED_HERB
+                HEART_SHAPED_HERB,
+                VIBRANIUM_INGOT,
+                DEPLETED_VIBRANIUM_INGOT
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.INGREDIENTS, () -> new ItemStack(supplier.get()));
+        });
+
+        //TOOLS & UTILITIES
+        List.of(
+                HOT_WATER_BUCKET
+        ).forEach(supplier -> {
+            CreativeTabRegistry.appendStack(CreativeModeTabs.TOOLS_AND_UTILITIES, () -> new ItemStack(supplier.get()));
         });
 
         //VIBRANIUM TAB
@@ -66,7 +84,9 @@ public class VibraniumItems {
                 VIBRANIUM_DUST,
                 BLACK_CLAY_BALL,
                 HEART_SHAPED_HERB,
-                HOT_WATER_BUCKET
+                HOT_WATER_BUCKET,
+                VIBRANIUM_INGOT,
+                DEPLETED_VIBRANIUM_INGOT
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(supplier.get()));
         });
