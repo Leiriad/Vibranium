@@ -29,7 +29,7 @@ public class ReactorCoreBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
     public static Properties getProperties (Properties settings){
-        return Properties.of()
+        return Properties.ofFullCopy(Blocks.IRON_BLOCK)
                 .mapColor(MapColor.COLOR_CYAN)
                 .instrument(NoteBlockInstrument.CHIME)
                 .emissiveRendering((state, world, pos) -> true)
@@ -44,8 +44,9 @@ public class ReactorCoreBlock extends BaseEntityBlock {
     //CONSTRUCTOR
     public ReactorCoreBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
-        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(LIT, false));
     }
 
     //TICKER
@@ -91,5 +92,10 @@ public class ReactorCoreBlock extends BaseEntityBlock {
             }
         }
     }
-
+    @Override
+    public boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
+        super.triggerEvent(state, level, pos, id, param);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        return blockEntity == null ? false : blockEntity.triggerEvent(id, param);
+    }
 }

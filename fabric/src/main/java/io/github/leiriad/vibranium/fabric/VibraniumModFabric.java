@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import team.reborn.energy.api.EnergyStorage;
 
 public final class VibraniumModFabric implements ModInitializer {
@@ -59,16 +60,9 @@ public final class VibraniumModFabric implements ModInitializer {
 
         // --- REGISTRATION FOR THE REACTOR CORE ---
         EnergyStorage.SIDED.registerForBlockEntities((blockEntity, direction) -> {
-
-            // Cast the generic BlockEntity to your specific ReactorCoreEntity
             if (blockEntity instanceof ReactorCoreEntity coreEntity) {
 
-                // Check if the reactor structure is functional before exposing energy
-                if (!coreEntity.isReactorFunctioningCorrectly()) {
-                    return null;
-                }
-
-                // Create the energy storage participant for the Core itself
+                // Use SnapshotParticipant with Integer since the Core uses int internally
                 SnapshotParticipant<Integer> coreParticipant = new SnapshotParticipant<>() {
                     @Override
                     protected Integer createSnapshot() {
@@ -84,33 +78,37 @@ public final class VibraniumModFabric implements ModInitializer {
                 return new EnergyStorage() {
                     @Override
                     public long insert(long maxAmount, TransactionContext transaction) {
-                        // The core itself only outputs energy generated, no insertion allowed
                         return 0L;
                     }
 
                     @Override
                     public long extract(long maxAmount, TransactionContext transaction) {
                         if (maxAmount <= 0) return 0L;
+                        // If the reactor is built incorrectly, prevent energy extraction
+                        if (!coreEntity.isReactorFunctioningCorrectly() || maxAmount <= 0) {
+                            return 0L;
+                        }
+                        // Safely clamp the long maxAmount to a valid integer range for the core
+                        int maxExtract = (int) Math.min(coreEntity.getEnergyStored(), maxAmount);
 
-                        int maxExtract = (int) Math.min(Integer.MAX_VALUE, maxAmount);
-                        int simulatedExtract = coreEntity.extractEnergy(maxExtract, true);
-
-                        if (simulatedExtract > 0) {
+                        if (maxExtract > 0) {
                             coreParticipant.updateSnapshots(transaction);
-                            coreEntity.extractEnergy(simulatedExtract, false);
-                            return (long) simulatedExtract;
+                            coreEntity.extractEnergy((int) maxExtract, false);
+                            return maxExtract;
                         }
                         return 0L;
                     }
 
                     @Override
                     public long getAmount() {
-                        return coreEntity.getEnergyStored();
+                        // Convert int to long for the Fabric Energy API
+                        return (long) coreEntity.getEnergyStored();
                     }
 
                     @Override
                     public long getCapacity() {
-                        return coreEntity.getMaxEnergyStored();
+                        // Convert int to long for the Fabric Energy API
+                        return (long) coreEntity.getMaxEnergyStored();
                     }
 
                     @Override
@@ -124,14 +122,13 @@ public final class VibraniumModFabric implements ModInitializer {
                     }
                 };
             }
-
-            return null; // Safe fallback if the block entity is not a ReactorCoreEntity
+            return null;
         }, VibraniumEntitiesFabric.REACTOR_CORE_ENTITY.get());
 
         // --- REGISTRATION FOR REINFORCED VIBRANIUM GLASS (UNIVERSAL ENERGY PROVIDER) ---
         EnergyStorage.SIDED.registerForBlockEntities((glassEntity, direction) -> {
             // 1. Retrieve the world and position directly from the block entity
-            net.minecraft.world.level.Level level = glassEntity.getLevel();
+            Level level = glassEntity.getLevel();
             BlockPos pos = glassEntity.getBlockPos();
 
             if (level == null) {
