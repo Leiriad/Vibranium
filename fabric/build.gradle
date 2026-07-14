@@ -51,8 +51,9 @@ dependencies {
     modApi "com.terraformersmc:modmenu:17.0.0"
 
     // TEAMREBORN ENERGY API
-    modApi "teamreborn:energy:4.1.0"
-    include "teamreborn:energy:4.1.0"
+    include modApi('teamreborn:energy:4.2.0') {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

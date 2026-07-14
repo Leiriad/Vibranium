@@ -3,10 +3,7 @@ package io.github.leiriad.vibranium.init;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.leiriad.vibranium.VibraniumMod;
-import io.github.leiriad.vibranium.entity.FluidTankEntity;
-import io.github.leiriad.vibranium.entity.ReactorControlPanelEntity;
-import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
-import io.github.leiriad.vibranium.entity.ReactorHatchEntity;
+import io.github.leiriad.vibranium.entity.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,6 +16,7 @@ public class VibraniumEntities {
     public static RegistrySupplier<BlockEntityType<ReactorControlPanelEntity>> REACTOR_CONTROL_PANEL_ENTITY;
     public static RegistrySupplier<BlockEntityType<ReactorHatchEntity>> REACTOR_HATCH_ENTITY;
     public static RegistrySupplier<BlockEntityType<FluidTankEntity>> FLUID_TANK_ENTITY;
+    public static RegistrySupplier<BlockEntityType<ReinforcedVibraniumGlassEntity>> REINFORCED_VIBRANIUM_GLASS_ENTITY;
 
     public static void registerModEntities(){
         BLOCK_ENTITIES.register();

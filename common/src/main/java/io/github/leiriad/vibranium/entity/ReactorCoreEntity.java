@@ -6,6 +6,7 @@ import io.github.leiriad.vibranium.init.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -727,8 +728,19 @@ public class ReactorCoreEntity extends BlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
     @Override
-    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
+    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
         return this.saveWithoutMetadata(provider);
+    }
+    /**
+     * Triggers a block update on both client and server.
+     * This forces Minecraft to synchronize our energy data with nearby players and cables.
+     */
+    public void syncToTrackingClients() {
+        this.setChanged(); // Marks the block entity as modified for saving
+        if (this.level != null && !this.level.isClientSide()) {
+            // Sends the update packet to all players watching this chunk
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
     }
 
     // --- ENERGY MANAGEMENT FOR EXTERNAL MODS COMPATIBILITY ---
@@ -760,5 +772,18 @@ public class ReactorCoreEntity extends BlockEntity {
      */
     public int getMaxEnergyStored() {
         return this.MAX_ENERGY;
+    }
+    /**
+     * Forces the amount of energy stored in the reactor core.
+     * This method is crucial for Fabric Transaction rollbacks.
+     *
+     * @param amount The exact amount of FE to store.
+     */
+    public void setEnergy(int amount) {
+        // Clamp the value to ensure it stays within the physical limits of the reactor
+        this.energyStored = Math.clamp(amount, 0, this.getMaxEnergyStored());
+
+        // Notify Minecraft and synchronize with nearby players and cables immediately
+        this.syncToTrackingClients();
     }
 }

@@ -12,7 +12,7 @@
       "name": "core",
       "from": [7, 7, 7],
       "to": [9, 9, 9],
-      "shade": false,
+      "shade": true,
       "rotation": {"angle": 0, "axis": "y", "origin": [7, -1, 4]},
       "faces": {
         "north": {"uv": [0, 0, 4, 4], "texture": "#1"},

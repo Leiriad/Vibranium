@@ -86,7 +86,7 @@ public class VibraniumBlocks {
 
     //COLORED
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS = register("vibranium_glass", VibraniumGlass::new, () -> VibraniumGlass.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS = register("reinforced_vibranium_glass", ReinforcedVibraniumGlass::new, () -> ReinforcedVibraniumGlass.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS = register("reinforced_vibranium_glass", ReinforcedVibraniumGlassBlock::new, () -> ReinforcedVibraniumGlassBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS_PANE = register("vibranium_glass_pane", VibraniumGlassPane::new, () -> VibraniumGlassPane.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS_PANE = register("reinforced_vibranium_glass_pane", ReinforcedVibraniumGlassPane::new, () -> ReinforcedVibraniumGlassPane.getProperties(BlockBehaviour.Properties.of()), true);
 

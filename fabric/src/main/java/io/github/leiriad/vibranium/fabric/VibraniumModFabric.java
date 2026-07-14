@@ -4,8 +4,6 @@ import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.entity.FluidTankEntity;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
 import io.github.leiriad.vibranium.fabric.block.entity.VibraniumEntitiesFabric;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
-import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -57,68 +55,149 @@ public final class VibraniumModFabric implements ModInitializer {
                 return storage;
             }
             return null;
-        }, VibraniumEntities.FLUID_TANK_ENTITY.get());
+        }, VibraniumEntitiesFabric.FLUID_TANK_ENTITY.get());
 
-        // --- REGISTRATION FOR REINFORCED VIBRANIUM GLASS (ENERGY OUTPUT) ---
-        EnergyStorage.SIDED.registerForBlocks((level, pos, state, blockEntity, context) -> {
+        // --- REGISTRATION FOR THE REACTOR CORE ---
+        EnergyStorage.SIDED.registerForBlockEntities((blockEntity, direction) -> {
 
-            // Scan around the glass block in a 3x3x3 area to locate the Reactor Core
+            // Cast the generic BlockEntity to your specific ReactorCoreEntity
+            if (blockEntity instanceof ReactorCoreEntity coreEntity) {
+
+                // Check if the reactor structure is functional before exposing energy
+                if (!coreEntity.isReactorFunctioningCorrectly()) {
+                    return null;
+                }
+
+                // Create the energy storage participant for the Core itself
+                SnapshotParticipant<Integer> coreParticipant = new SnapshotParticipant<>() {
+                    @Override
+                    protected Integer createSnapshot() {
+                        return coreEntity.getEnergyStored();
+                    }
+
+                    @Override
+                    protected void readSnapshot(Integer snapshotValue) {
+                        coreEntity.setEnergy(snapshotValue);
+                    }
+                };
+
+                return new EnergyStorage() {
+                    @Override
+                    public long insert(long maxAmount, TransactionContext transaction) {
+                        // The core itself only outputs energy generated, no insertion allowed
+                        return 0L;
+                    }
+
+                    @Override
+                    public long extract(long maxAmount, TransactionContext transaction) {
+                        if (maxAmount <= 0) return 0L;
+
+                        int maxExtract = (int) Math.min(Integer.MAX_VALUE, maxAmount);
+                        int simulatedExtract = coreEntity.extractEnergy(maxExtract, true);
+
+                        if (simulatedExtract > 0) {
+                            coreParticipant.updateSnapshots(transaction);
+                            coreEntity.extractEnergy(simulatedExtract, false);
+                            return (long) simulatedExtract;
+                        }
+                        return 0L;
+                    }
+
+                    @Override
+                    public long getAmount() {
+                        return coreEntity.getEnergyStored();
+                    }
+
+                    @Override
+                    public long getCapacity() {
+                        return coreEntity.getMaxEnergyStored();
+                    }
+
+                    @Override
+                    public boolean supportsInsertion() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean supportsExtraction() {
+                        return true;
+                    }
+                };
+            }
+
+            return null; // Safe fallback if the block entity is not a ReactorCoreEntity
+        }, VibraniumEntitiesFabric.REACTOR_CORE_ENTITY.get());
+
+        // --- REGISTRATION FOR REINFORCED VIBRANIUM GLASS (UNIVERSAL ENERGY PROVIDER) ---
+        EnergyStorage.SIDED.registerForBlockEntities((glassEntity, direction) -> {
+            // 1. Retrieve the world and position directly from the block entity
+            net.minecraft.world.level.Level level = glassEntity.getLevel();
+            BlockPos pos = glassEntity.getBlockPos();
+
+            if (level == null) {
+                return null;
+            }
+
+            // 2. Scan a 3x3x3 area around the glass to locate the Reactor Core
             for (BlockPos checkPos : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
                 if (level.getBlockEntity(checkPos) instanceof ReactorCoreEntity core) {
 
-                    // Instantiate a SnapshotParticipant to handle rollbacks during Fabric transactions
+                    // Check if the reactor structure is functional
+                    if (!core.isReactorFunctioningCorrectly()) {
+                        return null;
+                    }
+
+                    // Create a participant to handle transaction rollbacks safely
                     SnapshotParticipant<Integer> energyParticipant = new SnapshotParticipant<>() {
                         @Override
                         protected Integer createSnapshot() {
-                            // Capture the current energy level before modification
-                            return core.getEnergy();
+                            // Save the current energy state of the core
+                            return core.getEnergyStored();
                         }
 
                         @Override
-                        protected void readSnapshot(Integer snapshot) {
-                            // If the transaction aborts, rollback the core's energy level
-                            int difference = snapshot - core.getEnergy();
-                            if (difference > 0) {
-                                // Re-inject the extracted energy that was canceled
-                                core.extractEnergy(-difference, false);
-                            }
+                        protected void readSnapshot(Integer snapshotValue) {
+                            // Restore the exact energy state if the transaction is aborted
+                            core.setEnergy(snapshotValue);
                         }
                     };
 
-                    // Return the correct TeamReborn EnergyStorage implementation
                     return new EnergyStorage() {
                         @Override
                         public long insert(long maxAmount, TransactionContext transaction) {
-                            // The reactor generates power, it cannot receive energy from external sources
+                            // The glass only outputs energy and cannot receive input
                             return 0L;
                         }
 
                         @Override
                         public long extract(long maxAmount, TransactionContext transaction) {
-                            if (maxAmount <= 0) {
-                                return 0L;
-                            }
+                            if (maxAmount <= 0) return 0L;
 
-                            // Simulate extraction first to see how much we can actually pull
-                            int energyExtracted = core.extractEnergy((int) maxAmount, true);
-                            if (energyExtracted > 0) {
-                                // Register the rollback behavior inside Fabric's transaction manager
+                            int maxExtract = (int) Math.min(Integer.MAX_VALUE, maxAmount);
+
+                            // Step 1: Simulate the energy extraction from the core
+                            int simulatedExtract = core.extractEnergy(maxExtract, true);
+
+                            if (simulatedExtract > 0) {
+                                // Step 2: Register our participant in the current Fabric transaction
                                 energyParticipant.updateSnapshots(transaction);
 
-                                // Perform the actual extraction immediately on the core
-                                return (long) core.extractEnergy(energyExtracted, false);
+                                // Step 3: Perform the actual energy extraction (write)
+                                core.extractEnergy(simulatedExtract, false);
+
+                                return (long) simulatedExtract;
                             }
                             return 0L;
                         }
 
                         @Override
                         public long getAmount() {
-                            return core.getEnergy();
+                            return core.getEnergyStored();
                         }
 
                         @Override
                         public long getCapacity() {
-                            return 100000L; // Max energy matching core specification
+                            return core.getMaxEnergyStored();
                         }
 
                         @Override
@@ -133,7 +212,7 @@ public final class VibraniumModFabric implements ModInitializer {
                     };
                 }
             }
-            return null;
-        }, VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get());
+            return null; // No functional reactor core found adjacent to this glass
+        }, VibraniumEntitiesFabric.REINFORCED_VIBRANIUM_GLASS_ENTITY.get());
     }
 }
