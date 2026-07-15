@@ -4,14 +4,12 @@ import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.client.render.FluidTankRenderer;
 import io.github.leiriad.vibranium.entity.FluidTankEntity;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
-import io.github.leiriad.vibranium.neoforge.block.entity.VibraniumEntitiesNeoforge;
+import io.github.leiriad.vibranium.neoforge.block.entity.VibraniumEntitiesNeoForge;
 import io.github.leiriad.vibranium.neoforge.client.NeoForgeVibraniumScreen;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
@@ -24,6 +22,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
 @Mod(VibraniumMod.MOD_ID)
@@ -31,7 +30,7 @@ public final class VibraniumModNeoForge {
     public VibraniumModNeoForge(IEventBus modEventBus) {
         // Run our common setup.
         VibraniumMod.init();
-        VibraniumEntitiesNeoforge.init();
+        VibraniumEntitiesNeoForge.init();
 
         //Register config screen
         if (FMLEnvironment.getDist().isClient()) {
@@ -53,7 +52,7 @@ public final class VibraniumModNeoForge {
         // --- REGISTRATION FOR FLUID TANK COMPONENT ---
         event.registerBlockEntity(
                 Capabilities.Fluid.BLOCK,
-                VibraniumEntities.FLUID_TANK_ENTITY.get(),
+                VibraniumEntitiesNeoForge.FLUID_TANK_ENTITY.get(),
                 (be, direction) -> {
                     FluidTankEntity blockEntity = (FluidTankEntity) be;
 
@@ -149,64 +148,123 @@ public final class VibraniumModNeoForge {
                     };
                 }
         );
+        // --- REGISTRATION FOR REACTOR CORE ---
+        event.registerBlockEntity(
+                Capabilities.Energy.BLOCK,
+                VibraniumEntitiesNeoForge.REACTOR_CORE_ENTITY.get(),
+                (blockEntity, direction) -> {
+                    if (blockEntity instanceof ReactorCoreEntity coreEntity) {
+
+                        // Create a SnapshotJournal to track energy state changes within transactions
+                        SnapshotJournal<Integer> coreJournal = new SnapshotJournal<>() {
+                            @Override
+                            protected Integer createSnapshot() {
+                                return coreEntity.getEnergyStored();
+                            }
+
+                            @Override
+                            protected void revertToSnapshot(Integer snapshotValue) {
+                                coreEntity.setEnergy(snapshotValue);
+                            }
+                        };
+
+                        return new EnergyHandler() {
+                            @Override
+                            public int insert(int maxAmount, TransactionContext transaction) {
+                                // The reactor core generates power, it does not support receiving energy
+                                return 0;
+                            }
+
+                            @Override
+                            public int extract(int maxAmount, TransactionContext transaction) {
+                                if (maxAmount <= 0) return 0;
+
+                                // If the reactor is built incorrectly, prevent energy extraction
+                                if (!coreEntity.isReactorFunctioningCorrectly()) {
+                                    return 0;
+                                }
+
+                                // Calculate potential extractable energy
+                                int energyStored = coreEntity.getEnergyStored();
+                                int toExtract = Math.min(energyStored, maxAmount);
+
+                                if (toExtract > 0) {
+                                    // Register the current state to the transaction journal before making edits
+                                    coreJournal.updateSnapshots(transaction);
+
+                                    // Apply the modification immediately (the system reverts it if the transaction aborts)
+                                    coreEntity.extractEnergy(toExtract, false);
+                                    return toExtract;
+                                }
+                                return 0;
+                            }
+
+                            @Override
+                            public long getAmountAsLong() {
+                                return (long) coreEntity.getEnergyStored();
+                            }
+
+                            @Override
+                            public long getCapacityAsLong() {
+                                return (long) coreEntity.getMaxEnergyStored();
+                            }
+                        };
+                    }
+                    return null;
+                }
+        );
 
         // --- REGISTRATION FOR REINFORCED VIBRANIUM GLASS (ENERGY OUTPUT) ---
-        event.registerBlock(
+        event.registerBlockEntity(
                 Capabilities.Energy.BLOCK,
-                (level, pos, state, blockEntity, context) -> {
+                VibraniumEntitiesNeoForge.REINFORCED_VIBRANIUM_GLASS_ENTITY.get(),
+                (glassEntity, direction) -> {
+                    // Get the level and position directly from the block entity
+                    net.minecraft.world.level.Level level = glassEntity.getLevel();
+                    net.minecraft.core.BlockPos pos = glassEntity.getBlockPos();
+
+                    if (level == null) return null;
+
                     // Scan around the glass block in a 3x3x3 area to locate the Reactor Core
-                    for (BlockPos checkPos : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
+                    for (net.minecraft.core.BlockPos checkPos : net.minecraft.core.BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
                         if (level.getBlockEntity(checkPos) instanceof ReactorCoreEntity core) {
 
-                            // Return the corrected NeoForge EnergyHandler implementation
                             return new EnergyHandler() {
                                 @Override
                                 public long getAmountAsLong() {
-                                    return core.getEnergy();
+                                    return core.getEnergyStored();
                                 }
 
                                 @Override
                                 public long getCapacityAsLong() {
-                                    return 100000L; // Max energy matching core specification
+                                    return 100000L;
                                 }
 
                                 @Override
                                 public int insert(int amount, TransactionContext transactionContext) {
-                                    // The reactor generates power, it cannot receive energy from external sources
                                     return 0;
                                 }
 
                                 @Override
                                 public int extract(int amount, TransactionContext transactionContext) {
-                                    if (amount <= 0) {
-                                        return 0;
-                                    }
+                                    if (amount <= 0) return 0;
 
-                                    // Simulate extraction first to see how much we can actually pull
                                     int energyExtracted = core.extractEnergy(amount, true);
                                     if (energyExtracted > 0) {
 
-                                        // Instantiate a SnapshotJournal to safely register rollback logic into NeoForge's system
+                                        // Create a snapshot tracker using the core's energy
                                         new net.neoforged.neoforge.transfer.transaction.SnapshotJournal<Integer>() {
                                             @Override
                                             protected Integer createSnapshot() {
-                                                // Capture the current energy level before modification
-                                                return core.getEnergy();
+                                                return core.getEnergyStored();
                                             }
 
                                             @Override
                                             protected void revertToSnapshot(Integer snapshot) {
-                                                // If the transaction aborts, we restore the energy back into the core
-                                                // Note: Ensure your core handles changes or you can use a forced addition if needed
-                                                int difference = snapshot - core.getEnergy();
-                                                if (difference > 0) {
-                                                    // Re-inject the extracted energy that was canceled
-                                                    core.extractEnergy(-difference, false);
-                                                }
+                                                core.setEnergy(snapshot);
                                             }
-                                        }.updateSnapshots(transactionContext); // Bind this rollback rule to the transaction context
+                                        }.updateSnapshots(transactionContext);
 
-                                        // Apply the energy change directly to the core immediately
                                         return core.extractEnergy(energyExtracted, false);
                                     }
                                     return 0;
@@ -215,11 +273,9 @@ public final class VibraniumModNeoForge {
                         }
                     }
                     return null;
-                },
-                VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()
+                }
         );
     }
-
     // Register the BER for NeoForge
     private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(VibraniumEntities.FLUID_TANK_ENTITY.get(), FluidTankRenderer::new);

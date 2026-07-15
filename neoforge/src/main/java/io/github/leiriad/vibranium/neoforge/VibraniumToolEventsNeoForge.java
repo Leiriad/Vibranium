@@ -14,7 +14,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = VibraniumMod.MOD_ID)
-public class VibraniumToolEventsNeoforge {
+public class VibraniumToolEventsNeoForge {
     @SubscribeEvent
     public static void onBlockRightClick(PlayerInteractEvent.RightClickBlock event) {
         Level world = event.getLevel();
