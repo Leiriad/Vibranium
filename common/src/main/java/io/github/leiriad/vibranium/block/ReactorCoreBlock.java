@@ -29,11 +29,11 @@ public class ReactorCoreBlock extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
     public static Properties getProperties (Properties settings){
-        return Properties.ofFullCopy(Blocks.IRON_BLOCK)
+        return Properties.ofFullCopy(Blocks.GLASS)
+                .strength(1.5f,6.0f)
                 .mapColor(MapColor.COLOR_CYAN)
-                .instrument(NoteBlockInstrument.CHIME)
-                .emissiveRendering((state, world, pos) -> true)
-                .hasPostProcess((state, world, pos) -> true)
+                .emissiveRendering((state, world, pos) -> state.getValue(LIT))
+                .hasPostProcess((state, world, pos) -> state.getValue(LIT))
                 .lightLevel((state) -> 7);
     }
     @Override

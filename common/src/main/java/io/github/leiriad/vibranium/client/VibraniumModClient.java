@@ -65,16 +65,6 @@ public class VibraniumModClient {
                 VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get()
         );
 
-        //Screens init
-        System.out.println("-> Registering CONTROL PANEL screen !");
-        var menuType = VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get();
-        System.out.println("-> Trying to register screen id : " + BuiltInRegistries.MENU.getKey(menuType));
-        MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);
-        System.out.println("-> Registering HATCH screen !");
-        var menuType2 = VibraniumMenus.REACTOR_HATCH_MENU.get();
-        System.out.println("-> Trying to register screen id : " + BuiltInRegistries.MENU.getKey(menuType2));
-        MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_HATCH_MENU.get(), ReactorHatchScreen::new);
-
         //Fluid milk for tank
         // Solid Milk white tint mask representation (ARGB hex format)
         int milkColorHex = 0xFFFFFFFF;
