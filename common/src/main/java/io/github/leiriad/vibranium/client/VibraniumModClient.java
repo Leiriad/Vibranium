@@ -65,6 +65,10 @@ public class VibraniumModClient {
                 VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get()
         );
 
+        //Screens init
+        MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);
+        MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_HATCH_MENU.get(), ReactorHatchScreen::new);
+
         //Fluid milk for tank
         // Solid Milk white tint mask representation (ARGB hex format)
         int milkColorHex = 0xFFFFFFFF;
