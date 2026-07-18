@@ -45,6 +45,11 @@ dependencies {
     //Cloth Config
     modApi "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
 
+    //REI
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-neoforge:21.11.816"
+    modCompileOnlyApi "me.shedaniel:REIPluginCompatibilities-forge-annotations:12.+"
+    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-neoforge:21.11.816"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = true }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 }

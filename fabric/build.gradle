@@ -55,6 +55,11 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
+    //REI
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.816"
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:21.11.814"
+    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:21.11.816"
+
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }

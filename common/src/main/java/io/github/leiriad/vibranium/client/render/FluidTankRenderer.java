@@ -4,12 +4,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.architectury.fluid.FluidStack;
 import dev.architectury.hooks.client.fluid.ClientFluidStackHooks;
-import dev.architectury.hooks.fluid.FluidStackHooks;
 import io.github.leiriad.vibranium.client.VibraniumModClient;
 import io.github.leiriad.vibranium.entity.FluidTankEntity;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -17,12 +15,9 @@ import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.AtlasManager;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
@@ -58,6 +53,18 @@ public class FluidTankRenderer implements BlockEntityRenderer<FluidTankEntity, F
             return;
         }
 
+        // CRITICAL REI SECURITY: Fetch Minecraft's block texture atlas immediately.
+        // If REI triggers this method during early initialization or asynchronous recipe caching
+        // before the graphic engine is fully stitched, the atlas will be null.
+        // Aborting here prevents cascading NullPointerExceptions down the pipeline.
+        TextureAtlas blocksAtlas = Minecraft.getInstance()
+                .getTextureManager()
+                .getTexture(TextureAtlas.LOCATION_BLOCKS) instanceof TextureAtlas atlas ? atlas : null;
+
+        if (blocksAtlas == null) {
+            return;
+        }
+
         // Define model boundaries with a tiny inset to prevent Z-Fighting / Clipping
         // 1 pixel = 0.0625f. We use 0.0635f to pull the fluid slightly away from the walls.
         float minX = 0.0635f;
@@ -73,56 +80,59 @@ public class FluidTankRenderer implements BlockEntityRenderer<FluidTankEntity, F
         float fluidRatio = (float) amount / (float) capacity;
         float currentTopY = minY + (fluidRatio * (maxY - minY));
 
-        // Fetch fluid textures and colors using the proper Architectury Hook from your files
+        // Prepare fluid stack payload for hooks lookup
         FluidStack fluidStack = FluidStack.create(fluid, amount);
-
         TextureAtlasSprite sprite = null;
 
-        // SECURITY: If it's milk, bypass Architectury because its vanilla sprite is broken
-        if (fluid == VibraniumFluids.VANILLA_MILK_STILL.get()) {
-            TextureAtlas blocksAtlas = Minecraft.getInstance()
-                    .getTextureManager()
-                    .getTexture(TextureAtlas.LOCATION_BLOCKS) instanceof TextureAtlas atlas ? atlas : null;
-            if (blocksAtlas != null) {
-                // Use water_still as a baseline layout for milk (it will be colored or textured correctly)
-                sprite = blocksAtlas.getSprite(Identifier.fromNamespaceAndPath("minecraft", "block/water_still"));
-            }
-        } else {
-            // 2. For all other fluids, ask Architectury safely
+        // --- Texture (Sprite) Resolution Section ---
+        if (fluid == Fluids.LAVA) {
+            sprite = blocksAtlas.getSprite(Identifier.fromNamespaceAndPath("minecraft", "block/lava_still"));
+        }
+        // TARGETED BYPASS: Your custom milk and hot water do not have physical textures assigned.
+        // We explicitly force them to overlay onto the vanilla water still sprite.
+        // This bypasses early Architectury registration lookups which cause crashes with REI.
+        else if (fluid == VibraniumFluids.VANILLA_MILK_STILL.get() || fluid == VibraniumFluids.HOT_WATER_STILL.get()) {
+            sprite = blocksAtlas.getSprite(Identifier.fromNamespaceAndPath("minecraft", "block/water_still"));
+        }
+        // COMPATIBILITY FALLBACK: Safely delegate external mod fluids to Architectury API.
+        // Wrapped in a wide Throwable catch to trap early load exceptions triggered by REI menus.
+        else {
             try {
                 sprite = ClientFluidStackHooks.getStillTexture(fluidStack);
-            } catch (Exception e) {
+            } catch (Throwable t) {
                 sprite = null;
             }
         }
 
-        // GLOBAL FALLBACK: If the sprite is null or fundamentally broken, grab a guaranteed vanilla sprite
+        // GLOBAL FALLBACK: If the sprite resolution completely failed or returned an empty texture,
+        // recover using a guaranteed vanilla layout baseline before aborting.
         if (sprite == null || sprite.getU0() == sprite.getU1()) {
-            TextureAtlas blocksAtlas = Minecraft.getInstance()
-                    .getTextureManager()
-                    .getTexture(TextureAtlas.LOCATION_BLOCKS) instanceof TextureAtlas atlas ? atlas : null;
+            Identifier fallbackId = (fluid == Fluids.LAVA)
+                    ? Identifier.fromNamespaceAndPath("minecraft", "block/lava_still")
+                    : Identifier.fromNamespaceAndPath("minecraft", "block/water_still");
 
-            if (blocksAtlas != null) {
-                Identifier fallbackId = (fluid == Fluids.LAVA)
-                        ? Identifier.fromNamespaceAndPath("minecraft", "block/lava_still")
-                        : Identifier.fromNamespaceAndPath("minecraft", "block/water_still");
-
-                sprite = blocksAtlas.getSprite(fallbackId);
-            }
+            sprite = blocksAtlas.getSprite(fallbackId);
         }
 
-        //Final safety guard - if we still don't have a sprite, abort rendering to prevent crash
+        // Final safety guard - abort rendering for this frame if no valid sprite can be computed
         if (sprite == null) {
             return;
         }
 
-        int color;
+        // --- Color Resolution Section ---
+        int colorValue;
         if (VibraniumModClient.hasColorOverride(fluid)) {
-            color = VibraniumModClient.getFluidColor(fluid);
+            colorValue = VibraniumModClient.getFluidColor(fluid);
         } else {
-            // Fallback to Architectury's native lookup for standard fluids like Water and Lava
-            color = ClientFluidStackHooks.getColor(fluidStack);
+            try {
+                // Fetch native tinting (e.g., standard water color variations or modded fluid tints)
+                colorValue = ClientFluidStackHooks.getColor(fluidStack);
+            } catch (Throwable t) {
+                colorValue = 0xFFFFFFFF; // Fallback to flat opaque white if the hook fails during early loading
+            }
         }
+
+        final int color = colorValue;
 
         float u0 = sprite.getU0();
         float u1 = sprite.getU1();
@@ -130,7 +140,7 @@ public class FluidTankRenderer implements BlockEntityRenderer<FluidTankEntity, F
         float v1 = sprite.getV1();
         int light = 15728880; // Full brightness default fallback
 
-        // Create the rendering logic wrapped inside the new CustomGeometryRenderer functional interface
+        // Create the rendering logic wrapped inside the CustomGeometryRenderer functional interface
         SubmitNodeCollector.CustomGeometryRenderer fluidRenderer = (pose, builder) -> {
 
             // TOP FACE (Normal: Up -> 0, 1, 0)
@@ -170,19 +180,17 @@ public class FluidTankRenderer implements BlockEntityRenderer<FluidTankEntity, F
             builder.addVertex(pose, minX, minY, maxZ).setColor(color).setUv(u0, v1).setLight(light).setNormal(pose, 0.0F, -1.0F, 0.0F);
         };
 
-        // Submit our custom geometry renderer to the collector pipeline
-        // Architectury / Mojang maps the execution queue here using the active PoseStack state
+        // --- Material Layer Setup ---
         RenderType fluidLayer;
         if (fluid == Fluids.LAVA) {
-            fluidLayer = RenderTypes.translucentMovingBlock(); // Ou un type spécifique au feu/lave si besoin
+            fluidLayer = RenderTypes.translucentMovingBlock();
         } else if (fluid == VibraniumFluids.VANILLA_MILK_STILL.get()) {
-            fluidLayer = RenderTypes.cutoutMovingBlock();
+            fluidLayer = RenderTypes.cutoutMovingBlock(); // Keeps milk sharp and non-transparent
         } else {
             fluidLayer = RenderTypes.translucentMovingBlock();
         }
 
-        // Look for the pushing method inside your mapped version, usually names like 'add', 'submit' or 'push'
-        // taking (RenderType, PoseStack.Pose, CustomGeometryRenderer)
+        // Submit our custom geometry renderer execution proxy to the collector pipeline
         submitNodeCollector.submitCustomGeometry(
                 poseStack,
                 fluidLayer,
