@@ -19,6 +19,7 @@ dependencies {
 
     // Cloth Config
     compileOnly "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
+
 }
 loom {
 

@@ -3,7 +3,6 @@ plugins {
 }
 
 architectury {
-    platformSetupLoomIde()
     fabric()
 }
 
@@ -48,17 +47,19 @@ dependencies {
     include "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
 
     // ModMenu API
-    modApi "com.terraformersmc:modmenu:17.0.0"
+    modApi "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
 
     // TEAMREBORN ENERGY API
-    include modApi('teamreborn:energy:4.2.0') {
+    include modApi("teamreborn:energy:${rootProject.teamreborn_energy_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
     //REI
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.816"
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:21.11.814"
-    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:21.11.816"
+    modCompileOnlyApi  "me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}"
+    modCompileOnlyApi  "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rootProject.rei_version}"
+
+    //JEI
+    modCompileOnlyApi("mezz.jei:jei-${rootProject.minecraft_version}-fabric-api:${rootProject.jei_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
@@ -85,15 +86,19 @@ remapJar {
 
 loom {
     accessWidenerPath = project(":common").file("src/main/resources/vibranium.accesswidener")
+
     runs {
         datagen {
             client()
-            name "Minecraft Data"
-            runDir "build/datagen"
+            name("Minecraft Data")
+            runDir("build/datagen")
 
-            vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${project(":common").file("src/main/generated")}"
-            vmArg "-Dfabric-api.datagen.modid=vibranium"
+            // Syntaxe moderne pour injecter les arguments VM dans Loom 1.17+
+            vmArgs(
+                    "-Dfabric-api.datagen",
+                    "-Dfabric-api.datagen.output-dir=${project(":common").file("src/main/generated")}",
+                    "-Dfabric-api.datagen.modid=vibranium"
+            )
         }
     }
 }

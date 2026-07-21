@@ -10,15 +10,7 @@ public class VibraniumREIPlugin implements REIClientPlugin {
 
     @Override
     public void registerEntries(EntryRegistry registry) {
-        // Remove objects from REI's global display grid
-        if (VibraniumFluids.VANILLA_MILK_STILL.get() != null) {
-            registry.removeEntry(EntryStacks.of(VibraniumFluids.VANILLA_MILK_STILL.get()));
-        }
-
-        if (VibraniumFluids.HOT_WATER_STILL.get() != null) {
-            registry.removeEntry(EntryStacks.of(VibraniumFluids.HOT_WATER_STILL.get()));
-        }
-
+        // Hide Items / Blocks from REI's global display grid
         if (VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get() != null) {
             registry.removeEntry(EntryStacks.of(VibraniumBlocks.BIG_PURPLE_DRIPLEAF_STEM.get()));
         }
@@ -33,6 +25,15 @@ public class VibraniumREIPlugin implements REIClientPlugin {
 
         if (VibraniumBlocks.VIBRANIUM_PATH.get() != null) {
             registry.removeEntry(EntryStacks.of(VibraniumBlocks.VIBRANIUM_PATH.get()));
+        }
+
+        // Hide Fluids
+        if (VibraniumFluids.VANILLA_MILK_STILL.get() != null) {
+            registry.removeEntry(EntryStacks.of(VibraniumFluids.VANILLA_MILK_STILL.get()));
+        }
+
+        if (VibraniumFluids.HOT_WATER_STILL.get() != null) {
+            registry.removeEntry(EntryStacks.of(VibraniumFluids.HOT_WATER_STILL.get()));
         }
     }
 }

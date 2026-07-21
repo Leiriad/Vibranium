@@ -31,8 +31,8 @@ configurations {
 
 repositories {
     maven {
-        name = 'NeoForged'
-        url = 'https://maven.neoforged.net/releases'
+        name = "NeoForged"
+        url = "https://maven.neoforged.net/releases"
     }
 }
 
@@ -46,9 +46,11 @@ dependencies {
     modApi "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
 
     //REI
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-neoforge:21.11.816"
-    modCompileOnlyApi "me.shedaniel:REIPluginCompatibilities-forge-annotations:12.+"
-    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-neoforge:21.11.816"
+    modCompileOnlyApi  "me.shedaniel:RoughlyEnoughItems-neoforge:${rootProject.rei_version}"
+    modCompileOnlyApi  "me.shedaniel:REIPluginCompatibilities-forge-annotations:12.+"
+
+    //JEI
+    compileOnly("mezz.jei:jei-${rootProject.minecraft_version}-neoforge-api:${rootProject.jei_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive = true }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
