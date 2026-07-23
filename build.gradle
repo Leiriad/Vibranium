@@ -31,6 +31,9 @@ subprojects {
             url = uri("https://maven.neoforged.net/releases")
         }
         maven {
+            url = "https://api.modrinth.com/maven"
+        }
+        maven {
             name = "Shedaniel"
             url = uri("https://maven.shedaniel.me/")
         }

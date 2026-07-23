@@ -15,50 +15,48 @@ configurations {
     runtimeClasspath.extendsFrom common
     developmentFabric.extendsFrom common
 
-    // Files in this configuration will be bundled into your mod using the Shadow plugin.
-    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
     shadowBundle {
         canBeResolved = true
         canBeConsumed = false
     }
 }
+
 repositories {
     maven {
         url = "https://maven.terraformersmc.com/releases/"
     }
-    // Dépôt de Cloth Config au cas où il manquerait aussi à ce module
     maven {
         url = "https://maven.shedaniel.me/"
     }
+    maven {
+        url = "https://maven.blamejared.com"
+    }
 }
+
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
-    // Fabric API.
+    // Fabric API
     modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
 
-    // Architectury API.
+    // Architectury API
     modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
-    //Cloth Config
-    modApi ("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"){
-        exclude group: "net.fabricmc.fabric-api"
-    }
+    // Cloth Config
+    modApi "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
     include "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
 
     // ModMenu API
-    modApi "com.terraformersmc:modmenu:${rootProject.modmenu_version}"
+    modApi("com.terraformersmc:modmenu:${rootProject.modmenu_version}")
 
     // TEAMREBORN ENERGY API
-    include modApi("teamreborn:energy:${rootProject.teamreborn_energy_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
+    include modApi("teamreborn:energy:${rootProject.teamreborn_energy_version}")
 
-    //REI
-    modCompileOnlyApi  "me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}"
-    modCompileOnlyApi  "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rootProject.rei_version}"
+    // REI
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}"
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rootProject.rei_version}"
 
-    //JEI
+    // JEI
     modCompileOnlyApi("mezz.jei:jei-${rootProject.minecraft_version}-fabric-api:${rootProject.jei_version}")
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
@@ -71,7 +69,6 @@ processResources {
     filesMatching('fabric.mod.json') {
         expand version: inputs.properties.version
     }
-    // Copy AccessWidener file to fabric module
     from(project(":common").file("src/main/resources/vibranium.accesswidener"))
 }
 
@@ -87,18 +84,21 @@ remapJar {
 loom {
     accessWidenerPath = project(":common").file("src/main/resources/vibranium.accesswidener")
 
-    runs {
-        datagen {
-            client()
-            name("Minecraft Data")
-            runDir("build/datagen")
+    loom {
+        accessWidenerPath = project(":common").file("src/main/resources/vibranium.accesswidener")
 
-            // Syntaxe moderne pour injecter les arguments VM dans Loom 1.17+
-            vmArgs(
-                    "-Dfabric-api.datagen",
-                    "-Dfabric-api.datagen.output-dir=${project(":common").file("src/main/generated")}",
-                    "-Dfabric-api.datagen.modid=vibranium"
-            )
+        runs {
+            datagen {
+                client()
+                displayName = "Minecraft Data"
+                runDirectory.set(file("build/datagen"))
+
+                jvmArguments.addAll([
+                        "-Dfabric-api.datagen",
+                        "-Dfabric-api.datagen.output-dir=${project(":common").file("src/main/generated").absolutePath}",
+                        "-Dfabric-api.datagen.modid=vibranium"
+                ])
+            }
         }
     }
 }
