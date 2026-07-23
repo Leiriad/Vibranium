@@ -10,11 +10,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.WorldlyContainerHolder;
+import net.minecraft.world.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -47,7 +45,7 @@ public class ReactorHatchBlock extends BaseEntityBlock implements WorldlyContain
 
     public static Properties getProperties (Properties settings){
         return Properties.of()
-                .mapColor(MapColor.COLOR_CYAN)
+                .mapColor(MapColor.COLOR_GRAY)
                 .instrument(NoteBlockInstrument.CHIME);
     }
     @Override
@@ -58,8 +56,11 @@ public class ReactorHatchBlock extends BaseEntityBlock implements WorldlyContain
     //CONSTRUCTOR
     public ReactorHatchBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
-        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
+        this.registerDefaultState(
+                this.stateDefinition.any()
+                        .setValue(FACING, Direction.NORTH)
+                        .setValue(LIT, false)
+        );
     }
 
     //METHODS
@@ -138,5 +139,26 @@ public class ReactorHatchBlock extends BaseEntityBlock implements WorldlyContain
                 ReactorHatchEntity.tick(level1, pos, state1, hatch);
             }
         };
+    }
+    /// Make sure the BlockEntity is retained when changing properties like LIT
+    @Override
+    public boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
+        super.triggerEvent(state, level, pos, id, param);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        return blockEntity != null && blockEntity.triggerEvent(id, param);
+    }
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+    }
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof ReactorHatchEntity hatch) {
+            if (!level.isClientSide()) {
+                Containers.dropContents(level, pos, hatch.inventory);
+            }
+        }
+        return super.playerWillDestroy(level, pos, state, player);
     }
 }

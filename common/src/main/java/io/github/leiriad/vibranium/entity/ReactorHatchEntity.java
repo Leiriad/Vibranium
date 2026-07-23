@@ -24,10 +24,16 @@ import org.jspecify.annotations.Nullable;
 
 public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
     //PROPERTIES
-    public final SimpleContainer inventory = new SimpleContainer(2);
     private BlockPos corePos = null;
     private int trackedVibraniumAmount = 0;
     private int trackedMaxFuelTicks = 24000;
+    public final SimpleContainer inventory = new SimpleContainer(2) {
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            ReactorHatchEntity.this.setChanged();
+        }
+    };
 
     // CONSTRUCTOR
     public ReactorHatchEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -68,12 +74,33 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
         if (level.isClientSide()) return;
 
         ReactorCoreEntity core = hatch.getConnectedCore(level);
-        hatch.trackedVibraniumAmount = core != null ? core.getVibraniumAmount() : 0;
         if (core != null) {
+            hatch.trackedVibraniumAmount = core.getVibraniumAmount();
             hatch.trackedMaxFuelTicks = core.getTicksPerPowder();
+        } else {
+            hatch.trackedVibraniumAmount = 0;
         }
-        boolean hasFuel = !hatch.inventory.getItem(0).isEmpty();
-        hatch.updateLitState(core != null && hasFuel);
+    }
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        // Trigger update on server side whenever inventory or state changes
+        if (this.level != null && !this.level.isClientSide()) {
+            ReactorCoreEntity core = this.getConnectedCore(this.level);
+
+            // Track core values
+            this.trackedVibraniumAmount = core != null ? core.getVibraniumAmount() : 0;
+            if (core != null) {
+                this.trackedMaxFuelTicks = core.getTicksPerPowder();
+            }
+
+            // Check if fuel is in slot 0
+            boolean hasFuel = this.inventory.getItem(0).is(VibraniumItems.VIBRANIUM_DUST.get());
+
+            // Update blockstate LIT property
+            this.updateLitState(core != null && hasFuel);
+        }
+
     }
 
     //Inventory Synchronisation
@@ -95,6 +122,16 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
         @Override
         public int getCount() { return 2; }
     };
+    public void updateLitState(boolean isFuelPresent) {
+        if (this.level != null && !this.level.isClientSide()) {
+            BlockState currentState = this.level.getBlockState(this.worldPosition);
+
+            if (currentState.hasProperty(ReactorHatchBlock.LIT) && currentState.getValue(ReactorHatchBlock.LIT) != isFuelPresent) {
+                // Flag 3 = NOTIFY_NEIGHBORS (1) + BLOCK_UPDATE (2)
+                this.level.setBlock(this.worldPosition, currentState.setValue(ReactorHatchBlock.LIT, isFuelPresent), 3);
+            }
+        }
+    }
 
     //Game saving
     @Override
@@ -127,14 +164,7 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
         });
     }
 
-    public void updateLitState(boolean isFuelPresent) {
-        if (this.level != null && !this.level.isClientSide()) {
-            BlockState currentState = this.level.getBlockState(this.worldPosition);
-            if (currentState.hasProperty(ReactorHatchBlock.LIT) && currentState.getValue(ReactorHatchBlock.LIT) != isFuelPresent) {
-                this.level.setBlock(this.worldPosition, currentState.setValue(ReactorHatchBlock.LIT, isFuelPresent), 3);
-            }
-        }
-    }
+
 
     //Worldly Container
     @Override
@@ -153,26 +183,26 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
     }
 
     @Override
-    public int getContainerSize() { return inventory.getContainerSize(); }
+    public int getContainerSize() { return this.inventory.getContainerSize(); }
     @Override
-    public boolean isEmpty() { return inventory.isEmpty(); }
+    public boolean isEmpty() { return this.inventory.isEmpty(); }
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        this.inventory.setItem(slot, stack);
+        this.setChanged();
+    }
     @Override
     public ItemStack getItem(int slot) { return inventory.getItem(slot); }
     @Override
     public ItemStack removeItem(int slot, int amount) {
-        ItemStack res = inventory.removeItem(slot, amount);
+        ItemStack res = this.inventory.removeItem(slot, amount);
         this.setChanged();
         return res;
     }
     @Override
-    public ItemStack removeItemNoUpdate(int slot) { return inventory.removeItemNoUpdate(slot); }
-    @Override
-    public void setItem(int slot, ItemStack stack) {
-        inventory.setItem(slot, stack);
-        this.setChanged();
-    }
+    public ItemStack removeItemNoUpdate(int slot) { return this.inventory.removeItemNoUpdate(slot); }
     @Override
     public boolean stillValid(Player player) { return true; }
     @Override
-    public void clearContent() { inventory.clearContent(); }
+    public void clearContent() { this.inventory.clearContent(); }
 }
