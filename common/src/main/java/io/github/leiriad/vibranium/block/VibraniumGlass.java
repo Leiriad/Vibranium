@@ -1,8 +1,10 @@
 package io.github.leiriad.vibranium.block;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
 
@@ -21,5 +23,15 @@ public class VibraniumGlass extends Block {
     //CONSTRUCTOR
     public VibraniumGlass(Properties properties) {
         super(properties);
+    }
+
+    //METHODS
+    /// Skip rendering adjacent faces if the neighboring block is also VibraniumGlass
+    @Override
+    protected boolean skipRendering(BlockState state, BlockState adjacentState, Direction direction) {
+        if (adjacentState.is(this)) {
+            return true;
+        }
+        return super.skipRendering(state, adjacentState, direction);
     }
 }
