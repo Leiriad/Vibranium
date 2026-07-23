@@ -1,5 +1,8 @@
 {
   "variants": {
-    "": { "model": "vibranium:block/fluid_tank" }
+    "segment=single": { "model": "vibranium:block/fluid_tank" },
+    "segment=top": { "model": "vibranium:block/fluid_tank_top" },
+    "segment=middle": { "model": "vibranium:block/fluid_tank_middle" },
+    "segment=bottom": { "model": "vibranium:block/fluid_tank_bottom" }
   }
 }

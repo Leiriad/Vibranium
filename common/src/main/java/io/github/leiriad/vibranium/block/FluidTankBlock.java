@@ -5,10 +5,12 @@ import io.github.leiriad.vibranium.entity.FluidTankEntity;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
 import io.github.leiriad.vibranium.fluid.FluidHelper;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
+import io.github.leiriad.vibranium.utils.TankSegment;
 import io.github.leiriad.vibranium.utils.VibraniumTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -16,6 +18,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -40,6 +45,7 @@ public class FluidTankBlock extends BaseEntityBlock {
     //PROPERTIES
     public static final MapCodec<FluidTankBlock> CODEC = simpleCodec(FluidTankBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
+    public static final EnumProperty<TankSegment> SEGMENT = EnumProperty.create("segment", TankSegment.class);
 
     public static Properties getProperties (Properties settings){
         return Properties.of()
@@ -56,7 +62,10 @@ public class FluidTankBlock extends BaseEntityBlock {
     //CONSTRUCTOR
     public FluidTankBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.getStateDefinition()
+                .any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(SEGMENT, TankSegment.SINGLE));
     }
 
     //TICKER
@@ -78,14 +87,80 @@ public class FluidTankBlock extends BaseEntityBlock {
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING).add(SEGMENT);
     }
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        // Calculate the segment state based on top and bottom neighbors at placement time
+        BlockState calculatedState = calculateSegment(context.getLevel(), context.getClickedPos());
+
+        return calculatedState.setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
-    //Fill with bucket
+    /// Logic to calculate segment position based on adjacent tank blocks
+    private BlockState calculateSegment(LevelReader level, BlockPos pos) {
+        boolean hasTankAbove = level.getBlockState(pos.above()).is(this);
+        boolean hasTankBelow = level.getBlockState(pos.below()).is(this);
+
+        TankSegment segment;
+        if (hasTankAbove && hasTankBelow) {
+            segment = TankSegment.MIDDLE;
+        } else if (hasTankAbove) {
+            segment = TankSegment.BOTTOM;
+        } else if (hasTankBelow) {
+            segment = TankSegment.TOP;
+        } else {
+            segment = TankSegment.SINGLE;
+        }
+
+        return this.defaultBlockState().setValue(SEGMENT, segment);
+    }
+
+
+    //Update when changed
+    @Override
+    protected BlockState updateShape(BlockState state, LevelReader levelReader, ScheduledTickAccess scheduledTickAccess, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource randomSource
+    ) {
+        // Recalculate segment only when the updated neighbor is directly above or below
+        if (direction == Direction.UP || direction == Direction.DOWN) {
+            return calculateSegment(levelReader, pos).setValue(FACING, state.getValue(FACING));
+        }
+        return super.updateShape(state, levelReader, scheduledTickAccess, pos, direction, neighborPos, neighborState, randomSource);
+    }
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        super.onPlace(state, level, pos, oldState, isMoving);
+        if (!level.isClientSide()) {
+            this.notifyAdjacentReactor(level, pos);
+        }
+    }
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean isMoving) {
+        super.affectNeighborsAfterRemoval(state, level, pos, isMoving);
+        this.notifyAdjacentReactor(level, pos);
+    }
+    private void notifyAdjacentReactor(Level level, BlockPos tankPos) {
+        // Scan a 3x3x3 area around the tank to find the Reactor Core
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    mutablePos.set(tankPos.getX() + x, tankPos.getY() + y, tankPos.getZ() + z);
+
+                    BlockEntity be = level.getBlockEntity(mutablePos);
+                    if (be instanceof ReactorCoreEntity core) {
+                        // Force the reactor to rescan and recalculate capacities immediately
+                        core.scanForComponents(level, mutablePos);
+                        core.updateFluidLevels();
+                        return; // Core found and updated, we can stop searching
+                    }
+                }
+            }
+        }
+    }
+
+    ///Fill with bucket
     @Override
     protected InteractionResult useItemOn(ItemStack heldItem, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // We only process logic on the logical server side
@@ -129,45 +204,9 @@ public class FluidTankBlock extends BaseEntityBlock {
         return InteractionResult.PASS;
     }
 
-    //Update when changed
+    ///Render
     @Override
-    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
-        super.onPlace(state, level, pos, oldState, isMoving);
-        if (!level.isClientSide()) {
-            this.notifyAdjacentReactor(level, pos);
-        }
-    }
-
-    @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean isMoving) {
-        super.affectNeighborsAfterRemoval(state, level, pos, isMoving);
-        this.notifyAdjacentReactor(level, pos);
-    }
-
-    private void notifyAdjacentReactor(Level level, BlockPos tankPos) {
-        // Scan a 3x3x3 area around the tank to find the Reactor Core
-        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
-                    mutablePos.set(tankPos.getX() + x, tankPos.getY() + y, tankPos.getZ() + z);
-
-                    BlockEntity be = level.getBlockEntity(mutablePos);
-                    if (be instanceof ReactorCoreEntity core) {
-                        // Force the reactor to rescan and recalculate capacities immediately
-                        core.scanForComponents(level, mutablePos);
-                        core.updateFluidLevels();
-                        return; // Core found and updated, we can stop searching
-                    }
-                }
-            }
-        }
-    }
-
-    //Render
-    @Override
-    protected net.minecraft.world.level.block.RenderShape getRenderShape(BlockState state) {
-        return net.minecraft.world.level.block.RenderShape.MODEL;
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 }
