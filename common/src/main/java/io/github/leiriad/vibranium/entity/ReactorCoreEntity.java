@@ -609,7 +609,7 @@ public class ReactorCoreEntity extends BlockEntity {
                 player.addEffect(new MobEffectInstance(MobEffects.POISON, 400, 2));
             }
 
-            this.setRemoved();
+            level.removeBlock(pos, false);
         }
     }
     private void radiateHeatToPlayers(Level level, BlockPos pos) {
