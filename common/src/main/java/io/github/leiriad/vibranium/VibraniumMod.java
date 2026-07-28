@@ -37,6 +37,9 @@ public class VibraniumMod {
 		// Register the Meteorite Structure logics
 		VibraniumStructures.register();
 
+		//Registers Brewing recipes
+		VibraniumBrewingRecipes.register();
+
 		//Creative tabs
 		VibraniumBlocks.addBlocksToTabs();
 		VibraniumItems.addItemsToTabs();

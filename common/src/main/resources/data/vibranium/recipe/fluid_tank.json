@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "vibranium:reinforced_vibranium_glass_pane",
+    "S": "minecraft:slime_ball"
+  },
+  "pattern": [
+    "SGS",
+    "G G",
+    "SGS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:fluid_tank"
+  }
+}

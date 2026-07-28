@@ -9,8 +9,6 @@ import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.HashMap;
@@ -64,6 +62,7 @@ public class VibraniumModClient {
                 (state, world, pos, tintIndex) -> 0xFFFFFF,
                 VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get()
         );
+
 
         //Screens init
         MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);

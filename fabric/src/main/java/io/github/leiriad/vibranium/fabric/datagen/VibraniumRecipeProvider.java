@@ -1,13 +1,17 @@
 package io.github.leiriad.vibranium.fabric.datagen;
+import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumItems;
+import io.github.leiriad.vibranium.utils.VibraniumTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.*;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -22,7 +26,9 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
         return new RecipeProvider(registryLookup, exporter) {
             @Override
             public void buildRecipes() {
+                //FURNACE
                 // Main recipe configuration for autonomous furnace smelting
+                // Vibranium dust to depleted vibranium ingot
                 SimpleCookingRecipeBuilder.smelting(
                                 Ingredient.of(VibraniumItems.VIBRANIUM_DUST.get()),    // Input item
                                 RecipeCategory.MISC,                                   // Creative tab category
@@ -34,6 +40,135 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_DUST.get()), has(VibraniumItems.VIBRANIUM_DUST.get()))
                         // Save the file using the provided exporter
                         .save(exporter, "vibranium_dust_to_depleted");
+                //Black gravel to vibranium glass
+                SimpleCookingRecipeBuilder.smelting(
+                                Ingredient.of(VibraniumBlocks.BLACK_GRAVEL.get()),
+                                RecipeCategory.BUILDING_BLOCKS,
+                                VibraniumBlocks.VIBRANIUM_GLASS.get(),
+                                0.1F,
+                                200
+                        )
+                        .unlockedBy(getHasName(VibraniumBlocks.BLACK_GRAVEL.get()), has(VibraniumBlocks.BLACK_GRAVEL.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "glass_from_black_gravel")));
+                //Black clay balls to black bricks
+                SimpleCookingRecipeBuilder.smelting(
+                                Ingredient.of(VibraniumItems.BLACK_CLAY_BALL.get()),
+                                RecipeCategory.MISC,
+                                VibraniumItems.BLACK_BRICK.get(),
+                                0.1F,
+                                200
+                        )
+                        .unlockedBy(getHasName(VibraniumItems.BLACK_CLAY_BALL.get()), has(VibraniumItems.BLACK_CLAY_BALL.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_brick_from_smelting_black_clay_balls")));
+                //Black clay to black terracota
+                SimpleCookingRecipeBuilder.smelting(
+                                Ingredient.of(VibraniumBlocks.BLACK_CLAY.get()),
+                                RecipeCategory.BUILDING_BLOCKS,
+                                Items.BLACK_TERRACOTTA,
+                                0.1F,
+                                200
+                        )
+                        .unlockedBy(getHasName(VibraniumBlocks.BLACK_CLAY.get()), has(VibraniumBlocks.BLACK_CLAY.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_terracotta_from_smelting_black_clay")));
+
+                //CRAFTING TABLE
+                var itemHolderGetter = registryLookup.lookupOrThrow(Registries.ITEM);
+
+                //Glass pane
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.DECORATIONS, VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), 16)
+                        .pattern("   ")
+                        .pattern("GGG")
+                        .pattern("GGG")
+                        .define('G', VibraniumBlocks.VIBRANIUM_GLASS.get())
+                        .unlockedBy(getHasName(VibraniumBlocks.VIBRANIUM_GLASS.get()), has(VibraniumBlocks.VIBRANIUM_GLASS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "vibranium_glass_pane")));
+                //Reinforced vibranium glass
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.DECORATIONS, VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(), 1)
+                        .pattern("D D")
+                        .pattern(" G ")
+                        .pattern("D D")
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .define('G', VibraniumBlocks.VIBRANIUM_GLASS.get())
+                        .unlockedBy(getHasName(VibraniumBlocks.VIBRANIUM_GLASS.get()), has(VibraniumBlocks.VIBRANIUM_GLASS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reinforced_vibranium_glass")));
+                //Reinforced vibranium glass pane
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.DECORATIONS, VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), 16)
+                        .pattern("   ")
+                        .pattern("GGG")
+                        .pattern("GGG")
+                        .define('G', VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())
+                        .unlockedBy(getHasName(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()), has(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reinforced_vibranium_glass_pane")));
+                //Fluid tank
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.FLUID_TANK.get())
+                        .pattern("SGS")
+                        .pattern("G G")
+                        .pattern("SGS")
+                        .define('S', Items.SLIME_BALL)
+                        .define('G', VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get())
+
+                        .unlockedBy(getHasName(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get()), has(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "fluid_tank")));
+                //Reactor hatch
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_HATCH.get())
+                        .pattern("DSD")
+                        .pattern("S S")
+                        .pattern("DSD")
+                        .define('S', Blocks.STONE)
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_hatch")));
+                //Reactor control panel
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_CONTROL_PANEL.get())
+                        .pattern("DSD")
+                        .pattern("SGS")
+                        .pattern("DSD")
+                        .define('S', Blocks.STONE)
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .define('G', Blocks.GLASS_PANE)
+
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_control_panel")));
+                //Reactor core
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_CORE.get())
+                        .pattern("DGD")
+                        .pattern("GVG")
+                        .pattern("DGD")
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .define('G', VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+
+                        .unlockedBy(getHasName(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()), has(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_core")));
+                //Black clay balls to black clay
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.BLACK_CLAY.get())
+                        .pattern("CC")
+                        .pattern("CC")
+                        .define('C', VibraniumItems.BLACK_CLAY_BALL.get())
+                        .unlockedBy(getHasName(VibraniumItems.BLACK_CLAY_BALL.get()), has(VibraniumItems.BLACK_CLAY_BALL.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_terracotta_from_black_clay_balls")));
+                //Blue glow berry suspicious stew
+                ShapelessRecipeBuilder.shapeless(itemHolderGetter, RecipeCategory.FOOD, Items.SUSPICIOUS_STEW)
+                        .requires(Items.BOWL)
+                        .requires(VibraniumTags.Items.STEW_FLOWERS)
+                        .requires(VibraniumBlocks.BLUE_GLOW_BERRIES.get())
+                        .unlockedBy(getHasName(VibraniumBlocks.BLUE_GLOW_BERRIES.get()), has(VibraniumBlocks.BLUE_GLOW_BERRIES.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "suspicious_stew_from_blue_glow_berries")));
+                //Blue soup
+                ShapelessRecipeBuilder.shapeless(itemHolderGetter, RecipeCategory.FOOD, VibraniumItems.BLUE_SOUP.get())
+                        .requires(Items.BOWL)
+                        .requires(VibraniumTags.Items.BLUE_FLOWERS)
+                        .requires(VibraniumBlocks.BLUE_GLOW_BERRIES.get())
+                        .unlockedBy(getHasName(VibraniumBlocks.BLUE_GLOW_BERRIES.get()), has(VibraniumBlocks.BLUE_GLOW_BERRIES.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "blue_soup_from_blue_glow_berries")));
+                //Ancestral nectar
+                ShapelessRecipeBuilder.shapeless(itemHolderGetter, RecipeCategory.FOOD, VibraniumItems.ANCESTRAL_NECTAR.get())
+                        .requires(Items.BOWL)
+                        .requires(VibraniumBlocks.BLUE_GLOW_BERRIES.get())
+                        .requires(VibraniumItems.HEART_SHAPED_HERB.get())
+                        .unlockedBy(getHasName(VibraniumItems.HEART_SHAPED_HERB.get()), has(VibraniumItems.HEART_SHAPED_HERB.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "ancestral_nectar_from_heart_shaped_herb")));
             }
         };
     }

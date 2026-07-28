@@ -5,12 +5,15 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.item.*;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemLore;
 
 import java.util.List;
 
@@ -53,6 +56,32 @@ public class VibraniumItems {
 
         return new HotWaterBucket(VibraniumFluids.HOT_WATER_STILL, HotWaterBucket.getProperties().setId(key));
     });
+    public static final RegistrySupplier<Item> BLUE_SOUP = ITEMS.register("blue_soup", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "blue_soup"));
+
+        return new BlueSoup(new Item.Properties().setId(key));
+    });
+    public static final RegistrySupplier<Item> ANCESTRAL_NECTAR = ITEMS.register("ancestral_nectar", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "ancestral_nectar"));
+
+        return new AncestralNectar(AncestralNectar.getProperties().setId(key));
+    });
+    public static final RegistrySupplier<Item> BLACK_BRICK = ITEMS.register("black_brick", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_brick"));
+
+        return new BlackBrick(new Item.Properties().setId(key));
+    });
+    public static final RegistrySupplier<Item> BLUE_BERRY_SPIRIT = ITEMS.register("blue_berry_spirit", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "blue_berry_spirit"));
+
+        return new BlueBerrySpirit(BlueBerrySpirit.getProperties().setId(key).component(DataComponents.LORE, new ItemLore(List.of(
+                Component.translatable("tooltip.vibranium.distilled_alcohol")
+        ))));
+    });
 
     ///Registers items in the game
     public static void registerModItems() {
@@ -67,7 +96,8 @@ public class VibraniumItems {
                 BLACK_CLAY_BALL,
                 HEART_SHAPED_HERB,
                 VIBRANIUM_INGOT,
-                DEPLETED_VIBRANIUM_INGOT
+                DEPLETED_VIBRANIUM_INGOT,
+                BLACK_BRICK
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.INGREDIENTS, () -> new ItemStack(supplier.get()));
         });
@@ -79,6 +109,15 @@ public class VibraniumItems {
             CreativeTabRegistry.appendStack(CreativeModeTabs.TOOLS_AND_UTILITIES, () -> new ItemStack(supplier.get()));
         });
 
+        //FOOD & DRINKS
+        List.of(
+                BLUE_SOUP,
+                BLUE_BERRY_SPIRIT,
+                ANCESTRAL_NECTAR
+        ).forEach(supplier -> {
+            CreativeTabRegistry.appendStack(CreativeModeTabs.FOOD_AND_DRINKS, () -> new ItemStack(supplier.get()));
+        });
+
         //VIBRANIUM TAB
         List.of(
                 VIBRANIUM_DUST,
@@ -86,7 +125,11 @@ public class VibraniumItems {
                 HEART_SHAPED_HERB,
                 HOT_WATER_BUCKET,
                 VIBRANIUM_INGOT,
-                DEPLETED_VIBRANIUM_INGOT
+                DEPLETED_VIBRANIUM_INGOT,
+                BLACK_BRICK,
+                BLUE_SOUP,
+                BLUE_BERRY_SPIRIT,
+                ANCESTRAL_NECTAR
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(supplier.get()));
         });

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "vibranium:blue_glow_berries",
+    "vibranium:heart_shaped_herb"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:ancestral_nectar"
+  }
+}

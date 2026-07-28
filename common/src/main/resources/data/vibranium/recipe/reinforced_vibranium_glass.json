@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "vibranium:depleted_vibranium_ingot",
+    "G": "vibranium:vibranium_glass"
+  },
+  "pattern": [
+    "D D",
+    " G ",
+    "D D"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:reinforced_vibranium_glass"
+  }
+}

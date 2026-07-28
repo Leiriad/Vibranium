@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:bowl",
+    "#vibranium:blue_flowers",
+    "vibranium:blue_glow_berries"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:blue_soup"
+  }
+}

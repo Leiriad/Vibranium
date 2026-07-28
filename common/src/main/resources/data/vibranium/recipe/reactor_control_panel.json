@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "vibranium:depleted_vibranium_ingot",
+    "G": "minecraft:glass_pane",
+    "S": "minecraft:stone"
+  },
+  "pattern": [
+    "DSD",
+    "SGS",
+    "DSD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:reactor_control_panel"
+  }
+}

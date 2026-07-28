@@ -76,6 +76,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_INGOT.get(), "Lingot de vibranium");
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Lingot de vibranium appauvrit");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
+                translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Soupe bleue");
+                translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Nectar ancestral");
+                translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Eau de vie de baies bleues");
+                translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Eau de vie de baies bleues");
+                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Brique noire");
 
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Eau chaude");
 
@@ -91,6 +96,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Insérez la poudre de Vibranium ici");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Résidus et scories de combustion");
+                translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Distillé dans un alambic. Haute concentration !");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
@@ -149,6 +155,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_INGOT.get(), "Lingote de vibranio");
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Lingote de vibranio empobrecido");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
+                translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Sopa azul");
+                translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Néctar ancestral");
+                translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Aguardiente de baya azul");
+                translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Aguardiente de baya azul");
+                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Ladrillo negro");
 
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Agua caliente");
 
@@ -164,8 +175,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranio: quedan %ds");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Inserta el polvo de Vibranium aquí");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Residuos y escorias de combustión");
+                translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Destilado en un alambique. ¡Alta graduación!");
 
-                translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
+            translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
 
                 translationBuilder.add("text.vibranium.config.title", "Configuración de Vibranium");
@@ -222,6 +234,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_INGOT.get(), "Vibranium Ingot");
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Depleted Vibranium Ingot");
+                translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Blue Soup");
+                translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Ancestral Nectar");
+                translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Blue Glow Berries Spirit");
+                translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Blue Glow Berries Spirit");
+                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Black Brick");
 
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Hot Water Bucket");
 
@@ -239,6 +256,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Insert Vibranium powder here");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Combustion waste and slag");
+                translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Distilled in a brewing stand. High potency!");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "This hatch is not connected to any reactor core!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "Reactor Meltdown Alarm blares!");

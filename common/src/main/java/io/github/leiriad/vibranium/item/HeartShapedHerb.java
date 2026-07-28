@@ -19,7 +19,7 @@ public class HeartShapedHerb extends Item {
 
                 .component(DataComponents.CONSUMABLE, Consumables.defaultFood()
                         .consumeSeconds(0.8f)
-                        .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.POISON, 400, 0), 1.0f))
+                        .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.WITHER, 200, 1), 1.0f))
                         .build());
     }
     public HeartShapedHerb(Properties properties) {super(properties);}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "vibranium:depleted_vibranium_ingot",
+    "G": "vibranium:reinforced_vibranium_glass",
+    "V": "vibranium:vibranium_ingot"
+  },
+  "pattern": [
+    "DGD",
+    "GVG",
+    "DGD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:reactor_core"
+  }
+}

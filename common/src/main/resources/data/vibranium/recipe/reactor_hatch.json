@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "vibranium:depleted_vibranium_ingot",
+    "S": "minecraft:stone"
+  },
+  "pattern": [
+    "DSD",
+    "S S",
+    "DSD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:reactor_hatch"
+  }
+}

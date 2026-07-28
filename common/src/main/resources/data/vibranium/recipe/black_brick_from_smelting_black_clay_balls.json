@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "vibranium:black_clay_ball",
+  "result": {
+    "id": "vibranium:black_brick"
+  }
+}
