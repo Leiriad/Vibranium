@@ -27,7 +27,7 @@ import java.util.function.BiConsumer;
 public class FluidTankEntity extends BlockEntity {
     //PROPERTIES
     // Capacity of the tank (10000 mB)
-    private final long capacity = 10000;
+    public static final long capacity = 10000;
     private Fluid storedFluid = Fluids.EMPTY;
     private long fluidAmount = 0;
 

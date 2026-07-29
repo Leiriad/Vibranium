@@ -58,6 +58,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CORE.get(), "Cœur de réacteur");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Panneau de Contrôle de réacteur");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Trappe d'alimentation de réacteur");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_PUMP.get(), "Pompe de refroidissement du reacteur");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS.get(), "Verre de vibranium");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(), "Verre de vibranium renforcé");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Vitre de vibranium");
@@ -138,6 +139,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CORE.get(), "Núcleo del reactor");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Panel de control del reactor");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Escotilla de Alimentación del Reactor");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_PUMP.get(), "Bomba de refrigeración del reactor");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS.get(), "Vidrio de vibranio");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(), "Vidrio de vibranio reforzado");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Panel de cristal de vibranio");
@@ -177,7 +179,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip.vibranium.slot_output", "Residuos y escorias de combustión");
                 translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Destilado en un alambique. ¡Alta graduación!");
 
-            translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
+                translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
 
                 translationBuilder.add("text.vibranium.config.title", "Configuración de Vibranium");
@@ -217,6 +219,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CORE.get(), "Reactor Core");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_CONTROL_PANEL.get(), "Reactor Control Panel");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_HATCH.get(), "Reactor Fuel Hatch");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.REACTOR_PUMP.get(), "Reactor Cooling Pump");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS.get(), "Vibranium Glass");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get(), "Reinforced Vibranium Glass");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Vibranium Glass Pane");

@@ -119,6 +119,16 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
 
                         .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_hatch")));
+                //Reactor pump
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_PUMP.get())
+                        .pattern("DSD")
+                        .pattern("DDD")
+                        .pattern("DSD")
+                        .define('S', Blocks.STONE)
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_pump")));
                 //Reactor control panel
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_CONTROL_PANEL.get())
                         .pattern("DSD")

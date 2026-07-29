@@ -15,6 +15,7 @@ public class VibraniumEntities {
     public static RegistrySupplier<BlockEntityType<ReactorCoreEntity>> REACTOR_CORE_ENTITY;
     public static RegistrySupplier<BlockEntityType<ReactorControlPanelEntity>> REACTOR_CONTROL_PANEL_ENTITY;
     public static RegistrySupplier<BlockEntityType<ReactorHatchEntity>> REACTOR_HATCH_ENTITY;
+    public static RegistrySupplier<BlockEntityType<ReactorPumpEntity>> REACTOR_PUMP_ENTITY;
     public static RegistrySupplier<BlockEntityType<FluidTankEntity>> FLUID_TANK_ENTITY;
     public static RegistrySupplier<BlockEntityType<ReinforcedVibraniumGlassEntity>> REINFORCED_VIBRANIUM_GLASS_ENTITY;
 
