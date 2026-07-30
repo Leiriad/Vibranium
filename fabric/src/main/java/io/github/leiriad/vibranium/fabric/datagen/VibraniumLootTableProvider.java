@@ -86,6 +86,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createIndustrialBlocksLoot(VibraniumBlocks.VIBRANIUM_GLASS_PANE.get());
         createIndustrialBlocksLoot(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get());
         createIndustrialBlocksLoot(VibraniumBlocks.FLUID_TANK.get());
+        createIndustrialBlocksLoot(VibraniumBlocks.BLACK_BRICKS.get());
     }
 
     private void createVibraniumOreLoot() {

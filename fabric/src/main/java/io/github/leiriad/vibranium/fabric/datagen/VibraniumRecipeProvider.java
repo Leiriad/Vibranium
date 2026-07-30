@@ -198,6 +198,13 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .requires(VibraniumItems.HEART_SHAPED_HERB.get())
                         .unlockedBy(getHasName(VibraniumItems.HEART_SHAPED_HERB.get()), has(VibraniumItems.HEART_SHAPED_HERB.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "ancestral_nectar_from_heart_shaped_herb")));
+                //Black Bricks
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.BLACK_BRICKS.get())
+                        .pattern("BB")
+                        .pattern("BB")
+                        .define('B', VibraniumItems.BLACK_BRICK.get())
+                        .unlockedBy(getHasName(VibraniumItems.BLACK_BRICK.get()), has(VibraniumItems.BLACK_BRICK.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_bricks_from_black_brick")));
             }
         };
     }

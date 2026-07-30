@@ -65,6 +65,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Vitre de vibranium");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Vitre de vibranium renforcée");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.FLUID_TANK.get(), "Réservoir à fluides");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICKS.get(), "Briques noires");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Fleur d'herbe cœur");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Liane des cavernes pourpre");
@@ -147,6 +148,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Panel de cristal de vibranio");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Panel de cristal de vibranio reforzado");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.FLUID_TANK.get(), "Tanque de fluidos");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICKS.get(), "Ladrillos negros");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Flor de hierba en forma de corazón");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Lianas de cueva moradas");
@@ -228,6 +230,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), "Vibranium Glass Pane");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Reinforced Vibranium Glass Pane");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.FLUID_TANK.get(), "Fluid Tank");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICKS.get(), "Black Bricks");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Heart-shaped Herb Flower");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Purple Cave Vines");

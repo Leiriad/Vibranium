@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "vibranium:block/black_bricks"
+  },
+  "render_type": "solid"
+}
