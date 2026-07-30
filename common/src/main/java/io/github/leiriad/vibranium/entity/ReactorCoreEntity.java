@@ -169,6 +169,15 @@ public class ReactorCoreEntity extends BlockEntity {
             }
         }
         assignRolesToColumns();
+
+        //Notify tanks
+        boolean isNowValid = this.isReactorFunctioningCorrectly();
+        for (FluidTankEntity tank : this.waterTanks) {
+            tank.setPartOfActiveReactor(isNowValid);
+        }
+        for (FluidTankEntity tank : this.hotWaterTanks) {
+            tank.setPartOfActiveReactor(isNowValid);
+        }
     }
     private ReactorHatchEntity getHatch() {
         if (this.cachedHatch == null || this.cachedHatch.isRemoved() || !isNear(this.cachedHatch)) {
@@ -670,6 +679,21 @@ public class ReactorCoreEntity extends BlockEntity {
                 }
             }
         }
+    }
+    @Override
+    public void setRemoved() {
+        // If tank destroyed notify other blocks
+        for (FluidTankEntity tank : this.waterTanks) {
+            if (tank != null && !tank.isRemoved()) {
+                tank.setPartOfActiveReactor(false);
+            }
+        }
+        for (FluidTankEntity tank : this.hotWaterTanks) {
+            if (tank != null && !tank.isRemoved()) {
+                tank.setPartOfActiveReactor(false);
+            }
+        }
+        super.setRemoved();
     }
 
     //Screen

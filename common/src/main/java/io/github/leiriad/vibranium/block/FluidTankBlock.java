@@ -9,7 +9,10 @@ import io.github.leiriad.vibranium.utils.TankSegment;
 import io.github.leiriad.vibranium.utils.VibraniumTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -209,4 +212,47 @@ public class FluidTankBlock extends BaseEntityBlock {
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
+    ///Effects
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+
+        if (level.getBlockEntity(pos) instanceof FluidTankEntity tank) {
+
+            // Triggers effects ONLY if it holds hot water AND is inside a valid reactor
+            if (tank.getStoredFluid() == VibraniumFluids.HOT_WATER_STILL.get() && tank.getFluidAmount() > 0 && tank.isPartOfActiveReactor()) {
+
+                // Steam rising from the top of the tank block
+                if (random.nextInt(3) == 0) {
+                    double x = pos.getX() + 0.2 + random.nextDouble() * 0.6;
+                    double y = pos.getY() + 1.0;
+                    double z = pos.getZ() + 0.2 + random.nextDouble() * 0.6;
+
+                    level.addParticle(ParticleTypes.WHITE_SMOKE, x, y, z, 0.0, 0.02, 0.0);
+                }
+
+                // Underwater bubbles inside the tank
+                if (random.nextInt(4) == 0) {
+                    double x = pos.getX() + 0.1 + random.nextDouble() * 0.8;
+                    double y = pos.getY() + 0.1 + random.nextDouble() * 0.8;
+                    double z = pos.getZ() + 0.1 + random.nextDouble() * 0.8;
+
+                    level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, x, y, z, 0.0, 0.04, 0.0);
+                }
+
+                // Boiling / bubbling ambient sound loop
+                if (random.nextInt(10) == 0) {
+                    level.playLocalSound(
+                            pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                            SoundEvents.BUBBLE_COLUMN_UPWARDS_AMBIENT,
+                            SoundSource.BLOCKS,
+                            0.25F + random.nextFloat() * 0.1F,
+                            1.1F + random.nextFloat() * 0.2F,
+                            false
+                    );
+                }
+            }
+        }
+    }
+
 }

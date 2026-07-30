@@ -25,10 +25,9 @@ public class ReactorPumpEntity extends FluidTankEntity {
         // Check direction to find water source
         Direction facing = state.getValue(ReactorPumpBlock.FACING);
         BlockPos targetPos = pos.relative(facing);
-        FluidState fluidState = level.getFluidState(targetPos);
 
-        // If next block is water source
-        if (fluidState.is(Fluids.WATER)&& fluidState.isSource()) {
+        boolean isValidWaterSource = isBodyOfWaterLargeEnough(level, targetPos, 2);
+        if (isValidWaterSource) {
             // Force max water
             long filled = entity.fill(100, Fluids.WATER);
 
@@ -36,5 +35,31 @@ public class ReactorPumpEntity extends FluidTankEntity {
                 entity.setChanged();
             }
         }
+    }
+    private static boolean isBodyOfWaterLargeEnough(Level level, BlockPos startPos, int minRequiredWaterBlocks) {
+        FluidState fluidState = level.getFluidState(startPos);
+        boolean isWater = fluidState.is(Fluids.WATER);
+        boolean isSource = fluidState.isSource();
+        if (!(fluidState.is(Fluids.WATER) && fluidState.isSource())) {
+            return false;
+        }
+
+        int waterCount = 0;
+
+        // Scan 6 next direction
+        for (Direction dir : Direction.values()) {
+            BlockPos checkPos = startPos.relative(dir);
+
+            if (level.getFluidState(checkPos).is(Fluids.WATER)) {
+                waterCount++;
+            }
+
+            // If neighbor is more than 1 block of water pump can be filled
+            if (waterCount >= (minRequiredWaterBlocks - 1)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

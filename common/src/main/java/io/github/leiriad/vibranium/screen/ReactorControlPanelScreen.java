@@ -47,23 +47,33 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
         //Gauges
         int maxHeight = 78;
         //Energy (Max 100000)
-        drawVerticalGauge(guiGraphics, x + 44, y + 77, this.menu.getEnergy(), 100000, maxHeight, 0, 0, 14);
+        drawVerticalGauge(guiGraphics, x + 44, y + 77, this.menu.getEnergy(), 100000, maxHeight, 0, 0, 14, "Energy");
 
         //Heat (Max 3000)
-        drawVerticalGauge(guiGraphics, x + 83, y + 77, this.menu.getHeat(), 2500, maxHeight, 0, 0, 14);
+        drawVerticalGauge(guiGraphics, x + 83, y + 77, this.menu.getHeat(), 2500, maxHeight, 0, 0, 14, "Heat");
 
         //Water (Max 10000)
-        drawVerticalGauge(guiGraphics, x + 121, y + 77, this.menu.getWater(), this.menu.getMaxWater(), maxHeight, 0, 0, 14);
+        drawVerticalGauge(guiGraphics, x + 121, y + 77, this.menu.getWater(), this.menu.getMaxWater(), maxHeight, 0, 0, 14, "Water");
 
         //Hot Water (Max 10000)
-        drawVerticalGauge(guiGraphics, x + 160, y + 77, this.menu.getHotWater(), this.menu.getMaxHotWater(), maxHeight, 0, 0, 14);
+        drawVerticalGauge(guiGraphics, x + 160, y + 77, this.menu.getHotWater(), this.menu.getMaxHotWater(), maxHeight, 0, 0, 14,  "HotWater");
 
         //Vibranium (Burn ticks left, max 24000)
-        drawVerticalGauge(guiGraphics, x + 199, y + 77, this.menu.getVibranium(), 24000, maxHeight, 0, 0, 14);
+        drawVerticalGauge(guiGraphics, x + 199, y + 77, this.menu.getVibranium(), 24000, maxHeight, 0, 0, 14,   "Vibranium");
     }
-    private void drawVerticalGauge(GuiGraphics guiGraphics, int x, int y, long currentValue, long maxValue, int maxHeight, int texturePixelX, int texturePixelY, int width) {
+    private void drawVerticalGauge(GuiGraphics guiGraphics, int x, int y, long currentValue, long maxValue, int maxHeight, int texturePixelX, int texturePixelY, int width, String field) {
         if (maxValue <= 0) return;
-        Identifier gauge_texture = Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "textures/gui/reactor_control_panel_screen_gui_gauge.png");
+        Identifier gauge_texture = null;
+
+        //Choose texture
+        if(field=="Water"||field=="Vibranium") {
+            gauge_texture =Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "textures/gui/reactor_control_panel_screen_gui_gauge_inverted.png");
+        }
+        else{
+            gauge_texture = Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "textures/gui/reactor_control_panel_screen_gui_gauge.png");
+        }
+
+
         // Calculation is done using longs to prevent any scaling or overflow issues
         int renderedPixels = (int) ((currentValue * maxHeight) / maxValue);
         if (renderedPixels > maxHeight) renderedPixels = maxHeight;

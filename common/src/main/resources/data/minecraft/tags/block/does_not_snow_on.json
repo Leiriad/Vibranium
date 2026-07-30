@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "vibranium:reactor_control_panel",
+    "vibranium:reactor_core",
+    "vibranium:fluid_tank"
+  ]
+}

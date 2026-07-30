@@ -79,6 +79,7 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
             hatch.trackedMaxFuelTicks = core.getTicksPerPowder();
         } else {
             hatch.trackedVibraniumAmount = 0;
+            hatch.updateLitState(false);
         }
     }
     @Override

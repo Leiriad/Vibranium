@@ -30,6 +30,7 @@ public class FluidTankEntity extends BlockEntity {
     public static final long capacity = 10000;
     private Fluid storedFluid = Fluids.EMPTY;
     private long fluidAmount = 0;
+    private boolean partOfActiveReactor = false;
 
     //CONSTRUCTORS
     public FluidTankEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -50,11 +51,15 @@ public class FluidTankEntity extends BlockEntity {
         if (this.fluidAmount <= 0) {
             this.storedFluid = Fluids.EMPTY;
         }
-        setChanged(); // Marks the block entity for saving
-
-        // Synchronize data from server to client render thread
-        if (this.level != null) {
-            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        this.syncToClient();
+    }
+    public boolean isPartOfActiveReactor() {
+        return this.partOfActiveReactor;
+    }
+    public void setPartOfActiveReactor(boolean active) {
+        if (this.partOfActiveReactor != active) {
+            this.partOfActiveReactor = active;
+            this.syncToClient();
         }
     }
 
@@ -103,7 +108,7 @@ public class FluidTankEntity extends BlockEntity {
                     long accepted = tankAbove.fill(overflow, this.storedFluid);
                     if (accepted > 0) {
                         this.fluidAmount -= accepted;
-                        this.setChanged();
+                        this.syncToClient();
                         level.sendBlockUpdated(pos, getBlockState(), getBlockState(), 3);
                     }
                 }
@@ -126,8 +131,7 @@ public class FluidTankEntity extends BlockEntity {
                 // There is space in this tank
                 long toFill = Math.min(amount, spaceLeft);
                 this.fluidAmount += toFill;
-                this.setChanged();
-                if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+                this.syncToClient();
 
                 long remaining = amount - toFill;
                 // If there's still fluid left after filling this tank, pass it to the top tank
@@ -158,8 +162,7 @@ public class FluidTankEntity extends BlockEntity {
         if (this.fluidAmount <= 0) {
             this.storedFluid = Fluids.EMPTY;
         }
-        this.setChanged();
-        if (this.level != null) this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        this.syncToClient();
         return toDrain;
     }
 
@@ -197,6 +200,7 @@ public class FluidTankEntity extends BlockEntity {
             this.storedFluid = Fluids.EMPTY;
         }
 
+        this.partOfActiveReactor = valueInput.getBooleanOr("IsActiveReactor", false);
         // Read amount from NBT, fallback to 0L if missing
         this.fluidAmount = valueInput.getLongOr("FluidAmount", 0L);
     }
@@ -235,6 +239,8 @@ public class FluidTankEntity extends BlockEntity {
         return new Pair<>(totalAmount, totalCapacity);
     }
 
+
+
     // --- Network Synchronization for BER ---
 
     @Override
@@ -245,10 +251,11 @@ public class FluidTankEntity extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        // Creates the data tag that will be sent to the client through the packet
         CompoundTag tag = super.getUpdateTag(registries);
-        // Write into the network CompoundTag using lambda expressions
-        this.writeFluidData(tag::putString, tag::putLong);
+        Identifier fluidKey = BuiltInRegistries.FLUID.getKey(this.storedFluid);
+        tag.putString("FluidType", fluidKey.toString());
+        tag.putLong("FluidAmount", this.fluidAmount);
+        tag.putBoolean("IsActiveReactor", this.partOfActiveReactor);
         return tag;
     }
 
@@ -258,5 +265,11 @@ public class FluidTankEntity extends BlockEntity {
         Identifier fluidKey = BuiltInRegistries.FLUID.getKey(this.storedFluid);
         stringWriter.accept("FluidType", fluidKey.toString());
         longWriter.accept("FluidAmount", this.fluidAmount);
+    }
+    public void syncToClient() {
+        this.setChanged();
+        if (this.level != null && !this.level.isClientSide()) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
     }
 }

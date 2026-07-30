@@ -133,7 +133,7 @@ public class HotWaterLiquidBlock extends LiquidBlock {
                 );
             }
 
-            // 2. Underwater bubble effect
+            // Underwater bubble effect
             if (random.nextInt(5) == 0) {
                 double bx = pos.getX() + random.nextDouble();
                 double by = pos.getY() + random.nextDouble();
