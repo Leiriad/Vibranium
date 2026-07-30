@@ -14,6 +14,7 @@ public class VibraniumEntitiesFabric extends VibraniumEntities {
         REACTOR_CONTROL_PANEL_ENTITY = (RegistrySupplier<BlockEntityType<ReactorControlPanelEntity>>) register("reactor_control_panel", ()-> FabricBlockEntityTypeBuilder.create(ReactorControlPanelEntity::new, VibraniumBlocks.REACTOR_CONTROL_PANEL.get()).build());
         REACTOR_HATCH_ENTITY = (RegistrySupplier<BlockEntityType<ReactorHatchEntity>>) register("reactor_hatch", ()-> FabricBlockEntityTypeBuilder.create(ReactorHatchEntity::new, VibraniumBlocks.REACTOR_HATCH.get()).build());
         REACTOR_PUMP_ENTITY = (RegistrySupplier<BlockEntityType<ReactorPumpEntity>>) register("reactor_pump", ()-> FabricBlockEntityTypeBuilder.create(ReactorPumpEntity::new, VibraniumBlocks.REACTOR_PUMP.get()).build());
+        REACTOR_OUTLET_ENTITY = (RegistrySupplier<BlockEntityType<ReactorOutletEntity>>) register("reactor_oulet", ()-> FabricBlockEntityTypeBuilder.create(ReactorOutletEntity::new, VibraniumBlocks.REACTOR_OUTLET.get()).build());
         FLUID_TANK_ENTITY = (RegistrySupplier<BlockEntityType< FluidTankEntity>>) register("fluid_tank", ()-> FabricBlockEntityTypeBuilder.create(FluidTankEntity::new, VibraniumBlocks.FLUID_TANK.get()).build());
         REINFORCED_VIBRANIUM_GLASS_ENTITY = (RegistrySupplier<BlockEntityType<ReinforcedVibraniumGlassEntity>>) register("reinforced_vibranium_glass", ()-> FabricBlockEntityTypeBuilder.create(ReinforcedVibraniumGlassEntity::new, VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()).build());
         registerModEntities();

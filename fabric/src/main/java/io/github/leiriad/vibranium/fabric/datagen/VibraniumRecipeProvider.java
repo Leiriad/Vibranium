@@ -119,16 +119,34 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
 
                         .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_hatch")));
-                //Reactor pump
+                // Reactor Pump (Requires a Fluid Tank as base + mechanical parts)
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_PUMP.get())
+                        .pattern("DPR")
+                        .pattern("DTB")
                         .pattern("DSD")
-                        .pattern("DDD")
-                        .pattern("DSD")
+                        .define('P', Blocks.PISTON)                     // Mechanical pumping element
+                        .define('R', Items.REDSTONE)
+                        .define('T', VibraniumBlocks.FLUID_TANK.get()) //Fluid handling
+                        .define('B', Items.BLAZE_POWDER) //Higher cost than fluid tank
                         .define('S', Blocks.STONE)
+
                         .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
 
                         .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_pump")));
+                // Reactor Outlet (Requires a Fluid Tank + Heat-resistant casing)
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_OUTLET.get())
+                        .pattern("DGD")
+                        .pattern("DTB")
+                        .pattern("DRD")
+                        .define('G', VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()) // Reinforced glass for high pressure/heat
+                        .define('T', VibraniumBlocks.FLUID_TANK.get())               // Force fluid tank base
+                        .define('B', Items.BLAZE_POWDER) //Higher cost than fluid tank
+                        .define('R', Items.REDSTONE)                                 // Control logic
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_outlet")));
                 //Reactor control panel
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_CONTROL_PANEL.get())
                         .pattern("DSD")
@@ -143,10 +161,11 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                 //Reactor core
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_CORE.get())
                         .pattern("DGD")
-                        .pattern("GVG")
+                        .pattern("BVB")
                         .pattern("DGD")
                         .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
                         .define('G', VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())
+                        .define('B', Blocks.DIAMOND_BLOCK) //stabilisation
                         .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
 
                         .unlockedBy(getHasName(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()), has(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()))

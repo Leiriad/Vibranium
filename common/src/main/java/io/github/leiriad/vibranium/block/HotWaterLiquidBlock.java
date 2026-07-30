@@ -2,6 +2,7 @@ package io.github.leiriad.vibranium.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -38,7 +39,7 @@ public class HotWaterLiquidBlock extends LiquidBlock {
         int temp = state.getValue(TEMPERATURE);
 
         if (!level.isClientSide() && entity instanceof LivingEntity living) {
-            // The hotter the more damages
+            // The hotter the water, the more damages
             float damage = (temp > 200) ? 2.0F : 1.0F;
 
             if (level.getGameTime() % 20 == 0) {
@@ -66,6 +67,8 @@ public class HotWaterLiquidBlock extends LiquidBlock {
                 level.setBlockAndUpdate(randomNeighbor, Blocks.WATER.defaultBlockState());
                 // Water temperature goes down
                 level.setBlockAndUpdate(pos, state.setValue(TEMPERATURE, Math.max(0, state.getValue(TEMPERATURE) - 20)));
+                // Server-side particle burst when melting ice
+                level.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 3, 0.1, 0.1, 0.1, 0.02);
                 return;
             }
         }
@@ -75,7 +78,7 @@ public class HotWaterLiquidBlock extends LiquidBlock {
         if (currentTemp > 20) {
             if (random.nextInt(3) == 0) {
                 level.setBlockAndUpdate(pos, state.setValue(TEMPERATURE, Math.max(20, currentTemp - 10)));
-                level.levelEvent(2000, pos, 0);
+                level.levelEvent(2000, pos, 0);//smoke effect
             }
         } else {
             // If completely cold, turns into vanilla water
@@ -104,6 +107,43 @@ public class HotWaterLiquidBlock extends LiquidBlock {
                     // Fizz sound effect
                     level.levelEvent(1501, neighborPos, 0);
                 }
+            }
+        }
+    }
+
+    // --- CLIENT-SIDE VISUAL EFFECTS (Steam & Bubbles) ---
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+
+        int temp = state.getValue(TEMPERATURE);
+
+        // Only display ambient steam/bubbles if the water is hot enough (> 100°C)
+        if (temp > 100) {
+            double x = pos.getX() + random.nextDouble();
+            double y = pos.getY() + 0.9D; // Surface of the fluid
+            double z = pos.getZ() + random.nextDouble();
+
+            // 1. Steam / Smoke effect coming off the surface
+            if (random.nextInt(3) == 0) {
+                level.addParticle(
+                        ParticleTypes.WHITE_SMOKE, // Light steam (you can use CAMPFIRE_COSY_SMOKE for thicker steam)
+                        x, y, z,
+                        0.0D, 0.02D, 0.0D // Slow upward speed
+                );
+            }
+
+            // 2. Underwater bubble effect
+            if (random.nextInt(5) == 0) {
+                double bx = pos.getX() + random.nextDouble();
+                double by = pos.getY() + random.nextDouble();
+                double bz = pos.getZ() + random.nextDouble();
+
+                level.addParticle(
+                        ParticleTypes.BUBBLE_COLUMN_UP,
+                        bx, by, bz,
+                        0.0D, 0.05D, 0.0D
+                );
             }
         }
     }

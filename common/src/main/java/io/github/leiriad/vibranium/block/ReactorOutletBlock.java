@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.block;
 
 import com.mojang.serialization.MapCodec;
+import io.github.leiriad.vibranium.entity.ReactorOutletEntity;
 import io.github.leiriad.vibranium.entity.ReactorPumpEntity;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.minecraft.core.BlockPos;
@@ -21,9 +22,9 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import org.jspecify.annotations.Nullable;
 
-public class ReactorPumpBlock extends BaseEntityBlock {
+public class ReactorOutletBlock extends BaseEntityBlock {
     //PROPERTIES
-    public static final MapCodec<ReactorPumpBlock> CODEC = simpleCodec(ReactorPumpBlock::new);
+    public static final MapCodec<ReactorOutletBlock> CODEC = simpleCodec(ReactorOutletBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
     public static Properties getProperties (Properties settings){
@@ -36,7 +37,7 @@ public class ReactorPumpBlock extends BaseEntityBlock {
         return CODEC;
     }
     //CONSTRUCTOR
-    public ReactorPumpBlock(Properties properties) {
+    public ReactorOutletBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(
                 this.stateDefinition.any()
@@ -47,7 +48,7 @@ public class ReactorPumpBlock extends BaseEntityBlock {
     //METHODS
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new ReactorPumpEntity(blockPos, blockState);
+        return new ReactorOutletEntity(blockPos, blockState);
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -63,6 +64,7 @@ public class ReactorPumpBlock extends BaseEntityBlock {
     }
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide() ? null : createTickerHelper(type, VibraniumEntities.REACTOR_PUMP_ENTITY.get(), ReactorPumpEntity::tick);
+        //Server only ticker
+        return level.isClientSide() ? null : createTickerHelper(type, VibraniumEntities.REACTOR_OUTLET_ENTITY.get(), ReactorOutletEntity::tick);
     }
 }

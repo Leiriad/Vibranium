@@ -28,9 +28,13 @@ public class ReactorPumpEntity extends FluidTankEntity {
         FluidState fluidState = level.getFluidState(targetPos);
 
         // If next block is water source
-        if (fluidState.is(Fluids.WATER) && fluidState.isSource()) {
+        if (fluidState.is(Fluids.WATER)&& fluidState.isSource()) {
             // Force max water
-            entity.fill(FluidTankEntity.capacity, Fluids.WATER);
+            long filled = entity.fill(100, Fluids.WATER);
+
+            if (filled > 0) {
+                entity.setChanged();
+            }
         }
     }
 }

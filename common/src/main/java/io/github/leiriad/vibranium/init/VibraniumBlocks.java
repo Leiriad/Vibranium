@@ -83,6 +83,7 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> REACTOR_CONTROL_PANEL = register("reactor_control_panel", ReactorControlPanelBlock::new, () -> ReactorControlPanelBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REACTOR_HATCH = register("reactor_hatch", ReactorHatchBlock::new, () -> ReactorHatchBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REACTOR_PUMP = register("reactor_pump", ReactorPumpBlock::new, () -> ReactorPumpBlock.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> REACTOR_OUTLET = register("reactor_outlet", ReactorOutletBlock::new, () -> ReactorOutletBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> FLUID_TANK = register("fluid_tank", FluidTankBlock::new, () -> FluidTankBlock.getProperties(BlockBehaviour.Properties.of()), true);
 
     //COLORED
@@ -173,7 +174,8 @@ public class VibraniumBlocks {
                 REACTOR_CONTROL_PANEL,
                 REACTOR_HATCH,
                 FLUID_TANK,
-                REACTOR_PUMP
+                REACTOR_PUMP,
+                REACTOR_OUTLET
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
@@ -216,6 +218,7 @@ public class VibraniumBlocks {
                 REACTOR_CONTROL_PANEL,
                 REACTOR_HATCH,
                 REACTOR_PUMP,
+                REACTOR_OUTLET,
                 VIBRANIUM_GLASS,
                 REINFORCED_VIBRANIUM_GLASS,
                 VIBRANIUM_GLASS_PANE,

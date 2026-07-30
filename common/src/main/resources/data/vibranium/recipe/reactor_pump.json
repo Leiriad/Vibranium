@@ -2,12 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
+    "B": "minecraft:blaze_powder",
     "D": "vibranium:depleted_vibranium_ingot",
-    "S": "minecraft:stone"
+    "P": "minecraft:piston",
+    "R": "minecraft:redstone",
+    "S": "minecraft:stone",
+    "T": "vibranium:fluid_tank"
   },
   "pattern": [
-    "DSD",
-    "DDD",
+    "DPR",
+    "DTB",
     "DSD"
   ],
   "result": {

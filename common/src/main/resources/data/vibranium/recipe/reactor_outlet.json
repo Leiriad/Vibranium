@@ -2,18 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": "minecraft:diamond_block",
+    "B": "minecraft:blaze_powder",
     "D": "vibranium:depleted_vibranium_ingot",
     "G": "vibranium:reinforced_vibranium_glass",
-    "V": "vibranium:vibranium_ingot"
+    "R": "minecraft:redstone",
+    "T": "vibranium:fluid_tank"
   },
   "pattern": [
     "DGD",
-    "BVB",
-    "DGD"
+    "DTB",
+    "DRD"
   ],
   "result": {
     "count": 1,
-    "id": "vibranium:reactor_core"
+    "id": "vibranium:reactor_outlet"
   }
 }
