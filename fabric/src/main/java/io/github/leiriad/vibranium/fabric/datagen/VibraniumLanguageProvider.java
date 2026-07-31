@@ -66,6 +66,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Vitre de vibranium renforcée");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.FLUID_TANK.get(), "Réservoir à fluides");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICKS.get(), "Briques noires");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_STAIRS.get(), "Escaliers en briques noires");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_SLAB.get(), "Dalle en briques noires");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_WALL.get(), "Muret en briques noires");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Fleur d'herbe cœur");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Liane des cavernes pourpre");
@@ -149,6 +152,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Panel de cristal de vibranio reforzado");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.FLUID_TANK.get(), "Tanque de fluidos");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICKS.get(), "Ladrillos negros");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_SLAB.get(), "Losa de ladrillos negros");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_STAIRS.get(), "Escaleras de ladrillos negros");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_WALL.get(), "Muro de ladrillos negros");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Flor de hierba en forma de corazón");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Lianas de cueva moradas");
@@ -231,6 +237,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), "Reinforced Vibranium Glass Pane");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.FLUID_TANK.get(), "Fluid Tank");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICKS.get(), "Black Bricks");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_STAIRS.get(), "Black Brick Stairs");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_SLAB.get(), "Black Brick Slab");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_WALL.get(), "Black Brick Wall");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Heart-shaped Herb Flower");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Purple Cave Vines");

@@ -71,12 +71,40 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .unlockedBy(getHasName(VibraniumBlocks.BLACK_CLAY.get()), has(VibraniumBlocks.BLACK_CLAY.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_terracotta_from_smelting_black_clay")));
 
+                //STONECUTTER
+                //Black Brick Stairs
+                SingleItemRecipeBuilder.stonecutting(
+                                Ingredient.of(VibraniumBlocks.BLACK_BRICKS.get()),
+                                RecipeCategory.BUILDING_BLOCKS,
+                                VibraniumBlocks.BLACK_BRICK_STAIRS.get(),
+                                1
+                        )
+                        .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_brick_stairs_from_black_bricks_stonecutting")));
+                //Black Brick Slab
+                SingleItemRecipeBuilder.stonecutting(
+                                Ingredient.of(VibraniumBlocks.BLACK_BRICKS.get()),
+                                RecipeCategory.BUILDING_BLOCKS,
+                                VibraniumBlocks.BLACK_BRICK_SLAB.get(),
+                                2
+                        )
+                        .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_brick_slab_from_black_bricks_stonecutting")));
+                //Black Brick Wall
+                SingleItemRecipeBuilder.stonecutting(
+                                Ingredient.of(VibraniumBlocks.BLACK_BRICKS.get()),
+                                RecipeCategory.BUILDING_BLOCKS,
+                                VibraniumBlocks.BLACK_BRICK_WALL.get(),
+                                1
+                        )
+                        .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_brick_wall_from_black_bricks_stonecutting")));
+
                 //CRAFTING TABLE
                 var itemHolderGetter = registryLookup.lookupOrThrow(Registries.ITEM);
 
                 //Glass pane
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.DECORATIONS, VibraniumBlocks.VIBRANIUM_GLASS_PANE.get(), 16)
-                        .pattern("   ")
                         .pattern("GGG")
                         .pattern("GGG")
                         .define('G', VibraniumBlocks.VIBRANIUM_GLASS.get())
@@ -93,7 +121,6 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reinforced_vibranium_glass")));
                 //Reinforced vibranium glass pane
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.DECORATIONS, VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(), 16)
-                        .pattern("   ")
                         .pattern("GGG")
                         .pattern("GGG")
                         .define('G', VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())
@@ -205,7 +232,29 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('B', VibraniumItems.BLACK_BRICK.get())
                         .unlockedBy(getHasName(VibraniumItems.BLACK_BRICK.get()), has(VibraniumItems.BLACK_BRICK.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_bricks_from_black_brick")));
+                //Black Brick Stairs
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.BLACK_BRICK_STAIRS.get())
+                        .pattern("B  ")
+                        .pattern("BB ")
+                        .pattern("BBB")
+                        .define('B', VibraniumBlocks.BLACK_BRICKS.get())
+                        .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_brick_stairs_from_black_bricks")));
+                //Black Brick Slab
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.BLACK_BRICK_SLAB.get())
+                        .pattern("BBB")
+                        .define('B', VibraniumBlocks.BLACK_BRICKS.get())
+                        .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_brick_slab_from_black_bricks")));
+                //Black Brick Wall
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.BLACK_BRICK_WALL.get(), 16)
+                        .pattern("BBB")
+                        .pattern("BBB")
+                        .define('B', VibraniumBlocks.BLACK_BRICKS.get())
+                        .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_brick_wall_from_black_bricks")));
             }
+
         };
     }
 

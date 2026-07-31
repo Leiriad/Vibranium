@@ -76,17 +76,22 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createHeartShapedHerbLoot();
 
         //Industrial blocks
-        createIndustrialBlocksLoot(VibraniumBlocks.REACTOR_CORE.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.REACTOR_CONTROL_PANEL.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.REACTOR_HATCH.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.REACTOR_PUMP.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.REACTOR_OUTLET.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.VIBRANIUM_GLASS.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.VIBRANIUM_GLASS_PANE.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.FLUID_TANK.get());
-        createIndustrialBlocksLoot(VibraniumBlocks.BLACK_BRICKS.get());
+        createSimpleBlocksLoot(VibraniumBlocks.REACTOR_CORE.get());
+        createSimpleBlocksLoot(VibraniumBlocks.REACTOR_CONTROL_PANEL.get());
+        createSimpleBlocksLoot(VibraniumBlocks.REACTOR_HATCH.get());
+        createSimpleBlocksLoot(VibraniumBlocks.REACTOR_PUMP.get());
+        createSimpleBlocksLoot(VibraniumBlocks.REACTOR_OUTLET.get());
+        createSimpleBlocksLoot(VibraniumBlocks.VIBRANIUM_GLASS.get());
+        createSimpleBlocksLoot(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get());
+        createSimpleBlocksLoot(VibraniumBlocks.VIBRANIUM_GLASS_PANE.get());
+        createSimpleBlocksLoot(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get());
+        createSimpleBlocksLoot(VibraniumBlocks.FLUID_TANK.get());
+
+        //BUILDING BLOCKS
+        createSimpleBlocksLoot(VibraniumBlocks.BLACK_BRICKS.get());
+        createSimpleBlocksLoot(VibraniumBlocks.BLACK_BRICK_STAIRS.get());
+        createSimpleBlocksLoot(VibraniumBlocks.BLACK_BRICK_SLAB.get());
+        createSimpleBlocksLoot(VibraniumBlocks.BLACK_BRICK_WALL.get());
     }
 
     private void createVibraniumOreLoot() {
@@ -273,7 +278,7 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
             );
         }
     }
-    private void createIndustrialBlocksLoot( Block industrialBlock) {
+    private void createSimpleBlocksLoot(Block industrialBlock) {
         if(industrialBlock != null){
             this.add(industrialBlock, (block) ->
                     this.createSingleItemTable(industrialBlock));

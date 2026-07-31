@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "vibranium:block/black_brick_slab"
+    },
+    "type=top": {
+      "model": "vibranium:block/black_brick_slab_top"
+    },
+    "type=double": {
+      "model": "vibranium:block/black_bricks"
+    }
+  }
+}

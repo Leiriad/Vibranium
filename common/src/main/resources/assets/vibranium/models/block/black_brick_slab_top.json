@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "vibranium:block/black_bricks",
+    "top": "vibranium:block/black_bricks",
+    "side": "vibranium:block/black_bricks"
+  }
+}

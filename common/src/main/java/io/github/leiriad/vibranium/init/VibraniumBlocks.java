@@ -91,7 +91,12 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS = register("reinforced_vibranium_glass", ReinforcedVibraniumGlassBlock::new, () -> ReinforcedVibraniumGlassBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS_PANE = register("vibranium_glass_pane", VibraniumGlassPane::new, () -> VibraniumGlassPane.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS_PANE = register("reinforced_vibranium_glass_pane", ReinforcedVibraniumGlassPane::new, () -> ReinforcedVibraniumGlassPane.getProperties(BlockBehaviour.Properties.of()), true);
+
+    //BUILDING BLOCKS
     public static final RegistrySupplier<Block> BLACK_BRICKS = register("black_bricks", BlackBricks::new, () -> BlackBricks.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> BLACK_BRICK_STAIRS = register("black_brick_stairs", BlackBrickStairs::new, () -> BlackBrickStairs.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> BLACK_BRICK_SLAB = register("black_brick_slab", BlackBrickSlab::new, () -> BlackBrickSlab.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> BLACK_BRICK_WALL = register("black_brick_wall", BlackBrickWall::new, () -> BlackBrickWall.getProperties(BlockBehaviour.Properties.of()), true);
 
     //BLOCKITEMS
     public static final RegistrySupplier<Item> BLUE_GLOW_BERRIES = BLOCKITEMS.register("blue_glow_berries",
@@ -193,7 +198,10 @@ public class VibraniumBlocks {
 
         //BUILDING BLOCKS
         List.of(
-                BLACK_BRICKS
+                BLACK_BRICKS,
+                BLACK_BRICK_STAIRS,
+                BLACK_BRICK_SLAB,
+                BLACK_BRICK_WALL
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.BUILDING_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
@@ -232,7 +240,10 @@ public class VibraniumBlocks {
                 VIBRANIUM_GLASS_PANE,
                 REINFORCED_VIBRANIUM_GLASS_PANE,
                 FLUID_TANK,
-                BLACK_BRICKS
+                BLACK_BRICKS,
+                BLACK_BRICK_STAIRS,
+                BLACK_BRICK_SLAB,
+                BLACK_BRICK_WALL
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
         });
