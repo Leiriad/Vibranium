@@ -2,7 +2,9 @@ package io.github.leiriad.vibranium;
 
 import dev.architectury.registry.menu.MenuRegistry;
 import io.github.leiriad.vibranium.config.VibraniumConfigManager;
+import io.github.leiriad.vibranium.event.VibraniumEvents;
 import io.github.leiriad.vibranium.init.*;
+import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,7 @@ public class VibraniumMod {
 		LOGGER.info("Vibranium is loaded!");
 
 		//Initialize Registry Content
+		VibraniumDataComponents.DATA_COMPONENTS.register();
 		VibraniumBlocks.registerModBlocks();
 		VibraniumFluids.register();
 		VibraniumItems.registerModItems();
@@ -43,6 +46,9 @@ public class VibraniumMod {
 		//Creative tabs
 		VibraniumBlocks.addBlocksToTabs();
 		VibraniumItems.addItemsToTabs();
+
+		//Events
+		VibraniumEvents.registerEvents();
 	}
 
 }

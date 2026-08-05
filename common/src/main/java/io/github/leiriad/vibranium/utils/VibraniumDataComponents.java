@@ -13,10 +13,10 @@ public class VibraniumDataComponents {
             DeferredRegister.create(VibraniumMod.MOD_ID, Registries.DATA_COMPONENT_TYPE);
 
 
-    public static final RegistrySupplier<DataComponentType<Integer>> KINETIC_CHARGE =
+    public static final RegistrySupplier<DataComponentType<Float>> KINETIC_CHARGE =
             DATA_COMPONENTS.register("kinetic_charge", () ->
-                    DataComponentType.<Integer>builder()
-                            .persistent(Codec.INT)
+                    DataComponentType.<Float>builder()
+                            .persistent(Codec.FLOAT)
                             .build()
             );
 
