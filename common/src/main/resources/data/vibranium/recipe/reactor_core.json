@@ -4,12 +4,11 @@
   "key": {
     "B": "minecraft:diamond_block",
     "D": "vibranium:depleted_vibranium_ingot",
-    "G": "vibranium:reinforced_vibranium_glass",
-    "V": "vibranium:vibranium_ingot"
+    "G": "vibranium:reinforced_vibranium_glass"
   },
   "pattern": [
     "DGD",
-    "BVB",
+    "BDB",
     "DGD"
   ],
   "result": {

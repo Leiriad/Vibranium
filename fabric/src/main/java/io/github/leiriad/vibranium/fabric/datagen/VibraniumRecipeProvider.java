@@ -188,13 +188,11 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                 //Reactor core
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.REACTOR_CORE.get())
                         .pattern("DGD")
-                        .pattern("BVB")
+                        .pattern("BDB")
                         .pattern("DGD")
                         .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
                         .define('G', VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())
                         .define('B', Blocks.DIAMOND_BLOCK) //stabilisation
-                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
-
                         .unlockedBy(getHasName(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()), has(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "reactor_core")));
                 //Black clay balls to black clay
@@ -262,6 +260,15 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
                         .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "vibranium_spear")));
+                // Vibranium sword
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.VIBRANIUM_SWORD.get(), 1)
+                        .pattern(" V ")
+                        .pattern(" V ")
+                        .pattern(" D ")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "vibranium_sword")));
             }
 
         };
