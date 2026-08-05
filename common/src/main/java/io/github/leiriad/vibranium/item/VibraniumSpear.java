@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.item;
 
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
+import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -26,11 +27,14 @@ import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
+
+import static io.github.leiriad.vibranium.utils.VibraniumToolActions.spawnShockwave;
 
 public class VibraniumSpear extends Item {
 
@@ -93,37 +97,32 @@ public class VibraniumSpear extends Item {
         ItemStack stack = player.getItemInHand(hand);
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
-        if (charge > 10.0F) { // Requires a minimum charge threshold
-            if (!level.isClientSide()) {
-                double radius = 3.0 + (charge / 20.0); // Effect radius based on charge
+        if (charge >= 10.0F) { // Requires a minimum charge threshold
+            if (level instanceof ServerLevel serverLevel) {
+                float radius = 3.0F + (charge / 20.0F); // Effect radius based on charge
+                float force = 1.5F + (charge / 50.0F);  // Knockback force multiplier
                 float shockwaveDamage = charge * 0.15F;  // Energy-based damage
 
-                // Find all surrounding entities
+                // Target position centered slightly in front of the player
+                Vec3 targetPoint = player.position().add(player.getLookAngle().scale(1.5));
+
+                // Trigger visual and physical shockwave via utility class
+                VibraniumToolActions.spawnShockwave(serverLevel, targetPoint, radius, force, player);
+
+                // Apply direct area damage to entities in range
+                double diameter = radius * 2.0;
+                AABB area = AABB.ofSize(targetPoint, diameter, diameter, diameter);
                 List<LivingEntity> targets = level.getEntitiesOfClass(
                         LivingEntity.class,
-                        player.getBoundingBox().inflate(radius),
+                        area,
                         e -> e != player && e.isAlive()
                 );
 
                 for (LivingEntity target : targets) {
-                    // Apply repulsive knockback
-                    Vec3 direction = target.position().subtract(player.position()).normalize();
-                    target.knockback(1.5F + (charge / 50.0F), -direction.x, -direction.z);
-
-                    // Deal shockwave damage
                     target.hurt(level.damageSources().playerAttack(player), shockwaveDamage);
                 }
 
-                // Visual and sound effects
-                ServerLevel serverLevel = (ServerLevel) level;
-                serverLevel.sendParticles(
-                        ParticleTypes.SONIC_BOOM,
-                        player.getX(), player.getY() + 1.0, player.getZ(),
-                        1, 0.0, 0.0, 0.0, 0.0
-                );
-                level.playSound(null, player.blockPosition(), SoundEvents.WARDEN_SONIC_BOOM, SoundSource.PLAYERS, 1.0F, 1.2F);
-
-                // Reset charge
+                // Reset kinetic charge after releasing energy
                 stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
             }
 
@@ -133,9 +132,10 @@ public class VibraniumSpear extends Item {
 
         return super.use(level, player, hand);
     }
+
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        // La barre apparaît dès que la lance a au moins un peu de charge
+        // Bar appears at 25% charge
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
         return charge > 0.0F;
     }
@@ -143,14 +143,13 @@ public class VibraniumSpear extends Item {
     @Override
     public int getBarWidth(ItemStack stack) {
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        // 13 est la largeur maximale en pixels de la barre dans l'inventaire Minecraft
+        // Max inventory bar is 13 pixel long
         return Math.round((Math.min(charge, 100.0F) / 100.0F) * 13.0F);
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        // Couleur violette/cyan style Vibranium (Format RGB en hexadécimal)
-        return 0x9933FF; // Violet Vibranium
+        return 0x9933FF; // Violet
     }
     @Override
     public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity, @Nullable EquipmentSlot equipmentSlot) {
