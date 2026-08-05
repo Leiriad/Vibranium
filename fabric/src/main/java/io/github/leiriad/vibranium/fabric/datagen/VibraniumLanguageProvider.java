@@ -78,16 +78,18 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baies lumineuses bleues");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Poudre de vibranium");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Boule d'argile noire");
+                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Brique noire");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Herbe coeur");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_INGOT.get(), "Lingot de vibranium");
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Lingot de vibranium appauvrit");
-                translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
+
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Soupe bleue");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Nectar ancestral");
                 translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Eau de vie de baies bleues");
                 translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Eau de vie de baies bleues");
-                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Brique noire");
 
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lance en vibranium");
+                translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Eau chaude");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
@@ -163,16 +165,17 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get().asItem(), "Brote de hierba en forma de corazón");
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baya luminosas azules");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Bola de arcilla negra");
+                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Ladrillo negro");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Hierba en forma de corazón");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_INGOT.get(), "Lingote de vibranio");
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Lingote de vibranio empobrecido");
-                translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Sopa azul");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Néctar ancestral");
                 translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Aguardiente de baya azul");
                 translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Aguardiente de baya azul");
-                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Ladrillo negro");
 
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lanza de vibranio");
+                translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Agua caliente");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranio");
@@ -249,17 +252,18 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Blue Glow Berries");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Vibranium Dust");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Black Clay Ball");
+                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Black Brick");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_INGOT.get(), "Vibranium Ingot");
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Depleted Vibranium Ingot");
+
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Blue Soup");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Ancestral Nectar");
                 translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Blue Glow Berries Spirit");
                 translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Blue Glow Berries Spirit");
-                translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Black Brick");
 
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Vibranium Spear");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Hot Water Bucket");
-
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Hot Water");
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");

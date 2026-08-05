@@ -253,6 +253,15 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('B', VibraniumBlocks.BLACK_BRICKS.get())
                         .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "black_brick_wall_from_black_bricks")));
+                // Vibranium spear
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.VIBRANIUM_SPEAR.get(), 1)
+                        .pattern("  V")
+                        .pattern(" D ")
+                        .pattern("D  ")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "vibranium_spear")));
             }
 
         };

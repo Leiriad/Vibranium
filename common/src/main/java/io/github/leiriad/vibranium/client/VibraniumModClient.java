@@ -78,6 +78,7 @@ public class VibraniumModClient {
         FLUID_COLORS.put(VibraniumFluids.VANILLA_MILK_FLOWING.get(), milkColorHex);
         FLUID_COLORS.put(VibraniumFluids.HOT_WATER_STILL.get(), hotWaterColorHex);
         FLUID_COLORS.put(VibraniumFluids.HOT_WATER_FLOWING.get(), hotWaterColorHex);
+
     }
     /**
      * Safely retrieves the client-side tint color for any registered fluid.
