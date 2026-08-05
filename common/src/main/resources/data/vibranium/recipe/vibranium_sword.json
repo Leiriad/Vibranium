@@ -6,12 +6,12 @@
     "V": "vibranium:vibranium_ingot"
   },
   "pattern": [
-    "  V",
-    " D ",
-    "D  "
+    " V ",
+    " V ",
+    " D "
   ],
   "result": {
     "count": 1,
-    "id": "vibranium:vibranium_spear"
+    "id": "vibranium:vibranium_sword"
   }
 }

@@ -89,6 +89,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Eau de vie de baies bleues");
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lance en vibranium");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Épée en vibranium");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Eau chaude");
 
@@ -175,6 +176,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Aguardiente de baya azul");
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lanza de vibranio");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Espada de vibranio");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Agua caliente");
 
@@ -263,6 +265,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Blue Glow Berries Spirit");
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Vibranium Spear");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Vibranium Sword");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Hot Water Bucket");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Hot Water");
 

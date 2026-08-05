@@ -95,6 +95,12 @@ public class VibraniumItems {
 
         return new VibraniumSpear(VibraniumSpear.getProperties(new Item.Properties()).setId(key));
     });
+    public static final RegistrySupplier<Item> VIBRANIUM_SWORD= ITEMS.register("vibranium_sword", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_sword"));
+
+        return new VibraniumSword(VibraniumSword.getProperties(new Item.Properties()).setId(key));
+    });
 
     ///Registers items in the game
     public static void registerModItems() {
@@ -133,7 +139,8 @@ public class VibraniumItems {
 
         //COMBAT
         List.of(
-                VIBRANIUM_SPEAR
+                VIBRANIUM_SPEAR,
+                VIBRANIUM_SWORD
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.COMBAT, () -> new ItemStack(supplier.get()));
         });
@@ -150,7 +157,8 @@ public class VibraniumItems {
                 BLUE_SOUP,
                 BLUE_BERRY_SPIRIT,
                 ANCESTRAL_NECTAR,
-                VIBRANIUM_SPEAR
+                VIBRANIUM_SPEAR,
+                VIBRANIUM_SWORD
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(supplier.get()));
         });

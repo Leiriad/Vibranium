@@ -48,7 +48,9 @@ public class VibraniumSpear extends Item {
     }
 
     public static Item.Properties getProperties(Item.Properties settings) {
-        Item.Properties props = settings.spear(
+        Item.Properties props = settings
+                .enchantable(22)
+                .spear(
                 VibraniumToolMaterial.VIBRANIUM,
                 0.625F, // f: Attack / thrust speed
                 1.5F,   // g: Charge damage multiplier

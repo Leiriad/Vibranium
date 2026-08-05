@@ -379,10 +379,10 @@ public class ReactorCoreEntity extends BlockEntity {
                 if (actualDrained > 0) {
                     int coolingPower = 0;
 
-                    if (this.temperature < 1200) {
+                    if (this.temperature < 1250) {
                         // Under operational temp: water cools very gently (allows fast heating)
-                        coolingPower = 15;
-                    } else if (this.temperature >= 1200 && this.temperature <= 1300) {
+                        coolingPower = 20;
+                    } else if (this.temperature >= 1250 && this.temperature <= 1500) {
                         // Ideal zone: water perfectly matches the reactor's heat (+25°C) to lock it here
                         coolingPower = 25;
                     } else {

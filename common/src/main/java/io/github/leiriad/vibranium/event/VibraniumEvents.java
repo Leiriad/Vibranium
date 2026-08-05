@@ -3,6 +3,7 @@ package io.github.leiriad.vibranium.event;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import io.github.leiriad.vibranium.item.VibraniumSpear;
+import io.github.leiriad.vibranium.item.VibraniumSword;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +18,7 @@ public class VibraniumEvents {
         EntityEvent.LIVING_HURT.register((entity, source, amount) -> {
             if (entity instanceof Player player) {
                 ItemStack mainHand = player.getMainHandItem();
-                if (mainHand.getItem() instanceof VibraniumSpear) {
+                if ((mainHand.getItem() instanceof VibraniumSpear)||(mainHand.getItem() instanceof VibraniumSword)) {
                     //Ignore passive damages
                     if (source.is(DamageTypeTags.BYPASSES_ARMOR) ||
                             source.is(DamageTypeTags.IS_DROWNING) ||
