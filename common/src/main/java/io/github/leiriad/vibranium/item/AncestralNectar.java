@@ -1,6 +1,8 @@
 package io.github.leiriad.vibranium.item;
 
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
@@ -41,13 +44,23 @@ public class AncestralNectar extends Item {
                         .build());
     }
 
+    //CONSTRUCTOR
     public AncestralNectar(Properties properties) {super(properties);}
+
+    //METHODS
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        return ItemUtils.startUsingInstantly(level, player, hand);
+    }
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity user) {
         ItemStack resultStack = super.finishUsingItem(stack, level, user);
 
         if (user instanceof Player player && !player.getAbilities().instabuild) {
-            return new ItemStack(Items.BOWL);
+            if (resultStack.isEmpty()) {
+                return new ItemStack(Items.BOWL);
+            }
+            player.getInventory().add(new ItemStack(Items.BOWL));
         }
 
         return resultStack;
