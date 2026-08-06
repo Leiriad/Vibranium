@@ -187,18 +187,14 @@ public class VibraniumSpear extends Item {
             TooltipFlag tooltipFlag
     ) {
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
+        int percentage = (int) charge;
 
-        if (charge > 0.0F) {
-            consumer.accept(
-                    Component.literal("Kinetic Charge: " + (int) charge + "%")
-                            .withStyle(ChatFormatting.LIGHT_PURPLE)
-            );
-        } else {
-            consumer.accept(
-                    Component.literal("Kinetic Charge: 0%")
-                            .withStyle(ChatFormatting.GRAY)
-            );
-        }
+        ChatFormatting color = (percentage > 0) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY;
+
+        consumer.accept(
+                Component.translatable("tooltip.vibranium.weapons.charge", percentage)
+                        .withStyle(color)
+        );
 
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
     }

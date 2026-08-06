@@ -20,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
@@ -143,10 +142,15 @@ public class VibraniumSword extends Item {
             TooltipFlag tooltipFlag
     ) {
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
+        int percentage = (int) charge;
+
+        ChatFormatting color = (percentage > 0) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY;
+
         consumer.accept(
-                Component.literal("Kinetic Charge: " + (int) charge + "%")
-                        .withStyle(ChatFormatting.LIGHT_PURPLE)
+                Component.translatable("tooltip.vibranium.weapons.charge", percentage)
+                        .withStyle(color)
         );
+
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
     }
 }
