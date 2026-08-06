@@ -1,14 +1,21 @@
 package io.github.leiriad.vibranium.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
+import io.github.leiriad.vibranium.client.render.OreHighlightRenderer;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
+import io.github.leiriad.vibranium.network.OreHighlightPayload;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.HashMap;
@@ -78,6 +85,17 @@ public class VibraniumModClient {
         FLUID_COLORS.put(VibraniumFluids.VANILLA_MILK_FLOWING.get(), milkColorHex);
         FLUID_COLORS.put(VibraniumFluids.HOT_WATER_STILL.get(), hotWaterColorHex);
         FLUID_COLORS.put(VibraniumFluids.HOT_WATER_FLOWING.get(), hotWaterColorHex);
+
+        //Register Ore Highlight Event
+        // Registers the S2C network packet receiver
+        NetworkManager.registerReceiver(
+                NetworkManager.Side.S2C,
+                OreHighlightPayload.TYPE,
+                OreHighlightPayload.CODEC,
+                (payload, context) -> {
+                    context.queue(() -> OreHighlightRenderer.addOres(payload.orePositions(), payload.durationTicks()));
+                }
+        );
 
     }
     /**

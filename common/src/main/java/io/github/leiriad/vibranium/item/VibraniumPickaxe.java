@@ -1,5 +1,7 @@
 package io.github.leiriad.vibranium.item;
 
+import dev.architectury.networking.NetworkManager;
+import io.github.leiriad.vibranium.network.OreHighlightPayload;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
@@ -8,68 +10,48 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUseAnimation;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
-public class VibraniumShovel extends ShovelItem {
+public class VibraniumPickaxe extends Item {
 
     // ThreadLocal guard to prevent recursive execution loops when mining a 3x3 area
     private static final ThreadLocal<Boolean> IS_MINING_AREA = ThreadLocal.withInitial(() -> false);
     private static final float COST_PER_EXTRA_BLOCK = 2.0F;
-    private static final float COST_PER_PATH_BLOCK = 0.5F; // Low charge cost for flattening paths
 
-    public VibraniumShovel(Properties properties) {
-        super(VibraniumToolMaterial.VIBRANIUM, 4.5F, -3.0F, properties);
+    public VibraniumPickaxe(Properties properties) {
+        super(properties);
     }
 
     public static Item.Properties getProperties(Item.Properties settings) {
-        Item.Properties props = settings.enchantable(22);
-
-        props.attributes(
-                ItemAttributeModifiers.builder()
-                        .add(
-                                Attributes.ATTACK_DAMAGE,
-                                new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 4.5F, AttributeModifier.Operation.ADD_VALUE),
-                                EquipmentSlotGroup.MAINHAND
-                        )
-                        .add(
-                                Attributes.ATTACK_SPEED,
-                                new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -3.0F, AttributeModifier.Operation.ADD_VALUE),
-                                EquipmentSlotGroup.MAINHAND
-                        )
-                        .build()
-        );
-
-        return props;
+        return settings
+                .pickaxe(VibraniumToolMaterial.VIBRANIUM, 1.0F, -2.8F)
+                .enchantable(22);
     }
 
     /**
      * Accumulates kinetic charge on block break and triggers 3x3 Kinetic Burst if active.
-     * Passive effect: Automatically collapses falling blocks (Sand, Gravel) above the mined block.
      */
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner) {
@@ -85,25 +67,13 @@ public class VibraniumShovel extends ShovelItem {
             if (isBurstActive) {
                 if (updatedCharge < COST_PER_EXTRA_BLOCK) {
                     stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
-                } else if (isSoftEarth(state)) {
+                } else if (isSafeMiningTarget(state)) {
                     IS_MINING_AREA.set(true);
                     try {
-                        mineSurfaceArea(level, pos, player, stack);
+                        mine3x3Area(level, pos, player, stack);
                     } finally {
                         IS_MINING_AREA.set(false);
                     }
-                }
-            }
-
-            // Passive feature: Gravity neutralizer for falling block columns
-            if (state.getBlock() instanceof FallingBlock) {
-                BlockPos abovePos = pos.above();
-                BlockState aboveState = level.getBlockState(abovePos);
-
-                while (aboveState.getBlock() instanceof FallingBlock) {
-                    level.destroyBlock(abovePos, true, player);
-                    abovePos = abovePos.above();
-                    aboveState = level.getBlockState(abovePos);
                 }
             }
         }
@@ -113,7 +83,6 @@ public class VibraniumShovel extends ShovelItem {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        BlockPos clickedPos = context.getClickedPos();
         Player player = context.getPlayer();
 
         if (player == null) {
@@ -122,7 +91,7 @@ public class VibraniumShovel extends ShovelItem {
 
         ItemStack stack = context.getItemInHand();
 
-        // Shift + Right Click on block -> Toggle Kinetic Burst (3x3 mode)
+        // Shift + Right Click -> Toggle Kinetic Burst (3x3 mode)
         if (player.isSecondaryUseActive()) {
             if (!level.isClientSide()) {
                 toggleKineticBurstMode(level, player, stack);
@@ -130,25 +99,9 @@ public class VibraniumShovel extends ShovelItem {
             return InteractionResult.SUCCESS;
         }
 
-        // Standard Right Click on block -> Dirt path creation (1x1 or 3x3 depending on mode)
-        if (context.getClickedFace() != Direction.DOWN) {
-            BlockState targetState = level.getBlockState(clickedPos);
-            BlockState pathState = FLATTENABLES.get(targetState.getBlock());
-
-            if (pathState != null && level.getBlockState(clickedPos.above()).isAir()) {
-                if (!level.isClientSide()) {
-                    boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
-                    EquipmentSlot slot = context.getHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
-
-                    if (burstActive) {
-                        create3x3PathArea(level, clickedPos, player, stack, slot);
-                    } else {
-                        // Vanilla behaviour (1x1 path)
-                        level.setBlock(clickedPos, pathState, Block.UPDATE_ALL);
-                        level.playSound(player, clickedPos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-                        stack.hurtAndBreak(1, player, slot);
-                    }
-                }
+        // Standard Right Click on Block -> Trigger Sonar Pulse (Echolocation)
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
+            if (tryTriggerSonarPulse(serverLevel, context.getClickedPos(), player, stack)) {
                 return InteractionResult.SUCCESS;
             }
         }
@@ -168,14 +121,18 @@ public class VibraniumShovel extends ShovelItem {
             return InteractionResult.SUCCESS;
         }
 
-        // Maintain blocking stance on normal right click in air
-        player.startUsingItem(hand);
-        return InteractionResult.CONSUME;
+        // Standard Right Click in air -> Trigger Sonar Pulse (Echolocation)
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
+            if (tryTriggerSonarPulse(serverLevel, player.blockPosition(), player, stack)) {
+                return InteractionResult.SUCCESS;
+            }
+        }
+
+        return super.use(level, player, hand);
     }
 
     /**
-     * Toggles the 3x3 Kinetic Burst mode manually.
-     * Refuses activation if current kinetic charge is too low.
+     * Toggles the 3x3 Kinetic Burst mining mode.
      */
     private void toggleKineticBurstMode(Level level, Player player, ItemStack stack) {
         float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
@@ -202,41 +159,36 @@ public class VibraniumShovel extends ShovelItem {
         }
     }
 
-
     /**
-     * Mines horizontal/planar surface areas based on player gaze angle.
-     * Prevents unintended destruction of floors and lower wall blocks.
+     * Mines blocks in a 3x3 area around the broken block and triggers a kinetic shockwave effect.
      */
-    private void mineSurfaceArea(Level level, BlockPos center, Player player, ItemStack stack) {
+    private void mine3x3Area(Level level, BlockPos center, Player player, ItemStack stack) {
         Direction direction = player.getDirection();
         Direction.Axis axis = direction.getAxis();
         EquipmentSlot slot = EquipmentSlot.MAINHAND;
 
         if (level instanceof ServerLevel serverLevel) {
-            VibraniumToolActions.spawnShockwave(serverLevel, center.getBottomCenter(), 2.5F, 0.3F, player);
+            VibraniumToolActions.spawnShockwave(serverLevel, center.getBottomCenter(), 3.0F, 0.3F, player);
         }
 
         if (axis == Direction.Axis.Y) {
-            // Player looking UP/DOWN: clear 3x3 horizontal plane
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
                     if (x == 0 && z == 0) continue;
                     if (!breakBlockWithChargeCost(level, center.offset(x, 0, z), player, stack, slot)) {
-                        stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+                        stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false); // Coupe le mode
                         return;
                     }
                 }
             }
         } else {
-            // Player looking CARDINAL (N/S/E/W): clear horizontal surface line (depth x width)
             Direction right = direction.getClockWise();
-
-            for (int depth = -1; depth <= 2; depth++) {
+            for (int y = -1; y <= 1; y++) {
                 for (int width = -1; width <= 1; width++) {
-                    if (depth == 0 && width == 0) continue;
-                    BlockPos targetPos = center.relative(direction, depth).relative(right, width);
+                    if (y == 0 && width == 0) continue;
+                    BlockPos targetPos = center.above(y).relative(right, width);
                     if (!breakBlockWithChargeCost(level, targetPos, player, stack, slot)) {
-                        stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+                        stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false); // Coupe le mode
                         return;
                     }
                 }
@@ -245,18 +197,19 @@ public class VibraniumShovel extends ShovelItem {
     }
 
     /**
-     * Breaks a target block within the 3x3 area if kinetic charge is sufficient.
-     * Returns false when charge is depleted.
+     * Breaks a target block within the 3x3 area if sufficient kinetic charge is available
+     * and the block is a safe target.
      */
     private boolean breakBlockWithChargeCost(Level level, BlockPos pos, Player player, ItemStack stack, EquipmentSlot slot) {
         float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
         if (currentCharge < COST_PER_EXTRA_BLOCK) {
-            return false;
+            return false; // Charge insuffisante
         }
 
         BlockState targetState = level.getBlockState(pos);
-        if (isSoftEarth(targetState)) {
+
+        if (isSafeMiningTarget(targetState)) {
             stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), currentCharge - COST_PER_EXTRA_BLOCK);
             level.destroyBlock(pos, true, player);
             stack.hurtAndBreak(1, player, slot);
@@ -265,62 +218,57 @@ public class VibraniumShovel extends ShovelItem {
         return true;
     }
 
+    private boolean isSafeMiningTarget(BlockState state) {
+        if (isOre(state)) {
+            return false;
+        }
+        return state.is(BlockTags.STONE_ORE_REPLACEABLES)
+                || state.is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)
+                || state.is(BlockTags.BASE_STONE_OVERWORLD)
+                || state.is(BlockTags.BASE_STONE_NETHER);
+    }
+
     /**
-     * Creates a 3x3 dirt path area consuming low kinetic charge (0.5F per extra path block).
+     * Triggers Sonar Pulse (Echolocation) to scan nearby ores and highlight entities. Costs 20 Kinetic Charge.
      */
-    private void create3x3PathArea(Level level, BlockPos center, Player player, ItemStack stack, EquipmentSlot slot) {
-        int radius = 1;
-        boolean createdAny = false;
+    private boolean tryTriggerSonarPulse(ServerLevel level, BlockPos center, Player player, ItemStack stack) {
+        float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
+        float cost = 20.0F;
 
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
+        if (charge >= cost) {
+            stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), charge - cost);
 
-                // Allow central block for free, require cost for surrounding path blocks
-                if (x != 0 || z != 0) {
-                    if (currentCharge < COST_PER_PATH_BLOCK) {
-                        continue;
-                    }
-                }
+            // Sonar sound effect
+            level.playSound(null, center, SoundEvents.WARDEN_SONIC_BOOM, SoundSource.PLAYERS, 0.4F, 1.8F);
 
-                BlockPos targetPos = center.offset(x, 0, z);
+            // Scan ores within a 12-block radius
+            int radius = 12;
+            int durationTicks = 200; // 10 seconds highlight
+            List<BlockPos> foundOres = new ArrayList<>();
+
+            for (BlockPos targetPos : BlockPos.betweenClosed(center.offset(-radius, -radius, -radius), center.offset(radius, radius, radius))) {
                 BlockState state = level.getBlockState(targetPos);
-                BlockState pathState = FLATTENABLES.get(state.getBlock());
-
-                if (pathState != null && level.getBlockState(targetPos.above()).isAir()) {
-                    level.setBlock(targetPos, pathState, Block.UPDATE_ALL);
-                    createdAny = true;
-
-                    if (x != 0 || z != 0) {
-                        stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), currentCharge - COST_PER_PATH_BLOCK);
-                    }
+                if (isOre(state)) {
+                    foundOres.add(targetPos.immutable());
                 }
             }
+
+            // Send packet to client for rendering highlights
+            if (player instanceof ServerPlayer serverPlayer && !foundOres.isEmpty()) {
+                NetworkManager.sendToPlayer(serverPlayer, new OreHighlightPayload(foundOres, durationTicks));
+            }
+
+            // Highlight nearby entities with Glowing effect
+            AABB area = new AABB(center).inflate(radius);
+            level.getEntitiesOfClass(LivingEntity.class, area, e -> e != player).forEach(entity -> {
+                entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, durationTicks, 0, false, false));
+            });
+
+            return true;
         }
 
-        if (createdAny) {
-            level.playSound(player, center, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
-            stack.hurtAndBreak(1, player, slot);
-        }
+        return false;
     }
-
-    private boolean isSoftEarth(BlockState state) {
-        return state.is(BlockTags.MINEABLE_WITH_SHOVEL)
-                || state.is(Blocks.SNOW)
-                || state.is(Blocks.SNOW_BLOCK);
-    }
-
-    @Override
-    public ItemUseAnimation getUseAnimation(ItemStack stack) {
-        return ItemUseAnimation.BLOCK;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000;
-    }
-
-    /* --- Kinetic Charge Bar --- */
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
@@ -365,10 +313,25 @@ public class VibraniumShovel extends ShovelItem {
                         .withStyle(ChatFormatting.GRAY)
         );
         consumer.accept(
-                Component.translatable("tooltip.vibranium.shovel.passive.gravity")
-                        .withStyle(ChatFormatting.GRAY)
+                Component.translatable("tooltip.vibranium.pickaxe.active.echolocation")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE)
+        );
+        consumer.accept(
+                Component.translatable("tooltip.vibranium.pickaxe.passive.filter")
+                        .withStyle(ChatFormatting.DARK_GREEN)
         );
 
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
+    }
+
+    private boolean isOre(BlockState state) {
+        return state.is(BlockTags.GOLD_ORES)
+                || state.is(BlockTags.IRON_ORES)
+                || state.is(BlockTags.DIAMOND_ORES)
+                || state.is(BlockTags.REDSTONE_ORES)
+                || state.is(BlockTags.LAPIS_ORES)
+                || state.is(BlockTags.COAL_ORES)
+                || state.is(BlockTags.EMERALD_ORES)
+                || state.is(BlockTags.COPPER_ORES);
     }
 }

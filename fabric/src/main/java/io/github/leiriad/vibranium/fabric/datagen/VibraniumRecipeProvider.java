@@ -278,6 +278,15 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
                         .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "vibranium_shovel")));
+                // Vibranium pickaxe
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.TOOLS, VibraniumItems.VIBRANIUM_PICKAXE.get(), 1)
+                        .pattern("VVV")
+                        .pattern(" D ")
+                        .pattern(" D ")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("vibranium", "vibranium_pickaxe")));
             }
 
         };

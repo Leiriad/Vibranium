@@ -19,7 +19,7 @@ public class VibraniumToolMaterial {
             BlockTags.INCORRECT_FOR_NETHERITE_TOOL, // Unmineable blocks
             2500,                                   // Durability
             10.0F,                                  // Mining speed
-            5.0F,                                   // Base attack damage bonus
+            4.0F,                                   // Base attack damage bonus
             20,                                     // Enchantability rating
             VIBRANIUM_TOOL_MATERIALS                // Repair items tag
     );
