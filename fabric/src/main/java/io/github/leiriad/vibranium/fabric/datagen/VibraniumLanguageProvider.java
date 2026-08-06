@@ -90,6 +90,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lance en vibranium");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Épée en vibranium");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SHOVEL.get(), "Pelle en vibranium");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Eau chaude");
 
@@ -105,7 +106,13 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Insérez la poudre de Vibranium ici");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Résidus et scories de combustion");
+
                 translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Distillé dans un alambic. Haute concentration !");
+
+                translationBuilder.add("tooltip.vibranium.weapons.charge", "Charge cinétique");
+                translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Passif : Neutralisation de la gravité (Laisse s'effondrer le sable/gravier en sécurité)");
+                translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Passif : Création de chemins 3x3");
+                translationBuilder.add("tooltip.vibranium.shovel.active.dispersal", "Shift + Clic droit : Dispersion d'énergie (Nettoyage 5x5)");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
@@ -177,6 +184,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lanza de vibranio");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Espada de vibranio");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SHOVEL.get(), "Pala de vibranio");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Agua caliente");
 
@@ -192,7 +200,13 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranio: quedan %ds");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Inserta el polvo de Vibranium aquí");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Residuos y escorias de combustión");
+
                 translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Destilado en un alambique. ¡Alta graduación!");
+
+                translationBuilder.add("tooltip.vibranium.weapons.charge", "Carga cinética");
+                translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Pasiva: Neutralización de gravedad (Colapsa arena/grava de forma segura)");
+                translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Pasiva: Creación de caminos 3x3");
+                translationBuilder.add("tooltip.vibranium.shovel.active.dispersal", "Shift + Clic derecho: Dispersión de energía (Limpieza 5x5)");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
@@ -266,6 +280,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Vibranium Spear");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Vibranium Sword");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_SHOVEL.get(), "Vibranium Shovel");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Hot Water Bucket");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Hot Water");
 
@@ -281,7 +296,13 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
                 translationBuilder.add("tooltip.vibranium.slot_fuel", "Insert Vibranium powder here");
                 translationBuilder.add("tooltip.vibranium.slot_output", "Combustion waste and slag");
+
                 translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Distilled in a brewing stand. High potency!");
+
+                translationBuilder.add("tooltip.vibranium.weapons.charge", "Kinetic Charge");
+                translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Passive: Gravity Neutralisation (Collapses sand/gravel safely)");
+                translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Passive: 3x3 Path Maker");
+                translationBuilder.add("tooltip.vibranium.shovel.active.dispersal", "Shift + Right Click: Energy Dispersal (5x5 Clearing)");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "This hatch is not connected to any reactor core!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "Reactor Meltdown Alarm blares!");

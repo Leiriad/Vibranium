@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": "vibranium:depleted_vibranium_ingot",
+    "V": "vibranium:vibranium_ingot"
+  },
+  "pattern": [
+    " V ",
+    " D ",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:vibranium_shovel"
+  }
+}

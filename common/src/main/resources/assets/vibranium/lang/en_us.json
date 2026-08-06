@@ -99,6 +99,7 @@
   "item.vibranium.vibranium_ingot": "Vibranium Ingot",
   "item.vibranium.vibranium_ore": "Vibranium Ore",
   "item.vibranium.vibranium_path": "Vibranized Dirt Path",
+  "item.vibranium.vibranium_shovel": "Vibranium Shovel",
   "item.vibranium.vibranium_spear": "Vibranium Spear",
   "item.vibranium.vibranium_sword": "Vibranium Sword",
   "itemGroup.vibranium.vibranium_tab": "Vibranium",
@@ -112,6 +113,10 @@
   "text.vibranium.config.title": "Vibranium Configuration",
   "text.vibranium.config.weight_for": "Weight for %s",
   "tooltip.vibranium.distilled_alcohol": "Distilled in a brewing stand. High potency!",
+  "tooltip.vibranium.shovel.active.dispersal": "Shift + Right Click: Energy Dispersal (5x5 Clearing)",
+  "tooltip.vibranium.shovel.passive.gravity": "Passive: Gravity Neutralisation (Collapses sand/gravel safely)",
+  "tooltip.vibranium.shovel.passive.path": "Passive: 3x3 Path Maker",
   "tooltip.vibranium.slot_fuel": "Insert Vibranium powder here",
-  "tooltip.vibranium.slot_output": "Combustion waste and slag"
+  "tooltip.vibranium.slot_output": "Combustion waste and slag",
+  "tooltip.vibranium.weapons.charge": "Kinetic Charge"
 }

@@ -99,6 +99,7 @@
   "item.vibranium.vibranium_ingot": "Lingot de vibranium",
   "item.vibranium.vibranium_ore": "Minerai de vibranium",
   "item.vibranium.vibranium_path": "Chemin de terre vibranisée",
+  "item.vibranium.vibranium_shovel": "Pelle en vibranium",
   "item.vibranium.vibranium_spear": "Lance en vibranium",
   "item.vibranium.vibranium_sword": "Épée en vibranium",
   "itemGroup.vibranium.vibranium_tab": "Vibranium",
@@ -112,6 +113,10 @@
   "text.vibranium.config.title": "Configuration de Vibranium",
   "text.vibranium.config.weight_for": "Poids (Weight) pour %s",
   "tooltip.vibranium.distilled_alcohol": "Distillé dans un alambic. Haute concentration !",
+  "tooltip.vibranium.shovel.active.dispersal": "Shift + Clic droit : Dispersion d'énergie (Nettoyage 5x5)",
+  "tooltip.vibranium.shovel.passive.gravity": "Passif : Neutralisation de la gravité (Laisse s'effondrer le sable/gravier en sécurité)",
+  "tooltip.vibranium.shovel.passive.path": "Passif : Création de chemins 3x3",
   "tooltip.vibranium.slot_fuel": "Insérez la poudre de Vibranium ici",
-  "tooltip.vibranium.slot_output": "Résidus et scories de combustion"
+  "tooltip.vibranium.slot_output": "Résidus et scories de combustion",
+  "tooltip.vibranium.weapons.charge": "Charge cinétique"
 }

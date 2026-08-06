@@ -65,6 +65,12 @@ public class VibraniumItems {
 
         return new HotWaterBucket(VibraniumFluids.HOT_WATER_STILL, HotWaterBucket.getProperties().setId(key));
     });
+    public static final RegistrySupplier<Item> VIBRANIUM_SHOVEL = ITEMS.register("vibranium_shovel", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_shovel"));
+
+        return new VibraniumShovel(VibraniumShovel.getProperties(new Item.Properties()).setId(key));
+    });
 
     //FOOD & DRINKS
     public static final RegistrySupplier<Item> BLUE_SOUP = ITEMS.register("blue_soup", () -> {
