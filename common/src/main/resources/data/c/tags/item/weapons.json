@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "#c:tools/swords",
-    "#c:tools/spears"
+    "#c:tools/spears",
+    "#c:tools/axes"
   ]
 }

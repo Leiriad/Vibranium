@@ -37,7 +37,7 @@ public class VibraniumHoe extends HoeItem {
 
     private static final ThreadLocal<Boolean> IS_HARVESTING_AREA = ThreadLocal.withInitial(() -> false);
     private static final float COST_PER_EXTRA_TILL = 0.5F;
-    private static final float COST_PER_HARVEST_PULSE = 10.0F;
+    private static final float COST_PER_HARVEST_PULSE = 5.0F;
 
     public VibraniumHoe(Properties properties) {
         super(VibraniumToolMaterial.VIBRANIUM, -3.0F, 0.0F, properties);
@@ -74,7 +74,7 @@ public class VibraniumHoe extends HoeItem {
 
             // Build kinetic charge on primary block broken
             float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-            float updatedCharge = Math.min(100.0F, currentCharge + 5.0F);
+            float updatedCharge = Math.min(100.0F, currentCharge + 10.0F);
             stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), updatedCharge);
 
             // Sonic Harvest effect when breaking a mature crop

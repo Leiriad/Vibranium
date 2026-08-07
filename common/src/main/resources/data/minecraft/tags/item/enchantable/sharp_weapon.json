@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "vibranium:vibranium_sword"
+    "vibranium:vibranium_sword",
+    "vibranium:vibranium_axe"
   ]
 }

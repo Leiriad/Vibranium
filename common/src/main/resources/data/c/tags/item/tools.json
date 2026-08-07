@@ -3,6 +3,7 @@
   "values": [
     "#c:tools/pickaxes",
     "#c:tools/shovels",
-    "#c:tools/hoes"
+    "#c:tools/hoes",
+    "#c:tools/axes"
   ]
 }
