@@ -92,6 +92,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Épée en vibranium");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SHOVEL.get(), "Pelle en vibranium");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_PICKAXE.get(), "Pioche en vibranium");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_HOE.get(), "Houe en vibranium");
 
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Eau chaude");
@@ -119,6 +120,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip.vibranium.pickaxe.passive.filter", "Passif : Préserve les Minerais et Structures");
                 translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Passif : Fait S'effondrer les Blocs Soumis à la Gravité");
                 translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Clic Droit : Créateur de Chemins 3x3");
+                translationBuilder.add("tooltip.vibranium.hoe.active.resonant_till", "Labourage par résonance : Laboure une zone de 3x3");
+                translationBuilder.add("tooltip.vibranium.hoe.active.sonic_harvest", "Moisson sonique : Casser une culture mûre libère une onde de récolte");
+                translationBuilder.add("tooltip.vibranium.hoe.passive.sculk_suppression", "Amortissement acoustique : Miner du Sculk ne produit aucune vibration.");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
@@ -192,6 +196,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Espada de vibranio");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SHOVEL.get(), "Pala de vibranio");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_PICKAXE.get(), "Pico de vibranio");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_HOE.get(), "Azada de vibranio");
 
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Agua caliente");
@@ -219,6 +224,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip.vibranium.pickaxe.passive.filter", "Pasivo: Preserva Minerales y Estructuras");
                 translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Pasivo: Colapsa Bloques Afectados por la Gravedad");
                 translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Clic Derecho: Creador de Caminos 3x3");
+                translationBuilder.add("tooltip.vibranium.hoe.active.resonant_till", "Labrado resonante: Labra un área de 3x3 de tierra");
+                translationBuilder.add("tooltip.vibranium.hoe.active.sonic_harvest", "Cosecha sónica: Romper cultivos maduros libera una onda de cosecha");
+                translationBuilder.add("tooltip.vibranium.hoe.passive.sculk_suppression", "Amortiguación acústica: Minar Sculk no genera vibraciones.");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
@@ -294,6 +302,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Vibranium Sword");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SHOVEL.get(), "Vibranium Shovel");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_PICKAXE.get(), "Vibranium Pickaxe");
+                translationBuilder.add(VibraniumItems.VIBRANIUM_HOE.get(), "Vibranium Hoe");
 
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Hot Water Bucket");
                 translationBuilder.add(VibraniumFluids.HOT_WATER_BLOCK.get(), "Hot Water");
@@ -321,6 +330,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip.vibranium.pickaxe.passive.filter", "Passive: Preserves Ores & Structures");
                 translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Passive: Collapse Falling Blocks");
                 translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Right Click: 3x3 Path Maker");
+                translationBuilder.add("tooltip.vibranium.hoe.active.resonant_till", "Resonant Tilling: Tills a 3x3 area of soil");
+                translationBuilder.add("tooltip.vibranium.hoe.active.sonic_harvest", "Sonic Harvest: Breaking mature crops releases a harvesting shockwave");
+                translationBuilder.add("tooltip.vibranium.hoe.passive.sculk_suppression", "Acoustic Dampening: Mining Sculk produces no vibrations.");
 
                 translationBuilder.add("message.vibranium.hatch_no_core", "This hatch is not connected to any reactor core!");
                 translationBuilder.add("subtitles.vibranium.meltdown_alarm", "Reactor Meltdown Alarm blares!");

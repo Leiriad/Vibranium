@@ -70,7 +70,7 @@ public class VibraniumPickaxe extends Item {
                 } else if (isSafeMiningTarget(state)) {
                     IS_MINING_AREA.set(true);
                     try {
-                        mine3x3Area(level, pos, player, stack);
+                        burstMine(level, pos, player, stack);
                     } finally {
                         IS_MINING_AREA.set(false);
                     }
@@ -162,7 +162,7 @@ public class VibraniumPickaxe extends Item {
     /**
      * Mines blocks in a 3x3 area around the broken block and triggers a kinetic shockwave effect.
      */
-    private void mine3x3Area(Level level, BlockPos center, Player player, ItemStack stack) {
+    private void burstMine(Level level, BlockPos center, Player player, ItemStack stack) {
         Direction direction = player.getDirection();
         Direction.Axis axis = direction.getAxis();
         EquipmentSlot slot = EquipmentSlot.MAINHAND;

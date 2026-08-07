@@ -77,6 +77,12 @@ public class VibraniumItems {
 
         return new VibraniumPickaxe(VibraniumPickaxe.getProperties(new Item.Properties()).setId(key));
     });
+    public static final RegistrySupplier<Item> VIBRANIUM_HOE = ITEMS.register("vibranium_hoe", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_hoe"));
+
+        return new VibraniumHoe(VibraniumHoe.getProperties(new Item.Properties()).setId(key));
+    });
 
     //FOOD & DRINKS
     public static final RegistrySupplier<Item> BLUE_SOUP = ITEMS.register("blue_soup", () -> {
@@ -137,7 +143,8 @@ public class VibraniumItems {
         List.of(
                 HOT_WATER_BUCKET,
                 VIBRANIUM_SHOVEL,
-                VIBRANIUM_PICKAXE
+                VIBRANIUM_PICKAXE,
+                VIBRANIUM_HOE
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.TOOLS_AND_UTILITIES, () -> new ItemStack(supplier.get()));
         });
@@ -174,7 +181,8 @@ public class VibraniumItems {
                 VIBRANIUM_SPEAR,
                 VIBRANIUM_SWORD,
                 VIBRANIUM_PICKAXE,
-                VIBRANIUM_SHOVEL
+                VIBRANIUM_SHOVEL,
+                VIBRANIUM_HOE
         ).forEach(supplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(supplier.get()));
         });
