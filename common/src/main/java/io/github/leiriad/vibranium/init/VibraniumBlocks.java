@@ -85,6 +85,9 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> REACTOR_PUMP = register("reactor_pump", ReactorPumpBlock::new, () -> ReactorPumpBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REACTOR_OUTLET = register("reactor_outlet", ReactorOutletBlock::new, () -> ReactorOutletBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> FLUID_TANK = register("fluid_tank", FluidTankBlock::new, () -> FluidTankBlock.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> ELECTRIC_WIRE = register("electric_wire", ElectricWireBlock::new, () -> ElectricWireBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> ELECTRIC_WIRE_WALL = register("electric_wire_wall", ElectricWireWallBlock::new, () -> ElectricWireWallBlock.getProperties(BlockBehaviour.Properties.of()), false);
+
 
     //COLORED
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS = register("vibranium_glass", VibraniumGlass::new, () -> VibraniumGlass.getProperties(BlockBehaviour.Properties.of()), true);

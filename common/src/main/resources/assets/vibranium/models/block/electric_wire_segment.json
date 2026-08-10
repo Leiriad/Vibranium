@@ -1,0 +1,20 @@
+{
+  "textures": {
+    "wire": "vibranium:block/electric_wire",
+    "particle": "vibranium:block/electric_wire"
+  },
+  "elements": [
+    {
+      "from": [7, 0, 0],
+      "to": [9, 1, 7],
+      "faces": {
+        "up":    { "uv": [7, 0, 9, 7], "texture": "#wire" },
+        "down":  { "uv": [7, 0, 9, 7], "texture": "#wire" },
+        "north": { "uv": [7, 0, 9, 1], "texture": "#wire" },
+        "south": { "uv": [7, 0, 9, 1], "texture": "#wire" },
+        "east":  { "uv": [0, 0, 7, 1], "texture": "#wire" },
+        "west":  { "uv": [0, 0, 7, 1], "texture": "#wire" }
+      }
+    }
+  ]
+}
