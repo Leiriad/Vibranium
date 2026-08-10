@@ -3,6 +3,7 @@ package io.github.leiriad.vibranium.block;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -16,10 +17,15 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 public class ElectricWireWallBlock extends BaseElectricWireBlock {
     public static final MapCodec<ElectricWireWallBlock> CODEC = simpleCodec(ElectricWireWallBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+    @Override
+    protected MapCodec<? extends Block> codec() {
+        return CODEC;
+    }
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings) {
         return Properties.ofFullCopy(Blocks.TRIPWIRE);
     }
 
+    //CONSTRUCTORS
     public ElectricWireWallBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(
@@ -31,14 +37,11 @@ public class ElectricWireWallBlock extends BaseElectricWireBlock {
                         .setValue(WEST, false)
                         .setValue(UP, false)
                         .setValue(DOWN, false)
+                        .setValue(COLOR, DyeColor.WHITE)
         );
     }
 
-    @Override
-    protected MapCodec<? extends Block> codec() {
-        return CODEC;
-    }
-
+    //METHODS
     @Override
     public Direction getAttachedFace(BlockState state) {
         return state.getValue(FACING);
@@ -46,7 +49,7 @@ public class ElectricWireWallBlock extends BaseElectricWireBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, NORTH, EAST, SOUTH, WEST, UP, DOWN);
+        builder.add(FACING, NORTH, EAST, SOUTH, WEST, UP, DOWN, COLOR);
     }
 
     @Override
@@ -69,7 +72,7 @@ public class ElectricWireWallBlock extends BaseElectricWireBlock {
         for (Direction dir : Direction.values()) {
             var prop = PROPERTY_BY_DIRECTION.get(dir);
             if (prop != null) {
-                // Utilise shouldConnectTo pour évaluer correctement UP/DOWN et les axes
+                // Uses shouldConnectTo to properly evaluate vertical (UP/DOWN) and horizontal directions
                 state = state.setValue(prop, this.shouldConnectTo(level, pos, dir, attachedFace));
             }
         }

@@ -15,7 +15,7 @@
     },
     {
       "when": { "facing": "up", "south": "true" },
-      "apply": { "model": "vibranium:block/electric_wire_segment", "x": 180 }
+      "apply": { "model": "vibranium:block/electric_wire_segment", "x": 180, "y": 0 }
     },
     {
       "when": { "facing": "up", "west": "true" },
@@ -47,19 +47,19 @@
     },
     {
       "when": { "facing": "down", "north": "true" },
-      "apply": { "model": "vibranium:block/electric_wire_segment", "y": 180 }
+      "apply": { "model": "vibranium:block/electric_wire_segment", "y": 0 }
     },
     {
       "when": { "facing": "down", "east": "true" },
-      "apply": { "model": "vibranium:block/electric_wire_segment", "y": 270 }
+      "apply": { "model": "vibranium:block/electric_wire_segment", "y": 90 }
     },
     {
       "when": { "facing": "down", "south": "true" },
-      "apply": { "model": "vibranium:block/electric_wire_segment" }
+      "apply": { "model": "vibranium:block/electric_wire_segment", "y": 180 }
     },
     {
       "when": { "facing": "down", "west": "true" },
-      "apply": { "model": "vibranium:block/electric_wire_segment", "y": 90 }
+      "apply": { "model": "vibranium:block/electric_wire_segment", "y": 270 }
     },
 
 

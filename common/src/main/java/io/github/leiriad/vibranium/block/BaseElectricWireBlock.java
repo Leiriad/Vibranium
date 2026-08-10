@@ -3,9 +3,8 @@ package io.github.leiriad.vibranium.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
@@ -32,6 +31,7 @@ public abstract class BaseElectricWireBlock extends Block {
 
     public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = PipeBlock.PROPERTY_BY_DIRECTION;
     protected static final double THICKNESS = 1.0;
+    public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
 
     public BaseElectricWireBlock(Properties properties) {
         super(properties);
@@ -48,7 +48,7 @@ public abstract class BaseElectricWireBlock extends Block {
     }
 
     // =========================================================================
-    // DÉTECTION DES CONNEXIONS (LOGS INCLUS)
+    // CONNECTION DETECTION
     // =========================================================================
 
     protected boolean canConnectTo(BlockState state, Direction direction) {
@@ -56,7 +56,7 @@ public abstract class BaseElectricWireBlock extends Block {
     }
 
     protected boolean shouldConnectTo(LevelReader level, BlockPos pos, Direction connectionDir, Direction attachedFace) {
-        // Un câble ne s'étend jamais à travers le bloc auquel il est accroché
+        // A cable never extends through the block it is attached to
         if (connectionDir == attachedFace) return false;
 
         BlockState neighborState = level.getBlockState(pos.relative(connectionDir));
@@ -67,35 +67,31 @@ public abstract class BaseElectricWireBlock extends Block {
         Direction neighborAttachedFace = neighborWire.getAttachedFace(neighborState);
 
         // =========================================================================
-        // 1. SI 'THIS' EST UN CÂBLE MURAL (Horizontal : NORTH, SOUTH, EAST, WEST)
+        // 1. WALL CABLE (Horizontal attached face: NORTH, SOUTH, EAST, WEST)
         // =========================================================================
         if (attachedFace.getAxis().isHorizontal()) {
 
-            // Connexion vers le HAUT
+            // UP connection
             if (connectionDir == Direction.UP) {
-                // Se connecte si le voisin du dessus est :
-                // - Soit un câble sur le MÊME mur
-                // - Soit un câble fixé au PLAFOND
+                // Connects if the neighbor above is either on the same wall or attached to the ceiling
                 return neighborAttachedFace == attachedFace || neighborAttachedFace == Direction.UP;
             }
 
-            // Connexion vers le BAS
+            // DOWN connection
             if (connectionDir == Direction.DOWN) {
-                // Se connecte si le voisin du dessous est :
-                // - Soit un câble sur le MÊME mur
-                // - Soit un câble fixé au SOL
+                // Connects if the neighbor below is either on the same wall or attached to the floor
                 return neighborAttachedFace == attachedFace || neighborAttachedFace == Direction.DOWN;
             }
 
-            // Connexion HORIZONTALE sur le même mur
+            // Horizontal connection on the same wall
             if (connectionDir.getAxis().isHorizontal()) {
                 return neighborAttachedFace == attachedFace;
             }
         }
 
         // =========================================================================
-// 2. CEILING CABLE (attachedFace == UP)
-// =========================================================================
+        // 2. CEILING CABLE (attachedFace == UP)
+        // =========================================================================
         if (attachedFace == Direction.UP) {
 
             // Vertical connection to a wall cable below
@@ -111,9 +107,9 @@ public abstract class BaseElectricWireBlock extends Block {
             }
         }
 
-// =========================================================================
-// 3. FLOOR CABLE (attachedFace == DOWN)
-// =========================================================================
+        // =========================================================================
+        // 3. FLOOR CABLE (attachedFace == DOWN)
+        // =========================================================================
         if (attachedFace == Direction.DOWN) {
 
             // Vertical connection to a wall cable above
@@ -128,11 +124,20 @@ public abstract class BaseElectricWireBlock extends Block {
                 return neighborAttachedFace == Direction.DOWN;
             }
         }
+        if (attachedFace == Direction.DOWN) {
+            if (connectionDir.getAxis().isHorizontal()) {
+
+                // if block is under (outer corner)
+                if (neighborState.getBlock() instanceof BaseElectricWireBlock neighborDownWire) {
+                    if (neighborWire.getAttachedFace(neighborState) == connectionDir.getOpposite()) {
+                        return true;
+                    }
+                }
+            }
+        }
 
         return false;
     }
-
-
 
     @Override
     protected BlockState updateShape(
@@ -145,39 +150,34 @@ public abstract class BaseElectricWireBlock extends Block {
             BlockState neighborState,
             RandomSource random
     ) {
+        DyeColor currentColor = state.getValue(COLOR);
         if (!state.canSurvive(level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
 
-        if (state.getBlock() instanceof ElectricWireBlock wireBlock) {
-            Direction attachedFace = wireBlock.getAttachedFace(state);
+        Direction attachedFace = getAttachedFace(state);
 
-            // Mise à jour des liens horizontaux
-            for (Direction dir : Direction.Plane.HORIZONTAL) {
-                BooleanProperty prop = PROPERTY_BY_DIRECTION.get(dir);
-                if (prop != null) {
-                    boolean connect = isSamePlaneNeighbor(level, pos, dir, attachedFace);
-                    state = state.setValue(prop, connect);
-                }
+        // Update horizontal connections on the same plane
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            BooleanProperty prop = PROPERTY_BY_DIRECTION.get(dir);
+            if (prop != null) {
+                BlockState neighbor = level.getBlockState(pos.relative(dir));
+                boolean connect = neighbor.getBlock() instanceof BaseElectricWireBlock neighborWire
+                        && neighborWire.getAttachedFace(neighbor) == attachedFace;
+                state = state.setValue(prop, connect);
             }
+        }
 
-            // Application de l'orientation verticale
+        // Reapply vertical bend attachment if it is an ElectricWireBlock (floor/ceiling)
+        if (this instanceof ElectricWireBlock wireBlock) {
             state = wireBlock.applyVerticalAttachment(level, pos, state);
         }
 
-        return state;
-    }
-
-    private boolean isSamePlaneNeighbor(LevelReader level, BlockPos pos, Direction dir, Direction attachedFace) {
-        BlockState neighborState = level.getBlockState(pos.relative(dir));
-        if (neighborState.getBlock() instanceof BaseElectricWireBlock wire) {
-            return wire.getAttachedFace(neighborState) == attachedFace;
-        }
-        return false;
+        return state.setValue(COLOR, currentColor);
     }
 
     // =========================================================================
-    // DESSIN HITBOX / VOXELSHAPE
+    // HITBOX / VOXELSHAPE RENDERING
     // =========================================================================
 
     @Override
@@ -188,10 +188,6 @@ public abstract class BaseElectricWireBlock extends Block {
         for (Direction connectionDir : Direction.values()) {
             BooleanProperty prop = PROPERTY_BY_DIRECTION.get(connectionDir);
             if (prop != null && state.getValue(prop)) {
-                System.out.printf("[WIRE-SHAPE] Ajout forme extension : Pos(%d,%d,%d) | Face=%s | Connection=%s%n",
-                        pos.getX(), pos.getY(), pos.getZ(), attachedFace, connectionDir);
-
-                // Transmet level et pos pour pouvoir lire le bloc voisin si besoin
                 shape = Shapes.or(shape, getExtensionShape(state, attachedFace, connectionDir, level, pos));
             }
         }
@@ -213,16 +209,14 @@ public abstract class BaseElectricWireBlock extends Block {
     private VoxelShape getExtensionShape(BlockState state, Direction face, Direction connection, BlockGetter level, BlockPos pos) {
 
         // =========================================================================
-// 1. CÂBLES MURAUX (NORTH, SOUTH, EAST, WEST)
-// =========================================================================
+        // 1. WALL CABLES (NORTH, SOUTH, EAST, WEST)
+        // =========================================================================
         if (face.getAxis().isHorizontal()) {
 
-            // --- Connexion Verticale UP ---
+            // --- Vertical UP Connection ---
             if (connection == Direction.UP) {
                 BlockState aboveState = level.getBlockState(pos.above());
 
-                // Si le câble au-dessus est fixé au PLAFOND, il crée un coude qui descend.
-                // Le câble mural doit donc s'étirer de 0 à 16 pour former un segment continu.
                 boolean isCeilingAbove = aboveState.getBlock() instanceof BaseElectricWireBlock neighborWire
                         && neighborWire.getAttachedFace(aboveState) == Direction.UP;
 
@@ -237,12 +231,10 @@ public abstract class BaseElectricWireBlock extends Block {
                 };
             }
 
-            // --- Connexion Verticale DOWN ---
+            // --- Vertical DOWN Connection ---
             if (connection == Direction.DOWN) {
                 BlockState belowState = level.getBlockState(pos.below());
 
-                // Si le câble en dessous est fixé au SOL, il crée un coude qui monte.
-                // Le câble mural s'étire de 0 à 16 vers le haut.
                 boolean isFloorBelow = belowState.getBlock() instanceof BaseElectricWireBlock neighborWire
                         && neighborWire.getAttachedFace(belowState) == Direction.DOWN;
 
@@ -257,7 +249,7 @@ public abstract class BaseElectricWireBlock extends Block {
                 };
             }
 
-            // --- Connexions Horizontales sur le mur ---
+            // --- Horizontal Connections on wall ---
             if (connection.getAxis().isHorizontal() && connection != face && connection != face.getOpposite()) {
                 return switch (face) {
                     case NORTH -> connection == Direction.EAST ? Block.box(7.0, 7.0, 0.0, 16.0, 9.0, 1.0) : Block.box(0.0, 7.0, 0.0, 9.0, 9.0, 1.0);
@@ -267,98 +259,126 @@ public abstract class BaseElectricWireBlock extends Block {
                     default -> Shapes.empty();
                 };
             }
+
+
         }
 
         // =========================================================================
-        // 2. CÂBLE AU PLAFOND (attachedFace == UP) -> Extension DOWN vers un mur
+        // 2. CEILING CABLE (attachedFace == UP)
         // =========================================================================
-        if (face == Direction.UP && connection == Direction.DOWN) {
-            BlockState belowState = level.getBlockState(pos.below());
+        if (face == Direction.UP) {
+            if (connection == Direction.DOWN) {
+                BlockState belowState = level.getBlockState(pos.below());
 
-            if (belowState.getBlock() instanceof BaseElectricWireBlock neighborWire) {
-                Direction wallFace = neighborWire.getAttachedFace(belowState);
+                if (belowState.getBlock() instanceof BaseElectricWireBlock neighborWire) {
+                    Direction wallFace = neighborWire.getAttachedFace(belowState);
 
-                return switch (wallFace) {
-                    case EAST -> {
-                        boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.WEST));
-                        double minX = hasOpposite ? 0.0 : 7.0;
-                        yield Shapes.or(
-                                Block.box(minX, 15.0, 7.0, 16.0, 16.0, 9.0),
-                                Block.box(15.0, 0.0, 7.0, 16.0, 16.0, 9.0)
-                        );
-                    }
-                    case WEST -> {
-                        boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.EAST));
-                        double maxX = hasOpposite ? 16.0 : 9.0;
-                        yield Shapes.or(
-                                Block.box(0.0, 15.0, 7.0, maxX, 16.0, 9.0),
-                                Block.box(0.0, 0.0, 7.0, 1.0, 16.0, 9.0)
-                        );
-                    }
-                    case NORTH -> {
-                        boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.SOUTH));
-                        double maxZ = hasOpposite ? 16.0 : 9.0;
-                        yield Shapes.or(
-                                Block.box(7.0, 15.0, 0.0, 9.0, 16.0, maxZ),
-                                Block.box(7.0, 0.0, 0.0, 9.0, 16.0, 1.0)
-                        );
-                    }
-                    case SOUTH -> {
-                        boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.NORTH));
-                        double minZ = hasOpposite ? 0.0 : 7.0;
-                        yield Shapes.or(
-                                Block.box(7.0, 15.0, minZ, 9.0, 16.0, 16.0),
-                                Block.box(7.0, 0.0, 15.0, 9.0, 16.0, 16.0)
-                        );
-                    }
-                    default -> Block.box(7.0, 0.0, 7.0, 9.0, 16.0, 9.0);
+                    return switch (wallFace) {
+                        case EAST -> {
+                            boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.WEST));
+                            double minX = hasOpposite ? 0.0 : 7.0;
+                            yield Shapes.or(
+                                    Block.box(minX, 15.0, 7.0, 16.0, 16.0, 9.0),
+                                    Block.box(15.0, 0.0, 7.0, 16.0, 16.0, 9.0)
+                            );
+                        }
+                        case WEST -> {
+                            boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.EAST));
+                            double maxX = hasOpposite ? 16.0 : 9.0;
+                            yield Shapes.or(
+                                    Block.box(0.0, 15.0, 7.0, maxX, 16.0, 9.0),
+                                    Block.box(0.0, 0.0, 7.0, 1.0, 16.0, 9.0)
+                            );
+                        }
+                        case NORTH -> {
+                            boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.SOUTH));
+                            double maxZ = hasOpposite ? 16.0 : 9.0;
+                            yield Shapes.or(
+                                    Block.box(7.0, 15.0, 0.0, 9.0, 16.0, maxZ),
+                                    Block.box(7.0, 0.0, 0.0, 9.0, 16.0, 1.0)
+                            );
+                        }
+                        case SOUTH -> {
+                            boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.NORTH));
+                            double minZ = hasOpposite ? 0.0 : 7.0;
+                            yield Shapes.or(
+                                    Block.box(7.0, 15.0, minZ, 9.0, 16.0, 16.0),
+                                    Block.box(7.0, 0.0, 15.0, 9.0, 16.0, 16.0)
+                            );
+                        }
+                        default -> Block.box(7.0, 0.0, 7.0, 9.0, 16.0, 9.0);
+                    };
+                }
+            }
+
+            // Horizontal connection (ceiling)
+            if (connection.getAxis().isHorizontal()) {
+                return switch (connection) {
+                    case NORTH -> Block.box(7.0, 16.0 - THICKNESS, 0.0, 9.0, 16.0, 9.0);
+                    case SOUTH -> Block.box(7.0, 16.0 - THICKNESS, 7.0, 9.0, 16.0, 16.0);
+                    case WEST  -> Block.box(0.0, 16.0 - THICKNESS, 7.0, 9.0, 16.0, 9.0);
+                    case EAST  -> Block.box(7.0, 16.0 - THICKNESS, 7.0, 16.0, 16.0, 9.0);
+                    default -> Shapes.empty();
                 };
             }
         }
 
         // =========================================================================
-        // 3. CÂBLE AU SOL (attachedFace == DOWN) -> Extension UP vers un mur
+        // 3. FLOOR CABLE (attachedFace == DOWN)
         // =========================================================================
-        if (face == Direction.DOWN && connection == Direction.UP) {
-            BlockState aboveState = level.getBlockState(pos.above());
+        if (face == Direction.DOWN) {
+            if (connection == Direction.UP) {
+                BlockState aboveState = level.getBlockState(pos.above());
 
-            if (aboveState.getBlock() instanceof BaseElectricWireBlock neighborWire) {
-                Direction wallFace = neighborWire.getAttachedFace(aboveState);
+                if (aboveState.getBlock() instanceof BaseElectricWireBlock neighborWire) {
+                    Direction wallFace = neighborWire.getAttachedFace(aboveState);
 
-                return switch (wallFace) {
-                    case EAST -> {
-                        boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.WEST));
-                        double minX = hasOpposite ? 0.0 : 7.0;
-                        yield Shapes.or(
-                                Block.box(minX, 0.0, 7.0, 16.0, 1.0, 9.0),
-                                Block.box(15.0, 0.0, 7.0, 16.0, 16.0, 9.0)
-                        );
-                    }
-                    case WEST -> {
-                        boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.EAST));
-                        double maxX = hasOpposite ? 16.0 : 9.0;
-                        yield Shapes.or(
-                                Block.box(0.0, 0.0, 7.0, maxX, 1.0, 9.0),
-                                Block.box(0.0, 0.0, 7.0, 1.0, 16.0, 9.0)
-                        );
-                    }
-                    case NORTH -> {
-                        boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.SOUTH));
-                        double maxZ = hasOpposite ? 16.0 : 9.0;
-                        yield Shapes.or(
-                                Block.box(7.0, 0.0, 0.0, 9.0, 1.0, maxZ),
-                                Block.box(7.0, 0.0, 0.0, 9.0, 16.0, 1.0)
-                        );
-                    }
-                    case SOUTH -> {
-                        boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.NORTH));
-                        double minZ = hasOpposite ? 0.0 : 7.0;
-                        yield Shapes.or(
-                                Block.box(7.0, 0.0, minZ, 9.0, 1.0, 16.0),
-                                Block.box(7.0, 0.0, 15.0, 9.0, 16.0, 16.0)
-                        );
-                    }
-                    default -> Block.box(7.0, 0.0, 7.0, 9.0, 16.0, 9.0);
+                    return switch (wallFace) {
+                        case EAST -> {
+                            boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.WEST));
+                            double minX = hasOpposite ? 0.0 : 7.0;
+                            yield Shapes.or(
+                                    Block.box(minX, 0.0, 7.0, 16.0, 1.0, 9.0),
+                                    Block.box(15.0, 0.0, 7.0, 16.0, 16.0, 9.0)
+                            );
+                        }
+                        case WEST -> {
+                            boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.EAST));
+                            double maxX = hasOpposite ? 16.0 : 9.0;
+                            yield Shapes.or(
+                                    Block.box(0.0, 0.0, 7.0, maxX, 1.0, 9.0),
+                                    Block.box(0.0, 0.0, 7.0, 1.0, 16.0, 9.0)
+                            );
+                        }
+                        case NORTH -> {
+                            boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.SOUTH));
+                            double maxZ = hasOpposite ? 16.0 : 9.0;
+                            yield Shapes.or(
+                                    Block.box(7.0, 0.0, 0.0, 9.0, 1.0, maxZ),
+                                    Block.box(7.0, 0.0, 0.0, 9.0, 16.0, 1.0)
+                            );
+                        }
+                        case SOUTH -> {
+                            boolean hasOpposite = state.getValue(PROPERTY_BY_DIRECTION.get(Direction.NORTH));
+                            double minZ = hasOpposite ? 0.0 : 7.0;
+                            yield Shapes.or(
+                                    Block.box(7.0, 0.0, minZ, 9.0, 1.0, 16.0),
+                                    Block.box(7.0, 0.0, 15.0, 9.0, 16.0, 16.0)
+                            );
+                        }
+                        default -> Block.box(7.0, 0.0, 7.0, 9.0, 16.0, 9.0);
+                    };
+                }
+            }
+
+            // Horizontal connection (floor)
+            if (connection.getAxis().isHorizontal()) {
+                return switch (connection) {
+                    case NORTH -> Block.box(7.0, 0.0, 0.0, 9.0, THICKNESS, 9.0);
+                    case SOUTH -> Block.box(7.0, 0.0, 7.0, 9.0, THICKNESS, 16.0);
+                    case WEST  -> Block.box(0.0, 0.0, 7.0, 9.0, THICKNESS, 9.0);
+                    case EAST  -> Block.box(7.0, 0.0, 7.0, 16.0, THICKNESS, 9.0);
+                    default -> Shapes.empty();
                 };
             }
         }

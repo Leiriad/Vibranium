@@ -6,9 +6,11 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
+import io.github.leiriad.vibranium.block.BaseElectricWireBlock;
 import io.github.leiriad.vibranium.client.render.OreHighlightRenderer;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
+import io.github.leiriad.vibranium.init.VibraniumItems;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.network.OreHighlightPayload;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
@@ -69,6 +71,20 @@ public class VibraniumModClient {
                 (state, world, pos, tintIndex) -> 0xFFFFFF,
                 VibraniumBlocks.SMALL_PURPLE_DRIPLEAF.get()
         );
+
+        // Electric Wires color handler
+        ColorHandlerRegistry.registerBlockColors(
+                (state, world, pos, tintIndex) -> {
+                    if (state != null && state.hasProperty(BaseElectricWireBlock.COLOR)) {
+                        return state.getValue(BaseElectricWireBlock.COLOR).getTextureDiffuseColor();
+                    }
+                    return 0xFFFFFF; // default color
+                },
+                VibraniumBlocks.ELECTRIC_WIRE.get(),
+                VibraniumBlocks.ELECTRIC_WIRE_WALL.get()
+        );
+
+
 
 
         //Screens init
