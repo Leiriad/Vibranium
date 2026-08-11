@@ -2,6 +2,7 @@ package io.github.leiriad.vibranium.neoforge;
 
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.client.render.FluidTankRenderer;
+import io.github.leiriad.vibranium.entity.ElectricWireEntity;
 import io.github.leiriad.vibranium.entity.FluidTankEntity;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
@@ -271,6 +272,66 @@ public final class VibraniumModNeoForge {
                                 }
                             };
                         }
+                    }
+                    return null;
+                }
+        );
+        // --- REGISTRATION FOR ELECTRIC WIRE (UNIVERSAL ENERGY CONDUCTOR) ---
+        event.registerBlockEntity(
+                Capabilities.Energy.BLOCK,
+                VibraniumEntitiesNeoForge.ELECTRIC_WIRE_ENTITY.get(),
+                (wireEntity, direction) -> {
+                    if (wireEntity instanceof ElectricWireEntity wire) {
+
+                        // Journal to handle energy rollbacks during transactions
+                        net.neoforged.neoforge.transfer.transaction.SnapshotJournal<Integer> wireJournal =
+                                new net.neoforged.neoforge.transfer.transaction.SnapshotJournal<>() {
+                                    @Override
+                                    protected Integer createSnapshot() {
+                                        return wire.getEnergyStored();
+                                    }
+
+                                    @Override
+                                    protected void revertToSnapshot(Integer snapshotValue) {
+                                        wire.setEnergy(snapshotValue);
+                                    }
+                                };
+
+                        return new EnergyHandler() {
+                            @Override
+                            public int insert(int maxAmount, TransactionContext transaction) {
+                                if (maxAmount <= 0) return 0;
+
+                                int inserted = wire.insertEnergy(maxAmount, true);
+                                if (inserted > 0) {
+                                    wireJournal.updateSnapshots(transaction);
+                                    return wire.insertEnergy(inserted, false);
+                                }
+                                return 0;
+                            }
+
+                            @Override
+                            public int extract(int maxAmount, TransactionContext transaction) {
+                                if (maxAmount <= 0) return 0;
+
+                                int extracted = wire.extractEnergy(maxAmount, true);
+                                if (extracted > 0) {
+                                    wireJournal.updateSnapshots(transaction);
+                                    return wire.extractEnergy(extracted, false);
+                                }
+                                return 0;
+                            }
+
+                            @Override
+                            public long getAmountAsLong() {
+                                return (long) wire.getEnergyStored();
+                            }
+
+                            @Override
+                            public long getCapacityAsLong() {
+                                return (long) wire.getMaxEnergyStored();
+                            }
+                        };
                     }
                     return null;
                 }

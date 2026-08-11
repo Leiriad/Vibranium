@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.fabric;
 
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.entity.ElectricWireEntity;
 import io.github.leiriad.vibranium.entity.FluidTankEntity;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
 import io.github.leiriad.vibranium.fabric.block.entity.VibraniumEntitiesFabric;
@@ -217,6 +218,76 @@ public final class VibraniumModFabric implements ModInitializer {
             return null; // No functional reactor core found adjacent to this glass
         }, VibraniumEntitiesFabric.REINFORCED_VIBRANIUM_GLASS_ENTITY.get());
 
+        // --- REGISTRATION FOR ELECTRIC WIRE (UNIVERSAL ENERGY CONDUCTOR) ---
+        EnergyStorage.SIDED.registerForBlockEntities((wireEntity, direction) -> {
+            if (wireEntity instanceof ElectricWireEntity wire) {
+                Level level = wire.getLevel();
+                BlockPos pos = wire.getBlockPos();
 
+                if (level == null) return null;
+
+                // Create a participant for transaction rollbacks
+                SnapshotParticipant<Integer> wireParticipant = new SnapshotParticipant<>() {
+                    @Override
+                    protected Integer createSnapshot() {
+                        return wire.getEnergyStored();
+                    }
+
+                    @Override
+                    protected void readSnapshot(Integer snapshotValue) {
+                        wire.setEnergy(snapshotValue);
+                    }
+                };
+
+                return new EnergyStorage() {
+                    @Override
+                    public long insert(long maxAmount, TransactionContext transaction) {
+                        if (maxAmount <= 0) return 0L;
+                        int maxInsert = (int) Math.min(wire.getMaxEnergyStored() - wire.getEnergyStored(), maxAmount);
+
+                        int inserted = wire.insertEnergy(maxInsert, true);
+                        if (inserted > 0) {
+                            wireParticipant.updateSnapshots(transaction);
+                            return wire.insertEnergy(inserted, false);
+                        }
+                        return 0L;
+                    }
+
+                    @Override
+                    public long extract(long maxAmount, TransactionContext transaction) {
+                        if (maxAmount <= 0) return 0L;
+                        int maxExtract = (int) Math.min(wire.getEnergyStored(), maxAmount);
+
+                        int extracted = wire.extractEnergy(maxExtract, true);
+                        if (extracted > 0) {
+                            wireParticipant.updateSnapshots(transaction);
+                            return wire.extractEnergy(extracted, false);
+                        }
+                        return 0L;
+                    }
+
+                    @Override
+                    public long getAmount() {
+                        return wire.getEnergyStored();
+                    }
+
+                    @Override
+                    public long getCapacity() {
+                        return wire.getMaxEnergyStored();
+                    }
+
+                    @Override
+                    public boolean supportsInsertion() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean supportsExtraction() {
+                        return true;
+                    }
+                };
+            }
+            return null;
+        }, VibraniumEntitiesFabric.ELECTRIC_WIRE_ENTITY.get());
     }
 }

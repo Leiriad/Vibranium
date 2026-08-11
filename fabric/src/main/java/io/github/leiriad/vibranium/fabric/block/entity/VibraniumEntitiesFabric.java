@@ -17,6 +17,10 @@ public class VibraniumEntitiesFabric extends VibraniumEntities {
         REACTOR_OUTLET_ENTITY = (RegistrySupplier<BlockEntityType<ReactorOutletEntity>>) register("reactor_oulet", ()-> FabricBlockEntityTypeBuilder.create(ReactorOutletEntity::new, VibraniumBlocks.REACTOR_OUTLET.get()).build());
         FLUID_TANK_ENTITY = (RegistrySupplier<BlockEntityType< FluidTankEntity>>) register("fluid_tank", ()-> FabricBlockEntityTypeBuilder.create(FluidTankEntity::new, VibraniumBlocks.FLUID_TANK.get()).build());
         REINFORCED_VIBRANIUM_GLASS_ENTITY = (RegistrySupplier<BlockEntityType<ReinforcedVibraniumGlassEntity>>) register("reinforced_vibranium_glass", ()-> FabricBlockEntityTypeBuilder.create(ReinforcedVibraniumGlassEntity::new, VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()).build());
+        ELECTRIC_WIRE_ENTITY = (RegistrySupplier<BlockEntityType<ElectricWireEntity>>) register("electric_wire", ()-> FabricBlockEntityTypeBuilder.create(ElectricWireEntity::new,
+                            VibraniumBlocks.ELECTRIC_WIRE.get(),
+                            VibraniumBlocks.ELECTRIC_WIRE_WALL.get()).build());
+
         registerModEntities();
     }
 }

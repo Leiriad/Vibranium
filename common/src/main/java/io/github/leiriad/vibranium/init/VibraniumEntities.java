@@ -6,9 +6,6 @@ import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.entity.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.function.Supplier;
@@ -22,6 +19,7 @@ public class VibraniumEntities {
     public static RegistrySupplier<BlockEntityType<ReactorPumpEntity>> REACTOR_PUMP_ENTITY;
     public static RegistrySupplier<BlockEntityType<ReactorOutletEntity>> REACTOR_OUTLET_ENTITY;
     public static RegistrySupplier<BlockEntityType<FluidTankEntity>> FLUID_TANK_ENTITY;
+    public static RegistrySupplier<BlockEntityType<ElectricWireEntity>> ELECTRIC_WIRE_ENTITY;
     public static RegistrySupplier<BlockEntityType<ReinforcedVibraniumGlassEntity>> REINFORCED_VIBRANIUM_GLASS_ENTITY;
 
 

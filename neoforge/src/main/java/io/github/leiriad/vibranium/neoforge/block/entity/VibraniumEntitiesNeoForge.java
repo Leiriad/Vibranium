@@ -15,6 +15,10 @@ public class VibraniumEntitiesNeoForge extends VibraniumEntities {
         REACTOR_OUTLET_ENTITY = (RegistrySupplier<BlockEntityType<ReactorOutletEntity>>) register("reactor_oulet", ()-> new BlockEntityType<>(ReactorOutletEntity::new, VibraniumBlocks.REACTOR_OUTLET.get()));
         FLUID_TANK_ENTITY = (RegistrySupplier<BlockEntityType<FluidTankEntity>>) register("fluid_tank", ()-> new BlockEntityType<>(FluidTankEntity::new, VibraniumBlocks.FLUID_TANK.get()));
         REINFORCED_VIBRANIUM_GLASS_ENTITY = (RegistrySupplier<BlockEntityType<ReinforcedVibraniumGlassEntity>>) register("reinforced_vibranium_glass", ()-> new BlockEntityType<>(ReinforcedVibraniumGlassEntity::new, VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()));
+        ELECTRIC_WIRE_ENTITY = (RegistrySupplier<BlockEntityType<ElectricWireEntity>>) register("electric_wire", ()-> new BlockEntityType<>(ElectricWireEntity::new,
+                        VibraniumBlocks.ELECTRIC_WIRE.get(),
+                        VibraniumBlocks.ELECTRIC_WIRE_WALL.get()));
+
         registerModEntities();
     }
 }
