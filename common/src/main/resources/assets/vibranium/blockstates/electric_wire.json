@@ -1,6 +1,5 @@
 {
   "multipart": [
-
     {
       "when": { "facing": "up" },
       "apply": { "model": "vibranium:block/electric_wire_core", "x": 180 }
@@ -22,25 +21,6 @@
       "apply": { "model": "vibranium:block/electric_wire_segment", "x": 180, "y": 90 }
     },
 
-
-    {
-      "when": { "facing": "up", "down": "true", "vertical_attachment": "east" },
-      "apply": { "model": "vibranium:block/electric_wire_corner_ceiling", "y": 180 }
-    },
-    {
-      "when": { "facing": "up", "down": "true", "vertical_attachment": "south" },
-      "apply": { "model": "vibranium:block/electric_wire_corner_ceiling", "y": 270 }
-    },
-    {
-      "when": { "facing": "up", "down": "true", "vertical_attachment": "west" },
-      "apply": { "model": "vibranium:block/electric_wire_corner_ceiling", "y": 0 }
-    },
-    {
-      "when": { "facing": "up", "down": "true", "vertical_attachment": "north" },
-      "apply": { "model": "vibranium:block/electric_wire_corner_ceiling", "y": 90 }
-    },
-
-
     {
       "when": { "facing": "down" },
       "apply": { "model": "vibranium:block/electric_wire_core" }
@@ -60,24 +40,6 @@
     {
       "when": { "facing": "down", "west": "true" },
       "apply": { "model": "vibranium:block/electric_wire_segment", "y": 270 }
-    },
-
-
-    {
-      "when": { "facing": "down", "up": "true", "vertical_attachment": "east" },
-      "apply": { "model": "vibranium:block/electric_wire_corner_floor", "y": 180 }
-    },
-    {
-      "when": { "facing": "down", "up": "true", "vertical_attachment": "south" },
-      "apply": { "model": "vibranium:block/electric_wire_corner_floor", "y": 270 }
-    },
-    {
-      "when": { "facing": "down", "up": "true", "vertical_attachment": "west" },
-      "apply": { "model": "vibranium:block/electric_wire_corner_floor", "y": 0 }
-    },
-    {
-      "when": { "facing": "down", "up": "true", "vertical_attachment": "north" },
-      "apply": { "model": "vibranium:block/electric_wire_corner_floor", "y": 90 }
     }
   ]
 }

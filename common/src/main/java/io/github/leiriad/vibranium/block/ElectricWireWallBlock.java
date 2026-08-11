@@ -17,15 +17,16 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 public class ElectricWireWallBlock extends BaseElectricWireBlock {
     public static final MapCodec<ElectricWireWallBlock> CODEC = simpleCodec(ElectricWireWallBlock::new);
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
+
     @Override
     protected MapCodec<? extends Block> codec() {
         return CODEC;
     }
+
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings) {
         return Properties.ofFullCopy(Blocks.TRIPWIRE);
     }
 
-    //CONSTRUCTORS
     public ElectricWireWallBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(
@@ -37,11 +38,11 @@ public class ElectricWireWallBlock extends BaseElectricWireBlock {
                         .setValue(WEST, false)
                         .setValue(UP, false)
                         .setValue(DOWN, false)
+                        .setValue(CORNER_TYPE, CornerType.NONE)
                         .setValue(COLOR, DyeColor.WHITE)
         );
     }
 
-    //METHODS
     @Override
     public Direction getAttachedFace(BlockState state) {
         return state.getValue(FACING);
@@ -49,7 +50,7 @@ public class ElectricWireWallBlock extends BaseElectricWireBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, NORTH, EAST, SOUTH, WEST, UP, DOWN, COLOR);
+        builder.add(FACING, NORTH, EAST, SOUTH, WEST, UP, DOWN, CORNER_TYPE, COLOR);
     }
 
     @Override
@@ -72,7 +73,6 @@ public class ElectricWireWallBlock extends BaseElectricWireBlock {
         for (Direction dir : Direction.values()) {
             var prop = PROPERTY_BY_DIRECTION.get(dir);
             if (prop != null) {
-                // Uses shouldConnectTo to properly evaluate vertical (UP/DOWN) and horizontal directions
                 state = state.setValue(prop, this.shouldConnectTo(level, pos, dir, attachedFace));
             }
         }

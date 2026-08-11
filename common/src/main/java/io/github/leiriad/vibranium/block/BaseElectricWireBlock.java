@@ -27,8 +27,18 @@ public abstract class BaseElectricWireBlock extends Block {
     public static final BooleanProperty WEST = PipeBlock.WEST;
     public static final BooleanProperty UP = PipeBlock.UP;
     public static final BooleanProperty DOWN = PipeBlock.DOWN;
-    public static final EnumProperty<Direction> VERTICAL_ATTACHMENT = EnumProperty.create("vertical_attachment", Direction.class, Direction.Plane.HORIZONTAL);
 
+    public enum CornerType implements net.minecraft.util.StringRepresentable {
+        NONE("none"),
+        FLOOR("floor"),
+        CEILING("ceiling");
+
+        private final String name;
+        CornerType(String name) { this.name = name; }
+        @Override public String getSerializedName() { return this.name; }
+    }
+
+    public static final EnumProperty<CornerType> CORNER_TYPE = EnumProperty.create("corner_type", CornerType.class);
     public static final Map<Direction, BooleanProperty> PROPERTY_BY_DIRECTION = PipeBlock.PROPERTY_BY_DIRECTION;
     protected static final double THICKNESS = 1.0;
     public static final EnumProperty<DyeColor> COLOR = EnumProperty.create("color", DyeColor.class);
@@ -48,56 +58,61 @@ public abstract class BaseElectricWireBlock extends Block {
     }
 
     // =========================================================================
-    // CONNECTION DETECTION
+    // RÈGLES DE CONNEXION
     // =========================================================================
-
-    protected boolean canConnectTo(BlockState state, Direction direction) {
-        return state.getBlock() instanceof BaseElectricWireBlock;
-    }
 
     protected boolean shouldConnectTo(LevelReader level, BlockPos pos, Direction connectionDir, Direction attachedFace) {
         if (connectionDir == attachedFace) return false;
 
-        // 1. Détection voisin direct (Même hauteur / plan direct)
         BlockPos targetPos = pos.relative(connectionDir);
-        BlockState neighborState = level.getBlockState(targetPos);
+        BlockState targetState = level.getBlockState(targetPos);
 
-        if (neighborState.getBlock() instanceof BaseElectricWireBlock neighborWire) {
-            Direction neighborAttachedFace = neighborWire.getAttachedFace(neighborState);
-
-            if (neighborAttachedFace == attachedFace) return true; // Même face d'accroche (ex: 2 câbles au sol)
-            if (neighborAttachedFace == connectionDir.getOpposite()) return true; // Câble collé sur le bloc d'en face
-
-            if (attachedFace.getAxis().isHorizontal()) {
-                if (connectionDir == Direction.UP && (neighborAttachedFace == Direction.UP || neighborAttachedFace == attachedFace)) return true;
-                if (connectionDir == Direction.DOWN && (neighborAttachedFace == Direction.DOWN || neighborAttachedFace == attachedFace)) return true;
-            } else if (attachedFace == Direction.DOWN && connectionDir == Direction.UP) {
-                if (neighborAttachedFace.getAxis().isHorizontal()) return true;
-            } else if (attachedFace == Direction.UP && connectionDir == Direction.DOWN) {
-                if (neighborAttachedFace.getAxis().isHorizontal()) return true;
+        // --- A. CÂBLE HORIZONTAL (SOL / PLAFOND) ---
+        if (attachedFace.getAxis().isVertical()) {
+            if (connectionDir.getAxis().isHorizontal()) {
+                if (targetState.getBlock() instanceof BaseElectricWireBlock targetWire) {
+                    Direction targetAttached = targetWire.getAttachedFace(targetState);
+                    if (targetAttached == attachedFace) return true;
+                    if (targetAttached == connectionDir.getOpposite()) return true;
+                }
+                if (targetState.getBlock() instanceof BaseElectricWireBlock targetWire) {
+                    if (targetWire.getAttachedFace(targetState) == connectionDir) return true;
+                }
             }
         }
 
-        // 2. Détection Câble Latéral sur le MÊME bloc support
-        // Ex: Câble posé sur le bloc (attachedFace == DOWN) & Câble sur la face latérale du même bloc
-        BlockPos supportPos = pos.relative(attachedFace);
-        BlockPos lateralWirePos = supportPos.relative(connectionDir);
-        BlockState lateralState = level.getBlockState(lateralWirePos);
+        // --- B. LE CÂBLE COURANT EST VERTICAL (MUR) ---
+        if (attachedFace.getAxis().isHorizontal()) {
 
-        if (lateralState.getBlock() instanceof BaseElectricWireBlock lateralWire) {
-            Direction lateralAttachedFace = lateralWire.getAttachedFace(lateralState);
-            if (lateralAttachedFace == connectionDir.getOpposite()) {
-                return true;
+            // 1. Connexion verticale directe (Haut / Bas sur le même mur)
+            if (connectionDir == Direction.UP || connectionDir == Direction.DOWN) {
+                // A. Câble vertical directement au-dessus ou en-dessous sur la même paroi
+                if (targetState.getBlock() instanceof BaseElectricWireBlock targetWire) {
+                    if (targetWire.getAttachedFace(targetState) == attachedFace) {
+                        return true;
+                    }
+                }
             }
-        }
 
-        // 3. Détection Marche d'escalier (Câble horizontal posé un bloc plus bas à côté)
-        if (attachedFace == Direction.DOWN && connectionDir.getAxis().isHorizontal()) {
-            BlockPos lowerStepPos = targetPos.below();
-            BlockState lowerStepState = level.getBlockState(lowerStepPos);
-            if (lowerStepState.getBlock() instanceof BaseElectricWireBlock stepWire) {
-                if (stepWire.getAttachedFace(lowerStepState) == Direction.DOWN) {
-                    return true;
+            // 2. Connexions horizontales sur le même mur OU en outer corner autour du bloc
+            if (connectionDir.getAxis().isHorizontal() && connectionDir != attachedFace && connectionDir != attachedFace.getOpposite()) {
+                if (targetState.getBlock() instanceof BaseElectricWireBlock targetWire) {
+                    Direction targetAttached = targetWire.getAttachedFace(targetState);
+                    // Même mur
+                    if (targetAttached == attachedFace) return true;
+                    // Tour du même bloc (Outer Corner) : câble fixé sur la face 'connectionDir'
+                    if (targetAttached == connectionDir) return true;
+                }
+            }
+
+            // 3. Connexion à un câble horizontal (sol / plafond)
+            if (connectionDir == Direction.DOWN || connectionDir == Direction.UP) {
+                BlockPos adjacentPos = pos.relative(attachedFace.getOpposite());
+                BlockState adjacentState = level.getBlockState(adjacentPos);
+                if (adjacentState.getBlock() instanceof BaseElectricWireBlock adjacentWire) {
+                    if (adjacentWire.getAttachedFace(adjacentState) == connectionDir) {
+                        return true;
+                    }
                 }
             }
         }
@@ -116,30 +131,45 @@ public abstract class BaseElectricWireBlock extends Block {
             BlockState neighborState,
             RandomSource random
     ) {
-        DyeColor currentColor = state.getValue(COLOR);
         if (!state.canSurvive(level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
 
+        DyeColor currentColor = state.getValue(COLOR);
         Direction attachedFace = getAttachedFace(state);
 
         for (Direction dir : Direction.values()) {
             BooleanProperty prop = PROPERTY_BY_DIRECTION.get(dir);
             if (prop != null) {
-                boolean connect = shouldConnectTo(level, pos, dir, attachedFace);
-                state = state.setValue(prop, connect);
+                state = state.setValue(prop, shouldConnectTo(level, pos, dir, attachedFace));
             }
         }
 
-        if (this instanceof ElectricWireBlock wireBlock) {
-            state = wireBlock.applyVerticalAttachment(level, pos, state);
+        if (attachedFace.getAxis().isHorizontal() && state.hasProperty(CORNER_TYPE)) {
+            CornerType cornerType = CornerType.NONE;
+
+            // Vérification au sol (câble horizontal sur la face DOWN du bloc adjacent)
+            BlockPos floorPos = pos.relative(attachedFace.getOpposite());
+            BlockState floorState = level.getBlockState(floorPos);
+            if (floorState.getBlock() instanceof BaseElectricWireBlock floorWire && floorWire.getAttachedFace(floorState) == Direction.DOWN) {
+                cornerType = CornerType.FLOOR;
+            }
+
+            // Vérification au plafond (câble horizontal sur la face UP du bloc adjacent)
+            BlockPos ceilingPos = pos.relative(attachedFace.getOpposite());
+            BlockState ceilingState = level.getBlockState(ceilingPos);
+            if (ceilingState.getBlock() instanceof BaseElectricWireBlock ceilingWire && ceilingWire.getAttachedFace(ceilingState) == Direction.UP) {
+                cornerType = CornerType.CEILING;
+            }
+
+            state = state.setValue(CORNER_TYPE, cornerType);
         }
 
         return state.setValue(COLOR, currentColor);
     }
 
     // =========================================================================
-    // HITBOX / VOXELSHAPE RENDERING
+    // VOXELSHAPES / HITBOXES
     // =========================================================================
 
     @Override
@@ -147,10 +177,19 @@ public abstract class BaseElectricWireBlock extends Block {
         Direction attachedFace = getAttachedFace(state);
         VoxelShape shape = getCoreShape(attachedFace);
 
+        // Ajout des extensions selon les directions connectées
         for (Direction connectionDir : Direction.values()) {
             BooleanProperty prop = PROPERTY_BY_DIRECTION.get(connectionDir);
             if (prop != null && state.hasProperty(prop) && state.getValue(prop)) {
-                shape = Shapes.or(shape, getExtensionShape(state, attachedFace, connectionDir, level, pos));
+                shape = Shapes.or(shape, getExtensionShape(state, attachedFace, connectionDir));
+            }
+        }
+
+        // Ajout de la branche horizontale de 16 pixels au sol ou au plafond pour les Inner Corners
+        if (attachedFace.getAxis().isHorizontal() && state.hasProperty(CORNER_TYPE)) {
+            CornerType corner = state.getValue(CORNER_TYPE);
+            if (corner != CornerType.NONE) {
+                shape = Shapes.or(shape, getInnerCornerArmShape(attachedFace, corner));
             }
         }
 
@@ -168,127 +207,67 @@ public abstract class BaseElectricWireBlock extends Block {
         };
     }
 
-    private VoxelShape getExtensionShape(BlockState state, Direction face, Direction connection, BlockGetter level, BlockPos pos) {
-        if (face == Direction.DOWN) {
-            if (connection == Direction.UP) {
-                return Block.box(7.0, 0.0, 7.0, 9.0, 16.0, 9.0);
-            }
-            if (connection.getAxis().isHorizontal()) {
-                // Vérification coin extérieur (Support latéral)
-                BlockPos sameSupportNeighborPos = pos.below().relative(connection);
-                BlockState sameSupportState = level.getBlockState(sameSupportNeighborPos);
-                boolean isEdgeWrap = sameSupportState.getBlock() instanceof BaseElectricWireBlock neighborWire
-                        && neighborWire.getAttachedFace(sameSupportState) == connection.getOpposite();
+    /**
+     * Génère la branche horizontale de 16 pixels au sol ou au plafond formant la barre du 'L' de l'inner corner.
+     */
+    private static VoxelShape getInnerCornerArmShape(Direction attachedFace, CornerType corner) {
+        double yMin = corner == CornerType.FLOOR ? 0.0 : 16.0 - THICKNESS;
+        double yMax = corner == CornerType.FLOOR ? THICKNESS : 16.0;
 
-                // Vérification marche d'escalier vers le bas
-                BlockPos lowerStepPos = pos.relative(connection).below();
-                BlockState lowerStepState = level.getBlockState(lowerStepPos);
-                boolean isStepDown = lowerStepState.getBlock() instanceof BaseElectricWireBlock stepWire
-                        && stepWire.getAttachedFace(lowerStepState) == Direction.DOWN;
+        return switch (attachedFace) {
+            case NORTH -> Block.box(7.0, yMin, 0.0, 9.0, yMax, 16.0);
+            case SOUTH -> Block.box(7.0, yMin, 0.0, 9.0, yMax, 16.0);
+            case WEST  -> Block.box(0.0, yMin, 7.0, 16.0, yMax, 9.0);
+            case EAST  -> Block.box(0.0, yMin, 7.0, 16.0, yMax, 9.0);
+            default    -> Shapes.empty();
+        };
+    }
 
-                VoxelShape flatExtension = switch (connection) {
-                    case NORTH -> Block.box(7.0, 0.0, 0.0, 9.0, THICKNESS, 7.0);
-                    case SOUTH -> Block.box(7.0, 0.0, 9.0, 9.0, THICKNESS, 16.0);
-                    case WEST  -> Block.box(0.0, 0.0, 7.0, 7.0, THICKNESS, 9.0);
-                    case EAST  -> Block.box(9.0, 0.0, 7.0, 16.0, THICKNESS, 9.0);
-                    default -> Shapes.empty();
-                };
-
-                // Extension verticale vers le bas (Coin de bloc support OU marche d'escalier)
-                if (isEdgeWrap || isStepDown) {
-                    VoxelShape verticalDrop = switch (connection) {
-                        case NORTH -> Block.box(7.0, -16.0, 0.0, 9.0, 0.0, THICKNESS);
-                        case SOUTH -> Block.box(7.0, -16.0, 16.0 - THICKNESS, 9.0, 0.0, 16.0);
-                        case WEST  -> Block.box(0.0, -16.0, 7.0, THICKNESS, 0.0, 9.0);
-                        case EAST  -> Block.box(16.0 - THICKNESS, -16.0, 7.0, 16.0, 0.0, 9.0);
-                        default -> Shapes.empty();
-                    };
-                    return Shapes.or(flatExtension, verticalDrop);
-                }
-
-                return flatExtension;
-            }
+    private VoxelShape getExtensionShape(BlockState state, Direction face, Direction connection) {
+        // CÂBLE AU SOL / PLAFOND
+        if (face.getAxis().isVertical() && connection.getAxis().isHorizontal()) {
+            double yMin = face == Direction.DOWN ? 0.0 : 16.0 - THICKNESS;
+            double yMax = face == Direction.DOWN ? THICKNESS : 16.0;
+            return switch (connection) {
+                case NORTH -> Block.box(7.0, yMin, 0.0, 9.0, yMax, 7.0);
+                case SOUTH -> Block.box(7.0, yMin, 9.0, 9.0, yMax, 16.0);
+                case WEST  -> Block.box(0.0, yMin, 7.0, 7.0, yMax, 9.0);
+                case EAST  -> Block.box(9.0, yMin, 7.0, 16.0, yMax, 9.0);
+                default -> Shapes.empty();
+            };
         }
 
-        if (face == Direction.UP) {
-            if (connection == Direction.DOWN) {
-                return Block.box(7.0, 0.0, 7.0, 9.0, 16.0, 9.0);
-            }
-            if (connection.getAxis().isHorizontal()) {
-                BlockPos neighborPos = pos.above().relative(connection);
-                BlockState neighborState = level.getBlockState(neighborPos);
-                boolean isEdgeWrap = neighborState.getBlock() instanceof BaseElectricWireBlock neighborWire
-                        && neighborWire.getAttachedFace(neighborState) == connection.getOpposite();
-
-                VoxelShape flatExtension = switch (connection) {
-                    case NORTH -> Block.box(7.0, 16.0 - THICKNESS, 0.0, 9.0, 16.0, 7.0);
-                    case SOUTH -> Block.box(7.0, 16.0 - THICKNESS, 9.0, 9.0, 16.0, 16.0);
-                    case WEST  -> Block.box(0.0, 16.0 - THICKNESS, 7.0, 7.0, 16.0, 9.0);
-                    case EAST  -> Block.box(9.0, 16.0 - THICKNESS, 7.0, 16.0, 16.0, 9.0);
-                    default -> Shapes.empty();
-                };
-
-                if (isEdgeWrap) {
-                    VoxelShape verticalDrop = switch (connection) {
-                        case NORTH -> Block.box(7.0, 16.0, 0.0, 9.0, 32.0, THICKNESS);
-                        case SOUTH -> Block.box(7.0, 16.0, 16.0 - THICKNESS, 9.0, 32.0, 16.0);
-                        case WEST  -> Block.box(0.0, 16.0, 7.0, THICKNESS, 32.0, 9.0);
-                        case EAST  -> Block.box(16.0 - THICKNESS, 16.0, 7.0, 16.0, 32.0, 9.0);
-                        default -> Shapes.empty();
-                    };
-                    return Shapes.or(flatExtension, verticalDrop);
-                }
-
-                return flatExtension;
-            }
-        }
-
+        // CÂBLE MURAL / VERTICAL
         if (face.getAxis().isHorizontal()) {
-            if (connection == Direction.UP) {
-                return switch (face) {
-                    case NORTH -> Block.box(7.0, 9.0, 0.0, 9.0, 16.0, THICKNESS);
-                    case SOUTH -> Block.box(7.0, 9.0, 16.0 - THICKNESS, 9.0, 16.0, 16.0);
-                    case WEST  -> Block.box(0.0, 9.0, 7.0, THICKNESS, 16.0, 9.0);
-                    case EAST  -> Block.box(16.0 - THICKNESS, 9.0, 7.0, 16.0, 16.0, 9.0);
-                    default -> Shapes.empty();
-                };
-            }
+            // Extension vers le BAS (du centre Y=7 jusqu'au bas du bloc Y=0)
             if (connection == Direction.DOWN) {
                 return switch (face) {
                     case NORTH -> Block.box(7.0, 0.0, 0.0, 9.0, 7.0, THICKNESS);
                     case SOUTH -> Block.box(7.0, 0.0, 16.0 - THICKNESS, 9.0, 7.0, 16.0);
-                    case WEST  -> Block.box(0.0, 0.0, 7.0, THICKNESS, 0.0, 9.0);
-                    case EAST  -> Block.box(16.0 - THICKNESS, 0.0, 7.0, 16.0, 0.0, 9.0);
+                    case WEST  -> Block.box(0.0, 0.0, 7.0, THICKNESS, 7.0, 9.0);
+                    case EAST  -> Block.box(16.0 - THICKNESS, 0.0, 7.0, 16.0, 7.0, 9.0);
                     default -> Shapes.empty();
                 };
             }
-
+            // Extension vers le HAUT (du centre Y=9 jusqu'au haut du bloc Y=16)
+            if (connection == Direction.UP) {
+                return switch (face) {
+                    case NORTH -> Block.box(7.0, 9.0, 0.0, 9.0, 16.0, THICKNESS);
+                    case SOUTH -> Block.box(7.0, 9.0, 16.0 - THICKNESS, 9.0, 16.0, 16.0);
+                    case WEST  -> Block.box(0.0, 9.0, 7.0, THICKNESS, 9.0, 9.0); // Correction de la profondeur (7-9 au lieu de 9-16)
+                    case EAST  -> Block.box(16.0 - THICKNESS, 9.0, 7.0, 16.0, 16.0, 9.0); // Correction de la profondeur (7-9 au lieu de 9-16)
+                    default -> Shapes.empty();
+                };
+            }
+            // Extension HORIZONTALE sur le même mur
             if (connection.getAxis().isHorizontal() && connection != face && connection != face.getOpposite()) {
-                BlockPos neighborPos = pos.relative(face).relative(connection);
-                BlockState neighborState = level.getBlockState(neighborPos);
-                boolean isEdgeWrap = neighborState.getBlock() instanceof BaseElectricWireBlock neighborWire
-                        && neighborWire.getAttachedFace(neighborState) == connection.getOpposite();
-
-                VoxelShape flatExtension = switch (face) {
+                return switch (face) {
                     case NORTH -> connection == Direction.EAST ? Block.box(9.0, 7.0, 0.0, 16.0, 9.0, THICKNESS) : Block.box(0.0, 7.0, 0.0, 7.0, 9.0, THICKNESS);
                     case SOUTH -> connection == Direction.EAST ? Block.box(9.0, 7.0, 16.0 - THICKNESS, 16.0, 9.0, 16.0) : Block.box(0.0, 7.0, 16.0 - THICKNESS, 7.0, 9.0, 16.0);
                     case WEST  -> connection == Direction.NORTH ? Block.box(0.0, 7.0, 0.0, THICKNESS, 9.0, 7.0) : Block.box(0.0, 7.0, 9.0, THICKNESS, 9.0, 16.0);
                     case EAST  -> connection == Direction.NORTH ? Block.box(16.0 - THICKNESS, 7.0, 0.0, 16.0, 9.0, 7.0) : Block.box(16.0 - THICKNESS, 7.0, 9.0, 16.0, 9.0, 16.0);
                     default -> Shapes.empty();
                 };
-
-                if (isEdgeWrap) {
-                    VoxelShape edgeWrapExtension = switch (face) {
-                        case NORTH -> connection == Direction.EAST ? Block.box(16.0 - THICKNESS, 7.0, -THICKNESS, 16.0, 9.0, 0.0) : Block.box(0.0, 7.0, -THICKNESS, THICKNESS, 9.0, 0.0);
-                        case SOUTH -> connection == Direction.EAST ? Block.box(16.0 - THICKNESS, 7.0, 16.0, 16.0, 9.0, 16.0 + THICKNESS) : Block.box(0.0, 7.0, 16.0, THICKNESS, 9.0, 16.0 + THICKNESS);
-                        case WEST  -> connection == Direction.NORTH ? Block.box(-THICKNESS, 7.0, 0.0, 0.0, 9.0, THICKNESS) : Block.box(-THICKNESS, 7.0, 16.0 - THICKNESS, 0.0, 9.0, 16.0);
-                        case EAST  -> connection == Direction.NORTH ? Block.box(16.0, 7.0, 0.0, 16.0 + THICKNESS, 9.0, THICKNESS) : Block.box(16.0, 7.0, 16.0 - THICKNESS, 16.0 + THICKNESS, 9.0, 16.0);
-                        default -> Shapes.empty();
-                    };
-                    return Shapes.or(flatExtension, edgeWrapExtension);
-                }
-
-                return flatExtension;
             }
         }
 
