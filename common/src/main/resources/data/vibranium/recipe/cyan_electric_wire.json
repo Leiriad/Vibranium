@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "D": "minecraft:cyan_dye",
+    "S": "minecraft:slime_ball"
+  },
+  "pattern": [
+    "SCS",
+    "SCD",
+    "SCS"
+  ],
+  "result": {
+    "count": 6,
+    "id": "vibranium:cyan_electric_wire"
+  }
+}

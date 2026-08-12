@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "D": "minecraft:light_gray_dye",
+    "S": "minecraft:slime_ball"
+  },
+  "pattern": [
+    "SCS",
+    "SCD",
+    "SCS"
+  ],
+  "result": {
+    "count": 6,
+    "id": "vibranium:light_gray_electric_wire"
+  }
+}
