@@ -19,8 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class ElectricWireEntity extends BlockEntity {
     private int energyStored = 0;
-    private final int capacity = 1000; // Capacity buffer for the wire
-    private final int maxTransfer = 100; // Max transfer rate per operation
+    public static final int maxTransfer = 5000; // Max transfer rate per operation
+    private final int capacity = maxTransfer; // Capacity buffer for the wire (each câble keeps a single tranfert unit in stock to avoid keeping too much energy in the network)
 
     public ElectricWireEntity(BlockPos pos, BlockState state) {
         super(VibraniumEntities.ELECTRIC_WIRE_ENTITY.get(), pos, state);

@@ -113,32 +113,32 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
 
         // Energy (Rendered at x + 44)
         if (mouseX >= x + 44 && mouseX < x + 44 + gaugeWidth && mouseY >= gaugeTop && mouseY < gaugeBottom) {
-            Component text = Component.translatable("gui.vibranium.energy_tooltip", this.menu.getEnergy());
+            Component text = Component.translatable("gui." + VibraniumMod.MOD_ID + ".energy_tooltip", this.menu.getEnergy());
             guiGraphics.renderTooltip(this.font, List.of(ClientTooltipComponent.create(text.getVisualOrderText())), mouseX, mouseY, positioner, null);
         }
 
         // Heat (Rendered at x + 83)
         if (mouseX >= x + 83 && mouseX < x + 83 + gaugeWidth && mouseY >= gaugeTop && mouseY < gaugeBottom) {
-            Component text = Component.translatable("gui.vibranium.heat_tooltip", this.menu.getHeat());
+            Component text = Component.translatable("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", this.menu.getHeat());
             guiGraphics.renderTooltip(this.font, List.of(ClientTooltipComponent.create(text.getVisualOrderText())), mouseX, mouseY, positioner, null);
         }
 
         // Water (Rendered at x + 121)
         if (mouseX >= x + 121 && mouseX < x + 121 + gaugeWidth && mouseY >= gaugeTop && mouseY < gaugeBottom) {
-            Component text = Component.translatable("gui.vibranium.water_tooltip", this.menu.getWater(), this.menu.getMaxWater());
+            Component text = Component.translatable("gui." + VibraniumMod.MOD_ID + ".water_tooltip", this.menu.getWater(), this.menu.getMaxWater());
             guiGraphics.renderTooltip(this.font, List.of(ClientTooltipComponent.create(text.getVisualOrderText())), mouseX, mouseY, positioner, null);
         }
 
         // Hot Water (Rendered at x + 160)
         if (mouseX >= x + 160 && mouseX < x + 160 + gaugeWidth && mouseY >= gaugeTop && mouseY < gaugeBottom) {
-            Component text = Component.translatable("gui.vibranium.hot_water_tooltip", this.menu.getHotWater(), this.menu.getMaxHotWater());
+            Component text = Component.translatable("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", this.menu.getHotWater(), this.menu.getMaxHotWater());
             guiGraphics.renderTooltip(this.font, List.of(ClientTooltipComponent.create(text.getVisualOrderText())), mouseX, mouseY, positioner, null);
         }
 
         // Vibranium (Rendered at x + 199)
         if (mouseX >= x + 199 && mouseX < x + 199 + gaugeWidth && mouseY >= gaugeTop && mouseY < gaugeBottom) {
             int secondsRemaining = this.menu.getVibranium() / 20;
-            Component text = Component.translatable("gui.vibranium.fuel_tooltip", secondsRemaining);
+            Component text = Component.translatable("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", secondsRemaining);
             guiGraphics.renderTooltip(this.font, List.of(ClientTooltipComponent.create(text.getVisualOrderText())), mouseX, mouseY, positioner, null);
         }
     }

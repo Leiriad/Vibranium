@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.item;
 
+import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
@@ -259,11 +260,11 @@ public class VibraniumAxe extends AxeItem {
             if (currentCharge < COST_PER_EXTRA_BLOCK) return;
             stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), true);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.8F, 1.5F);
-            player.displayClientMessage(Component.translatable("tooltip.vibranium.tool.mode.active").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.displayClientMessage(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active").withStyle(ChatFormatting.LIGHT_PURPLE), true);
         } else {
             stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.8F, 1.2F);
-            player.displayClientMessage(Component.translatable("tooltip.vibranium.tool.mode.inactive").withStyle(ChatFormatting.GRAY), true);
+            player.displayClientMessage(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive").withStyle(ChatFormatting.GRAY), true);
         }
     }
     private void disablePlayerShield(ServerLevel level, Player targetPlayer) {
@@ -306,13 +307,13 @@ public class VibraniumAxe extends AxeItem {
         boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
 
         ChatFormatting statusColor = burstActive ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.DARK_GRAY;
-        String statusKey = burstActive ? "tooltip.vibranium.tool.mode.active" : "tooltip.vibranium.tool.mode.inactive";
+        String statusKey = burstActive ? "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active" : "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive";
 
-        consumer.accept(Component.translatable("tooltip.vibranium.weapons.charge", (int) charge).withStyle((charge > 0) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY));
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", (int) charge).withStyle((charge > 0) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY));
         consumer.accept(Component.translatable(statusKey).withStyle(statusColor, ChatFormatting.BOLD));
-        consumer.accept(Component.translatable("tooltip.vibranium.tool.active.toggle").withStyle(ChatFormatting.GRAY));
-        consumer.accept(Component.translatable("tooltip.vibranium.axe.active.cleave").withStyle(ChatFormatting.LIGHT_PURPLE));
-        consumer.accept(Component.translatable("tooltip.vibranium.axe.passive.shield_break").withStyle(ChatFormatting.DARK_GREEN));
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle").withStyle(ChatFormatting.GRAY));
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave").withStyle(ChatFormatting.LIGHT_PURPLE));
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break").withStyle(ChatFormatting.DARK_GREEN));
 
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
     }

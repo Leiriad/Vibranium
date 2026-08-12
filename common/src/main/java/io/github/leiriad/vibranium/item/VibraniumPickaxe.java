@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.item;
 
 import dev.architectury.networking.NetworkManager;
+import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.network.OreHighlightPayload;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
@@ -149,13 +150,13 @@ public class VibraniumPickaxe extends Item {
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.8F, 1.5F);
             player.displayClientMessage(
-                    Component.translatable("tooltip.vibranium.tool.mode.active").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                    Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active").withStyle(ChatFormatting.LIGHT_PURPLE), true);
         } else {
             stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.8F, 1.2F);
             player.displayClientMessage(
-                    Component.translatable("tooltip.vibranium.tool.mode.inactive").withStyle(ChatFormatting.GRAY), true);
+                    Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive").withStyle(ChatFormatting.GRAY), true);
         }
     }
 
@@ -298,10 +299,10 @@ public class VibraniumPickaxe extends Item {
         boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
 
         ChatFormatting statusColor = burstActive ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.DARK_GRAY;
-        String statusKey = burstActive ? "tooltip.vibranium.tool.mode.active" : "tooltip.vibranium.tool.mode.inactive";
+        String statusKey = burstActive ? "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active" : "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive";
 
         consumer.accept(
-                Component.translatable("tooltip.vibranium.weapons.charge", (int) charge)
+                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", (int) charge)
                         .withStyle((charge > 0) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY)
         );
         consumer.accept(
@@ -309,15 +310,15 @@ public class VibraniumPickaxe extends Item {
                         .withStyle(statusColor, ChatFormatting.BOLD)
         );
         consumer.accept(
-                Component.translatable("tooltip.vibranium.tool.active.toggle")
+                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle")
                         .withStyle(ChatFormatting.GRAY)
         );
         consumer.accept(
-                Component.translatable("tooltip.vibranium.pickaxe.active.echolocation")
+                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation")
                         .withStyle(ChatFormatting.LIGHT_PURPLE)
         );
         consumer.accept(
-                Component.translatable("tooltip.vibranium.pickaxe.passive.filter")
+                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.passive.filter")
                         .withStyle(ChatFormatting.DARK_GREEN)
         );
 

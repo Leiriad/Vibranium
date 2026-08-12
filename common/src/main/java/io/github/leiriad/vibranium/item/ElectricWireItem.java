@@ -1,12 +1,18 @@
 package io.github.leiriad.vibranium.item;
 
+import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.block.BaseElectricWireBlock;
+import io.github.leiriad.vibranium.entity.ElectricWireEntity;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.StandingAndWallBlockItem;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.function.Consumer;
 
 public class ElectricWireItem extends StandingAndWallBlockItem {
 
@@ -31,5 +37,21 @@ public class ElectricWireItem extends StandingAndWallBlockItem {
         }
 
         return state;
+    }
+    @Override
+    public void appendHoverText(
+            ItemStack stack,
+            Item.TooltipContext tooltipContext,
+            TooltipDisplay tooltipDisplay,
+            Consumer<Component> consumer,
+            TooltipFlag tooltipFlag
+    ) {
+        int tranferRate = ElectricWireEntity.maxTransfer;
+        consumer.accept(
+                Component.translatable("tooltip."+ VibraniumMod.MOD_ID+".wire.tranfer_rate", tranferRate/1000)
+                        .withStyle(ChatFormatting.GRAY)
+        );
+
+        super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
     }
 }

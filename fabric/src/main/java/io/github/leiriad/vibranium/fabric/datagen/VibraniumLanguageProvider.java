@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.fabric.datagen;
 
+import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.init.VibraniumCreativeTabs;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumItems;
@@ -73,6 +74,9 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Fleur d'herbe cœur");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Liane des cavernes pourpre");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.get(), "Liane des cavernes pourpre");
+                translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE.get(), "Fil électrique");
+                translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE_WALL.get(), "Fil électrique");
+
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get().asItem(), "Pousse d'herbe cœur");
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baies lumineuses bleues");
@@ -86,7 +90,23 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Soupe bleue");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Nectar ancestral");
                 translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Eau de vie de baies bleues");
-                translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Eau de vie de baies bleues");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berry_spirit.effect.water", "Eau de vie de baies bleues");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".black_electric_wire", "Fil électrique noir");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_electric_wire", "Fil électrique bleu");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".brown_electric_wire", "Fil électrique marron");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".cyan_electric_wire", "Fil électrique cyan");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".gray_electric_wire", "Fil électrique gris");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".green_electric_wire", "Fil électrique vert");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".light_blue_electric_wire", "Fil électrique bleu clair");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".light_gray_electric_wire", "Fil électrique gris clair");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".lime_electric_wire", "Fil électrique vert clair");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".magenta_electric_wire", "Fil électrique magenta");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".orange_electric_wire", "Fil électrique orange");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".pink_electric_wire", "Fil électrique rose");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".purple_electric_wire", "Fil électrique violet");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".red_electric_wire", "Fil électrique rouge");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".white_electric_wire", "Fil électrique blanc");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".yellow_electric_wire", "Fil électrique jaune");
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lance en vibranium");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Épée en vibranium");
@@ -100,43 +120,44 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
 
-                translationBuilder.add("container.vibranium.reactor_control_panel", "Panneau de contrôle du réacteur");
-                translationBuilder.add("container.vibranium.reactor_hatch", "Trappe d'alimentation du réacteur");
+                translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_control_panel", "Panneau de contrôle du réacteur");
+                translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Trappe d'alimentation du réacteur");
 
-                translationBuilder.add("gui.vibranium.energy_tooltip", "Énergie : %d / 100000 FE");
-                translationBuilder.add("gui.vibranium.heat_tooltip", "Température : %d°C / 3000°C");
-                translationBuilder.add("gui.vibranium.water_tooltip", "Eau : %d / %d mB");
-                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Eau Chaude : %d / %d mB");
-                translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
-                translationBuilder.add("tooltip.vibranium.slot_fuel", "Insérez la poudre de Vibranium ici");
-                translationBuilder.add("tooltip.vibranium.slot_output", "Résidus et scories de combustion");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".energy_tooltip", "Énergie : %d / 100000 FE");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Température : %d°C / 3000°C");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Eau : %d / %d mB");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", "Eau Chaude : %d / %d mB");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium : %ds restants");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Insérez la poudre de Vibranium ici");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Résidus et scories de combustion");
 
-                translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Distillé dans un alambic. Haute concentration !");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Distillé dans un alambic. Haute concentration !");
 
-                translationBuilder.add("tooltip.vibranium.weapons.charge", "Charge cinétique");
-                translationBuilder.add("tooltip.vibranium.tool.mode.active", "Propulsion Cinétique : ACTIF");
-                translationBuilder.add("tooltip.vibranium.tool.mode.inactive", "Propulsion Cinétique : INACTIF");
-                translationBuilder.add("tooltip.vibranium.tool.active.toggle", "Shift + Clic Droit : Alterner Mode 3x3");
-                translationBuilder.add("tooltip.vibranium.pickaxe.active.echolocation", "Clic Droit : Impulsion d'Écholocalisation");
-                translationBuilder.add("tooltip.vibranium.pickaxe.passive.filter", "Passif : Préserve les Minerais et Structures");
-                translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Passif : Fait S'effondrer les Blocs Soumis à la Gravité");
-                translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Clic Droit : Créateur de Chemins 3x3");
-                translationBuilder.add("tooltip.vibranium.hoe.active.resonant_till", "Labourage par résonance : Laboure une zone de 3x3");
-                translationBuilder.add("tooltip.vibranium.hoe.active.sonic_harvest", "Moisson sonique : Casser une culture mûre libère une onde de récolte");
-                translationBuilder.add("tooltip.vibranium.hoe.passive.sculk_suppression", "Amortissement acoustique : Miner du Sculk ne produit aucune vibration.");
-                translationBuilder.add("tooltip.vibranium.axe.active.cleave", "Clic Droit : Tranchant Cinétique");
-                translationBuilder.add("tooltip.vibranium.axe.passive.shield_break", "Passif : Désarme les Boucliers par Surcharge Cinétique");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Charge cinétique");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Propulsion Cinétique : ACTIF");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive", "Propulsion Cinétique : INACTIF");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "Shift + Clic Droit : Alterner Mode 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation", "Clic Droit : Impulsion d'Écholocalisation");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.passive.filter", "Passif : Préserve les Minerais et Structures");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.gravity", "Passif : Fait S'effondrer les Blocs Soumis à la Gravité");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.path", "Clic Droit : Créateur de Chemins 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.resonant_till", "Labourage par résonance : Laboure une zone de 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.sonic_harvest", "Moisson sonique : Casser une culture mûre libère une onde de récolte");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.passive.sculk_suppression", "Amortissement acoustique : Miner du Sculk ne produit aucune vibration.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "Clic Droit : Tranchant Cinétique");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break", "Passif : Désarme les Boucliers par Surcharge Cinétique");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".wire.tranfer_rate", "Taux de transfert : %s K E/t");
 
-                translationBuilder.add("message.vibranium.hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
-                translationBuilder.add("subtitles.vibranium.meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
+                translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
+                translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
 
-                translationBuilder.add("text.vibranium.config.title", "Configuration de Vibranium");
-                translationBuilder.add("text.vibranium.config.category.overworld", "Génération de Météorites : Overworld");
-                translationBuilder.add("text.vibranium.config.category.end", "Génération de Météorites : End");
-                translationBuilder.add("text.vibranium.config.option.spacing", "Espacement (Spacing)");
-                translationBuilder.add("text.vibranium.config.option.separation", "Séparation (Separation)");
-                translationBuilder.add("text.vibranium.config.section.weights", "§6Probabilité d'apparition des structures (Weights)");
-                translationBuilder.add("text.vibranium.config.weight_for", "Poids (Weight) pour %s");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Configuration de Vibranium");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.overworld", "Génération de Météorites : Overworld");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.end", "Génération de Météorites : End");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Espacement (Spacing)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Séparation (Separation)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Probabilité d'apparition des structures (Weights)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Poids (Weight) pour %s");
                 break;
             case "es_es":
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Mineral de vibranio");
@@ -182,9 +203,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Flor de hierba en forma de corazón");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Lianas de cueva moradas");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.get(), "Enredaderas de cueva moradas");
-
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get().asItem(), "Brote de hierba en forma de corazón");
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baya luminosas azules");
+                translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE.get(), "Cable eléctrico");
+                translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE_WALL.get(), "Cable eléctrico");
+
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Bola de arcilla negra");
                 translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Ladrillo negro");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Hierba en forma de corazón");
@@ -193,7 +216,23 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Sopa azul");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Néctar ancestral");
                 translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Aguardiente de baya azul");
-                translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Aguardiente de baya azul");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berry_spirit.effect.water", "Aguardiente de baya azul");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".black_electric_wire", "Cable eléctrico negro");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_electric_wire", "Cable eléctrico azul");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".brown_electric_wire", "Cable eléctrico marrón");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".cyan_electric_wire", "Cable eléctrico cian");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".gray_electric_wire", "Cable eléctrico gris");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".green_electric_wire", "Cable eléctrico verde");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".light_blue_electric_wire", "Cable eléctrico azul claro");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".light_gray_electric_wire", "Cable eléctrico gris claro");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".lime_electric_wire", "Cable eléctrico verde lima");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".magenta_electric_wire", "Cable eléctrico magenta");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".orange_electric_wire", "Cable eléctrico naranja");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".pink_electric_wire", "Cable eléctrico rosa");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".purple_electric_wire", "Cable eléctrico morado");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".red_electric_wire", "Cable eléctrico rojo");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".white_electric_wire", "Cable eléctrico blanco");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".yellow_electric_wire", "Cable eléctrico amarillo");
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lanza de vibranio");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Espada de vibranio");
@@ -207,43 +246,44 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranio");
 
-                translationBuilder.add("container.vibranium.reactor_control_panel", "Panel de control del reactor");
-                translationBuilder.add("container.vibranium.reactor_hatch", "Escotilla de alimentación del reactor");
+                translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_control_panel", "Panel de control del reactor");
+                translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Escotilla de alimentación del reactor");
 
-                translationBuilder.add("gui.vibranium.energy_tooltip", "Energía: %d / 100000 FE");
-                translationBuilder.add("gui.vibranium.heat_tooltip", "Temperatura: %d°C / 3000°C");
-                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Aqua Caliente: %d / %d mB");
-                translationBuilder.add("gui.vibranium.water_tooltip", "Aqua: %d / %d mB");
-                translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranio: quedan %ds");
-                translationBuilder.add("tooltip.vibranium.slot_fuel", "Inserta el polvo de Vibranium aquí");
-                translationBuilder.add("tooltip.vibranium.slot_output", "Residuos y escorias de combustión");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".energy_tooltip", "Energía: %d / 100000 FE");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Temperatura: %d°C / 3000°C");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", "Aqua Caliente: %d / %d mB");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Aqua: %d / %d mB");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranio: quedan %ds");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Inserta el polvo de Vibranium aquí");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Residuos y escorias de combustión");
 
-                translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Destilado en un alambique. ¡Alta graduación!");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Destilado en un alambique. ¡Alta graduación!");
 
-                translationBuilder.add("tooltip.vibranium.weapons.charge", "Carga cinética");
-                translationBuilder.add("tooltip.vibranium.tool.mode.active", "Propulsión Cinética: ACTIVO");
-                translationBuilder.add("tooltip.vibranium.tool.mode.inactive", "Propulsión Cinética: INACTIVO");
-                translationBuilder.add("tooltip.vibranium.tool.active.toggle", "Shift + Clic Derecho: Alternar Modo 3x3");
-                translationBuilder.add("tooltip.vibranium.pickaxe.active.echolocation", "Clic Derecho: Pulso de Ecolocalización");
-                translationBuilder.add("tooltip.vibranium.pickaxe.passive.filter", "Pasivo: Preserva Minerales y Estructuras");
-                translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Pasivo: Colapsa Bloques Afectados por la Gravedad");
-                translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Clic Derecho: Creador de Caminos 3x3");
-                translationBuilder.add("tooltip.vibranium.hoe.active.resonant_till", "Labrado resonante: Labra un área de 3x3 de tierra");
-                translationBuilder.add("tooltip.vibranium.hoe.active.sonic_harvest", "Cosecha sónica: Romper cultivos maduros libera una onda de cosecha");
-                translationBuilder.add("tooltip.vibranium.hoe.passive.sculk_suppression", "Amortiguación acústica: Minar Sculk no genera vibraciones.");
-                translationBuilder.add("tooltip.vibranium.axe.active.cleave", "Clic Derecho: Filo Cinético");
-                translationBuilder.add("tooltip.vibranium.axe.passive.shield_break", "Pasivo: Desarma Escudos por Sobrecarga Cinética");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Carga cinética");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Propulsión Cinética: ACTIVO");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive", "Propulsión Cinética: INACTIVO");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "Shift + Clic Derecho: Alternar Modo 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation", "Clic Derecho: Pulso de Ecolocalización");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.passive.filter", "Pasivo: Preserva Minerales y Estructuras");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.gravity", "Pasivo: Colapsa Bloques Afectados por la Gravedad");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.path", "Clic Derecho: Creador de Caminos 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.resonant_till", "Labrado resonante: Labra un área de 3x3 de tierra");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.sonic_harvest", "Cosecha sónica: Romper cultivos maduros libera una onda de cosecha");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.passive.sculk_suppression", "Amortiguación acústica: Minar Sculk no genera vibraciones.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "Clic Derecho: Filo Cinético");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break", "Pasivo: Desarma Escudos por Sobrecarga Cinética");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".wire.tranfer_rate", "Tasa de transferencia: %s K E/t");
 
-                translationBuilder.add("message.vibranium.hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
-                translationBuilder.add("subtitles.vibranium.meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
+                translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
+                translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
 
-                translationBuilder.add("text.vibranium.config.title", "Configuración de Vibranium");
-                translationBuilder.add("text.vibranium.config.category.overworld", "Generación de Meteoritos: Overworld");
-                translationBuilder.add("text.vibranium.config.category.end", "Generación de Meteoritos: End");
-                translationBuilder.add("text.vibranium.config.option.spacing", "Espaciado (Spacing)");
-                translationBuilder.add("text.vibranium.config.option.separation", "Separación (Separation)");
-                translationBuilder.add("text.vibranium.config.section.weights", "§6Probabilidad de Estructuras (Weights)");
-                translationBuilder.add("text.vibranium.config.weight_for", "Probabilidad (Weight) para %s");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Configuración de Vibranium");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.overworld", "Generación de Meteoritos: Overworld");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.end", "Generación de Meteoritos: End");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Espaciado (Spacing)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separación (Separation)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Probabilidad de Estructuras (Weights)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Probabilidad (Weight) para %s");
                 break;
             default:
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Vibranium Ore");
@@ -289,20 +329,37 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Heart-shaped Herb Flower");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Purple Cave Vines");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES_PLANT.get(), "Purple Cave Vines");
-
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get().asItem(), "Heart-shaped Herb Sprout");
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Blue Glow Berries");
+                translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE.get(), "Electric Wire");
+                translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE_WALL.get(), "Electric Wire");
+
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Vibranium Dust");
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Black Clay Ball");
                 translationBuilder.add(VibraniumItems.BLACK_BRICK.get(), "Black Brick");
                 translationBuilder.add(VibraniumItems.HEART_SHAPED_HERB.get(), "Heart-shaped Herb");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_INGOT.get(), "Vibranium Ingot");
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Depleted Vibranium Ingot");
-
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Blue Soup");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Ancestral Nectar");
                 translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Blue Glow Berries Spirit");
-                translationBuilder.add("item.vibranium.blue_berry_spirit.effect.water", "Blue Glow Berries Spirit");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berry_spirit.effect.water", "Blue Glow Berries Spirit");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".black_electric_wire", "Black Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_electric_wire", "Blue Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".brown_electric_wire", "Brown Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".cyan_electric_wire", "Cyan Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".gray_electric_wire", "Gray Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".green_electric_wire", "Green Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".light_blue_electric_wire", "Light Blue Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".light_gray_electric_wire", "Light Gray Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".lime_electric_wire", "Lime Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".magenta_electric_wire", "Magenta Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".orange_electric_wire", "Orange Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".pink_electric_wire", "Pink Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".purple_electric_wire", "Purple Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".red_electric_wire", "Red Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".white_electric_wire", "White Electric Wire");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".yellow_electric_wire", "Yellow Electric Wire");
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Vibranium Spear");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Vibranium Sword");
@@ -316,43 +373,44 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
 
-                translationBuilder.add("container.vibranium.reactor_control_panel", "Reactor Control Panel");
-                translationBuilder.add("container.vibranium.reactor_hatch", "Reactor fuel hatch");
+                translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_control_panel", "Reactor Control Panel");
+                translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Reactor fuel hatch");
 
-                translationBuilder.add("gui.vibranium.energy_tooltip", "Energy : %d / 100000 FE");
-                translationBuilder.add("gui.vibranium.heat_tooltip", "Temperature : %d°C / 3000°C");
-                translationBuilder.add("gui.vibranium.hot_water_tooltip", "Hot Water: %d / %d mB");
-                translationBuilder.add("gui.vibranium.water_tooltip", "Water: %d / %d mB");
-                translationBuilder.add("gui.vibranium.fuel_tooltip", "Vibranium : %ds restants");
-                translationBuilder.add("tooltip.vibranium.slot_fuel", "Insert Vibranium powder here");
-                translationBuilder.add("tooltip.vibranium.slot_output", "Combustion waste and slag");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".energy_tooltip", "Energy : %d / 100000 FE");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Temperature : %d°C / 3000°C");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", "Hot Water: %d / %d mB");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Water: %d / %d mB");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium : %ds restants");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Insert Vibranium powder here");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Combustion waste and slag");
 
-                translationBuilder.add("tooltip.vibranium.distilled_alcohol", "Distilled in a brewing stand. High potency!");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Distilled in a brewing stand. High potency!");
 
-                translationBuilder.add("tooltip.vibranium.weapons.charge", "Kinetic Charge");
-                translationBuilder.add("tooltip.vibranium.tool.mode.active", "Kinetic Burst: ACTIVE");
-                translationBuilder.add("tooltip.vibranium.tool.mode.inactive", "Kinetic Burst: INACTIVE");
-                translationBuilder.add("tooltip.vibranium.tool.active.toggle", "Shift + Right Click: Toggle 3x3 Mode");
-                translationBuilder.add("tooltip.vibranium.pickaxe.active.echolocation", "Right Click: Echolocation Pulse");
-                translationBuilder.add("tooltip.vibranium.pickaxe.passive.filter", "Passive: Preserves Ores & Structures");
-                translationBuilder.add("tooltip.vibranium.shovel.passive.gravity", "Passive: Collapse Falling Blocks");
-                translationBuilder.add("tooltip.vibranium.shovel.passive.path", "Right Click: 3x3 Path Maker");
-                translationBuilder.add("tooltip.vibranium.hoe.active.resonant_till", "Resonant Tilling: Tills a 3x3 area of soil");
-                translationBuilder.add("tooltip.vibranium.hoe.active.sonic_harvest", "Sonic Harvest: Breaking mature crops releases a harvesting shockwave");
-                translationBuilder.add("tooltip.vibranium.hoe.passive.sculk_suppression", "Acoustic Dampening: Mining Sculk produces no vibrations.");
-                translationBuilder.add("tooltip.vibranium.axe.active.cleave", "Right-Click: Kinetic Edge");
-                translationBuilder.add("tooltip.vibranium.axe.passive.shield_break", "Passive: Disarms Shields via Kinetic Overload");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Kinetic Charge");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Kinetic Burst: ACTIVE");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive", "Kinetic Burst: INACTIVE");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "Shift + Right Click: Toggle 3x3 Mode");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation", "Right Click: Echolocation Pulse");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.passive.filter", "Passive: Preserves Ores & Structures");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.gravity", "Passive: Collapse Falling Blocks");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.path", "Right Click: 3x3 Path Maker");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.resonant_till", "Resonant Tilling: Tills a 3x3 area of soil");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.sonic_harvest", "Sonic Harvest: Breaking mature crops releases a harvesting shockwave");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.passive.sculk_suppression", "Acoustic Dampening: Mining Sculk produces no vibrations.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "Right-Click: Kinetic Edge");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break", "Passive: Disarms Shields via Kinetic Overload");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID +".wire.tranfer_rate", "Transfer rate: %s K E/t");
 
-                translationBuilder.add("message.vibranium.hatch_no_core", "This hatch is not connected to any reactor core!");
-                translationBuilder.add("subtitles.vibranium.meltdown_alarm", "Reactor Meltdown Alarm blares!");
+                translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "This hatch is not connected to any reactor core!");
+                translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "Reactor Meltdown Alarm blares!");
 
-                translationBuilder.add("text.vibranium.config.title", "Vibranium Configuration");
-                translationBuilder.add("text.vibranium.config.category.overworld", "Meteorite Generation: Overworld");
-                translationBuilder.add("text.vibranium.config.category.end", "Meteorite Generation: The End");
-                translationBuilder.add("text.vibranium.config.option.spacing", "Spacing");
-                translationBuilder.add("text.vibranium.config.option.separation", "Separation");
-                translationBuilder.add("text.vibranium.config.section.weights", "§6Structure Spawn Weights");
-                translationBuilder.add("text.vibranium.config.weight_for", "Weight for %s");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Vibranium Configuration");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.overworld", "Meteorite Generation: Overworld");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.end", "Meteorite Generation: The End");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Spacing");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separation");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Structure Spawn Weights");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Weight for %s");
         }
 
     }

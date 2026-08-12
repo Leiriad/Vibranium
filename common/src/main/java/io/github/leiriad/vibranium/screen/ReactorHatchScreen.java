@@ -121,11 +121,11 @@ public class ReactorHatchScreen extends AbstractContainerScreen<ReactorHatchMenu
 
             // Fuel
             if (this.hoveredSlot.index == 0) {
-                tooltipText = Component.translatable("tooltip.vibranium.slot_fuel");
+                tooltipText = Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel");
             }
             // Output
             else if (this.hoveredSlot.index == 1) {
-                tooltipText = Component.translatable("tooltip.vibranium.slot_output");
+                tooltipText = Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".slot_output");
             }
 
             if (tooltipText != null) {

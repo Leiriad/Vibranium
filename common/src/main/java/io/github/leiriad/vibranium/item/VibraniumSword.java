@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.item;
 
+import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
@@ -147,7 +148,7 @@ public class VibraniumSword extends Item {
         ChatFormatting color = (percentage > 0) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY;
 
         consumer.accept(
-                Component.translatable("tooltip.vibranium.weapons.charge", percentage)
+                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", percentage)
                         .withStyle(color)
         );
 
