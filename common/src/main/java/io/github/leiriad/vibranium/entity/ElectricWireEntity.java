@@ -88,6 +88,37 @@ public class ElectricWireEntity extends BlockEntity {
                 }
             }
         }
+
+        // Push/Propagate energy through outer-corners (diagonal adjacent wires)
+        if (wire.energyStored > 0 && state.getBlock() instanceof BaseElectricWireBlock wireBlock) {
+            Direction attachedFace = wireBlock.getAttachedFace(state);
+
+            for (Direction dir : Direction.values()) {
+                if (wire.energyStored <= 0) break;
+
+                // Check if an outer corner connection exists in this direction
+                BlockPos diagonalPos = pos.relative(attachedFace).relative(dir);
+                BlockState diagonalState = level.getBlockState(diagonalPos);
+
+                if (diagonalState.getBlock() instanceof BaseElectricWireBlock diagonalWireBlock) {
+                    if (diagonalWireBlock.getAttachedFace(diagonalState) == dir.getOpposite()) {
+                        BlockEntity diagonalEntity = level.getBlockEntity(diagonalPos);
+                        if (diagonalEntity instanceof ElectricWireEntity targetWire) {
+                            if (wire.energyStored > targetWire.energyStored) {
+                                int transferAmount = Math.min(wire.energyStored - targetWire.energyStored, wire.maxTransfer) / 2;
+                                if (transferAmount > 0) {
+                                    int accepted = targetWire.insertEnergy(transferAmount, false);
+                                    if (accepted > 0) {
+                                        wire.energyStored -= accepted;
+                                        wire.setChanged();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     public int getEnergyStored() {
         return this.energyStored;
