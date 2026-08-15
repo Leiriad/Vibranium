@@ -2,6 +2,7 @@ package io.github.leiriad.vibranium.neoforge;
 
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.client.render.FluidTankRenderer;
+import io.github.leiriad.vibranium.entity.ElectricLampEntity;
 import io.github.leiriad.vibranium.entity.ElectricWireEntity;
 import io.github.leiriad.vibranium.entity.FluidTankEntity;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
@@ -330,6 +331,62 @@ public final class VibraniumModNeoForge {
                             @Override
                             public long getCapacityAsLong() {
                                 return (long) wire.getMaxEnergyStored();
+                            }
+                        };
+                    }
+                    return null;
+                }
+        );
+
+        // --- REGISTRATION FOR LAMPS ---
+        event.registerBlockEntity(
+                Capabilities.Energy.BLOCK,
+                VibraniumEntitiesNeoForge.ELECTRIC_LAMP_ENTITY.get(),
+                (lampEntity, direction) -> {
+                    if (lampEntity instanceof ElectricLampEntity lamp) {
+
+                        // Journal to handle energy rollbacks during transactions
+                        net.neoforged.neoforge.transfer.transaction.SnapshotJournal<Integer> lampJournal =
+                                new net.neoforged.neoforge.transfer.transaction.SnapshotJournal<>() {
+                                    @Override
+                                    protected Integer createSnapshot() {
+                                        return lamp.getEnergyStored();
+                                    }
+
+                                    @Override
+                                    protected void revertToSnapshot(Integer snapshotValue) {
+                                        // Fallback adjustment to restore previous energy state
+                                        lamp.insertEnergy(snapshotValue - lamp.getEnergyStored(), false);
+                                    }
+                                };
+
+                        return new EnergyHandler() {
+                            @Override
+                            public int insert(int maxAmount, TransactionContext transaction) {
+                                if (maxAmount <= 0) return 0;
+
+                                int inserted = lamp.insertEnergy(maxAmount, true);
+                                if (inserted > 0) {
+                                    lampJournal.updateSnapshots(transaction);
+                                    return lamp.insertEnergy(inserted, false);
+                                }
+                                return 0;
+                            }
+
+                            @Override
+                            public int extract(int maxAmount, TransactionContext transaction) {
+                                // Lamps do not allow extracting energy back, only consuming it
+                                return 0;
+                            }
+
+                            @Override
+                            public long getAmountAsLong() {
+                                return (long) lamp.getEnergyStored();
+                            }
+
+                            @Override
+                            public long getCapacityAsLong() {
+                                return 1000L;
                             }
                         };
                     }

@@ -1,12 +1,14 @@
 package io.github.leiriad.vibranium.fabric;
 
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.entity.ElectricLampEntity;
 import io.github.leiriad.vibranium.entity.ElectricWireEntity;
 import io.github.leiriad.vibranium.entity.FluidTankEntity;
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
 import io.github.leiriad.vibranium.fabric.block.entity.VibraniumEntitiesFabric;
 import io.github.leiriad.vibranium.fabric.init.VibraniumBrewingRecipesImpl;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
+import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -289,5 +291,70 @@ public final class VibraniumModFabric implements ModInitializer {
             }
             return null;
         }, VibraniumEntitiesFabric.ELECTRIC_WIRE_ENTITY.get());
+
+        // --- REGISTRATION FOR LAMPS ---
+        EnergyStorage.SIDED.registerForBlockEntities((lampEntity, direction) -> {
+            if (lampEntity instanceof ElectricLampEntity lamp) {
+                Level level = lamp.getLevel();
+                BlockPos pos = lamp.getBlockPos();
+
+                if (level == null) return null;
+
+                // Create a participant for transaction rollbacks
+                SnapshotParticipant<Integer> lampParticipant = new SnapshotParticipant<>() {
+                    @Override
+                    protected Integer createSnapshot() {
+                        return lamp.getEnergyStored();
+                    }
+
+                    @Override
+                    protected void readSnapshot(Integer snapshotValue) {
+                        lamp.insertEnergy(snapshotValue - lamp.getEnergyStored(), false); // Fallback adjustment
+                    }
+                };
+
+                return new EnergyStorage() {
+                    @Override
+                    public long insert(long maxAmount, TransactionContext transaction) {
+                        if (maxAmount <= 0) return 0L;
+                        int maxInsert = (int) Math.min(1000 - lamp.getEnergyStored(), maxAmount); // 1000 is your CAPACITY
+
+                        int inserted = lamp.insertEnergy(maxInsert, true);
+                        if (inserted > 0) {
+                            lampParticipant.updateSnapshots(transaction);
+                            return lamp.insertEnergy(inserted, false);
+                        }
+                        return 0L;
+                    }
+
+                    @Override
+                    public long extract(long maxAmount, TransactionContext transaction) {
+                        // Lamps usually don't allow extracting energy back, only receiving it
+                        return 0L;
+                    }
+
+                    @Override
+                    public long getAmount() {
+                        return lamp.getEnergyStored();
+                    }
+
+                    @Override
+                    public long getCapacity() {
+                        return 1000;
+                    }
+
+                    @Override
+                    public boolean supportsInsertion() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean supportsExtraction() {
+                        return false; // Lamps do not extract energy
+                    }
+                };
+            }
+            return null;
+        }, VibraniumEntities.ELECTRIC_LAMP_ENTITY.get());
     }
 }
