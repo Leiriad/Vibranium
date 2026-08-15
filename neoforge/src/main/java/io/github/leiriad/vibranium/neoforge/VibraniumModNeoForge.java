@@ -12,6 +12,8 @@ import io.github.leiriad.vibranium.neoforge.block.entity.VibraniumEntitiesNeoFor
 import io.github.leiriad.vibranium.neoforge.client.NeoForgeVibraniumScreen;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
@@ -20,12 +22,15 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+
+import java.util.function.Supplier;
 
 @Mod(VibraniumMod.MOD_ID)
 public final class VibraniumModNeoForge {
@@ -59,8 +64,8 @@ public final class VibraniumModNeoForge {
                     FluidTankEntity blockEntity = (FluidTankEntity) be;
 
                     // Instantiate NeoForge's SnapshotJournal to seamlessly capture and restore fluid state
-                    net.neoforged.neoforge.transfer.transaction.SnapshotJournal<Long> journal =
-                            new net.neoforged.neoforge.transfer.transaction.SnapshotJournal<>() {
+                    SnapshotJournal<Long> journal =
+                            new SnapshotJournal<>() {
                                 @Override
                                 protected Long createSnapshot() {
                                     // Capture the current fluid amount as our checkpoint/rollback data
@@ -285,8 +290,8 @@ public final class VibraniumModNeoForge {
                     if (wireEntity instanceof ElectricWireEntity wire) {
 
                         // Journal to handle energy rollbacks during transactions
-                        net.neoforged.neoforge.transfer.transaction.SnapshotJournal<Integer> wireJournal =
-                                new net.neoforged.neoforge.transfer.transaction.SnapshotJournal<>() {
+                        SnapshotJournal<Integer> wireJournal =
+                                new SnapshotJournal<>() {
                                     @Override
                                     protected Integer createSnapshot() {
                                         return wire.getEnergyStored();
@@ -346,8 +351,8 @@ public final class VibraniumModNeoForge {
                     if (lampEntity instanceof ElectricLampEntity lamp) {
 
                         // Journal to handle energy rollbacks during transactions
-                        net.neoforged.neoforge.transfer.transaction.SnapshotJournal<Integer> lampJournal =
-                                new net.neoforged.neoforge.transfer.transaction.SnapshotJournal<>() {
+                        SnapshotJournal<Integer> lampJournal =
+                                new SnapshotJournal<>() {
                                     @Override
                                     protected Integer createSnapshot() {
                                         return lamp.getEnergyStored();
@@ -386,7 +391,7 @@ public final class VibraniumModNeoForge {
 
                             @Override
                             public long getCapacityAsLong() {
-                                return 1000L;
+                                return lamp.getCapacity();
                             }
                         };
                     }
@@ -400,7 +405,7 @@ public final class VibraniumModNeoForge {
     }
 
     //Register screens
-    private void registerScreens(net.neoforged.neoforge.client.event.RegisterMenuScreensEvent event) {
+    private void registerScreens(RegisterMenuScreensEvent event) {
         event.register(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);
         event.register(VibraniumMenus.REACTOR_HATCH_MENU.get(), ReactorHatchScreen::new);
     }

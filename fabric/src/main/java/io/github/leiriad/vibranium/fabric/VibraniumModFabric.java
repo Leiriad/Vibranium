@@ -1,15 +1,9 @@
 package io.github.leiriad.vibranium.fabric;
 
 import io.github.leiriad.vibranium.VibraniumMod;
-import io.github.leiriad.vibranium.entity.ElectricLampEntity;
-import io.github.leiriad.vibranium.entity.ElectricWireEntity;
-import io.github.leiriad.vibranium.entity.FluidTankEntity;
-import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
+import io.github.leiriad.vibranium.entity.*;
 import io.github.leiriad.vibranium.fabric.block.entity.VibraniumEntitiesFabric;
-import io.github.leiriad.vibranium.fabric.init.VibraniumBrewingRecipesImpl;
-import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
-import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -17,10 +11,10 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import team.reborn.energy.api.EnergyStorage;
+
+import java.util.function.Supplier;
 
 public final class VibraniumModFabric implements ModInitializer {
 
@@ -340,7 +334,7 @@ public final class VibraniumModFabric implements ModInitializer {
 
                     @Override
                     public long getCapacity() {
-                        return 1000;
+                        return lamp.getCapacity();
                     }
 
                     @Override

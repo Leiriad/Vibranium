@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:cobblestone",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    " I ",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:kill_switch"
+  }
+}

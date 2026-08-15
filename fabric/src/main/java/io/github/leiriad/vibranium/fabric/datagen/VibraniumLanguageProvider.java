@@ -70,6 +70,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_STAIRS.get(), "Escaliers en briques noires");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_SLAB.get(), "Dalle en briques noires");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_WALL.get(), "Muret en briques noires");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.KILL_SWITCH.get(), "Bouton d'arrêt d'urgence");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.FLAT_ELECTRIC_LAMP.get(), "Lampe éléctrique plate");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Fleur d'herbe cœur");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Liane des cavernes pourpre");
@@ -199,6 +201,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_SLAB.get(), "Losa de ladrillos negros");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_STAIRS.get(), "Escaleras de ladrillos negros");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_WALL.get(), "Muro de ladrillos negros");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.KILL_SWITCH.get(), "Interruptor de apagado de emergencia");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.FLAT_ELECTRIC_LAMP.get(), "Lámpara eléctrica plana");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Flor de hierba en forma de corazón");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Lianas de cueva moradas");
@@ -325,6 +329,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_STAIRS.get(), "Black Brick Stairs");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_SLAB.get(), "Black Brick Slab");
                 addBlockWithItem(translationBuilder,VibraniumBlocks.BLACK_BRICK_WALL.get(), "Black Brick Wall");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.KILL_SWITCH.get(), "Kill Switch");
+                addBlockWithItem(translationBuilder,VibraniumBlocks.FLAT_ELECTRIC_LAMP.get(), "Flat Electric Lamp");
 
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get(), "Heart-shaped Herb Flower");
                 translationBuilder.add(VibraniumBlocks.PURPLE_CAVE_VINES.get(), "Purple Cave Vines");

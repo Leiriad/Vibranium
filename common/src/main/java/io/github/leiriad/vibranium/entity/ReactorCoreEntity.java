@@ -39,6 +39,7 @@ public class ReactorCoreEntity extends BlockEntity {
     private long hotWaterAmount=0;
     private final int TICKS_PER_POWDER = 24000;
     private final int MAX_ENERGY = 100000;
+    private final int MAX_TRANSFER = 20000;
 
     private Map<Pair<Integer, Integer>, List<FluidTankEntity>> waterColumns = new HashMap<>();
     private final List<FluidTankEntity> waterTanks = new ArrayList<>();
@@ -161,9 +162,12 @@ public class ReactorCoreEntity extends BlockEntity {
                     }
 
                     // If it's not a BlockEntity component, it MUST be the Reinforced Glass
-                    // Replace VibraniumBlocks.REINFORCED_GLASS.get() with your actual block registry object
-                    if (!blockState.is(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())) {
-                        this.structureBlocksValid = false; // Invalid block found in the 3x3x3 shell
+                    if (blockState.is(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get())) {
+                        if (be instanceof ReinforcedVibraniumGlassEntity glass) {
+                            glass.setCorePos(centerPos);
+                        }
+                    } else {
+                        this.structureBlocksValid = false;
                     }
                 }
             }
@@ -418,6 +422,9 @@ public class ReactorCoreEntity extends BlockEntity {
     public boolean isReactorFunctioningCorrectly() {
         // The reactor is valid only if fluid tanks are present AND the outer shell is made of reinforced glass
         return !waterTanks.isEmpty() && !hotWaterTanks.isEmpty() && this.structureBlocksValid;
+    }
+    public boolean isStructureBlocksValid() {
+        return this.structureBlocksValid;
     }
     private boolean checkAndBoostAdjacentFurnaces(Level level, BlockPos centerPos, BlockState state) {
         if (level == null) return false;
@@ -679,6 +686,9 @@ public class ReactorCoreEntity extends BlockEntity {
                 }
             }
         }
+    }
+    public int getMaxTransfer(){
+        return this.MAX_TRANSFER;
     }
     @Override
     public void setRemoved() {

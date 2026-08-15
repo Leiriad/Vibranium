@@ -15,6 +15,13 @@ public class EnergyApiHelper {
         throw new AssertionError();
     }
     /**
+     * Checks if an adjacent block has energy to share (generator).
+     */
+    @ExpectPlatform
+    public static boolean isEnergySource(Level level, BlockPos pos, Direction side) {
+        throw new AssertionError();
+    }
+    /**
      * Tries to push energy into an adjacent energy storage block.
      */
     @ExpectPlatform

@@ -6,6 +6,7 @@ import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -309,6 +310,24 @@ public abstract class BaseElectricWireBlock extends BaseEntityBlock {
         return Shapes.empty();
     }
     @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide()) {
+            // Only check directions where an active connection actually existed
+            for (Direction direction : Direction.values()) {
+                BooleanProperty prop = PROPERTY_BY_DIRECTION.get(direction);
+                if (prop != null && state.hasProperty(prop) && state.getValue(prop)) {
+                    BlockPos neighborPos = pos.relative(direction);
+                    BlockEntity neighborEntity = level.getBlockEntity(neighborPos);
+                    if (neighborEntity instanceof ElectricWireEntity wireEntity) {
+                        wireEntity.invalidateConnectionCache();
+                    }
+                }
+            }
+        }
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston) {
         super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
 
@@ -320,9 +339,23 @@ public abstract class BaseElectricWireBlock extends BaseEntityBlock {
 
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof ElectricWireEntity wire) {
+                // Invalidate local cache and notify only connected neighbors if needed
                 wire.invalidateConnectionCache();
                 wire.setChanged();
+
+                // Only invalidate cache on adjacent neighbors if a connection existed in that direction
+                for (Direction direction : Direction.values()) {
+                    BooleanProperty prop = PROPERTY_BY_DIRECTION.get(direction);
+                    if (prop != null && state.hasProperty(prop) && state.getValue(prop)) {
+                        BlockPos neighborPos = pos.relative(direction);
+                        BlockEntity neighborEntity = level.getBlockEntity(neighborPos);
+                        if (neighborEntity instanceof ElectricWireEntity neighborWire) {
+                            neighborWire.invalidateConnectionCache();
+                        }
+                    }
+                }
             }
         }
     }
+
 }

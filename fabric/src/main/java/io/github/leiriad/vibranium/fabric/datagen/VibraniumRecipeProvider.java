@@ -111,6 +111,15 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         )
                         .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_brick_wall_from_black_bricks_stonecutting")));
+                //Flat Electric Lamp
+                SingleItemRecipeBuilder.stonecutting(
+                                Ingredient.of(Blocks.REDSTONE_LAMP),
+                                RecipeCategory.REDSTONE,
+                                VibraniumBlocks.FLAT_ELECTRIC_LAMP.get(),
+                                16
+                        )
+                        .unlockedBy(getHasName(Blocks.REDSTONE_LAMP), has(Blocks.REDSTONE_LAMP))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "flat_electric_lamp_redstone_lamp_stonecutting")));
 
 
                 //***************************************************************************************************//
@@ -206,7 +215,15 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('B', Blocks.DIAMOND_BLOCK) //stabilisation
                         .unlockedBy(getHasName(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()), has(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "reactor_core")));
-
+                //REDSTONE
+                //Kill switch
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.REDSTONE, VibraniumBlocks.KILL_SWITCH.get())
+                        .pattern(" I ")
+                        .pattern(" C ")
+                        .define('I', Items.IRON_INGOT)
+                        .define('C', Blocks.COBBLESTONE)
+                        .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "kill_switch")));
                 //DECORATIVE ELEMENTS
                 //Black clay balls to black clay
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.BLACK_CLAY.get())
@@ -243,7 +260,6 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('B', VibraniumBlocks.BLACK_BRICKS.get())
                         .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_brick_wall_from_black_bricks")));
-
                 //FOOD
                 //Blue glow berry suspicious stew
                 ShapelessRecipeBuilder.shapeless(itemHolderGetter, RecipeCategory.FOOD, Items.SUSPICIOUS_STEW)

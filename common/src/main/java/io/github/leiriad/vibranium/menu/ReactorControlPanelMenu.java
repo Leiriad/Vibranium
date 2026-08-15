@@ -1,13 +1,16 @@
 package io.github.leiriad.vibranium.menu;
 
 import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
+import io.github.leiriad.vibranium.entity.ReinforcedVibraniumGlassEntity;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class ReactorControlPanelMenu extends AbstractContainerMenu {
 
@@ -76,8 +79,10 @@ public class ReactorControlPanelMenu extends AbstractContainerMenu {
     // METHODS
     @Override
     public void broadcastChanges() {
-        if (this.reactor != null) {
-            // Split integers into two 16-bit chunks
+        if (this.reactor != null && this.reactor.getLevel() != null) {
+            Level level = this.reactor.getLevel();
+            BlockPos centerPos = this.reactor.getBlockPos();
+
             int energy = this.reactor.getEnergy();
             this.energyLowerSlot.set(energy & 0xFFFF);
             this.energyUpperSlot.set((energy >> 16) & 0xFFFF);
@@ -105,15 +110,15 @@ public class ReactorControlPanelMenu extends AbstractContainerMenu {
 
             long maxWater = this.reactor.getMaxWaterCapacity();
             this.maxWater1.set((int) (maxWater & 0xFFFF));
-            this.maxWater2.set((int) ((maxWater >> 16) & 0xFFFF));
-            this.maxWater3.set((int) ((maxWater >> 32) & 0xFFFF));
-            this.maxWater4.set((int) ((maxWater >> 48) & 0xFFFF));
+            this.maxWater2.set((int) (maxWater >> 16) & 0xFFFF);
+            this.maxWater3.set((int) (maxWater >> 32) & 0xFFFF);
+            this.maxWater4.set((int) (maxWater >> 48) & 0xFFFF);
 
             long maxHotWater = this.reactor.getMaxHotWaterCapacity();
             this.maxHotWater1.set((int) (maxHotWater & 0xFFFF));
-            this.maxHotWater2.set((int) ((maxHotWater >> 16) & 0xFFFF));
-            this.maxHotWater3.set((int) ((maxHotWater >> 32) & 0xFFFF));
-            this.maxHotWater4.set((int) ((maxHotWater >> 48) & 0xFFFF));
+            this.maxHotWater2.set((int) (maxHotWater >> 16) & 0xFFFF);
+            this.maxHotWater3.set((int) (maxHotWater >> 32) & 0xFFFF);
+            this.maxHotWater4.set((int) (maxHotWater >> 48) & 0xFFFF);
         }
         super.broadcastChanges();
     }

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "minecraft:redstone_lamp",
+  "result": {
+    "count": 16,
+    "id": "vibranium:flat_electric_lamp"
+  }
+}

@@ -2,12 +2,16 @@ package io.github.leiriad.vibranium.block;
 
 import com.mojang.serialization.MapCodec;
 import io.github.leiriad.vibranium.entity.ReinforcedVibraniumGlassEntity;
+import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -45,6 +49,7 @@ public class ReinforcedVibraniumGlassBlock extends BaseEntityBlock {
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new ReinforcedVibraniumGlassEntity(pos, state);
     }
+
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;

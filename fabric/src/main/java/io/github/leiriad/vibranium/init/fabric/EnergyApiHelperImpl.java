@@ -27,9 +27,13 @@ public class EnergyApiHelperImpl {
         }
         return 0;
     }
-
+    // Check if an energy storage can act as a source (supports extraction)
+    public static boolean isEnergySource(Level level, BlockPos pos, Direction side) {
+        EnergyStorage targetStorage = EnergyStorage.SIDED.find(level, pos, side.getOpposite());
+        return targetStorage != null && targetStorage.supportsExtraction();
+    }
     // Pull energy from a neighboring block using Fabric Transfer transactions
-    public static int pullEnergy(Level level, BlockPos pos, Direction side, int maxTransfer) {
+   public static int pullEnergy(Level level, BlockPos pos, Direction side, int maxTransfer) {
         EnergyStorage targetStorage = EnergyStorage.SIDED.find(level, pos, side.getOpposite());
         if (targetStorage != null && targetStorage.supportsExtraction()) {
             try (Transaction transaction = Transaction.openOuter()) {
