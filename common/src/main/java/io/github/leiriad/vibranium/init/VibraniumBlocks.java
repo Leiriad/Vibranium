@@ -87,6 +87,8 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> FLUID_TANK = register("fluid_tank", FluidTankBlock::new, () -> FluidTankBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> ELECTRIC_WIRE = register("electric_wire", ElectricWireBlock::new, () -> ElectricWireBlock.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> ELECTRIC_WIRE_WALL = register("electric_wire_wall", ElectricWireWallBlock::new, () -> ElectricWireWallBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> KILL_SWITCH = register("kill_switch", KillSwitchBlock::new, () -> KillSwitchBlock.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> FLAT_ELECTRIC_LAMP = register("flat_electric_lamp", FlatElectricLampBlock::new, () -> FlatElectricLampBlock.getProperties(BlockBehaviour.Properties.of()), true);
 
 
     //COLORED
@@ -184,7 +186,9 @@ public class VibraniumBlocks {
                 REACTOR_HATCH,
                 FLUID_TANK,
                 REACTOR_PUMP,
-                REACTOR_OUTLET
+                REACTOR_OUTLET,
+                KILL_SWITCH,
+                FLAT_ELECTRIC_LAMP
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
@@ -246,7 +250,9 @@ public class VibraniumBlocks {
                 BLACK_BRICKS,
                 BLACK_BRICK_STAIRS,
                 BLACK_BRICK_SLAB,
-                BLACK_BRICK_WALL
+                BLACK_BRICK_WALL,
+                KILL_SWITCH,
+                FLAT_ELECTRIC_LAMP
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
         });

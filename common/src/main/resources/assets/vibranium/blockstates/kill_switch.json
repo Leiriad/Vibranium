@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=true": {
+      "model": "vibranium:block/kill_switch_on"
+    },
+    "powered=false": {
+      "model": "vibranium:block/kill_switch"
+    }
+  }
+}

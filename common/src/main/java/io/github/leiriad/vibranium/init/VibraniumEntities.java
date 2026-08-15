@@ -21,6 +21,7 @@ public class VibraniumEntities {
     public static RegistrySupplier<BlockEntityType<FluidTankEntity>> FLUID_TANK_ENTITY;
     public static RegistrySupplier<BlockEntityType<ElectricWireEntity>> ELECTRIC_WIRE_ENTITY;
     public static RegistrySupplier<BlockEntityType<ReinforcedVibraniumGlassEntity>> REINFORCED_VIBRANIUM_GLASS_ENTITY;
+    public static RegistrySupplier<BlockEntityType<ElectricLampEntity>> ELECTRIC_LAMP_ENTITY;
 
 
     public static void registerModEntities(){

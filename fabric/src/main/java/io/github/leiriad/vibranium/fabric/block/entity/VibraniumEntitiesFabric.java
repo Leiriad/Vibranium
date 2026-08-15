@@ -20,6 +20,7 @@ public class VibraniumEntitiesFabric extends VibraniumEntities {
         ELECTRIC_WIRE_ENTITY = (RegistrySupplier<BlockEntityType<ElectricWireEntity>>) register("electric_wire", ()-> FabricBlockEntityTypeBuilder.create(ElectricWireEntity::new,
                             VibraniumBlocks.ELECTRIC_WIRE.get(),
                             VibraniumBlocks.ELECTRIC_WIRE_WALL.get()).build());
+        ELECTRIC_LAMP_ENTITY = (RegistrySupplier<BlockEntityType<ElectricLampEntity>>) register("base_electric_lamp", ()-> FabricBlockEntityTypeBuilder.create(ElectricLampEntity::new, VibraniumBlocks.FLAT_ELECTRIC_LAMP.get()).build());
 
         registerModEntities();
     }
