@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=true": {
+      "model": "vibranium:block/flat_electric_lamp_on"
+    },
+    "lit=false": {
+      "model": "vibranium:block/flat_electric_lamp"
+    }
+  }
+}
