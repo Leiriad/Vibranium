@@ -11,19 +11,18 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.PipeBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -81,7 +80,7 @@ public abstract class BaseElectricWireBlock extends BaseEntityBlock {
         return supportingState.isFaceSturdy(level, supportingPos, attachedFace.getOpposite());
     }
 
-    protected boolean shouldConnectTo(LevelReader level, BlockPos pos, Direction connectionDir, Direction attachedFace) {
+    public boolean shouldConnectTo(LevelReader level, BlockPos pos, Direction connectionDir, Direction attachedFace) {
         if (connectionDir == attachedFace) return false;
 
         // Detection in the adjacent block
@@ -140,6 +139,13 @@ public abstract class BaseElectricWireBlock extends BaseEntityBlock {
             if (EnergyApiHelper.isEnergyMachine(l, targetPos, connectionDir)) {
                 return true;
             }
+        }
+
+        //Lever detection
+        BlockPos target = pos.relative(connectionDir);
+        BlockState targetState = level.getBlockState(target);
+        if (targetState.getBlock() instanceof LeverBlock) {
+            return true;
         }
 
         return false;
@@ -301,5 +307,22 @@ public abstract class BaseElectricWireBlock extends BaseEntityBlock {
         }
 
         return Shapes.empty();
+    }
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, block, orientation, movedByPiston);
+
+        if (!level.isClientSide()) {
+            BlockState newState = updateShape(state, level, level, pos, Direction.UP, pos, state, level.getRandom());
+            if (newState != state) {
+                level.setBlock(pos, newState, 3);
+            }
+
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof ElectricWireEntity wire) {
+                wire.invalidateConnectionCache();
+                wire.setChanged();
+            }
+        }
     }
 }
