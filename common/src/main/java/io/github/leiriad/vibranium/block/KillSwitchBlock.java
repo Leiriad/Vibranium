@@ -7,10 +7,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
 import org.jetbrains.annotations.Nullable;
 
 public class KillSwitchBlock extends LeverBlock {
@@ -40,13 +42,12 @@ public class KillSwitchBlock extends LeverBlock {
 
         // If the kill switch is powered (which means our kill switch is engaged / circuit cut OFF), purge downstream cables
         if (isPowered && !level.isClientSide()) {
-            // Determine the direction the lever is attached to in order to find what is on the other side
-            Direction attachedDir = getConnectedDirection(newState).getOpposite();
-            BlockPos targetPos = blockPos.relative(attachedDir);
-
-            BlockEntity targetEntity = level.getBlockEntity(targetPos);
-            if (targetEntity instanceof ElectricWireEntity wireEntity) {
-                wireEntity.purgeEnergyNetwork();
+            for (Direction direction : Direction.values()) {
+                BlockPos targetPos = blockPos.relative(direction);
+                BlockEntity targetEntity = level.getBlockEntity(targetPos);
+                if (targetEntity instanceof ElectricWireEntity wireEntity) {
+                    wireEntity.purgeEnergyNetwork();
+                }
             }
         }
     }

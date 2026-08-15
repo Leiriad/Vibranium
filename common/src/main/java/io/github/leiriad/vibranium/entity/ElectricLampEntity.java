@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ElectricLampEntity extends BlockEntity {
     private int energyStored = 0;
-    private static final int CAPACITY = 1000; // Max energy buffer
+    private static final int CAPACITY = 1; // Max energy buffer
     private static final int CONSUMPTION_PER_TICK = 20; // Energy consumed per tick while lit
     private boolean poweredByRedstone = false;
 
@@ -73,6 +73,9 @@ public class ElectricLampEntity extends BlockEntity {
 
     public int getEnergyStored() {
         return this.energyStored;
+    }
+    public int getCapacity() {
+        return CAPACITY;
     }
 
     // --- NBT SAVE & LOAD (To keep energy when reloading chunks) ---
