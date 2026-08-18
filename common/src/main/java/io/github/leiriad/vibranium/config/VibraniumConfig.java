@@ -7,17 +7,22 @@ public class VibraniumConfig {
     // Unique IDs used by the Mixin to target the correct dimension placement
     public static final int OVERWORLD_SALT = 12345678;
     public static final int END_SALT = 87654321;
+    // Default values
+    public static final int DEFAULT_OVERWORLD_SPACING = 100;
+    public static final int DEFAULT_OVERWORLD_SEPARATION = 60;
+    public static final int DEFAULT_END_SPACING = 20;
+    public static final int DEFAULT_END_SEPARATION = 16;
 
     // Overworld configuration with its default values
     public DimensionConfig meteoritesOverworld = new DimensionConfig(
             defaultOverworldStructures(),
-            new PlacementConfig("minecraft:random_spread", 4, 2, OVERWORLD_SALT)
+            new PlacementConfig("minecraft:random_spread", DEFAULT_OVERWORLD_SPACING, DEFAULT_OVERWORLD_SEPARATION, OVERWORLD_SALT)
     );
 
     // End configuration with its default values
     public DimensionConfig meteoritesEnd = new DimensionConfig(
             defaultEndStructures(),
-            new PlacementConfig("minecraft:random_spread", 4, 2, END_SALT)
+            new PlacementConfig("minecraft:random_spread", DEFAULT_END_SPACING, DEFAULT_END_SEPARATION, END_SALT)
     );
 
     // Sub-class for dimension-specific settings
@@ -60,8 +65,8 @@ public class VibraniumConfig {
     // Helpers to populate default values programmatically
     private static List<StructureWeight> defaultOverworldStructures() {
         List<StructureWeight> list = new ArrayList<>();
-        list.add(new StructureWeight("vibranium:meteorite_small", 10));
-        list.add(new StructureWeight("vibranium:meteorite_medium", 5));
+        list.add(new StructureWeight("vibranium:meteorite_small", 5));
+        list.add(new StructureWeight("vibranium:meteorite_medium", 3));
         list.add(new StructureWeight("vibranium:meteorite_big", 2));
         list.add(new StructureWeight("vibranium:meteorite_huge", 1));
         return list;

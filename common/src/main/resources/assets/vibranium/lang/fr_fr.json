@@ -136,6 +136,8 @@
   "text.vibranium.config.option.spacing": "Espacement (Spacing)",
   "text.vibranium.config.section.weights": "§6Probabilité d'apparition des structures (Weights)",
   "text.vibranium.config.title": "Configuration de Vibranium",
+  "text.vibranium.config.tooltip.separation": "La distance minimale (en chunks) entre les structures. Doit être inférieure à l'espacement (spacing).",
+  "text.vibranium.config.tooltip.spacing": "La distance maximale (en chunks) pour la grille de génération. Des valeurs plus élevées rendent les structures plus rares.",
   "text.vibranium.config.weight_for": "Poids (Weight) pour %s",
   "tooltip.vibranium.axe.active.cleave": "Clic Droit : Tranchant Cinétique",
   "tooltip.vibranium.axe.passive.shield_break": "Passif : Désarme les Boucliers par Surcharge Cinétique",

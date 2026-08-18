@@ -136,6 +136,8 @@
   "text.vibranium.config.option.spacing": "Spacing",
   "text.vibranium.config.section.weights": "§6Structure Spawn Weights",
   "text.vibranium.config.title": "Vibranium Configuration",
+  "text.vibranium.config.tooltip.separation": "The minimum distance (in chunks) between structures. Must be lower than spacing.",
+  "text.vibranium.config.tooltip.spacing": "The maximum distance (in chunks) for the generation grid. Higher values make structures rarer.",
   "text.vibranium.config.weight_for": "Weight for %s",
   "tooltip.vibranium.axe.active.cleave": "Right-Click: Kinetic Edge",
   "tooltip.vibranium.axe.passive.shield_break": "Passive: Disarms Shields via Kinetic Overload",

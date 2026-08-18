@@ -135,6 +135,8 @@
   "text.vibranium.config.option.spacing": "Espaciado (Spacing)",
   "text.vibranium.config.section.weights": "§6Probabilidad de Estructuras (Weights)",
   "text.vibranium.config.title": "Configuración de Vibranium",
+  "text.vibranium.config.tooltip.separation": "La distancia mínima (en chunks) entre estructuras. Debe ser menor que el espaciado (spacing).",
+  "text.vibranium.config.tooltip.spacing": "La distancia máxima (en chunks) para la cuadrícula de generación. Los valores más altos hacen que las estructuras sean más raras.",
   "text.vibranium.config.weight_for": "Probabilidad (Weight) para %s",
   "tooltip.vibranium.axe.active.cleave": "Clic Derecho: Filo Cinético",
   "tooltip.vibranium.axe.passive.shield_break": "Pasivo: Desarma Escudos por Sobrecarga Cinética",

@@ -160,6 +160,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Séparation (Separation)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Probabilité d'apparition des structures (Weights)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Poids (Weight) pour %s");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing", "La distance maximale (en chunks) pour la grille de génération. Des valeurs plus élevées rendent les structures plus rares.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation", "La distance minimale (en chunks) entre les structures. Doit être inférieure à l'espacement (spacing).");
                 break;
             case "es_es":
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Mineral de vibranio");
@@ -288,6 +290,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separación (Separation)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Probabilidad de Estructuras (Weights)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Probabilidad (Weight) para %s");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing", "La distancia máxima (en chunks) para la cuadrícula de generación. Los valores más altos hacen que las estructuras sean más raras.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation", "La distancia mínima (en chunks) entre estructuras. Debe ser menor que el espaciado (spacing).");
                 break;
             default:
                 addBlockWithItem(translationBuilder,VibraniumBlocks.VIBRANIUM_ORE.get(), "Vibranium Ore");
@@ -417,6 +421,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separation");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Structure Spawn Weights");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Weight for %s");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing", "The maximum distance (in chunks) for the generation grid. Higher values make structures rarer.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation", "The minimum distance (in chunks) between structures. Must be lower than spacing.");
         }
 
     }

@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.fabric.client;
 
+import io.github.leiriad.vibranium.config.VibraniumConfig;
 import io.github.leiriad.vibranium.config.VibraniumConfigManager;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -26,15 +27,19 @@ public class FabricVibraniumScreen {
         overworldCategory.addEntry(entryBuilder.startIntField(
                         Component.translatable("text.vibranium.config.option.spacing"),
                         VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.spacing)
-                .setDefaultValue(4)
+                .setDefaultValue(VibraniumConfig.DEFAULT_OVERWORLD_SPACING)
                 .setSaveConsumer(newValue -> VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.spacing = newValue)
+
+                .setTooltip(Component.translatable("text.vibranium.config.tooltip.spacing"))
                 .build());
 
         overworldCategory.addEntry(entryBuilder.startIntField(
                         Component.translatable("text.vibranium.config.option.separation"),
                         VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.separation)
-                .setDefaultValue(2)
+                .setDefaultValue(VibraniumConfig.DEFAULT_OVERWORLD_SEPARATION)
                 .setSaveConsumer(newValue -> VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.separation = newValue)
+
+                .setTooltip(Component.translatable("text.vibranium.config.tooltip.separation"))
                 .build());
 
         // --- Dynamic Weights Section ---
@@ -65,15 +70,19 @@ public class FabricVibraniumScreen {
         endCategory.addEntry(entryBuilder.startIntField(
                         Component.translatable("text.vibranium.config.option.spacing"),
                         VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.spacing)
-                .setDefaultValue(4)
+                .setDefaultValue(VibraniumConfig.DEFAULT_END_SPACING)
                 .setSaveConsumer(newValue -> VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.spacing = newValue)
+
+                .setTooltip(Component.translatable("text.vibranium.config.tooltip.spacing"))
                 .build());
 
         endCategory.addEntry(entryBuilder.startIntField(
                         Component.translatable("text.vibranium.config.option.separation"),
                         VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.separation)
-                .setDefaultValue(2)
+                .setDefaultValue(VibraniumConfig.DEFAULT_END_SEPARATION)
                 .setSaveConsumer(newValue -> VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.separation = newValue)
+
+                .setTooltip(Component.translatable("text.vibranium.config.tooltip.separation"))
                 .build());
 
         // --- Dynamic Weights Section ---
