@@ -149,6 +149,13 @@ public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock
                         boolean isFlower = randomPlant.defaultBlockState().is(BlockTags.FLOWERS);
                         if (isFlower && growthspeed!=0){continue;}
 
+                        //If HeartShaped Herb
+                        if (randomPlant == VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get()) {
+                            if (random.nextInt(6) != 0) {
+                                continue; // Ignore this attempt and goes to next
+                            }
+                        }
+
                         // Place the plant depending on its size
                         if (randomPlant instanceof DoublePlantBlock) {
                             if (level.isEmptyBlock(targetPos.above())) {
