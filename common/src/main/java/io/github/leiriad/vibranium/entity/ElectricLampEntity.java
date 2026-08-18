@@ -3,6 +3,7 @@ package io.github.leiriad.vibranium.entity;
 import io.github.leiriad.vibranium.block.BaseElectricLampBlock;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -103,7 +104,7 @@ public class ElectricLampEntity extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return this.saveWithoutMetadata(registries);
     }
 }

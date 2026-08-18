@@ -6,6 +6,11 @@ import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
@@ -206,4 +211,17 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
     public boolean stillValid(Player player) { return true; }
     @Override
     public void clearContent() { this.inventory.clearContent(); }
+
+    // --- NETWORK SYNCHRONIZATION ---
+
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return this.saveWithoutMetadata(registries);
+    }
 }
