@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#c:tools/swords",
-    "#c:tools/spears",
-    "#c:tools/axes"
+    "#c:weapons/swords",
+    "#c:weapons/spears",
+    "#c:weapons/axes"
   ]
 }
