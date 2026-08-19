@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=down,lit=false":  { "model": "vibranium:block/electric_heater", "x": 180 },
+    "facing=down,lit=true":   { "model": "vibranium:block/electric_heater_on", "x": 180 },
+    "facing=up,lit=false":    { "model": "vibranium:block/electric_heater" },
+    "facing=up,lit=true":     { "model": "vibranium:block/electric_heater_on" },
+    "facing=north,lit=false": { "model": "vibranium:block/electric_heater", "x": 90, "y": 0 },
+    "facing=north,lit=true":  { "model": "vibranium:block/electric_heater_on", "x": 90, "y": 0 },
+    "facing=south,lit=false": { "model": "vibranium:block/electric_heater", "x": 90, "y": 180 },
+    "facing=south,lit=true":  { "model": "vibranium:block/electric_heater_on", "x": 90, "y": 180 },
+    "facing=west,lit=false":  { "model": "vibranium:block/electric_heater", "x": 90, "y": 270 },
+    "facing=west,lit=true":   { "model": "vibranium:block/electric_heater_on", "x": 90, "y": 270 },
+    "facing=east,lit=false":  { "model": "vibranium:block/electric_heater", "x": 90, "y": 90 },
+    "facing=east,lit=true":   { "model": "vibranium:block/electric_heater_on", "x": 90, "y": 90 }
+  }
+}

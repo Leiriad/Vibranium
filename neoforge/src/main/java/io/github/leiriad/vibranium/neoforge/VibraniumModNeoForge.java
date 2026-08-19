@@ -2,10 +2,7 @@ package io.github.leiriad.vibranium.neoforge;
 
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.client.render.FluidTankRenderer;
-import io.github.leiriad.vibranium.entity.ElectricLampEntity;
-import io.github.leiriad.vibranium.entity.ElectricWireEntity;
-import io.github.leiriad.vibranium.entity.FluidTankEntity;
-import io.github.leiriad.vibranium.entity.ReactorCoreEntity;
+import io.github.leiriad.vibranium.entity.*;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
 import io.github.leiriad.vibranium.neoforge.block.entity.VibraniumEntitiesNeoForge;
@@ -392,6 +389,60 @@ public final class VibraniumModNeoForge {
                             @Override
                             public long getCapacityAsLong() {
                                 return lamp.getCapacity();
+                            }
+                        };
+                    }
+                    return null;
+                }
+        );
+        // --- REGISTRATION FOR HEATER ---
+        event.registerBlockEntity(
+                Capabilities.Energy.BLOCK,
+                VibraniumEntitiesNeoForge.ELECTRIC_HEATER_ENTITY.get(),
+                (heaterEntity, direction) -> {
+                    if (heaterEntity instanceof ElectricHeaterEntity heater) {
+
+                        // Journal to handle energy rollbacks during transactions
+                        SnapshotJournal<Integer> lampJournal =
+                                new SnapshotJournal<>() {
+                                    @Override
+                                    protected Integer createSnapshot() {
+                                        return heater.getEnergyStored();
+                                    }
+
+                                    @Override
+                                    protected void revertToSnapshot(Integer snapshotValue) {
+                                        // Fallback adjustment to restore previous energy state
+                                        heater.insertEnergy(snapshotValue - heater.getEnergyStored(), false);
+                                    }
+                                };
+
+                        return new EnergyHandler() {
+                            @Override
+                            public int insert(int maxAmount, TransactionContext transaction) {
+                                if (maxAmount <= 0) return 0;
+
+                                int inserted = heater.insertEnergy(maxAmount, true);
+                                if (inserted > 0) {
+                                    lampJournal.updateSnapshots(transaction);
+                                    return heater.insertEnergy(inserted, false);
+                                }
+                                return 0;
+                            }
+
+                            @Override
+                            public int extract(int maxAmount, TransactionContext transaction) {
+                                return 0;
+                            }
+
+                            @Override
+                            public long getAmountAsLong() {
+                                return (long) heater.getEnergyStored();
+                            }
+
+                            @Override
+                            public long getCapacityAsLong() {
+                                return heater.getCapacity();
                             }
                         };
                     }

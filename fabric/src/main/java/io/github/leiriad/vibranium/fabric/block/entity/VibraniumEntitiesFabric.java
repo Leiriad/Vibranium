@@ -21,6 +21,7 @@ public class VibraniumEntitiesFabric extends VibraniumEntities {
                             VibraniumBlocks.ELECTRIC_WIRE.get(),
                             VibraniumBlocks.ELECTRIC_WIRE_WALL.get()).build());
         ELECTRIC_LAMP_ENTITY = (RegistrySupplier<BlockEntityType<ElectricLampEntity>>) register("base_electric_lamp", ()-> FabricBlockEntityTypeBuilder.create(ElectricLampEntity::new, VibraniumBlocks.FLAT_ELECTRIC_LAMP.get()).build());
+        ELECTRIC_HEATER_ENTITY = (RegistrySupplier<BlockEntityType<ElectricHeaterEntity>>) register("electric_heater", ()-> FabricBlockEntityTypeBuilder.create(ElectricHeaterEntity::new, VibraniumBlocks.ELECTRIC_HEATER.get()).build());
 
         registerModEntities();
     }

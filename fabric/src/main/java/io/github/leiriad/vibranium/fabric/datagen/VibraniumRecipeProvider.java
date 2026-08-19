@@ -224,6 +224,16 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('C', Blocks.COBBLESTONE)
                         .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "kill_switch")));
+                //Electric Heater
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.ELECTRIC_HEATER.get(),16)
+                        .pattern("CCC")
+                        .pattern("RIR")
+                        .pattern("CCC")
+                        .define('C', Blocks.COBBLESTONE)
+                        .define('I', Items.IRON_INGOT)
+                        .define('R', Items.REDSTONE)
+                        .unlockedBy(getHasName(Items.REDSTONE), has(Items.REDSTONE))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "electric_heater")));
                 //DECORATIVE ELEMENTS
                 //Black clay balls to black clay
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.BLACK_CLAY.get())

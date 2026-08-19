@@ -19,6 +19,7 @@ public class VibraniumEntitiesNeoForge extends VibraniumEntities {
                         VibraniumBlocks.ELECTRIC_WIRE.get(),
                         VibraniumBlocks.ELECTRIC_WIRE_WALL.get()));
         ELECTRIC_LAMP_ENTITY = (RegistrySupplier<BlockEntityType<ElectricLampEntity>>) register("electric_lamp", ()-> new BlockEntityType<>(ElectricLampEntity::new, VibraniumBlocks.FLAT_ELECTRIC_LAMP.get()));
+        ELECTRIC_HEATER_ENTITY = (RegistrySupplier<BlockEntityType<ElectricHeaterEntity>>) register("electric_heater", ()-> new BlockEntityType<>(ElectricHeaterEntity::new, VibraniumBlocks.ELECTRIC_HEATER.get()));
 
         registerModEntities();
     }

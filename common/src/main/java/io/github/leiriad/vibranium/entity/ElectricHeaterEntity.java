@@ -15,17 +15,17 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class ElectricLampEntity extends BlockEntity {
+public class ElectricHeaterEntity extends BlockEntity {
     private int energyStored = 0;
     private static final int CAPACITY = 1; // Max energy buffer
     private static final int CONSUMPTION_PER_TICK = 20; // Energy consumed per tick while lit
     private boolean poweredByRedstone = false;
 
-    public ElectricLampEntity(BlockPos pos, BlockState state) {
-        super(VibraniumEntities.ELECTRIC_LAMP_ENTITY.get(), pos, state);
+    public ElectricHeaterEntity(BlockPos pos, BlockState state) {
+        super(VibraniumEntities.ELECTRIC_HEATER_ENTITY.get(), pos, state);
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, ElectricLampEntity lamp) {
+    public static void tick(Level level, BlockPos pos, BlockState state, ElectricHeaterEntity lamp) {
         if (level.isClientSide()) return;
 
         boolean shouldBeLit = false;

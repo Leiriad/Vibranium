@@ -89,6 +89,7 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> ELECTRIC_WIRE_WALL = register("electric_wire_wall", ElectricWireWallBlock::new, () -> ElectricWireWallBlock.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> KILL_SWITCH = register("kill_switch", KillSwitchBlock::new, () -> KillSwitchBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> FLAT_ELECTRIC_LAMP = register("flat_electric_lamp", FlatElectricLampBlock::new, () -> FlatElectricLampBlock.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> ELECTRIC_HEATER = register("electric_heater", ElectricHeater::new, () -> ElectricHeater.getProperties(BlockBehaviour.Properties.of()), true);
 
 
     //COLORED
@@ -188,7 +189,8 @@ public class VibraniumBlocks {
                 REACTOR_PUMP,
                 REACTOR_OUTLET,
                 KILL_SWITCH,
-                FLAT_ELECTRIC_LAMP
+                FLAT_ELECTRIC_LAMP,
+                ELECTRIC_HEATER
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
@@ -252,7 +254,8 @@ public class VibraniumBlocks {
                 BLACK_BRICK_SLAB,
                 BLACK_BRICK_WALL,
                 KILL_SWITCH,
-                FLAT_ELECTRIC_LAMP
+                FLAT_ELECTRIC_LAMP,
+                ELECTRIC_HEATER
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
         });

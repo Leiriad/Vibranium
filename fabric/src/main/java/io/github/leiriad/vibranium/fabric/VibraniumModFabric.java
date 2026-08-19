@@ -311,7 +311,7 @@ public final class VibraniumModFabric implements ModInitializer {
                     @Override
                     public long insert(long maxAmount, TransactionContext transaction) {
                         if (maxAmount <= 0) return 0L;
-                        int maxInsert = (int) Math.min(1000 - lamp.getEnergyStored(), maxAmount); // 1000 is your CAPACITY
+                        int maxInsert = (int) Math.min(lamp.getCapacity() - lamp.getEnergyStored(), maxAmount);
 
                         int inserted = lamp.insertEnergy(maxInsert, true);
                         if (inserted > 0) {
@@ -350,5 +350,69 @@ public final class VibraniumModFabric implements ModInitializer {
             }
             return null;
         }, VibraniumEntities.ELECTRIC_LAMP_ENTITY.get());
+
+        // --- REGISTRATION FOR HEATER ---
+        EnergyStorage.SIDED.registerForBlockEntities((heaterEntity, direction) -> {
+            if (heaterEntity instanceof ElectricHeaterEntity heater) {
+                Level level = heater.getLevel();
+                BlockPos pos = heater.getBlockPos();
+
+                if (level == null) return null;
+
+                // Create a participant for transaction rollbacks
+                SnapshotParticipant<Integer> lampParticipant = new SnapshotParticipant<>() {
+                    @Override
+                    protected Integer createSnapshot() {
+                        return heater.getEnergyStored();
+                    }
+
+                    @Override
+                    protected void readSnapshot(Integer snapshotValue) {
+                        heater.insertEnergy(snapshotValue - heater.getEnergyStored(), false); // Fallback adjustment
+                    }
+                };
+
+                return new EnergyStorage() {
+                    @Override
+                    public long insert(long maxAmount, TransactionContext transaction) {
+                        if (maxAmount <= 0) return 0L;
+                        int maxInsert = (int) Math.min(heater.getCapacity() - heater.getEnergyStored(), maxAmount);
+
+                        int inserted = heater.insertEnergy(maxInsert, true);
+                        if (inserted > 0) {
+                            lampParticipant.updateSnapshots(transaction);
+                            return heater.insertEnergy(inserted, false);
+                        }
+                        return 0L;
+                    }
+
+                    @Override
+                    public long extract(long maxAmount, TransactionContext transaction) {
+                        return 0L;
+                    }
+
+                    @Override
+                    public long getAmount() {
+                        return heater.getEnergyStored();
+                    }
+
+                    @Override
+                    public long getCapacity() {
+                        return heater.getCapacity();
+                    }
+
+                    @Override
+                    public boolean supportsInsertion() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean supportsExtraction() {
+                        return false; // Lamps do not extract energy
+                    }
+                };
+            }
+            return null;
+        }, VibraniumEntities.ELECTRIC_HEATER_ENTITY.get());
     }
 }
