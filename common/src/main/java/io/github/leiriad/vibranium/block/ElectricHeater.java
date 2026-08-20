@@ -5,6 +5,9 @@ import io.github.leiriad.vibranium.entity.ElectricHeaterEntity;
 import io.github.leiriad.vibranium.entity.ElectricLampEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -38,7 +41,7 @@ public class ElectricHeater extends BaseEntityBlock {
     private static final VoxelShape SHAPE_EAST  = Block.box(0, 0, 0, 1, 16, 16);   // East
 
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
-        return BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE).strength(3.5f, 3.5f);
     }
     @Nullable
     @Override
@@ -55,7 +58,19 @@ public class ElectricHeater extends BaseEntityBlock {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false).setValue(FACING, Direction.NORTH));
     }
-
+    @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        // Ice melting process
+        if (state.getValue(LIT)) {
+            BlockPos randomNeighbor = pos.offset(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
+            if (level.getBlockState(randomNeighbor).is(Blocks.ICE)) {
+                level.setBlockAndUpdate(randomNeighbor, Blocks.WATER.defaultBlockState());
+                // Server-side particle burst when melting ice
+                level.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 3, 0.1, 0.1, 0.1, 0.02);
+                return;
+            }
+        }
+    }
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction facing = state.getValue(FACING);

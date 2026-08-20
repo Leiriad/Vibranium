@@ -11,7 +11,7 @@ public class ReinforcedVibraniumGlassPane extends IronBarsBlock {
     public static Properties getProperties (Properties settings){
         return Properties.ofFullCopy(Blocks.GLASS_PANE)
                 .strength(1.5f,6.0f)
-                .mapColor(MapColor.COLOR_BLACK);
+                .mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops();
     }
     @Override
     public MapCodec<? extends IronBarsBlock> codec() {

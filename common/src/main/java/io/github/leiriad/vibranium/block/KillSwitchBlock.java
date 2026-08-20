@@ -28,7 +28,7 @@ public class KillSwitchBlock extends LeverBlock {
     }
 
     public static Properties getProperties(Properties settings) {
-        return Properties.ofFullCopy(Blocks.LEVER);
+        return Properties.ofFullCopy(Blocks.LEVER).requiresCorrectToolForDrops();
     }
 
     @Override

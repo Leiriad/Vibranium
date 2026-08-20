@@ -3,6 +3,18 @@
   "values": [
     "vibranium:vibranium_ore",
     "vibranium:reinforced_vibranium_glass",
-    "vibranium:reinforced_vibranium_glass_pane"
+    "vibranium:reinforced_vibranium_glass_pane",
+    "vibranium:flat_electric_lamp",
+    "vibranium:black_bricks",
+    "vibranium:black_brick_slab",
+    "vibranium:black_brick_stairs",
+    "vibranium:black_brick_wall",
+    "vibranium:electric_heater",
+    "vibranium:fluid_tank",
+    "vibranium:reactor_core",
+    "vibranium:reactor_control_panel",
+    "vibranium:reactor_hatch",
+    "vibranium:reactor_outlet",
+    "vibranium:reactor_pump"
   ]
 }

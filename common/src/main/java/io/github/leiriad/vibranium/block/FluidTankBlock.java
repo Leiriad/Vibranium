@@ -55,7 +55,8 @@ public class FluidTankBlock extends BaseEntityBlock {
                 .mapColor(MapColor.COLOR_BLACK)
                 .noOcclusion()
                 .sound(SoundType.GLASS)
-                .instrument(NoteBlockInstrument.CHIME);
+                .instrument(NoteBlockInstrument.CHIME)
+                .requiresCorrectToolForDrops();
     }
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {

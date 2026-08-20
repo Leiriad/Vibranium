@@ -4,7 +4,7 @@
 	"parent": "minecraft:block/cube_all",
 	"textures": {
 		"all": "vibranium:block/electric_heater",
-		"particle": "vibranium:electric_heater"
+		"particle": "vibranium:block/electric_heater"
 	},
 	"elements": [
 		{

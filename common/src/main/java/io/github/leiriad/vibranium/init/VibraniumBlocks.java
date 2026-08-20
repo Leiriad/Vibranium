@@ -195,6 +195,15 @@ public class VibraniumBlocks {
             CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
 
+        //REDSTONE
+        List.of(
+                KILL_SWITCH,
+                FLAT_ELECTRIC_LAMP,
+                ELECTRIC_HEATER
+        ).forEach(blockSupplier -> {
+            CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
+        });
+
         //COLORED BLOCKS
         List.of(
                 VIBRANIUM_GLASS,

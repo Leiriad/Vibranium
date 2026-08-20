@@ -34,7 +34,7 @@ public class ReactorCoreBlock extends BaseEntityBlock {
                 .mapColor(MapColor.COLOR_CYAN)
                 .emissiveRendering((state, world, pos) -> state.getValue(LIT))
                 .hasPostProcess((state, world, pos) -> state.getValue(LIT))
-                .lightLevel((state) -> 7);
+                .lightLevel((state) -> 7).requiresCorrectToolForDrops();
     }
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {

@@ -1,0 +1,309 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "white"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:white_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "orange"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:orange_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "magenta"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:magenta_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "light_blue"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:light_blue_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "yellow"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:yellow_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "lime"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:lime_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "pink"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:pink_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "gray"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:gray_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "light_gray"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:light_gray_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "cyan"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:cyan_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "purple"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:purple_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "blue"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:blue_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "brown"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:brown_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "green"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:green_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "red"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:red_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "vibranium:electric_wire",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "color": "black"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "vibranium:black_electric_wire"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

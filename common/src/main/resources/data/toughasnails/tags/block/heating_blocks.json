@@ -1,0 +1,7 @@
+{
+  "values": [
+    "vibranium:reactor_core",
+    "vibranium:electric_heater",
+    "vibranium:hot_water"
+  ]
+}

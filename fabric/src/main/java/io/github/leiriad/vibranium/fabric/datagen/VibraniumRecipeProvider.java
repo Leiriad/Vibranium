@@ -225,7 +225,7 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "kill_switch")));
                 //Electric Heater
-                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.ELECTRIC_HEATER.get(),16)
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.MISC, VibraniumBlocks.ELECTRIC_HEATER.get())
                         .pattern("CCC")
                         .pattern("RIR")
                         .pattern("CCC")

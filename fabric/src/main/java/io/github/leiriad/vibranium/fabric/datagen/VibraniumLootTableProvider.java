@@ -1,6 +1,8 @@
 package io.github.leiriad.vibranium.fabric.datagen;
 
 
+import dev.architectury.registry.registries.RegistrySupplier;
+import io.github.leiriad.vibranium.block.BaseElectricWireBlock;
 import io.github.leiriad.vibranium.block.HeartShapedHerbFlower;
 import io.github.leiriad.vibranium.init.VibraniumItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -10,6 +12,8 @@ import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -43,13 +47,9 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
 
     @Override
     public void generate() {
-        System.out.println("DEBUG: Lancement de la génération des tables de loot...");
 
-        // Modifie temporairement une de tes méthodes pour voir ce qu'il se passe
         Block ore = VibraniumBlocks.VIBRANIUM_ORE.get();
-        System.out.println("DEBUG: Vibranium Ore récupéré : " + ore);
         if (ore != null) {
-            System.out.println("DEBUG: ID du bloc dans le registre : " + BuiltInRegistries.BLOCK.getKey(ore));
         }
         //Get enchantments
         HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
@@ -86,6 +86,12 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createSimpleBlocksLoot(VibraniumBlocks.VIBRANIUM_GLASS_PANE.get());
         createSimpleBlocksLoot(VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get());
         createSimpleBlocksLoot(VibraniumBlocks.FLUID_TANK.get());
+        createSimpleBlocksLoot(VibraniumBlocks.KILL_SWITCH.get());
+        createSimpleBlocksLoot(VibraniumBlocks.ELECTRIC_WIRE_WALL.get());
+        createSimpleBlocksLoot(VibraniumBlocks.ELECTRIC_HEATER.get());
+        createSimpleBlocksLoot(VibraniumBlocks.FLAT_ELECTRIC_LAMP.get());
+        createColoredBlocksLoot(VibraniumBlocks.ELECTRIC_WIRE.get());
+        createColoredBlocksLoot(VibraniumBlocks.ELECTRIC_WIRE_WALL.get());
 
         //BUILDING BLOCKS
         createSimpleBlocksLoot(VibraniumBlocks.BLACK_BRICKS.get());
@@ -282,6 +288,25 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         if(industrialBlock != null){
             this.add(industrialBlock, (block) ->
                     this.createSingleItemTable(industrialBlock));
+        }
+    }
+    private void createColoredBlocksLoot(Block coloredBlock) {
+        if (coloredBlock != null) {
+            LootTable.Builder builder = LootTable.lootTable();
+
+            for (DyeColor color : DyeColor.values()) {
+                RegistrySupplier<Item> itemSupplier = VibraniumItems.COLORED_WIRES.get(color);
+
+                if (itemSupplier != null) {
+                    builder.withPool(LootPool.lootPool()
+                            .add(LootItem.lootTableItem(itemSupplier.get()))
+                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(coloredBlock)
+                                    .setProperties(StatePropertiesPredicate.Builder.properties()
+                                            .hasProperty(BaseElectricWireBlock.COLOR, color))));
+                }
+            }
+
+            this.add(coloredBlock, builder);
         }
     }
 }

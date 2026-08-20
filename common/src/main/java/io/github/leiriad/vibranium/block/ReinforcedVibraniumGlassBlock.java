@@ -27,7 +27,7 @@ public class ReinforcedVibraniumGlassBlock extends BaseEntityBlock {
     public static Properties getProperties (Properties settings){
         return Properties.ofFullCopy(Blocks.GLASS)
                 .strength(1.5f,6.0f)
-                .mapColor(MapColor.COLOR_BLACK);
+                .mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops();
     }
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {

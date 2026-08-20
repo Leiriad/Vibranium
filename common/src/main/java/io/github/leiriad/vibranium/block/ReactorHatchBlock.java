@@ -46,7 +46,7 @@ public class ReactorHatchBlock extends BaseEntityBlock implements WorldlyContain
     public static Properties getProperties (Properties settings){
         return Properties.of()
                 .mapColor(MapColor.COLOR_GRAY)
-                .instrument(NoteBlockInstrument.CHIME);
+                .instrument(NoteBlockInstrument.CHIME).requiresCorrectToolForDrops();
     }
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
