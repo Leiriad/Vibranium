@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_electric_wire": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#vibranium:electric_wires"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "vibranium:yellow_electric_wire_dyeing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_electric_wire"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "vibranium:yellow_electric_wire_dyeing"
+    ]
+  }
+}

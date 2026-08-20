@@ -1,4 +1,4 @@
-package io.github.leiriad.vibranium.utils;
+package io.github.leiriad.vibranium.init;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -18,6 +18,10 @@ public class VibraniumTags {
         public static final TagKey<Item> BLUE_FLOWERS = TagKey.create(
                 Registries.ITEM,
                 Identifier.fromNamespaceAndPath("vibranium", "blue_flowers")
+        );
+        public static final TagKey<Item> ELECTRIC_WIRES = TagKey.create(
+                Registries.ITEM,
+                Identifier.fromNamespaceAndPath("vibranium", "electric_wires")
         );
     }
 }

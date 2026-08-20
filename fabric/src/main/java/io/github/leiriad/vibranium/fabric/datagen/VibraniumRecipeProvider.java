@@ -2,7 +2,7 @@ package io.github.leiriad.vibranium.fabric.datagen;
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumItems;
-import io.github.leiriad.vibranium.utils.VibraniumTags;
+import io.github.leiriad.vibranium.init.VibraniumTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
@@ -361,6 +361,20 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                             .define('D', dyeFor(color))
                             .unlockedBy("has_slime_ball", has(Items.SLIME_BALL))
                             .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID,colourName + "_electric_wire")));
+                }
+                for (DyeColor color : DyeColor.values()) {
+                    String colourName = color.getName();
+                    Item coloredWireItem = COLORED_WIRES.get(color).get();
+                    Item correspondingDye = dyeFor(color);
+
+                    ShapelessRecipeBuilder.shapeless(itemHolderGetter, RecipeCategory.MISC, coloredWireItem, 1)
+                            .requires(VibraniumTags.Items.ELECTRIC_WIRES)
+                            .requires(correspondingDye)
+                            .unlockedBy("has_electric_wire", has(VibraniumTags.Items.ELECTRIC_WIRES))
+                            .save(exporter, ResourceKey.create(
+                                    Registries.RECIPE,
+                                    Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, colourName + "_electric_wire_dyeing")
+                            ));
                 }
 
             }

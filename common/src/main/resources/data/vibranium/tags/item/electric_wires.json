@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "vibranium:white_electric_wire",
+    "vibranium:orange_electric_wire",
+    "vibranium:magenta_electric_wire",
+    "vibranium:light_blue_electric_wire",
+    "vibranium:yellow_electric_wire",
+    "vibranium:lime_electric_wire",
+    "vibranium:pink_electric_wire",
+    "vibranium:gray_electric_wire",
+    "vibranium:light_gray_electric_wire",
+    "vibranium:cyan_electric_wire",
+    "vibranium:purple_electric_wire",
+    "vibranium:blue_electric_wire",
+    "vibranium:brown_electric_wire",
+    "vibranium:green_electric_wire",
+    "vibranium:red_electric_wire",
+    "vibranium:black_electric_wire"
+  ]
+}

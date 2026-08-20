@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#vibranium:electric_wires",
+    "minecraft:black_dye"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:black_electric_wire"
+  }
+}
