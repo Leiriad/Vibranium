@@ -35,6 +35,7 @@ public class ReactorControlPanelBlock extends BaseEntityBlock {
         return Properties.of()
                 .mapColor(MapColor.COLOR_CYAN)
                 .instrument(NoteBlockInstrument.CHIME)
+                .strength(1.5f,6.0f)
                 .noOcclusion().requiresCorrectToolForDrops();
     }
 

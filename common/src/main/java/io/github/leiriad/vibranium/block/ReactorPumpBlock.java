@@ -29,6 +29,7 @@ public class ReactorPumpBlock extends BaseEntityBlock {
     public static Properties getProperties (Properties settings){
         return Properties.of()
                 .mapColor(MapColor.COLOR_GRAY)
+                .strength(1.5f,6.0f)
                 .instrument(NoteBlockInstrument.CHIME).requiresCorrectToolForDrops();
     }
     @Override
