@@ -5,6 +5,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.block.*;
+import io.github.leiriad.vibranium.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -91,7 +92,6 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> FLAT_ELECTRIC_LAMP = register("flat_electric_lamp", FlatElectricLampBlock::new, () -> FlatElectricLampBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> ELECTRIC_HEATER = register("electric_heater", ElectricHeater::new, () -> ElectricHeater.getProperties(BlockBehaviour.Properties.of()), true);
 
-
     //COLORED
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS = register("vibranium_glass", VibraniumGlass::new, () -> VibraniumGlass.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS = register("reinforced_vibranium_glass", ReinforcedVibraniumGlassBlock::new, () -> ReinforcedVibraniumGlassBlock.getProperties(BlockBehaviour.Properties.of()), true);
@@ -103,6 +103,10 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> BLACK_BRICK_STAIRS = register("black_brick_stairs", BlackBrickStairs::new, () -> BlackBrickStairs.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> BLACK_BRICK_SLAB = register("black_brick_slab", BlackBrickSlab::new, () -> BlackBrickSlab.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> BLACK_BRICK_WALL = register("black_brick_wall", BlackBrickWall::new, () -> BlackBrickWall.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> DEPLETED_VIBRANIUM_BLOCK = register("depleted_vibranium_block", DepletedVibraniumBlock::new, () -> DepletedVibraniumBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> VIBRANIUM_BLOCK = register("vibranium_block", VibraniumBlock::new, () -> VibraniumBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> DEPLETED_VIBRANIUM_GRATE = register("depleted_vibranium_grate", DepletedVibraniumGrate::new, () -> DepletedVibraniumGrate.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> VIBRANIUM_GRATE = register("vibranium_grate", VibraniumGrate::new, () -> VibraniumGrate.getProperties(BlockBehaviour.Properties.of()), false);
 
     //BLOCKITEMS
     public static final RegistrySupplier<Item> BLUE_GLOW_BERRIES = BLOCKITEMS.register("blue_glow_berries",
@@ -114,6 +118,50 @@ public class VibraniumBlocks {
                 return new BlueGlowBerries(
                         PURPLE_CAVE_VINES.get(),
                         BlueGlowBerries.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> VIBRANIUM_BLOCK_ITEM = BLOCKITEMS.register("vibranium_block",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_block"));
+
+                return new VibraniumBlockItem(
+                        VIBRANIUM_BLOCK.get(),
+                        VibraniumBlockItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> VIBRANIUM_GRATE_ITEM = BLOCKITEMS.register("vibranium_grate",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_grate"));
+
+                return new VibraniumGrateItem(
+                        VIBRANIUM_GRATE.get(),
+                        VibraniumGrateItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> DEPLETED_VIBRANIUM_BLOCK_ITEM = BLOCKITEMS.register("depleted_vibranium_block",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_block"));
+
+                return new DepletedVibraniumBlockItem(
+                        DEPLETED_VIBRANIUM_BLOCK.get(),
+                        DepletedVibraniumBlockItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> DEPLETED_VIBRANIUM_GRATE_ITEM = BLOCKITEMS.register("depleted_vibranium_grate",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_grate"));
+
+                return new DepletedVibraniumGrateItem(
+                        DEPLETED_VIBRANIUM_GRATE.get(),
+                        DepletedVibraniumGrateItem.getProperties().setId(itemKey)
                 );
             }
     );
@@ -219,7 +267,11 @@ public class VibraniumBlocks {
                 BLACK_BRICKS,
                 BLACK_BRICK_STAIRS,
                 BLACK_BRICK_SLAB,
-                BLACK_BRICK_WALL
+                BLACK_BRICK_WALL,
+                DEPLETED_VIBRANIUM_BLOCK,
+                VIBRANIUM_BLOCK,
+                DEPLETED_VIBRANIUM_GRATE,
+                VIBRANIUM_GRATE
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.BUILDING_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
@@ -264,7 +316,11 @@ public class VibraniumBlocks {
                 BLACK_BRICK_WALL,
                 KILL_SWITCH,
                 FLAT_ELECTRIC_LAMP,
-                ELECTRIC_HEATER
+                ELECTRIC_HEATER,
+                DEPLETED_VIBRANIUM_BLOCK,
+                VIBRANIUM_BLOCK,
+                DEPLETED_VIBRANIUM_GRATE,
+                VIBRANIUM_GRATE
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
         });

@@ -2,7 +2,7 @@ package io.github.leiriad.vibranium.fabric.datagen;
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumItems;
-import io.github.leiriad.vibranium.init.VibraniumTags;
+import io.github.leiriad.vibranium.utils.VibraniumTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.HolderLookup;
@@ -270,6 +270,38 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('B', VibraniumBlocks.BLACK_BRICKS.get())
                         .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_brick_wall_from_black_bricks")));
+                //Depleted vibranium block
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), 1)
+                        .pattern("DDD")
+                        .pattern("DDD")
+                        .pattern("DDD")
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_block")));
+                //Depleted vibranium block
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.VIBRANIUM_BLOCK.get(), 1)
+                        .pattern("VVV")
+                        .pattern("VVV")
+                        .pattern("VVV")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_block")));
+                //Depleted vibranium grate
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), 1)
+                        .pattern(" D ")
+                        .pattern("D D")
+                        .pattern(" D ")
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_grate")));
+                //Vibranium grate
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.VIBRANIUM_GRATE.get(), 1)
+                        .pattern(" V ")
+                        .pattern("V V")
+                        .pattern(" V ")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_grate")));
                 //FOOD
                 //Blue glow berry suspicious stew
                 ShapelessRecipeBuilder.shapeless(itemHolderGetter, RecipeCategory.FOOD, Items.SUSPICIOUS_STEW)

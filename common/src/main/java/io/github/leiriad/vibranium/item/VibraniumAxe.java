@@ -296,12 +296,7 @@ public class VibraniumAxe extends AxeItem {
     }
 
     @Override
-    public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext tooltipContext,
-            TooltipDisplay tooltipDisplay,
-            Consumer<Component> consumer,
-            TooltipFlag tooltipFlag
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag
     ) {
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
         boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);

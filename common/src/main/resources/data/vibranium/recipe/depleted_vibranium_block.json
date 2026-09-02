@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": "vibranium:depleted_vibranium_ingot"
+  },
+  "pattern": [
+    "DDD",
+    "DDD",
+    "DDD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:depleted_vibranium_block"
+  }
+}

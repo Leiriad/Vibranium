@@ -98,6 +98,10 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createSimpleBlocksLoot(VibraniumBlocks.BLACK_BRICK_STAIRS.get());
         createSimpleBlocksLoot(VibraniumBlocks.BLACK_BRICK_SLAB.get());
         createSimpleBlocksLoot(VibraniumBlocks.BLACK_BRICK_WALL.get());
+        createSimpleBlocksLoot(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get());
+        createSimpleBlocksLoot(VibraniumBlocks.VIBRANIUM_BLOCK.get());
+        createSimpleBlocksLoot(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get());
+        createSimpleBlocksLoot(VibraniumBlocks.VIBRANIUM_GRATE.get());
     }
 
     private void createVibraniumOreLoot() {

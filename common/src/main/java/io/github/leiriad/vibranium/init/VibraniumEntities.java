@@ -23,6 +23,7 @@ public class VibraniumEntities {
     public static RegistrySupplier<BlockEntityType<ReinforcedVibraniumGlassEntity>> REINFORCED_VIBRANIUM_GLASS_ENTITY;
     public static RegistrySupplier<BlockEntityType<ElectricLampEntity>> ELECTRIC_LAMP_ENTITY;
     public static RegistrySupplier<BlockEntityType<ElectricHeaterEntity>> ELECTRIC_HEATER_ENTITY;
+    public static RegistrySupplier<BlockEntityType<VibraniumBlockEntity>> VIBRANIUM_BLOCK_ENTITY;
 
 
     public static void registerModEntities(){

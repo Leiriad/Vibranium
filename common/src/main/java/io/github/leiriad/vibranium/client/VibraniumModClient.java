@@ -59,7 +59,9 @@ public class VibraniumModClient {
                 VibraniumBlocks.REINFORCED_VIBRANIUM_GLASS_PANE.get(),
                 VibraniumBlocks.FLUID_TANK.get(),
                 VibraniumBlocks.REACTOR_CORE.get(),
-                VibraniumBlocks.REACTOR_CONTROL_PANEL.get()
+                VibraniumBlocks.REACTOR_CONTROL_PANEL.get(),
+                VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(),
+                VibraniumBlocks.VIBRANIUM_GRATE.get()
         );
 
         //Vine & dripleaf color fix

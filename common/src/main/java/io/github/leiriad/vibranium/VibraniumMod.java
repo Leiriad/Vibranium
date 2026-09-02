@@ -1,6 +1,5 @@
 package io.github.leiriad.vibranium;
 
-import dev.architectury.registry.menu.MenuRegistry;
 import io.github.leiriad.vibranium.config.VibraniumConfigManager;
 import io.github.leiriad.vibranium.event.VibraniumEvents;
 import io.github.leiriad.vibranium.init.*;
