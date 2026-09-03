@@ -83,6 +83,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE_WALL.get(), "Fil électrique");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_BLOCK.get(), "Block de vibranium");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRATE.get(), "Grille de vibranium");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_DOOR.get(), "Porte en vibranium");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR.get(), "Trappe en vibranium");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), "Bloc de vibranium appauvrit");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), "Grille de vibranium appauvrit");
 
@@ -91,6 +93,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baies lumineuses bleues");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_BLOCK_ITEM.get(), "Block de vibranium");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRATE_ITEM.get(), "Grille de vibranium");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_DOOR_ITEM.get(), "Porte en vibranium");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR_ITEM.get(), "Trappe en vibranium");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK_ITEM.get(), "Bloc de vibranium appauvrit");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE_ITEM.get(), "Grille de vibranium appauvrit");
 
@@ -168,6 +172,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.shockwave_effect", "L'onde de choc repousse les entités et casse tous les blocs aux alentours.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.info", "Laisse passer les fluides et les objets librement.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.repulsion", "Émet une impulsion cinétique directionnelle lorsqu'une entité vivante marche dessus si alimentée par de la redstone.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".door.repulsion", "Repousse les attaquants par onde cinétique en cas de choc ou contact non autorisé.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".door.interaction", "Nécessite de la Redstone ou une pioche en diamant pour interagir en sécurité.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".trapdoor.repulsion", "Éjecte les entités vers le haut par énergie cinétique si l'on marche ou frappe dessus.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".trapdoor.interaction", "Nécessite de la Redstone ou une pioche en diamant pour interagir en sécurité.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.sound_info", "Absorbe les sons environnants et bloque les vibrations acoustiques.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.blast_info", "Extrêmement dense, offre une résistance presque totale aux explosions.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_grate.sound_info", "Atténue partiellement les sons proches et le bruit de la pluie.");
@@ -238,6 +246,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE_WALL.get(), "Cable eléctrico");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_BLOCK.get(), "Bloque de vibranio");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRATE.get(), "Rejilla de vibranio");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_DOOR.get(), "Puerta de vibranium");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR.get(), "Trampilla de vibranium");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), "Bloque de vibranio empobrecido");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), "Rejilla de vibranio empobrecido");
 
@@ -246,6 +256,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Baya luminosas azules");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_BLOCK_ITEM.get(), "Bloque de vibranio");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRATE_ITEM.get(), "Rejilla de vibranio");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_DOOR_ITEM.get(), "Puerta de vibranium");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR_ITEM.get(), "Trampilla de vibranium");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK_ITEM.get(), "Bloque de vibranio empobrecido");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE_ITEM.get(), "Rejilla de vibranio empobrecido");
 
@@ -322,6 +334,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.shockwave_effect", "La onda de choque empuja a las entidades y rompe todos los bloques a su alrededor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.info", "Permite el paso libre de fluidos u objetos.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.repulsion", "Emite un impulso cinético direccional cuando una entidad viva la pisa si está alimentada por redstone.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".door.repulsion", "Repele a los atacantes con una onda cinética al recibir un golpe o contacto no autorizado.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".door.interaction", "Requiere Redstone o un pico de diamante para interactuar de forma segura.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".trapdoor.repulsion", "Lanza a las entidades hacia arriba con energía cinética al pisarla o golpearla.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".trapdoor.interaction", "Requiere Redstone o un pico de diamante para interactuar de forma segura.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.sound_info", "Absorbe los sonidos cercanos y bloquea las vibraciones acústicas.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.blast_info", "Extremadamente denso, ofrece una resistencia casi total a las explosiones.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_grate.sound_info", "Atenúa parcialmente los sonidos cercanos y el ruido de la lluvia.");
@@ -392,6 +408,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.ELECTRIC_WIRE_WALL.get(), "Electric Wire");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_BLOCK.get(), "Vibranium Block");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRATE.get(), "Vibranium Grate");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_DOOR.get(), "Vibranium Door");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR.get(), "Vibranium Trapdoor");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), "Depleted Vibranium Block");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), "Depleted Vibranium Grate");
 
@@ -400,6 +418,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.BLUE_GLOW_BERRIES.get(), "Blue Glow Berries");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_BLOCK_ITEM.get(), "Vibranium Block");
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_GRATE_ITEM.get(), "Vibranium Grate");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_DOOR_ITEM.get(), "Vibranium Door");
+                translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR_ITEM.get(), "Vibranium Trapdoor");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK_ITEM.get(), "Depleted Vibranium Block");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE_ITEM.get(), "Depleted Vibranium Grate");
 
@@ -478,6 +498,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.shockwave_effect", "The shockwave knocks back entities and breaks all surrounding blocks.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.info", "Allows fluids and items to pass through freely.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.repulsion", "Emits a directional kinetic pulse when a living entity steps on it if powered by redstone.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".door.repulsion", "Repels attackers with a kinetic shockwave on hit or unauthorized contact.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".door.interaction", "Requires Redstone or a Diamond Pickaxe to manipulate or open safely.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".trapdoor.repulsion", "Launches entities upward with kinetic energy when stepped on or struck.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".trapdoor.interaction", "Requires Redstone or a Diamond Pickaxe to interact safely.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.sound_info", "Absorbs surrounding sounds and blocks acoustic vibrations.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.blast_info", "Extremely dense, offering near-total resistance to explosions.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_grate.sound_info", "Partially dampens nearby sounds and weather noise.");

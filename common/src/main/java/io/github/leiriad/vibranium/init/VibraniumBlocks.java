@@ -105,6 +105,8 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> BLACK_BRICK_WALL = register("black_brick_wall", BlackBrickWall::new, () -> BlackBrickWall.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> DEPLETED_VIBRANIUM_BLOCK = register("depleted_vibranium_block", DepletedVibraniumBlock::new, () -> DepletedVibraniumBlock.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> VIBRANIUM_BLOCK = register("vibranium_block", VibraniumBlock::new, () -> VibraniumBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> VIBRANIUM_DOOR = register("vibranium_door", VibraniumDoor::new, () -> VibraniumDoor.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> VIBRANIUM_TRAPDOOR = register("vibranium_trapdoor", VibraniumTrapdoor::new, () -> VibraniumTrapdoor.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> DEPLETED_VIBRANIUM_GRATE = register("depleted_vibranium_grate", DepletedVibraniumGrate::new, () -> DepletedVibraniumGrate.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> VIBRANIUM_GRATE = register("vibranium_grate", VibraniumGrate::new, () -> VibraniumGrate.getProperties(BlockBehaviour.Properties.of()), false);
 
@@ -140,6 +142,28 @@ public class VibraniumBlocks {
                 return new VibraniumGrateItem(
                         VIBRANIUM_GRATE.get(),
                         VibraniumGrateItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> VIBRANIUM_DOOR_ITEM = BLOCKITEMS.register("vibranium_door",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_door"));
+
+                return new VibraniumDoorItem(
+                        VIBRANIUM_DOOR.get(),
+                        VibraniumDoorItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> VIBRANIUM_TRAPDOOR_ITEM = BLOCKITEMS.register("vibranium_trapdoor",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_trapdoor"));
+
+                return new VibraniumTrapdoorItem(
+                        VIBRANIUM_TRAPDOOR.get(),
+                        VibraniumTrapdoorItem.getProperties().setId(itemKey)
                 );
             }
     );
@@ -271,7 +295,9 @@ public class VibraniumBlocks {
                 DEPLETED_VIBRANIUM_BLOCK,
                 VIBRANIUM_BLOCK,
                 DEPLETED_VIBRANIUM_GRATE,
-                VIBRANIUM_GRATE
+                VIBRANIUM_GRATE,
+                VIBRANIUM_DOOR,
+                VIBRANIUM_TRAPDOOR
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(CreativeModeTabs.BUILDING_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
@@ -320,7 +346,9 @@ public class VibraniumBlocks {
                 DEPLETED_VIBRANIUM_BLOCK,
                 VIBRANIUM_BLOCK,
                 DEPLETED_VIBRANIUM_GRATE,
-                VIBRANIUM_GRATE
+                VIBRANIUM_GRATE,
+                VIBRANIUM_DOOR,
+                VIBRANIUM_TRAPDOOR
         ).forEach(blockSupplier -> {
             CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(blockSupplier.get()));
         });

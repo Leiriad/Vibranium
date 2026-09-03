@@ -270,15 +270,8 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('B', VibraniumBlocks.BLACK_BRICKS.get())
                         .unlockedBy(getHasName(VibraniumBlocks.BLACK_BRICKS.get()), has(VibraniumBlocks.BLACK_BRICKS.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_brick_wall_from_black_bricks")));
-                //Depleted vibranium block
-                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), 1)
-                        .pattern("DDD")
-                        .pattern("DDD")
-                        .pattern("DDD")
-                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
-                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
-                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_block")));
-                //Depleted vibranium block
+
+                //Vibranium block
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.VIBRANIUM_BLOCK.get(), 1)
                         .pattern("VVV")
                         .pattern("VVV")
@@ -286,14 +279,6 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
                         .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_block")));
-                //Depleted vibranium grate
-                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), 1)
-                        .pattern(" D ")
-                        .pattern("D D")
-                        .pattern(" D ")
-                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
-                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
-                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_grate")));
                 //Vibranium grate
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.VIBRANIUM_GRATE.get(), 1)
                         .pattern(" V ")
@@ -302,6 +287,39 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
                         .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_grate")));
+                //Vibranium door
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.VIBRANIUM_DOOR.get(), 3)
+                        .pattern("VV ")
+                        .pattern("VV ")
+                        .pattern("VV ")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_door")));
+                //Vibranium trapdoor
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.VIBRANIUM_TRAPDOOR.get(), 1)
+                        .pattern("   ")
+                        .pattern("VV ")
+                        .pattern("VV ")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_trapdoor")));
+                //Depleted vibranium block
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), 1)
+                        .pattern("DDD")
+                        .pattern("DDD")
+                        .pattern("DDD")
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_block")));
+                //Depleted vibranium grate
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), 1)
+                        .pattern(" D ")
+                        .pattern("D D")
+                        .pattern(" D ")
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_grate")));
+
                 //FOOD
                 //Blue glow berry suspicious stew
                 ShapelessRecipeBuilder.shapeless(itemHolderGetter, RecipeCategory.FOOD, Items.SUSPICIOUS_STEW)

@@ -27,7 +27,7 @@ import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public class VibraniumGrate extends Block implements SimpleWaterloggedBlock {
+public class VibraniumGrate extends Block implements SimpleWaterloggedBlock, VibraniumKineticBlock {
     //PROPERTIES
     public static final MapCodec<Block> CODEC = simpleCodec(BlackBricks::new);
     public static final EnumProperty<Direction> FACING = DirectionalBlock.FACING;
@@ -103,42 +103,16 @@ public class VibraniumGrate extends Block implements SimpleWaterloggedBlock {
     // Directional repulsion shockwave
     private void handleRepulsion(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (!level.isClientSide() && state.getValue(POWERED) && entity instanceof LivingEntity livingEntity) {
-            if (livingEntity.invulnerableTime <= 0) {
-                Direction facing = state.getValue(FACING);
-                triggerDirectionalRepulsion((ServerLevel) level, pos, facing, livingEntity);
+            Direction facing = state.getValue(FACING);
 
-                // Prevents instant spam execution on every single tick
-                livingEntity.invulnerableTime = 10;
-            }
+            // Calculates directional push vector based on block orientation
+            Vec3 pushVector = new Vec3(
+                    facing.getStepX(),
+                    facing.getStepY() + (facing == Direction.UP ? 0.25 : 0.0),
+                    facing.getStepZ()
+            ).normalize();
+
+            triggerKineticReaction((ServerLevel) level, pos, livingEntity, 1.0, pushVector);
         }
-    }
-    private void triggerDirectionalRepulsion(ServerLevel level, BlockPos pos, Direction facing, LivingEntity target) {
-        Vec3 center = Vec3.atCenterOf(pos);
-
-        // Visual effects (kinetic flash/sparks)
-        level.sendParticles(
-                ParticleTypes.SONIC_BOOM,
-                center.x, center.y, center.z,
-                1, 0.0, 0.0, 0.0, 0.0
-        );
-
-        level.playSound(
-                null, pos,
-                SoundEvents.WIND_CHARGE_BURST.value(),
-                SoundSource.BLOCKS,
-                0.6F, 1.8F
-        );
-
-        // Directional push calculation
-        double pushForce = 0.75; // Adjusted pulse strength
-        Vec3 pushVector = new Vec3(
-                facing.getStepX() * pushForce,
-                facing.getStepY() * pushForce + (facing == Direction.UP ? 0.2 : 0.0),
-                facing.getStepZ() * pushForce
-        );
-
-        // Apply instant velocity impulse
-        target.setDeltaMovement(target.getDeltaMovement().add(pushVector));
-        target.hurtMarked = true; // Force movement packet sync with client
     }
 }

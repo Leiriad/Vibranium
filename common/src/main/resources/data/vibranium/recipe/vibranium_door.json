@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "V": "vibranium:vibranium_ingot"
+  },
+  "pattern": [
+    "VV ",
+    "VV ",
+    "VV "
+  ],
+  "result": {
+    "count": 3,
+    "id": "vibranium:vibranium_door"
+  }
+}
