@@ -30,7 +30,7 @@ public class ReactorCoreBlock extends BaseEntityBlock {
 
     public static Properties getProperties (Properties settings){
         return Properties.ofFullCopy(Blocks.GLASS)
-                .strength(1.5f,6.0f)
+                .strength(50f,1200f)
                 .mapColor(MapColor.COLOR_CYAN)
                 .emissiveRendering((state, world, pos) -> state.getValue(LIT))
                 .hasPostProcess((state, world, pos) -> state.getValue(LIT))

@@ -35,7 +35,7 @@ public class VibraniumBlock extends BaseEntityBlock {
     public static final MapCodec<VibraniumBlock> CODEC = simpleCodec(VibraniumBlock::new);
     public static final IntegerProperty CHARGE = IntegerProperty.create("charge", 0, 10);
     public static Properties getProperties (Properties settings){
-        return Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_BLACK)
+        return Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_BLUE)
                 .sound(VibraniumSoundType.VIBRANIUM_BLOCK)
                 .strength(50.0F, 1200.0F) // High blast resistance
                 // Linear dynamic light emission from 0 to 15 based on a 10-step charge

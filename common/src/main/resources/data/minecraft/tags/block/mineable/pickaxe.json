@@ -15,6 +15,14 @@
     "vibranium:reactor_control_panel",
     "vibranium:reactor_hatch",
     "vibranium:reactor_outlet",
-    "vibranium:reactor_pump"
+    "vibranium:reactor_pump",
+    "vibranium:vibranium_block",
+    "vibranium:vibranium_grate",
+    "vibranium:vibranium_door",
+    "vibranium:vibranium_trapdoor",
+    "vibranium:depleted_vibranium_block",
+    "vibranium:depleted_vibranium_grate",
+    "vibranium:depleted_vibranium_door",
+    "vibranium:depleted_vibranium_trapdoor"
   ]
 }

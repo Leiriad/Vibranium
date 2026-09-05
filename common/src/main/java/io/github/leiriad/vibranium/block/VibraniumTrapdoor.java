@@ -21,9 +21,9 @@ public class VibraniumTrapdoor extends TrapDoorBlock implements VibraniumKinetic
     public static final MapCodec<VibraniumTrapdoor> CODEC = simpleCodec(properties -> new VibraniumTrapdoor(properties));
 
     public static Properties getProperties(Properties settings) {
-        return Properties.ofFullCopy(Blocks.IRON_TRAPDOOR).mapColor(MapColor.COLOR_BLACK)
+        return Properties.ofFullCopy(Blocks.IRON_TRAPDOOR).mapColor(MapColor.COLOR_BLUE)
                 .sound(VibraniumSoundType.VIBRANIUM_GRATE)
-                .strength(50.0F, 1200.0F)
+                .strength(24F, 532.0F)
                 .requiresCorrectToolForDrops();
     }
 

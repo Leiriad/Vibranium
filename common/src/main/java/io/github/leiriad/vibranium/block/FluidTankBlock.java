@@ -53,7 +53,7 @@ public class FluidTankBlock extends BaseEntityBlock {
                 .mapColor(MapColor.COLOR_BLACK)
                 .noOcclusion()
                 .sound(SoundType.GLASS)
-                .strength(1.5f,6.0f)
+                .strength(36f,800f)
                 .instrument(NoteBlockInstrument.CHIME)
                 .requiresCorrectToolForDrops();
     }

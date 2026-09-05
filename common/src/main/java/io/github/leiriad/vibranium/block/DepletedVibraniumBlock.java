@@ -13,7 +13,7 @@ import net.minecraft.world.level.material.MapColor;
 
 public class DepletedVibraniumBlock extends Block{
     //PROPERTIES
-    public static final MapCodec<Block> CODEC = simpleCodec(BlackBricks::new);
+    public static final MapCodec<Block> CODEC = simpleCodec(DepletedVibraniumBlock::new);
     public static BlockBehaviour.Properties getProperties (BlockBehaviour.Properties settings){
         return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_BLACK)
                 .sound(VibraniumSoundType.DEPLETED_VIBRANIUM_BLOCK)
@@ -36,5 +36,4 @@ public class DepletedVibraniumBlock extends Block{
     public void stepOn(Level level, BlockPos blockPos, BlockState blockState, Entity entity) {
         super.stepOn(level, blockPos, blockState, entity);
     }
-
 }

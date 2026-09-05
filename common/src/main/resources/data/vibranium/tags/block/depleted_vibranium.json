@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "vibranium:depleted_vibranium_block",
-    "vibranium:depleted_vibranium_grate"
+    "vibranium:depleted_vibranium_grate",
+    "vibranium:depleted_vibranium_door",
+    "vibranium:depleted_vibranium_trapdoor",
+    "vibranium:reinforced_vibranium_glass"
   ]
 }

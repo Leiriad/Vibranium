@@ -311,14 +311,22 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
                         .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_block")));
-                //Depleted vibranium grate
-                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), 1)
-                        .pattern(" D ")
-                        .pattern("D D")
-                        .pattern(" D ")
+                //Depleted vibranium door
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_DOOR.get(), 1)
+                        .pattern("DD ")
+                        .pattern("DD ")
+                        .pattern("DD ")
                         .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
                         .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
-                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_grate")));
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_door")));
+                //Depleted vibranium trapdoor
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.BUILDING_BLOCKS, VibraniumBlocks.DEPLETED_VIBRANIUM_TRAPDOOR.get(), 1)
+                        .pattern("   ")
+                        .pattern("DD ")
+                        .pattern("DD ")
+                        .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()), has(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "depleted_vibranium_trapdoor")));
 
                 //FOOD
                 //Blue glow berry suspicious stew

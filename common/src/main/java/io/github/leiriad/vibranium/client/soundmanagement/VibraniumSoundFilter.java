@@ -4,6 +4,7 @@ import io.github.leiriad.vibranium.block.DepletedVibraniumBlock;
 // N'oublie pas d'importer ta classe de grille ici
 // import io.github.leiriad.vibranium.block.DepletedVibraniumGrateBlock;
 import io.github.leiriad.vibranium.block.DepletedVibraniumGrate;
+import io.github.leiriad.vibranium.block.ReinforcedVibraniumGlassBlock;
 import io.github.leiriad.vibranium.utils.VibraniumTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -28,12 +29,12 @@ public class VibraniumSoundFilter {
         Identifier identifier = sound.getIdentifier();
         String path = (identifier != null) ? identifier.getPath() : "";
 
-        // 1. Rain and weather (checking above the player)
+        // Rain and weather (checking above the player)
         if (source == SoundSource.WEATHER || path.contains("rain") || path.contains("thunder")) {
             return getRainAttenuationMultiplier(client);
         }
 
-        // 2. Jukebox / Discs (RECORDS source)
+        // Jukebox / Discs (RECORDS source)
         if (source == SoundSource.RECORDS) {
             Vec3 soundPos = new Vec3(sound.getX(), sound.getY(), sound.getZ());
             Vec3 playerPos = client.player.getEyePosition();
@@ -44,7 +45,7 @@ public class VibraniumSoundFilter {
             }
         }
 
-        // 3. All other sounds positioned in the world (except UI/background music)
+        // All other sounds positioned in the world (except UI/background music)
         if (!sound.isRelative()) {
             Vec3 soundPos = new Vec3(sound.getX(), sound.getY(), sound.getZ());
             Vec3 playerPos = client.player.getEyePosition();
@@ -65,12 +66,13 @@ public class VibraniumSoundFilter {
 
         for (int i = 1; i <= 20; i++) {
             BlockPos checkPos = playerPos.above(i);
-            Block block = client.level.getBlockState(checkPos).getBlock();
+            BlockState state = client.level.getBlockState(checkPos);
 
-            if (block instanceof DepletedVibraniumBlock) {
-                return 0.05f; // 95% attenuation
-            } else if (block instanceof DepletedVibraniumGrate) {
-                return 0.4f; // 60% attenuation
+            if (isDepletedVibranium(state)) {
+                float attenuation = getBlockAttenuation(state);
+                if (attenuation < 1.0f) {
+                    return attenuation;
+                }
             }
         }
         return 1.0f;
@@ -106,28 +108,41 @@ public class VibraniumSoundFilter {
         return Math.max(currentMultiplier, 0.05f);
     }
 
+    /**
+     * Determines individual block attenuation based on tag and block characteristics.
+     */
     private static float getBlockAttenuation(BlockState state) {
-        // Check if the block belongs to the Depleted Vibranium tag
-        if (isDepletedVibranium(state)) {
-
-            // Handle open/close state for doors and trapdoors automatically
-            if (state.hasProperty(DoorBlock.OPEN) && state.getValue(DoorBlock.OPEN)) {
-                return 1.0f; // Sound flows through open doors/trapdoors
-            }
-            if (state.hasProperty(TrapDoorBlock.OPEN) && state.getValue(TrapDoorBlock.OPEN)) {
-                return 1.0f;
-            }
-
-            // Grate specific behavior
-            if (state.getBlock() instanceof DepletedVibraniumGrate) {
-                return 0.5f;
-            }
-
-            // Default closed block attenuation
-            return 0.05f;
+        if (!isDepletedVibranium(state)) {
+            return 1.0f;
         }
 
-        return 1.0f;
+        // Check open/closed status for doors and trapdoors
+        if (state.hasProperty(DoorBlock.OPEN) && state.getValue(DoorBlock.OPEN)) {
+            return 1.0f; // Sound passes freely when open
+        }
+        if (state.hasProperty(TrapDoorBlock.OPEN) && state.getValue(TrapDoorBlock.OPEN)) {
+            return 1.0f;
+        }
+
+        // Specific block behaviors
+        // Closed Door / Trapdoor
+        if (state.getBlock() instanceof DoorBlock || state.getBlock() instanceof TrapDoorBlock) {
+            // Door lowers sound significantly when closed, but leaves a slight leak compared to a full solid block
+            return 0.15f;
+        }
+
+        // Grate (semi-permeable structure)
+        if (state.getBlock() instanceof DepletedVibraniumGrate) {
+            return 0.5f; // 50% sound reduction
+        }
+
+        // Reinforced Glass (dense barrier but partially reflective)
+        if (state.getBlock() instanceof ReinforcedVibraniumGlassBlock) {
+            return 0.2f; // 80% sound reduction
+        }
+
+        //Solid block default attenuation (Full block)
+        return 0.05f; // 95% attenuation
     }
 
     private static boolean isDepletedVibranium(BlockState state) {

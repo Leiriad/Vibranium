@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import io.github.leiriad.vibranium.entity.ReinforcedVibraniumGlassEntity;
 import io.github.leiriad.vibranium.init.VibraniumEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -26,7 +27,7 @@ public class ReinforcedVibraniumGlassBlock extends BaseEntityBlock {
     public static final MapCodec<ReinforcedVibraniumGlassBlock> CODEC = simpleCodec(ReinforcedVibraniumGlassBlock::new);
     public static Properties getProperties (Properties settings){
         return Properties.ofFullCopy(Blocks.GLASS)
-                .strength(1.5f,6.0f)
+                .strength(24f,532f)
                 .mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops();
     }
     @Override
@@ -53,5 +54,11 @@ public class ReinforcedVibraniumGlassBlock extends BaseEntityBlock {
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    //It's made of depleted vibranium so it absorbs sound
+    @Override
+    public void stepOn(Level level, BlockPos blockPos, BlockState blockState, Entity entity) {
+        super.stepOn(level, blockPos, blockState, entity);
     }
 }

@@ -27,7 +27,7 @@ public class DepletedVibraniumGrate extends Block{
     public static Properties getProperties (Properties settings){
         return Properties.ofFullCopy(Blocks.IRON_BLOCK).mapColor(MapColor.COLOR_BLACK)
                 .sound(VibraniumSoundType.DEPLETED_VIBRANIUM_GRATE)
-                .strength(60.0F, 1200.0F)
+                .strength(24F, 532F)
                 .noOcclusion()
                 .requiresCorrectToolForDrops();
     }

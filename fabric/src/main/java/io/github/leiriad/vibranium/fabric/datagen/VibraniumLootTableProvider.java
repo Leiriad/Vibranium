@@ -48,9 +48,6 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
     @Override
     public void generate() {
 
-        Block ore = VibraniumBlocks.VIBRANIUM_ORE.get();
-        if (ore != null) {
-        }
         //Get enchantments
         HolderLookup.RegistryLookup<Enchantment> enchantmentLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
@@ -104,6 +101,8 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         createSimpleBlocksLoot(VibraniumBlocks.VIBRANIUM_TRAPDOOR.get());
         createSimpleBlocksLoot(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get());
         createSimpleBlocksLoot(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get());
+        createSimpleBlocksLoot(VibraniumBlocks.DEPLETED_VIBRANIUM_DOOR.get());
+        createSimpleBlocksLoot(VibraniumBlocks.DEPLETED_VIBRANIUM_TRAPDOOR.get());
     }
 
     private void createVibraniumOreLoot() {
@@ -315,4 +314,5 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
             this.add(coloredBlock, builder);
         }
     }
+
 }

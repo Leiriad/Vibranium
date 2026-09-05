@@ -87,6 +87,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR.get(), "Trappe en vibranium");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), "Bloc de vibranium appauvrit");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), "Grille de vibranium appauvrit");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_DOOR.get(), "Porte en vibranium appauvrit");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_TRAPDOOR.get(), "Trappe en vibranium appauvrit");
 
                 //-- Block items --
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get().asItem(), "Pousse d'herbe cœur");
@@ -97,6 +99,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR_ITEM.get(), "Trappe en vibranium");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK_ITEM.get(), "Bloc de vibranium appauvrit");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE_ITEM.get(), "Grille de vibranium appauvrit");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_DOOR_ITEM.get(), "Porte en vibranium appauvrit");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_TRAPDOOR_ITEM.get(), "Trappe en vibranium appauvrit");
 
                 //-- Items --
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Poudre de vibranium");
@@ -250,6 +254,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR.get(), "Trampilla de vibranium");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), "Bloque de vibranio empobrecido");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), "Rejilla de vibranio empobrecido");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_DOOR.get(), "Puerta de vibranio empobrecido");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_TRAPDOOR.get(), "Trampilla de vibranio empobrecido");
 
                 //-- Block items --
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get().asItem(), "Brote de hierba en forma de corazón");
@@ -260,6 +266,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR_ITEM.get(), "Trampilla de vibranium");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK_ITEM.get(), "Bloque de vibranio empobrecido");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE_ITEM.get(), "Rejilla de vibranio empobrecido");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_DOOR_ITEM.get(), "Puerta de vibranio empobrecido");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_TRAPDOOR_ITEM.get(), "Trampilla de vibranio empobrecido");
 
                 //-- Items --
                 translationBuilder.add(VibraniumItems.BLACK_CLAY_BALL.get(), "Bola de arcilla negra");
@@ -412,6 +420,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR.get(), "Vibranium Trapdoor");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK.get(), "Depleted Vibranium Block");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE.get(), "Depleted Vibranium Grate");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_DOOR.get(), "Depleted Vibranium Door");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_TRAPDOOR.get(), "Depleted Vibranium Trapdoor");
 
                 //-- Block items --
                 translationBuilder.add(VibraniumBlocks.HEART_SHAPED_HERB_FLOWER.get().asItem(), "Heart-shaped Herb Sprout");
@@ -422,6 +432,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumBlocks.VIBRANIUM_TRAPDOOR_ITEM.get(), "Vibranium Trapdoor");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_BLOCK_ITEM.get(), "Depleted Vibranium Block");
                 translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_GRATE_ITEM.get(), "Depleted Vibranium Grate");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_DOOR_ITEM.get(), "Depleted Vibranium Door");
+                translationBuilder.add(VibraniumBlocks.DEPLETED_VIBRANIUM_TRAPDOOR_ITEM.get(), "Depleted Vibranium Trapdoor");
 
                 //-- Items --
                 translationBuilder.add(VibraniumItems.VIBRANIUM_DUST.get(), "Vibranium Dust");

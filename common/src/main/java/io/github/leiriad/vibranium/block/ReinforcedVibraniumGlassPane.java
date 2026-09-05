@@ -10,7 +10,7 @@ public class ReinforcedVibraniumGlassPane extends IronBarsBlock {
     public static final MapCodec<IronBarsBlock> CODEC = simpleCodec(ReinforcedVibraniumGlassPane::new);
     public static Properties getProperties (Properties settings){
         return Properties.ofFullCopy(Blocks.GLASS_PANE)
-                .strength(1.5f,6.0f)
+                .strength(9f,200f)
                 .mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops();
     }
     @Override

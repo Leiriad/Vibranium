@@ -17,12 +17,13 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class VibraniumDoor extends DoorBlock implements VibraniumKineticBlock {
+    //PROPERTIES
     public static final MapCodec<VibraniumDoor> CODEC = simpleCodec(properties -> new VibraniumDoor(properties));
 
     public static Properties getProperties(Properties settings) {
-        return Properties.ofFullCopy(Blocks.IRON_DOOR).mapColor(MapColor.COLOR_BLACK)
+        return Properties.ofFullCopy(Blocks.IRON_DOOR).mapColor(MapColor.COLOR_BLUE)
                 .sound(VibraniumSoundType.VIBRANIUM_BLOCK)
-                .strength(50.0F, 1200.0F)
+                .strength(36F, 798F)
                 .requiresCorrectToolForDrops();
     }
 
@@ -31,10 +32,12 @@ public class VibraniumDoor extends DoorBlock implements VibraniumKineticBlock {
         return CODEC;
     }
 
+    //CONSTRUCTOR
     public VibraniumDoor(Properties properties) {
         super(VibraniumBlockSetType.VIBRANIUM, properties);
     }
 
+    //METHODS
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (isDiamondPickaxe(player.getItemInHand(hand))) {

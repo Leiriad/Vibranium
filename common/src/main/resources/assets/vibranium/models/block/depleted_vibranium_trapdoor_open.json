@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_trapdoor_open",
+  "textures": {
+    "texture": "vibranium:block/depleted_vibranium_trapdoor"
+  }
+}

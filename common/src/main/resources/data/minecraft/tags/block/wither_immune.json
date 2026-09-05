@@ -2,6 +2,16 @@
   "replace": false,
   "values": [
     "vibranium:depleted_vibranium_block",
-    "vibranium:depleted_vibranium_grate"
+    "vibranium:depleted_vibranium_grate",
+    "vibranium:depleted_vibranium_door",
+    "vibranium:depleted_vibranium_trapdoor",
+    "vibranium:reinforced_vibranium_glass",
+    "vibranium:reinforced_vibranium_glass_pane",
+    "vibranium:reactor_core",
+    "vibranium:fluid_tank",
+    "vibranium:reactor_hatch",
+    "vibranium:reactor_outlet",
+    "vibranium:reactor_pump",
+    "vibranium:reactor_control_panel"
   ]
 }
