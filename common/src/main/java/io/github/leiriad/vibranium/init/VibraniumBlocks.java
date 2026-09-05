@@ -80,11 +80,11 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> HEART_SHAPED_HERB_FLOWER = register("heart_shaped_herb_flower", HeartShapedHerbFlower::new, () -> HeartShapedHerbFlower.getProperties(BlockBehaviour.Properties.of()), true);
 
     //INDUSTRIAL
-    public static final RegistrySupplier<Block> REACTOR_CORE = register("reactor_core", ReactorCoreBlock::new, () -> ReactorCoreBlock.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> REACTOR_CONTROL_PANEL = register("reactor_control_panel", ReactorControlPanelBlock::new, () -> ReactorControlPanelBlock.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> REACTOR_HATCH = register("reactor_hatch", ReactorHatchBlock::new, () -> ReactorHatchBlock.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> REACTOR_PUMP = register("reactor_pump", ReactorPumpBlock::new, () -> ReactorPumpBlock.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> REACTOR_OUTLET = register("reactor_outlet", ReactorOutletBlock::new, () -> ReactorOutletBlock.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> REACTOR_CORE = register("reactor_core", ReactorCoreBlock::new, () -> ReactorCoreBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> REACTOR_CONTROL_PANEL = register("reactor_control_panel", ReactorControlPanelBlock::new, () -> ReactorControlPanelBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> REACTOR_HATCH = register("reactor_hatch", ReactorHatchBlock::new, () -> ReactorHatchBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> REACTOR_PUMP = register("reactor_pump", ReactorPumpBlock::new, () -> ReactorPumpBlock.getProperties(BlockBehaviour.Properties.of()), false);
+    public static final RegistrySupplier<Block> REACTOR_OUTLET = register("reactor_outlet", ReactorOutletBlock::new, () -> ReactorOutletBlock.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> FLUID_TANK = register("fluid_tank", FluidTankBlock::new, () -> FluidTankBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> ELECTRIC_WIRE = register("electric_wire", ElectricWireBlock::new, () -> ElectricWireBlock.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> ELECTRIC_WIRE_WALL = register("electric_wire_wall", ElectricWireWallBlock::new, () -> ElectricWireWallBlock.getProperties(BlockBehaviour.Properties.of()), false);
@@ -94,7 +94,7 @@ public class VibraniumBlocks {
 
     //COLORED
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS = register("vibranium_glass", VibraniumGlass::new, () -> VibraniumGlass.getProperties(BlockBehaviour.Properties.of()), true);
-    public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS = register("reinforced_vibranium_glass", ReinforcedVibraniumGlassBlock::new, () -> ReinforcedVibraniumGlassBlock.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS = register("reinforced_vibranium_glass", ReinforcedVibraniumGlassBlock::new, () -> ReinforcedVibraniumGlassBlock.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> VIBRANIUM_GLASS_PANE = register("vibranium_glass_pane", VibraniumGlassPane::new, () -> VibraniumGlassPane.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> REINFORCED_VIBRANIUM_GLASS_PANE = register("reinforced_vibranium_glass_pane", ReinforcedVibraniumGlassPane::new, () -> ReinforcedVibraniumGlassPane.getProperties(BlockBehaviour.Properties.of()), true);
 
@@ -114,6 +114,72 @@ public class VibraniumBlocks {
 
 
     //BLOCKITEMS
+    public static final RegistrySupplier<Item> REACTOR_CORE_ITEM = BLOCKITEMS.register("reactor_core",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "reactor_core"));
+
+                return new ReactorCoreItem(
+                        REACTOR_CORE.get(),
+                        ReactorCoreItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> REACTOR_CONTROL_PANEL_ITEM = BLOCKITEMS.register("reactor_control_panel",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "reactor_control_panel"));
+
+                return new ReactorControlPanelItem(
+                        REACTOR_CONTROL_PANEL.get(),
+                        ReactorControlPanelItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> REACTOR_HATCH_ITEM = BLOCKITEMS.register("reactor_hatch",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "reactor_hatch"));
+
+                return new ReactorHatchItem(
+                        REACTOR_HATCH.get(),
+                        ReactorHatchItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> REACTOR_OUTLET_ITEM = BLOCKITEMS.register("reactor_outlet",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "reactor_outlet"));
+
+                return new ReactorOutletItem(
+                        REACTOR_OUTLET.get(),
+                        ReactorOutletItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> REACTOR_PUMP_ITEM = BLOCKITEMS.register("reactor_pump",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "reactor_pump"));
+
+                return new ReactorPumpItem(
+                        REACTOR_PUMP.get(),
+                        ReactorPumpItem.getProperties().setId(itemKey)
+                );
+            }
+    );
+    public static final RegistrySupplier<Item> REINFORCED_VIBRANIUM_GLASS_ITEM = BLOCKITEMS.register("reinforced_vibranium_glass",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "reinforced_vibranium_glass"));
+
+                return new ReinforcedVibraniumGlassItem(
+                        REINFORCED_VIBRANIUM_GLASS.get(),
+                        ReinforcedVibraniumGlassItem.getProperties().setId(itemKey)
+                );
+            }
+    );
     public static final RegistrySupplier<Item> BLUE_GLOW_BERRIES = BLOCKITEMS.register("blue_glow_berries",
             () -> {
                 // Create id

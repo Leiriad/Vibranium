@@ -26,10 +26,6 @@ public class DepletedVibraniumBlockItem extends BlockItem {
         consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.sound_info")
                 .withStyle(ChatFormatting.GRAY));
 
-        // Kinetic dampening description
-        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.dampening_info")
-                .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
-
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
     }
 

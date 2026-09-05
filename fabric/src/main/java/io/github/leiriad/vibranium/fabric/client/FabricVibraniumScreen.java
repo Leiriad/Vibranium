@@ -30,7 +30,7 @@ public class FabricVibraniumScreen {
                 .setDefaultValue(VibraniumConfig.DEFAULT_OVERWORLD_SPACING)
                 .setSaveConsumer(newValue -> VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.spacing = newValue)
 
-                .setTooltip(Component.translatable("text.vibranium.config.tooltip.spacing"))
+                .setTooltip(Component.translatable("text.vibranium.config.tooltip.spacing.line1"),Component.translatable("text.vibranium.config.tooltip.spacing.line2"))
                 .build());
 
         overworldCategory.addEntry(entryBuilder.startIntField(
@@ -39,7 +39,7 @@ public class FabricVibraniumScreen {
                 .setDefaultValue(VibraniumConfig.DEFAULT_OVERWORLD_SEPARATION)
                 .setSaveConsumer(newValue -> VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.separation = newValue)
 
-                .setTooltip(Component.translatable("text.vibranium.config.tooltip.separation"))
+                .setTooltip(Component.translatable("text.vibranium.config.tooltip.separation.line1"),Component.translatable("text.vibranium.config.tooltip.separation.line2"))
                 .build());
 
         // --- Dynamic Weights Section ---
@@ -73,7 +73,7 @@ public class FabricVibraniumScreen {
                 .setDefaultValue(VibraniumConfig.DEFAULT_END_SPACING)
                 .setSaveConsumer(newValue -> VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.spacing = newValue)
 
-                .setTooltip(Component.translatable("text.vibranium.config.tooltip.spacing"))
+                .setTooltip(Component.translatable("text.vibranium.config.tooltip.spacing.line1"),Component.translatable("text.vibranium.config.tooltip.spacing.line2"))
                 .build());
 
         endCategory.addEntry(entryBuilder.startIntField(
@@ -82,7 +82,7 @@ public class FabricVibraniumScreen {
                 .setDefaultValue(VibraniumConfig.DEFAULT_END_SEPARATION)
                 .setSaveConsumer(newValue -> VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.separation = newValue)
 
-                .setTooltip(Component.translatable("text.vibranium.config.tooltip.separation"))
+                .setTooltip(Component.translatable("text.vibranium.config.tooltip.separation.line1"),Component.translatable("text.vibranium.config.tooltip.separation.line2"))
                 .build());
 
         // --- Dynamic Weights Section ---

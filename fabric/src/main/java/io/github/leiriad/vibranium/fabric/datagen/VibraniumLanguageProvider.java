@@ -154,6 +154,19 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", "Eau Chaude : %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium : %ds restants");
 
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req", "Nécessite d'être au centre d'une structure de 3x3x3 blocs pour fonctionner.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_2", "Les blocs compatibles sont les blocs de réacteur, les réservoirs de fluides");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_3", "et les blocs de verre renforcé.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.function", "Cœur principal gérant la réaction et le comportement du réacteur.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.warning", "Risque d'explosion.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.function", "Interface du réacteur.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "Clic droit pour ouvrir l'interface de contrôle.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.function", "Permet l'insertion et l'extraction d'objets pour le réacteur.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.requirement", "Doit être connecté à un cœur de réacteur valide.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_pump.function", "Injecte de l'eau dans le réacteur pour son refroidissement.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_outlet.function", "Extrait la vapeur du réacteur sous forme d'eau chaude.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.properties", "Très résistant, absorbe les sons et conduit l'électricité.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Isole efficacement des radiations du cœur du réacteur.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Insérez la poudre de Vibranium ici");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Résidus et scories de combustion");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Distillé dans un alambic. Haute concentration !");
@@ -194,8 +207,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Séparation (Separation)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Probabilité d'apparition des structures (Weights)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Poids (Weight) pour %s");
-                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing", "La distance maximale (en chunks) pour la grille de génération. Des valeurs plus élevées rendent les structures plus rares.");
-                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation", "La distance minimale (en chunks) entre les structures. Doit être inférieure à l'espacement (spacing).");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line1", "La distance maximale (en chunks) pour la grille de génération.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line2", "Des valeurs plus élevées rendent les structures plus rares.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line1", "La distance minimale (en chunks) entre les structures.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line2", "Doit être inférieure à l'espacement (spacing).");
                 break;
             case "es_es":
                 //--Blocks with items--
@@ -320,6 +335,19 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Aqua: %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranio: quedan %ds");
 
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req", "Debe estar en el centro de una estructura de 3x3x3 bloques para funcionar.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_2", "Los bloques compatibles incluyen bloques de reactor, tanques de fluidos");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_3", "y bloques de cristal reforzado.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.function", "Núcleo principal que gestiona la reacción y el comportamiento del reactor.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.warning", "Riesgo de explosión.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.function", "Interfaz del reactor.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "Haz clic derecho para abrir la interfaz de control.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.function", "Permite la inserción y extracción de objetos para el reactor.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.requirement", "Debe estar conectado a un núcleo de reactor válido.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_pump.function", "Inyecta agua en el reactor para su refrigeración.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_outlet.function", "Extrae el vapor del reactor en forma de agua caliente.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.properties", "Muy resistente, absorbe el sonido y conduce electricidad.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Aísla eficazmente contra la radiación del núcleo del reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Inserta el polvo de Vibranium aquí");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Residuos y escorias de combustión");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Destilado en un alambique. ¡Alta graduación!");
@@ -360,8 +388,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separación (Separation)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Probabilidad de Estructuras (Weights)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Probabilidad (Weight) para %s");
-                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing", "La distancia máxima (en chunks) para la cuadrícula de generación. Los valores más altos hacen que las estructuras sean más raras.");
-                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation", "La distancia mínima (en chunks) entre estructuras. Debe ser menor que el espaciado (spacing).");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line1", "La distancia máxima (en chunks) para la cuadrícula de generación.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line2", "Los valores más altos hacen que las estructuras sean más raras.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line1", "La distancia mínima (en chunks) entre estructuras.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line2", "Debe ser menor que el espaciado (spacing).");
                 break;
             default:
                 //--Blocks with items--
@@ -488,6 +518,19 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Water: %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium : %ds restants");
 
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req", "Must be placed at the centre of a 3x3x3 structure to function.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_2", "Compatible blocks include reactor blocks, fluid tanks,");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_3", "and reinforced glass blocks.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.function", "Main core managing the reaction and reactor behaviour.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.warning", "Risk of explosion.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.function", "Reactor interface.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "Right-click to open the control interface.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.function", "Allows item insertion and extraction for the reactor.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.requirement", "Must be connected to a valid reactor core.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_pump.function", "Injects water into the reactor for cooling.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_outlet.function", "Extracts steam from the reactor as hot water.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.properties", "Highly resistant, dampens sound, and conducts electricity.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Effectively insulates against radiation from the reactor core.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Insert Vibranium powder here");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Combustion waste and slag");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Distilled in a brewing stand. High potency!");
@@ -528,8 +571,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separation");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Structure Spawn Weights");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Weight for %s");
-                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing", "The maximum distance (in chunks) for the generation grid. Higher values make structures rarer.");
-                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation", "The minimum distance (in chunks) between structures. Must be lower than spacing.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line1", "The maximum distance (in chunks) for the generation grid.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line2", "Higher values make structures rarer.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line1", "The minimum distance (in chunks) between structures. Must be lower than spacing.");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line2", "Must be lower than spacing.");
         }
 
     }

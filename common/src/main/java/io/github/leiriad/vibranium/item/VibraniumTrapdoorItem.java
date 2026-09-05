@@ -23,10 +23,10 @@ public class VibraniumTrapdoorItem extends BlockItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
         consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".trapdoor.repulsion")
-                .withStyle(ChatFormatting.LIGHT_PURPLE));
+                .withStyle(ChatFormatting.GRAY));
 
         consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".trapdoor.interaction")
-                .withStyle(ChatFormatting.GRAY));
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
 
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
     }
