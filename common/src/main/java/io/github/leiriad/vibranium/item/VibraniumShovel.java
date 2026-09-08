@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 
 public class VibraniumShovel extends ShovelItem {
 
-    // ThreadLocal guard to prevent recursive execution loops when mining a 3x3 area
+    //ThreadLocal guard to prevent recursive execution loops when mining a 3x3 area
     private static final ThreadLocal<Boolean> IS_MINING_AREA = ThreadLocal.withInitial(() -> false);
     private static final float COST_PER_EXTRA_BLOCK = 2.0F;
     private static final float COST_PER_PATH_BLOCK = 0.5F; // Low charge cost for flattening paths
@@ -76,7 +76,7 @@ public class VibraniumShovel extends ShovelItem {
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner) {
         if (!level.isClientSide() && miner instanceof Player player && !IS_MINING_AREA.get()) {
 
-            // Build kinetic charge on primary block broken
+            //Build kinetic charge on primary block broken
             float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
             float updatedCharge = Math.min(100.0F, currentCharge + 5.0F);
             stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), updatedCharge);
@@ -96,7 +96,7 @@ public class VibraniumShovel extends ShovelItem {
                 }
             }
 
-            // Passive feature: Gravity neutralizer for falling block columns
+            //Passive feature: Gravity neutralizer for falling block columns
             if (state.getBlock() instanceof FallingBlock) {
                 BlockPos abovePos = pos.above();
                 BlockState aboveState = level.getBlockState(abovePos);
@@ -123,7 +123,7 @@ public class VibraniumShovel extends ShovelItem {
 
         ItemStack stack = context.getItemInHand();
 
-        // Shift + Right Click on block -> Toggle Kinetic Burst (3x3 mode)
+        //Shift + Right Click on block -> Toggle Kinetic Burst (3x3 mode)
         if (player.isSecondaryUseActive()) {
             if (!level.isClientSide()) {
                 toggleKineticBurstMode(level, player, stack);
@@ -131,7 +131,7 @@ public class VibraniumShovel extends ShovelItem {
             return InteractionResult.SUCCESS;
         }
 
-        // Standard Right Click on block -> Dirt path creation (1x1 or 3x3 depending on mode)
+        //Standard Right Click on block -> Dirt path creation (1x1 or 3x3 depending on mode)
         if (context.getClickedFace() != Direction.DOWN) {
             BlockState targetState = level.getBlockState(clickedPos);
             BlockState pathState = FLATTENABLES.get(targetState.getBlock());
@@ -161,7 +161,7 @@ public class VibraniumShovel extends ShovelItem {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        // Shift + Right Click in air -> Toggle Kinetic Burst (3x3 mode)
+        //Shift + Right Click in air -> Toggle Kinetic Burst (3x3 mode)
         if (player.isSecondaryUseActive()) {
             if (!level.isClientSide()) {
                 toggleKineticBurstMode(level, player, stack);
@@ -169,7 +169,7 @@ public class VibraniumShovel extends ShovelItem {
             return InteractionResult.SUCCESS;
         }
 
-        // Maintain blocking stance on normal right click in air
+        //Maintain blocking stance on normal right click in air
         player.startUsingItem(hand);
         return InteractionResult.CONSUME;
     }
@@ -184,7 +184,7 @@ public class VibraniumShovel extends ShovelItem {
         boolean newState = !currentMode;
 
         if (newState) {
-            // Refuse activation if charge is insufficient
+            //Refuse activation if charge is insufficient
             if (currentCharge < COST_PER_EXTRA_BLOCK) {
                 return;
             }
@@ -218,7 +218,7 @@ public class VibraniumShovel extends ShovelItem {
         }
 
         if (axis == Direction.Axis.Y) {
-            // Player looking UP/DOWN: clear 3x3 horizontal plane
+            //Player looking UP/DOWN: clear 3x3 horizontal plane
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
                     if (x == 0 && z == 0) continue;
@@ -229,7 +229,7 @@ public class VibraniumShovel extends ShovelItem {
                 }
             }
         } else {
-            // Player looking CARDINAL (N/S/E/W): clear horizontal surface line (depth x width)
+            //Player looking CARDINAL (N/S/E/W): clear horizontal surface line (depth x width)
             Direction right = direction.getClockWise();
 
             for (int depth = -1; depth <= 2; depth++) {
@@ -277,7 +277,7 @@ public class VibraniumShovel extends ShovelItem {
             for (int z = -radius; z <= radius; z++) {
                 float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
-                // Allow central block for free, require cost for surrounding path blocks
+                //Allow central block for free, require cost for surrounding path blocks
                 if (x != 0 || z != 0) {
                     if (currentCharge < COST_PER_PATH_BLOCK) {
                         continue;
@@ -321,23 +321,6 @@ public class VibraniumShovel extends ShovelItem {
         return 72000;
     }
 
-    /* --- Kinetic Charge Bar --- */
-
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F) > 0.0F;
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        return Math.round((Math.min(charge, 100.0F) / 100.0F) * 13.0F);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return 0x9933FF; // Purple charge bar
-    }
 
     @Override
     public void appendHoverText(

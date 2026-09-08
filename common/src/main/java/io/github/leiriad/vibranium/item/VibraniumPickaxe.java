@@ -37,7 +37,7 @@ import java.util.function.Consumer;
 
 public class VibraniumPickaxe extends Item {
 
-    // ThreadLocal guard to prevent recursive execution loops when mining a 3x3 area
+    //ThreadLocal guard to prevent recursive execution loops when mining a 3x3 area
     private static final ThreadLocal<Boolean> IS_MINING_AREA = ThreadLocal.withInitial(() -> false);
     private static final float COST_PER_EXTRA_BLOCK = 2.0F;
 
@@ -58,7 +58,7 @@ public class VibraniumPickaxe extends Item {
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner) {
         if (!level.isClientSide() && miner instanceof Player player && !IS_MINING_AREA.get()) {
 
-            // Build kinetic charge on primary block broken
+            //Build kinetic charge on primary block broken
             float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
             float updatedCharge = Math.min(100.0F, currentCharge + 5.0F);
             stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), updatedCharge);
@@ -92,7 +92,7 @@ public class VibraniumPickaxe extends Item {
 
         ItemStack stack = context.getItemInHand();
 
-        // Shift + Right Click -> Toggle Kinetic Burst (3x3 mode)
+        //Shift + Right Click -> Toggle Kinetic Burst (3x3 mode)
         if (player.isSecondaryUseActive()) {
             if (!level.isClientSide()) {
                 toggleKineticBurstMode(level, player, stack);
@@ -100,7 +100,7 @@ public class VibraniumPickaxe extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        // Standard Right Click on Block -> Trigger Sonar Pulse (Echolocation)
+        //Standard Right Click on Block -> Trigger Sonar Pulse (Echolocation)
         if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
             if (tryTriggerSonarPulse(serverLevel, context.getClickedPos(), player, stack)) {
                 return InteractionResult.SUCCESS;
@@ -114,7 +114,7 @@ public class VibraniumPickaxe extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        // Shift + Right Click in air -> Toggle Kinetic Burst (3x3 mode)
+        //Shift + Right Click in air -> Toggle Kinetic Burst (3x3 mode)
         if (player.isSecondaryUseActive()) {
             if (!level.isClientSide()) {
                 toggleKineticBurstMode(level, player, stack);
@@ -122,7 +122,7 @@ public class VibraniumPickaxe extends Item {
             return InteractionResult.SUCCESS;
         }
 
-        // Standard Right Click in air -> Trigger Sonar Pulse (Echolocation)
+        //Standard Right Click in air -> Trigger Sonar Pulse (Echolocation)
         if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
             if (tryTriggerSonarPulse(serverLevel, player.blockPosition(), player, stack)) {
                 return InteractionResult.SUCCESS;
@@ -141,7 +141,7 @@ public class VibraniumPickaxe extends Item {
         boolean newState = !currentMode;
 
         if (newState) {
-            // Refuse activation if charge is insufficient
+            //Refuse activation if charge is insufficient
             if (currentCharge < COST_PER_EXTRA_BLOCK) {
                 return;
             }
@@ -205,7 +205,7 @@ public class VibraniumPickaxe extends Item {
         float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
         if (currentCharge < COST_PER_EXTRA_BLOCK) {
-            return false; // Charge insuffisante
+            return false; //Charge insuffisante
         }
 
         BlockState targetState = level.getBlockState(pos);
@@ -239,10 +239,10 @@ public class VibraniumPickaxe extends Item {
         if (charge >= cost) {
             stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), charge - cost);
 
-            // Sonar sound effect
+            //Sonar sound effect
             level.playSound(null, center, SoundEvents.WARDEN_SONIC_BOOM, SoundSource.PLAYERS, 0.4F, 1.8F);
 
-            // Scan ores within a 12-block radius
+            //Scan ores within a 12-block radius
             int radius = 12;
             int durationTicks = 200; // 10 seconds highlight
             List<BlockPos> foundOres = new ArrayList<>();
@@ -254,12 +254,12 @@ public class VibraniumPickaxe extends Item {
                 }
             }
 
-            // Send packet to client for rendering highlights
+            //Send packet to client for rendering highlights
             if (player instanceof ServerPlayer serverPlayer && !foundOres.isEmpty()) {
                 NetworkManager.sendToPlayer(serverPlayer, new OreHighlightPayload(foundOres, durationTicks));
             }
 
-            // Highlight nearby entities with Glowing effect
+            //Highlight nearby entities with Glowing effect
             AABB area = new AABB(center).inflate(radius);
             level.getEntitiesOfClass(LivingEntity.class, area, e -> e != player).forEach(entity -> {
                 entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, durationTicks, 0, false, false));
@@ -269,22 +269,6 @@ public class VibraniumPickaxe extends Item {
         }
 
         return false;
-    }
-
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F) > 0.0F;
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        return Math.round((Math.min(charge, 100.0F) / 100.0F) * 13.0F);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return 0x9933FF; // Purple charge bar
     }
 
     @Override

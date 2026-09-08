@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 public class VibraniumMod {
 	public static final String MOD_ID = "vibranium";
+	public static final int BarColour = 0xFF9933FF;//Vibranium Purple
+	public static final int BarBackground =  0xFF000000; //Black
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -21,7 +23,7 @@ public class VibraniumMod {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Vibranium is loaded!");
+		//LOGGER.info("Vibranium is loaded!");
 
 		//Initialize Registry Content
 		VibraniumDataComponents.DATA_COMPONENTS.register();

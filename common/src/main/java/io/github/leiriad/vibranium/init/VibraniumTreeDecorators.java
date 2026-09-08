@@ -25,7 +25,5 @@ public class VibraniumTreeDecorators {
         GRADIENT_DECORATOR = (RegistrySupplier<TreeDecoratorType<VibraniumGradientDecorator>>) (Object) DECORATORS.register(id,
                 () -> new TreeDecoratorType<>(CODEC)
         );
-
-        VibraniumMod.LOGGER.info("Vibranium Tree has been registered !");
     }
 }

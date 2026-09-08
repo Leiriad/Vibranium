@@ -1,7 +1,7 @@
 {
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
-	"parent": "minecraft:block/cube_all",
+	"parent": "minecraft:block/block",
 	"textures": {
 		"1": "vibranium:block/electric_heater_on",
 		"particle": "vibranium:block/electric_heater"

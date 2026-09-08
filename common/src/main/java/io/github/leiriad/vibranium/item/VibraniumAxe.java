@@ -46,24 +46,7 @@ public class VibraniumAxe extends AxeItem {
     }
 
     public static Item.Properties getProperties(Item.Properties settings) {
-        Item.Properties props = settings.enchantable(22);
-
-        props.attributes(
-                ItemAttributeModifiers.builder()
-                        .add(
-                                Attributes.ATTACK_DAMAGE,
-                                new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 8.0F, AttributeModifier.Operation.ADD_VALUE), // Direct heavy damage
-                                EquipmentSlotGroup.MAINHAND
-                        )
-                        .add(
-                                Attributes.ATTACK_SPEED,
-                                new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -3.1F, AttributeModifier.Operation.ADD_VALUE), // Heavy attack speed
-                                EquipmentSlotGroup.MAINHAND
-                        )
-                        .build()
-        );
-
-        return props;
+       return settings.enchantable(22);
     }
 
     @Override
@@ -73,7 +56,7 @@ public class VibraniumAxe extends AxeItem {
             boolean isBurstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
 
             if (isBurstActive) {
-                // RESONANCE MODE: Consume charge
+                //RESONANCE MODE: Consume charge
                 if (state.is(BlockTags.MINEABLE_WITH_AXE) || state.is(BlockTags.LEAVES)) {
                     float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
                     if (currentCharge < COST_PER_EXTRA_BLOCK) {
@@ -88,14 +71,14 @@ public class VibraniumAxe extends AxeItem {
                     }
                 }
             } else {
-                // NORMAL MODE: Gain charge when mining valid blocks
+                //NORMAL MODE: Gain charge when mining valid blocks
                 float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
                 if (state.is(BlockTags.MINEABLE_WITH_AXE)) {
-                    // Full charge gain for wood logs
+                    //Full charge gain for wood logs
                     stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), Math.min(100.0F, currentCharge + 5.0F));
                 } else if (state.is(BlockTags.LEAVES)) {
-                    // Reduced charge gain for leaves
+                    //Reduced charge gain for leaves
                     stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), Math.min(100.0F, currentCharge + 1.0F));
                 }
             }
@@ -111,15 +94,11 @@ public class VibraniumAxe extends AxeItem {
 
             if (target.isBlocking() && currentCharge >= 15.0F) {
                 stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), currentCharge - 15.0F);
+
                 if (target instanceof Player targetPlayer) {
-                    var blockingItem = targetPlayer.getItemBlockingWith();
-                    if (!blockingItem.isEmpty()) {
-                        var blocksAttacks = blockingItem.get(net.minecraft.core.component.DataComponents.BLOCKS_ATTACKS);
-                        if (blocksAttacks != null) {
-                            blocksAttacks.disable(level, targetPlayer, 5.0F, blockingItem);
-                        }
-                    }
+                    disablePlayerShield(level, targetPlayer);
                 }
+
                 level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.SHIELD_BREAK.value(), SoundSource.PLAYERS, 1.0F, 0.8F);
             }
         }
@@ -215,16 +194,16 @@ public class VibraniumAxe extends AxeItem {
     private void burstMine(Level level, BlockPos center, Player player, ItemStack stack) {
         EquipmentSlot slot = EquipmentSlot.MAINHAND;
 
-        // Trigger a visual and sound shockwave centered on the broken block
+        //Trigger a visual and sound shockwave centered on the broken block
         if (level instanceof ServerLevel serverLevel) {
             VibraniumToolActions.spawnShockwave(serverLevel, center.getBottomCenter(), 1.5F, 0.2F, player);
         }
 
-        // Iterate through a full 3x3x3 cube around the targeted block
+        //Iterate through a full 3x3x3 cube around the targeted block
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 for (int z = -1; z <= 1; z++) {
-                    // Ignore the central block already broken by mineBlock
+                    //Ignore the central block already broken by mineBlock
                     if (x == 0 && y == 0 && z == 0) continue;
 
                     BlockPos targetPos = center.offset(x, y, z);
@@ -236,16 +215,16 @@ public class VibraniumAxe extends AxeItem {
 
     private void breakBlockWithCost(Level level, BlockPos pos, Player player, ItemStack stack, EquipmentSlot slot) {
         BlockState state = level.getBlockState(pos);
-        // Skip air and non-matching blocks immediately without consuming charge or stopping the loop
+        //Skip air and non-matching blocks immediately without consuming charge or stopping the loop
         if (state.isAir() || (!state.is(BlockTags.MINEABLE_WITH_AXE) && !state.is(BlockTags.LEAVES))) {
             return;
         }
         float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        // Stop breaking extra blocks if charge is depleted
+        //Stop breaking extra blocks if charge is depleted
         if (currentCharge < COST_PER_EXTRA_BLOCK) {
             return;
         }
-        // Break valid blocks (wood or leaves) and deduct kinetic charge
+        //Break valid blocks (wood or leaves) and deduct kinetic charge
         stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), currentCharge - COST_PER_EXTRA_BLOCK);
         level.destroyBlock(pos, true, player);
         stack.hurtAndBreak(1, player, slot);
@@ -272,27 +251,12 @@ public class VibraniumAxe extends AxeItem {
         if (!blockingItem.isEmpty()) {
             BlocksAttacks blocksAttacks = blockingItem.get(DataComponents.BLOCKS_ATTACKS);
             if (blocksAttacks != null) {
-                // Applies a cooldown/disable time to the item used for parrying
+                //Applies a cooldown/disable time to the item used for parrying
                 float cooldownSeconds = targetPlayer.getSecondsToDisableBlocking();
                 float duration = cooldownSeconds > 0.0F ? cooldownSeconds : 5.0F; // 5 seconds
                 blocksAttacks.disable(level, targetPlayer, duration, blockingItem);
             }
         }
-    }
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F) > 0.0F;
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        return Math.round((Math.min(charge, 100.0F) / 100.0F) * 13.0F);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return 0x9933FF;
     }
 
     @Override

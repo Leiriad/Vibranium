@@ -50,6 +50,7 @@ public class VibraniumSpear extends Item {
 
     public static Item.Properties getProperties(Item.Properties settings) {
         Item.Properties props = settings
+                .durability(VibraniumToolMaterial.VIBRANIUM.durability())
                 .enchantable(22)
                 .spear(
                 VibraniumToolMaterial.VIBRANIUM,
@@ -100,19 +101,19 @@ public class VibraniumSpear extends Item {
         ItemStack stack = player.getItemInHand(hand);
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
-        if (charge >= 10.0F) { // Requires a minimum charge threshold
+        if (charge >= 10.0F) { //Requires a minimum charge threshold
             if (level instanceof ServerLevel serverLevel) {
                 float radius = 3.0F + (charge / 20.0F); // Effect radius based on charge
                 float force = 1.5F + (charge / 50.0F);  // Knockback force multiplier
                 float shockwaveDamage = charge * 0.15F;  // Energy-based damage
 
-                // Target position centered slightly in front of the player
+                //Target position centered slightly in front of the player
                 Vec3 targetPoint = player.position().add(player.getLookAngle().scale(1.5));
 
-                // Trigger visual and physical shockwave via utility class
+                //Trigger visual and physical shockwave via utility class
                 VibraniumToolActions.spawnShockwave(serverLevel, targetPoint, radius, force, player);
 
-                // Apply direct area damage to entities in range
+                //Apply direct area damage to entities in range
                 double diameter = radius * 2.0;
                 AABB area = AABB.ofSize(targetPoint, diameter, diameter, diameter);
                 List<LivingEntity> targets = level.getEntitiesOfClass(
@@ -125,11 +126,12 @@ public class VibraniumSpear extends Item {
                     target.hurt(level.damageSources().playerAttack(player), shockwaveDamage);
                 }
 
-                // Reset kinetic charge after releasing energy
+                //Reset kinetic charge after releasing energy
                 stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
             }
 
-            player.getCooldowns().addCooldown(stack, 40); // 2-second cooldown after release
+            player.getCooldowns().addCooldown(stack, 40); //2-second cooldown after release
+            stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
             return InteractionResult.SUCCESS;
         }
 
@@ -137,27 +139,8 @@ public class VibraniumSpear extends Item {
     }
 
     @Override
-    public boolean isBarVisible(ItemStack stack) {
-        // Bar appears at 25% charge
-        float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        return charge > 0.0F;
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        // Max inventory bar is 13 pixel long
-        return Math.round((Math.min(charge, 100.0F) / 100.0F) * 13.0F);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return 0x9933FF; // Violet
-    }
-    @Override
     public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity, @Nullable EquipmentSlot equipmentSlot) {
         if (entity instanceof Player player) {
-            // Vérification directe sur l'item tenu en main principale (contourne la limitation d'equipmentSlot)
             boolean isHoldingInMainHand = player.getMainHandItem() == itemStack;
 
             if (isHoldingInMainHand) {

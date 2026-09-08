@@ -45,18 +45,18 @@ public class VibraniumSword extends Item {
                 ItemAttributeModifiers.builder()
                         .add(
                                 Attributes.ATTACK_DAMAGE,
-                                new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 6.0F, AttributeModifier.Operation.ADD_VALUE), // Base damage 9 (3 + 6)
+                                new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 6.0F, AttributeModifier.Operation.ADD_VALUE), //Base damage 9 (3 + 6)
                                 EquipmentSlotGroup.MAINHAND
                         )
                         .add(
                                 Attributes.ATTACK_SPEED,
-                                new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.2F, AttributeModifier.Operation.ADD_VALUE), // Speed 1.8
+                                new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.2F, AttributeModifier.Operation.ADD_VALUE), //Speed 1.8
                                 EquipmentSlotGroup.MAINHAND
                         )
-                        // Lore: Vibranium absorbs physical feedback, making the wielder immune to knockback
+                        //Vibranium absorbs physical feedback, making the wielder immune to knockback
                         .add(
                                 Attributes.KNOCKBACK_RESISTANCE,
-                                new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 0.25F, AttributeModifier.Operation.ADD_VALUE), // +25% knockback resistance
+                                new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 0.25F, AttributeModifier.Operation.ADD_VALUE), //+25% knockback resistance
                                 EquipmentSlotGroup.MAINHAND
                         )
                         .build()
@@ -67,19 +67,19 @@ public class VibraniumSword extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        // Start blocking / parrying stance (like shield or trident channel)
+        //Start blocking / parrying stance (like shield or trident channel)
         player.startUsingItem(hand);
         return InteractionResult.CONSUME;
     }
 
     @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
-        return ItemUseAnimation.BLOCK; // Play blocking animation in third person
+        return ItemUseAnimation.BLOCK; //Play blocking animation in third person
     }
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 72000; // Can hold guard for up to 1 hour (standard shield behavior)
+        return 72000; //Can hold guard for up to 1 hour (standard shield behavior)
     }
 
     @Override
@@ -87,15 +87,15 @@ public class VibraniumSword extends Item {
         if (attacker.level() instanceof ServerLevel serverLevel && attacker instanceof Player player) {
             float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
-            if (charge >= 10.0F) { // Minimal charge required to trigger discharge
-                float radius = 2.5F + (charge / 25.0F);  // Shockwave radius
-                float force = 1.0F + (charge / 50.0F);   // Knockback force
-                float bonusDamage = charge * 0.25F;      // Increased scaling for noticeable damage
+            if (charge >= 10.0F) { //Minimal charge required to trigger discharge
+                float radius = 2.5F + (charge / 25.0F);  //Shockwave radius
+                float force = 1.0F + (charge / 50.0F);   //Knockback force
+                float bonusDamage = charge * 0.25F;      //Increased scaling for noticeable damage
 
-                // 1. Trigger the visual and physical shockwave around the struck target
+                //Trigger the visual and physical shockwave around the struck target
                 VibraniumToolActions.spawnShockwave(serverLevel, target.position(), radius, force, player);
 
-                // 2. Deal shockwave area damage to surrounding enemies (excluding the wielder)
+                //Deal shockwave area damage to surrounding enemies (excluding the wielder)
                 double diameter = radius * 2.0;
                 AABB area = AABB.ofSize(target.position(), diameter, diameter, diameter);
                 List<LivingEntity> nearbyTargets = serverLevel.getEntitiesOfClass(
@@ -105,33 +105,17 @@ public class VibraniumSword extends Item {
                 );
 
                 for (LivingEntity nearby : nearbyTargets) {
-                    // Bypass invulnerability frames briefly for the direct target if needed
+                    //Bypass invulnerability frames briefly for the direct target if needed
                     nearby.invulnerableTime = 0;
                     nearby.hurt(serverLevel.damageSources().playerAttack(player), bonusDamage);
                 }
 
-                // 3. Reset charge after releasing energy
+                //Reset charge after releasing energy
                 stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
             }
         }
 
         super.hurtEnemy(stack, target, attacker);
-    }
-
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        return stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F) > 0.0F;
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        return Math.round((Math.min(charge, 100.0F) / 100.0F) * 13.0F);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return 0x9933FF; // Violet
     }
 
     @Override
