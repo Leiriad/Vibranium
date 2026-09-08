@@ -16,7 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemLore;
-import net.minecraft.world.level.block.Block;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -129,10 +128,10 @@ public class VibraniumItems {
         return new AncestralNectar(AncestralNectar.getProperties().setId(key));
     });
 
-    public static final RegistrySupplier<Item> BLUE_BERRY_SPIRIT = ITEMS.register("blue_berry_spirit", () -> {
+    public static final RegistrySupplier<Item> BLUE_BERRIES_SPIRIT = ITEMS.register("blue_berries_spirit", () -> {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
-                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "blue_berry_spirit"));
-        return new BlueBerrySpirit(BlueBerrySpirit.getProperties().setId(key).component(DataComponents.LORE, new ItemLore(List.of(
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "blue_berries_spirit"));
+        return new BlueBerriesSpirit(BlueBerriesSpirit.getProperties().setId(key).component(DataComponents.LORE, new ItemLore(List.of(
                 Component.translatable("tooltip.vibranium.distilled_alcohol")
         ))));
     });
@@ -177,7 +176,7 @@ public class VibraniumItems {
         // FOOD & DRINKS
         List.of(
                 BLUE_SOUP,
-                BLUE_BERRY_SPIRIT,
+                BLUE_BERRIES_SPIRIT,
                 ANCESTRAL_NECTAR
         ).forEach(supplier -> CreativeTabRegistry.appendStack(CreativeModeTabs.FOOD_AND_DRINKS, () -> new ItemStack(supplier.get())));
 
@@ -197,7 +196,7 @@ public class VibraniumItems {
                 DEPLETED_VIBRANIUM_INGOT,
                 BLACK_BRICK,
                 BLUE_SOUP,
-                BLUE_BERRY_SPIRIT,
+                BLUE_BERRIES_SPIRIT,
                 ANCESTRAL_NECTAR,
                 VIBRANIUM_SPEAR,
                 VIBRANIUM_SWORD,

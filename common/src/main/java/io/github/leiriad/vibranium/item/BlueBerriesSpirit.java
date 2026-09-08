@@ -12,9 +12,7 @@ import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.Level;
 
-import java.util.List;
-
-public class BlueBerrySpirit extends PotionItem {
+public class BlueBerriesSpirit extends PotionItem {
     public static Item.Properties getProperties() {
         return new Item.Properties()
                 .stacksTo(16) // Max stack of 16 like potions/bottles
@@ -32,7 +30,7 @@ public class BlueBerrySpirit extends PotionItem {
 
     }
 
-    public BlueBerrySpirit(Properties properties) {
+    public BlueBerriesSpirit(Properties properties) {
         super(properties);
     }
 

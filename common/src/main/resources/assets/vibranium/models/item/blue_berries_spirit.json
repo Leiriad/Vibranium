@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "vibranium:item/blue_berry_spirit_overlay",
+    "layer0": "vibranium:item/blue_berries_spirit_overlay",
     "layer1": "minecraft:item/potion"
   }
 }

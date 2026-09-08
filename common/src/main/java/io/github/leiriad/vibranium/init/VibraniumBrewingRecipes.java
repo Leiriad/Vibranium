@@ -20,7 +20,7 @@ public class VibraniumBrewingRecipes {
                 () -> PotionContents.createItemStack(Items.POTION, Potions.WATER),// Water Bottle input
                 () -> new ItemStack(VibraniumBlocks.BLUE_GLOW_BERRIES.get()),// Blue Glow Berries ingredient
                 () -> {
-                    ItemStack alcohol = new ItemStack(VibraniumItems.BLUE_BERRY_SPIRIT.get());// Blue Berry Alcohol output
+                    ItemStack alcohol = new ItemStack(VibraniumItems.BLUE_BERRIES_SPIRIT.get());// Blue Berry Alcohol output
 
                     return alcohol;// Register recipe
                 }

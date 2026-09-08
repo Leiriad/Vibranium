@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "item": "vibranium:blue_berries_spirit",
+      "thirst": 4,
+      "hydration": 0.4,
+      "stamina": 0,
+      "temperature": 4.0
+    }
+  ]
+}

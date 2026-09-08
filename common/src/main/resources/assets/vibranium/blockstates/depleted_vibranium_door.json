@@ -61,7 +61,7 @@
       "y": 0
     },
     "facing=west,half=lower,hinge=left,open=false": {
-      "model": "vibranium:block/vibranium_door_bottom_left",
+      "model": "vibranium:block/depleted_vibranium_door_bottom_left",
       "y": 180
     },
     "facing=west,half=lower,hinge=left,open=true": {

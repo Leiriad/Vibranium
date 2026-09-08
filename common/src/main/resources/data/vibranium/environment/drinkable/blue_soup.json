@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "item": "vibranium:blue_soup",
+      "thirst": 10,
+      "hydration": 0.8,
+      "stamina": 5,
+      "temperature": 3.0
+    }
+  ]
+}

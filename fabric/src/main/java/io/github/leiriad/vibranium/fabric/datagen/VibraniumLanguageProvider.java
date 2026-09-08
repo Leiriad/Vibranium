@@ -111,7 +111,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Lingot de vibranium appauvrit");
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Soupe bleue");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Nectar ancestral");
-                translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Eau de vie de baies bleues");
+                translationBuilder.add(VibraniumItems.BLUE_BERRIES_SPIRIT.get(), "Eau de vie de baies bleues");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lance en vibranium");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Épée en vibranium");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SHOVEL.get(), "Pelle en vibranium");
@@ -120,7 +120,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_AXE.get(), "Hache en vibranium");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
 
-                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berry_spirit.effect.water", "Eau de vie de baies bleues");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_spirit.effect.water", "Eau de vie de baies bleues");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_wine", "Vin de baies bleues");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".black_electric_wire", "Fil électrique noir");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_electric_wire", "Fil électrique bleu");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".brown_electric_wire", "Fil électrique marron");
@@ -292,7 +293,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Lingote de vibranio empobrecido");
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Sopa azul");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Néctar ancestral");
-                translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Aguardiente de baya azul");
+                translationBuilder.add(VibraniumItems.BLUE_BERRIES_SPIRIT.get(), "Aguardiente de baya azul");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Lanza de vibranio");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Espada de vibranio");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SHOVEL.get(), "Pala de vibranio");
@@ -301,7 +302,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_AXE.get(), "Hacha de vibranio");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
 
-                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berry_spirit.effect.water", "Aguardiente de baya azul");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_spirit.effect.water", "Aguardiente de baya azul");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_wine", "Vino de baya azul");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".black_electric_wire", "Cable eléctrico negro");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_electric_wire", "Cable eléctrico azul");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".brown_electric_wire", "Cable eléctrico marrón");
@@ -474,7 +476,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get(), "Depleted Vibranium Ingot");
                 translationBuilder.add(VibraniumItems.BLUE_SOUP.get(), "Blue Soup");
                 translationBuilder.add(VibraniumItems.ANCESTRAL_NECTAR.get(), "Ancestral Nectar");
-                translationBuilder.add(VibraniumItems.BLUE_BERRY_SPIRIT.get(), "Blue Glow Berries Spirit");
+                translationBuilder.add(VibraniumItems.BLUE_BERRIES_SPIRIT.get(), "Blue Glow Berries Spirit");
 
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SPEAR.get(), "Vibranium Spear");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_SWORD.get(), "Vibranium Sword");
@@ -484,7 +486,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_AXE.get(), "Vibranium Axe");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Hot Water Bucket");
 
-                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berry_spirit.effect.water", "Blue Glow Berries Spirit");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_spirit.effect.water", "Blue Glow Berries Spirit");
+                translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_wine", "Blue Glow Berries Wine");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".black_electric_wire", "Black Electric Wire");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_electric_wire", "Blue Electric Wire");
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".brown_electric_wire", "Brown Electric Wire");

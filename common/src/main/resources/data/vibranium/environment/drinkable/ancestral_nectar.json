@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "item": "vibranium:ancestral_nectar",
+      "thirst": 20,
+      "hydration": 1,
+      "stamina": 20,
+      "temperature": 10
+    }
+  ]
+}
