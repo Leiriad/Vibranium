@@ -118,6 +118,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_PICKAXE.get(), "Pioche en vibranium");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_HOE.get(), "Houe en vibranium");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_AXE.get(), "Hache en vibranium");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_HELMET.get(), "Casque de la Panthère");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_CHESTPLATE.get(), "Plastron de la Panthère");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_LEGGINGS.get(), "Jambières de la Panthère");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_BOOTS.get(), "Bottes de la Panthère");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Seau d'eau chaude");
 
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_spirit.effect.water", "Eau de vie de baies bleues");
@@ -197,6 +201,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.sound_info", "Absorbe les sons environnants et bloque les vibrations acoustiques.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.blast_info", "Extrêmement dense, offre une résistance presque totale aux explosions.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_grate.sound_info", "Atténue partiellement les sons proches et le bruit de la pluie.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_set_bonus", "§7Bonus d'ensemble : Transfert d'énergie cinétique");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_helmet_desc", "§7L'immunité à l'Obscurité et révèle les entités proches.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_chestplate_desc", "§7Stocke les dégâts physiques subis sous forme de charge cinétique.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_leggings_desc", "§7Augmente la vitesse de déplacement et la hauteur de franchissement.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_boots_desc", "§7Convertit les dégâts de chute en charge cinétique et étouffe les vibrations Sculk.");
 
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
@@ -300,6 +309,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_PICKAXE.get(), "Pico de vibranio");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_HOE.get(), "Azada de vibranio");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_AXE.get(), "Hacha de vibranio");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_HELMET.get(), "Casco de la Pantera");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_CHESTPLATE.get(), "Peto de la Pantera");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_LEGGINGS.get(), "Grebas de la Pantera");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_BOOTS.get(), "Botas de la Pantera");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Cubo de agua caliente");
 
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_spirit.effect.water", "Aguardiente de baya azul");
@@ -379,6 +392,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.sound_info", "Absorbe los sonidos cercanos y bloquea las vibraciones acústicas.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.blast_info", "Extremadamente denso, ofrece una resistencia casi total a las explosiones.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_grate.sound_info", "Atenúa parcialmente los sonidos cercanos y el ruido de la lluvia.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_set_bonus", "§7Bonificación de conjunto: Transferencia de energía cinética");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_helmet_desc", "§7Otorga inmunidad a la Oscuridad y revela entidades cercanas.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_chestplate_desc", "§7Almacena el daño físico recibido como carga cinética.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_leggings_desc", "§7Aumenta la velocidad de movimiento y la altura de escalón.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_boots_desc", "§7Convierte el daño de caída en carga cinética y suprime las vibraciones de Sculk.");
 
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
@@ -484,6 +502,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add(VibraniumItems.VIBRANIUM_PICKAXE.get(), "Vibranium Pickaxe");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_HOE.get(), "Vibranium Hoe");
                 translationBuilder.add(VibraniumItems.VIBRANIUM_AXE.get(), "Vibranium Axe");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_HELMET.get(), "Black Panther Helmet");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_CHESTPLATE.get(), "Black Panther Chestplate");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_LEGGINGS.get(), "Black Panther Leggings");
+                translationBuilder.add(VibraniumItems.BLACK_PANTHER_BOOTS.get(), "Black Panther Boots");
                 translationBuilder.add(VibraniumItems.HOT_WATER_BUCKET.get(), "Hot Water Bucket");
 
                 translationBuilder.add("item." + VibraniumMod.MOD_ID + ".blue_berries_spirit.effect.water", "Blue Glow Berries Spirit");
@@ -563,6 +585,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.sound_info", "Absorbs surrounding sounds and blocks acoustic vibrations.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.blast_info", "Extremely dense, offering near-total resistance to explosions.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_grate.sound_info", "Partially dampens nearby sounds and weather noise.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_set_bonus", "§7Full Set Bonus: Kinetic Energy Transfer");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_helmet_desc", "§7Grants immunity to Darkness and reveals nearby entities.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_chestplate_desc", "§7Stores incoming physical damage as kinetic charge.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_leggings_desc", "§7Increases movement speed and step height.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_boots_desc", "§7Converts fall damage into kinetic charge and suppresses Sculk vibrations.");
 
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "This hatch is not connected to any reactor core!");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "Reactor Meltdown Alarm blares!");

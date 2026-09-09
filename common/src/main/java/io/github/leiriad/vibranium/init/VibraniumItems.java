@@ -16,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.equipment.ArmorType;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -148,6 +149,26 @@ public class VibraniumItems {
                 Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_sword"));
         return new VibraniumSword(VibraniumSword.getProperties(new Item.Properties()).setId(key));
     });
+    public static final RegistrySupplier<Item> BLACK_PANTHER_HELMET = ITEMS.register("black_panther_helmet", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_helmet"));
+        return new BlackPantherArmorItem(ArmorType.HELMET, BlackPantherArmorItem.getHelmetProperties(new Item.Properties()).setId(key));
+    });
+    public static final RegistrySupplier<Item> BLACK_PANTHER_CHESTPLATE = ITEMS.register("black_panther_chestplate", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_chestplate"));
+        return new BlackPantherArmorItem(ArmorType.CHESTPLATE, BlackPantherArmorItem.getChestplateProperties(new Item.Properties()).setId(key));
+    });
+    public static final RegistrySupplier<Item> BLACK_PANTHER_LEGGINGS = ITEMS.register("black_panther_leggings", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_leggings"));
+        return new BlackPantherArmorItem(ArmorType.LEGGINGS, BlackPantherArmorItem.getLeggingsProperties(new Item.Properties()).setId(key));
+    });
+    public static final RegistrySupplier<Item> BLACK_PANTHER_BOOTS = ITEMS.register("black_panther_boots", () -> {
+        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
+                Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_boots"));
+        return new BlackPantherArmorItem(ArmorType.BOOTS, BlackPantherArmorItem.getBootsProperties(new Item.Properties()).setId(key));
+    });
 
     public static void registerModItems() {
         ITEMS.register();
@@ -183,7 +204,11 @@ public class VibraniumItems {
         // COMBAT
         List.of(
                 VIBRANIUM_SPEAR,
-                VIBRANIUM_SWORD
+                VIBRANIUM_SWORD,
+                BLACK_PANTHER_HELMET,
+                BLACK_PANTHER_CHESTPLATE,
+                BLACK_PANTHER_LEGGINGS,
+                BLACK_PANTHER_BOOTS
         ).forEach(supplier -> CreativeTabRegistry.appendStack(CreativeModeTabs.COMBAT, () -> new ItemStack(supplier.get())));
 
         // VIBRANIUM TAB
@@ -203,7 +228,11 @@ public class VibraniumItems {
                 VIBRANIUM_PICKAXE,
                 VIBRANIUM_SHOVEL,
                 VIBRANIUM_HOE,
-                VIBRANIUM_AXE
+                VIBRANIUM_AXE,
+                BLACK_PANTHER_HELMET,
+                BLACK_PANTHER_CHESTPLATE,
+                BLACK_PANTHER_LEGGINGS,
+                BLACK_PANTHER_BOOTS
         ).forEach(supplier -> CreativeTabRegistry.appendStack(VibraniumCreativeTabs.VIBRANIUM_TAB, () -> new ItemStack(supplier.get())));
 
         // REGISTER ELECTRIC WIRES IN TABS

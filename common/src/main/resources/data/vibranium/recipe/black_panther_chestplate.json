@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "V": "vibranium:vibranium_ingot"
+  },
+  "pattern": [
+    "V V",
+    "VVV",
+    "VVV"
+  ],
+  "result": {
+    "count": 1,
+    "id": "vibranium:black_panther_chestplate"
+  }
+}

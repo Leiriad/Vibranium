@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "vibranium:vibranium_pickaxe",
+    "vibranium:vibranium_shovel",
+    "vibranium:vibranium_hoe",
+    "vibranium:vibranium_axe",
+    "vibranium:vibranium_spear",
+    "vibranium:black_panther_helmet",
+    "vibranium:black_panther_chestplate",
+    "vibranium:black_panther_leggings",
+    "vibranium:black_panther_boots"
+  ]
+}

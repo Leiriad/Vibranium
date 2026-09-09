@@ -351,7 +351,7 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .unlockedBy(getHasName(VibraniumItems.HEART_SHAPED_HERB.get()), has(VibraniumItems.HEART_SHAPED_HERB.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "ancestral_nectar_from_heart_shaped_herb")));
 
-                //TOOLS & WEAPONS
+                //COMBAT
                 // Vibranium spear
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.VIBRANIUM_SPEAR.get(), 1)
                         .pattern("  V")
@@ -370,6 +370,38 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .define('D', VibraniumItems.DEPLETED_VIBRANIUM_INGOT.get())
                         .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "vibranium_sword")));
+                // Black Panther Helmet
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.BLACK_PANTHER_HELMET.get(), 1)
+                        .pattern("VVV")
+                        .pattern("V V")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_helmet")));
+                // Black Panther Chestplate
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.BLACK_PANTHER_CHESTPLATE.get(), 1)
+                        .pattern("V V")
+                        .pattern("VVV")
+                        .pattern("VVV")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_chestplate")));
+                // Black Panther Leggings
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.BLACK_PANTHER_LEGGINGS.get(), 1)
+                        .pattern("VVV")
+                        .pattern("V V")
+                        .pattern("V V")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_leggings")));
+                // Black Panther Boots
+                ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.BLACK_PANTHER_BOOTS.get(), 1)
+                        .pattern("V V")
+                        .pattern("V V")
+                        .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
+                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_boots")));
+
+                //TOOLS
                 // Vibranium shovel
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.TOOLS, VibraniumItems.VIBRANIUM_SHOVEL.get(), 1)
                         .pattern(" V ")
