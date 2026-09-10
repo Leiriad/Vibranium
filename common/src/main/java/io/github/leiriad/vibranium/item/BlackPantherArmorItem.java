@@ -2,25 +2,38 @@ package io.github.leiriad.vibranium.item;
 
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.utils.VibraniumArmorMaterials;
+import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
+import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BlackPantherArmorItem extends Item {
+public class BlackPantherArmorItem extends Item implements VibraniumAbilityItem{
 
     private final ArmorType armorType;
+    private static final float MAX_CHARGE = 100.0F;
+
     private static final Identifier HELMET_ARMOR_ID = Identifier.fromNamespaceAndPath("vibranium", "helmet_armor");
     private static final Identifier HELMET_TOUGHNESS_ID = Identifier.fromNamespaceAndPath("vibranium", "helmet_toughness");
     private static final Identifier HELMET_KNOCKBACK_ID = Identifier.fromNamespaceAndPath("vibranium", "helmet_knockback");
@@ -107,12 +120,64 @@ public class BlackPantherArmorItem extends Item {
                                 .build()
                 );
     }
+    //COMMON METHODS
+    /**
+     * Triggers active abilities based on the equipped armor piece when the ability key is pressed.
+     */
+    @Override
+    public void onAbilityKeyPressed(Player player, ItemStack stack) {
+        if (!(player.level() instanceof ServerLevel serverLevel)) return;
+
+        switch (this.armorType) {
+            case HELMET -> triggerTacticalScan(serverLevel, player);
+            case CHESTPLATE -> {
+            }
+            case LEGGINGS, BOOTS -> {
+            }
+        }
+    }
+
+    /**
+     * Highlights nearby living entities through walls for a short duration.
+     */
+    private void triggerTacticalScan(ServerLevel level, Player player) {
+        double radius = 25.0D;
+        int durationTicks = 160; // 8 seconds
+
+        AABB scanArea = player.getBoundingBox().inflate(radius);
+        List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, scanArea, e -> e != player && e.isAlive());
+
+        if (!targets.isEmpty()) {
+            for (LivingEntity target : targets) {
+                target.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                        net.minecraft.world.effect.MobEffects.GLOWING,
+                        durationTicks,
+                        0,
+                        false,
+                        false
+                ));
+            }
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS, 0.8F, 1.2F);
+        } else {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.PLAYERS, 0.5F, 1.5F);
+        }
+    }
+
+    public static void triggerAutoDischarge(ServerLevel level, Player player, ItemStack chestStack) {
+        // Triggers a radial shockwave around the player
+        VibraniumToolActions.spawnShockwave(level, player.position(), 6.0F, 1.5F, player);
+
+        // Resets chestplate charge to zero
+        chestStack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
+    }
 
     //TOOLTIPS
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
-
+        Component useKey = Minecraft.getInstance().options.keyUse.getTranslatedKeyMessage();
         // Common suit tooltip
         consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".black_panther_set_bonus")
                 .withStyle(ChatFormatting.GRAY));
@@ -120,7 +185,7 @@ public class BlackPantherArmorItem extends Item {
         // Specific tooltips per armor piece
         switch (this.armorType) {
             case HELMET -> {
-                consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".black_panther_helmet_desc")
+                consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".black_panther_helmet_desc", useKey)
                         .withStyle(ChatFormatting.GRAY));
             }
             case CHESTPLATE -> {

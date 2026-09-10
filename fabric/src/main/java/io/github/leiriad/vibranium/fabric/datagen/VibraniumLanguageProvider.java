@@ -149,6 +149,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 //-- Tabs --
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
 
+                //-- Keys --
+                translationBuilder.add("key.category." + VibraniumMod.MOD_ID + ".general", "Vibranium Mod");
+                translationBuilder.add("key." + VibraniumMod.MOD_ID + ".use_ability", "Activer la capacité (Arme / Armure)");
+
                 //-- Text --
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_control_panel", "Panneau de contrôle du réacteur");
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Trappe d'alimentation du réacteur");
@@ -165,7 +169,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.function", "Cœur principal gérant la réaction et le comportement du réacteur.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.warning", "Risque d'explosion.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.function", "Interface du réacteur.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "Clic droit pour ouvrir l'interface de contrôle.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "%s pour ouvrir l'interface de contrôle.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.function", "Permet l'insertion et l'extraction d'objets pour le réacteur.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.requirement", "Doit être connecté à un cœur de réacteur valide.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_pump.function", "Injecte de l'eau dans le réacteur pour son refroidissement.");
@@ -178,19 +182,19 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Charge cinétique");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Propulsion Cinétique : ACTIF");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive", "Propulsion Cinétique : INACTIF");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "Shift + Clic Droit : Alterner Mode 3x3");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation", "Clic Droit : Impulsion d'Écholocalisation");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "%s + %s : Alterner Mode 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation", "%s : Impulsion d'Écholocalisation");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.passive.filter", "Passif : Préserve les Minerais et Structures");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.gravity", "Passif : Fait S'effondrer les Blocs Soumis à la Gravité");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.path", "Clic Droit : Créateur de Chemins 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.path", "%s : Créateur de Chemins 3x3");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.resonant_till", "Labourage par résonance : Laboure une zone de 3x3");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.sonic_harvest", "Moisson sonique : Casser une culture mûre libère une onde de récolte");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.passive.sculk_suppression", "Amortissement acoustique : Miner du Sculk ne produit aucune vibration.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "Clic Droit : Tranchant Cinétique");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "%s : Tranchant Cinétique");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break", "Passif : Désarme les Boucliers par Surcharge Cinétique");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".wire.tranfer_rate", "Taux de transfert : %s K E/t");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.charge_info", "Accumule de l'énergie cinétique en subissant des coups ou en recevant des projectiles ou chutes.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.release_info", "Clic droit ou signal Redstone pour libérer une onde de choc.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.release_info", "%s ou signal Redstone pour libérer une onde de choc.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.shockwave_effect", "L'onde de choc repousse les entités et casse tous les blocs aux alentours.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.info", "Laisse passer les fluides et les objets librement.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.repulsion", "Émet une impulsion cinétique directionnelle lorsqu'une entité vivante marche dessus si alimentée par de la redstone.");
@@ -210,9 +214,18 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
 
+                //Config
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Configuration de Vibranium");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.client", "Interface Client");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.overworld", "Génération de Météorites : Overworld");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.end", "Génération de Météorites : End");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.gameplay", "Gameplay & Capacités");
+
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hud_alignment", "Alignement de la barre cinétique");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.center", "Centré");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.left", "Gauche");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.right", "Droite");
+
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Espacement (Spacing)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Séparation (Separation)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Probabilité d'apparition des structures (Weights)");
@@ -221,6 +234,24 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line2", "Des valeurs plus élevées rendent les structures plus rares.");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line1", "La distance minimale (en chunks) entre les structures.");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line2", "Doit être inférieure à l'espacement (spacing).");
+
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.helmet_cost", "Coût en charge du casque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.helmet_radius", "Rayon de la vision du casque");
+
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_burst_cost", "Pioche : Coût du minage 3x3 par bloc");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_cost", "Pioche : Coût du Sonar");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_radius", "Pioche : Rayon du Sonar (en blocs)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_duration", "Pioche : Durée du Sonar (en ticks)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_burst_cost", "Hache : Coût de la coupe 3x3 par bloc");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_cost", "Hache : Coût de l'Onde de choc");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_distance", "Hache : Portée de l'Onde de choc");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_damage", "Hache : Dégâts de l'Onde de choc");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.shovel_burst_cost", "Pelle : Coût du creusage 3x3 par bloc");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.shovel_path_cost", "Pelle : Coût du chemin 3x3 par bloc");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hoe_till_cost", "Houe : Coût du labourage 3x3 par bloc");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hoe_harvest_cost", "Houe : Coût de récolte de zone");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.sword_discharge_threshold", "Épée : Seuil de décharge cinétique");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spear_discharge_threshold", "Lance : Seuil de décharge cinétique");
                 break;
             case "es_es":
                 //--Blocks with items--
@@ -340,6 +371,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 //-- Tabs --
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranio");
 
+                //-- Keys --
+                translationBuilder.add("key.category." + VibraniumMod.MOD_ID + ".general", "Vibranium Mod");
+                translationBuilder.add("key." + VibraniumMod.MOD_ID + ".use_ability", "Activar habilidad (Arma / Armadura)");
+
                 //-- Text --
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_control_panel", "Panel de control del reactor");
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Escotilla de alimentación del reactor");
@@ -356,7 +391,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.function", "Núcleo principal que gestiona la reacción y el comportamiento del reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.warning", "Riesgo de explosión.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.function", "Interfaz del reactor.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "Haz clic derecho para abrir la interfaz de control.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "Haz %s para abrir la interfaz de control.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.function", "Permite la inserción y extracción de objetos para el reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.requirement", "Debe estar conectado a un núcleo de reactor válido.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_pump.function", "Inyecta agua en el reactor para su refrigeración.");
@@ -369,19 +404,19 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Carga cinética");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Propulsión Cinética: ACTIVO");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive", "Propulsión Cinética: INACTIVO");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "Shift + Clic Derecho: Alternar Modo 3x3");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation", "Clic Derecho: Pulso de Ecolocalización");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "%s + %s: Alternar Modo 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation", "%s: Pulso de Ecolocalización");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.passive.filter", "Pasivo: Preserva Minerales y Estructuras");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.gravity", "Pasivo: Colapsa Bloques Afectados por la Gravedad");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.path", "Clic Derecho: Creador de Caminos 3x3");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.path", "%s: Creador de Caminos 3x3");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.resonant_till", "Labrado resonante: Labra un área de 3x3 de tierra");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.sonic_harvest", "Cosecha sónica: Romper cultivos maduros libera una onda de cosecha");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.passive.sculk_suppression", "Amortiguación acústica: Minar Sculk no genera vibraciones.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "Clic Derecho: Filo Cinético");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "%s: Filo Cinético");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break", "Pasivo: Desarma Escudos por Sobrecarga Cinética");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".wire.tranfer_rate", "Tasa de transferencia: %s K E/t");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.charge_info", "Acumula energía cinética al recibir golpes, proyectiles o caídas.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.release_info", "Clic derecho o señal de Redstone para liberar una onda de choque.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.release_info", "%s o señal de Redstone para liberar una onda de choque.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.shockwave_effect", "La onda de choque empuja a las entidades y rompe todos los bloques a su alrededor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.info", "Permite el paso libre de fluidos u objetos.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.repulsion", "Emite un impulso cinético direccional cuando una entidad viva la pisa si está alimentada por redstone.");
@@ -401,17 +436,45 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
 
+                //Config
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Configuración de Vibranium");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.client", "Interfaz Cliente");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.overworld", "Generación de Meteoritos: Overworld");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.end", "Generación de Meteoritos: End");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.gameplay", "Jugabilidad y Habilidades");
+
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hud_alignment", "Alineación de la barra cinética");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.center", "Centro");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.left", "Izquierda");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.right", "Derecha");
+
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Espaciado (Spacing)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separación (Separation)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Probabilidad de Estructuras (Weights)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.weight_for", "Probabilidad (Weight) para %s");
+
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.helmet_cost", "Coste de carga del casco");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.helmet_radius", "Radio de visión del casco");
+
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line1", "La distancia máxima (en chunks) para la cuadrícula de generación.");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line2", "Los valores más altos hacen que las estructuras sean más raras.");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line1", "La distancia mínima (en chunks) entre estructuras.");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line2", "Debe ser menor que el espaciado (spacing).");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_burst_cost", "Pico: Coste de minado 3x3 por bloque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_cost", "Pico: Coste del Sónar");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_radius", "Pico: Radio del Sónar (en bloques)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_duration", "Pico: Duración del Sónar (en ticks)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_burst_cost", "Hacha: Coste de corte 3x3 por bloque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_cost", "Hacha: Coste de la Onda de choque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_distance", "Hacha: Alcance de la Onda de choque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_damage", "Hacha: Daño de la Onda de choque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.shovel_burst_cost", "Pala: Coste de excavación 3x3 por bloque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.shovel_path_cost", "Pala: Coste de camino 3x3 por bloque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hoe_till_cost", "Azada: Coste de labrado 3x3 por bloque");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hoe_harvest_cost", "Azada: Coste de cosecha en área");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.sword_discharge_threshold", "Espada: Umbral de descarga cinética");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spear_discharge_threshold", "Lanza: Umbral de descarga cinética");
+
                 break;
             default:
                 //--Blocks with items--
@@ -533,6 +596,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 //-- Tabs --
                 translationBuilder.add(VibraniumCreativeTabs.VIBRANIUM_TAB.get().getDisplayName().getString(), "Vibranium");
 
+                //-- Keys --
+                translationBuilder.add("key.category." + VibraniumMod.MOD_ID + ".general", "Vibranium Mod");
+                translationBuilder.add("key." + VibraniumMod.MOD_ID + ".use_ability", "Activate Ability (Weapon / Armor)");
+
                 //-- Text --
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_control_panel", "Reactor Control Panel");
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Reactor fuel hatch");
@@ -549,7 +616,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.function", "Main core managing the reaction and reactor behaviour.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.warning", "Risk of explosion.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.function", "Reactor interface.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "Right-click to open the control interface.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", "%s to open the control interface.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.function", "Allows item insertion and extraction for the reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_hatch.requirement", "Must be connected to a valid reactor core.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_pump.function", "Injects water into the reactor for cooling.");
@@ -562,7 +629,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Kinetic Charge");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Kinetic Burst: ACTIVE");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive", "Kinetic Burst: INACTIVE");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "Shift + Right Click: Toggle 3x3 Mode");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", "%s + %s: Toggle 3x3 Mode");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.active.echolocation", "Right Click: Echolocation Pulse");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".pickaxe.passive.filter", "Passive: Preserves Ores & Structures");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.gravity", "Passive: Collapse Falling Blocks");
@@ -570,11 +637,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.resonant_till", "Resonant Tilling: Tills a 3x3 area of soil");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.active.sonic_harvest", "Sonic Harvest: Breaking mature crops releases a harvesting shockwave");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".hoe.passive.sculk_suppression", "Acoustic Dampening: Mining Sculk produces no vibrations.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "Right-Click: Kinetic Edge");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", "%s: Kinetic Edge");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break", "Passive: Disarms Shields via Kinetic Overload");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID +".wire.tranfer_rate", "Transfer rate: %s K E/t");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.charge_info", "Stores kinetic energy when taking hits, projectiles, or is fallen on.");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.release_info", "Right-click or apply Redstone to unleash a shockwave.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.release_info", "%s or apply Redstone to unleash a shockwave.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".block.shockwave_effect", "The shockwave knocks back entities and breaks all surrounding blocks.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.info", "Allows fluids and items to pass through freely.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".grate.repulsion", "Emits a directional kinetic pulse when a living entity steps on it if powered by redstone.");
@@ -586,7 +653,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_block.blast_info", "Extremely dense, offering near-total resistance to explosions.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".depleted_grate.sound_info", "Partially dampens nearby sounds and weather noise.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_set_bonus", "§7Full Set Bonus: Kinetic Energy Transfer");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_helmet_desc", "§7Grants immunity to Darkness and reveals nearby entities.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_helmet_desc", "§7Grants immunity to Darkness and reveals nearby entities (Sneak + %s).");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_chestplate_desc", "§7Stores incoming physical damage as kinetic charge.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_leggings_desc", "§7Increases movement speed and step height.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_panther_boots_desc", "§7Converts fall damage into kinetic charge and suppresses Sculk vibrations.");
@@ -594,9 +661,18 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "This hatch is not connected to any reactor core!");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "Reactor Meltdown Alarm blares!");
 
+                //Config
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Vibranium Configuration");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.client", "Client Interface");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.overworld", "Meteorite Generation: Overworld");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.end", "Meteorite Generation: The End");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.gameplay", "Gameplay & Abilities");
+
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hud_alignment", "Kinetic Bar Alignment");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.center", "Centre");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.left", "Left");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.right", "Right");
+
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Spacing");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separation");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.section.weights", "§6Structure Spawn Weights");
@@ -605,6 +681,25 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.spacing.line2", "Higher values make structures rarer.");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line1", "The minimum distance (in chunks) between structures. Must be lower than spacing.");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.tooltip.separation.line2", "Must be lower than spacing.");
+
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.helmet_cost", "Helmet Charge Cost");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.helmet_radius", "Helmet Vision Radius");
+
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_burst_cost", "Pickaxe: 3x3 Mining Cost Per Block");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_cost", "Pickaxe: Sonar Cost");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_radius", "Pickaxe: Sonar Radius (in blocks)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.pickaxe_sonar_duration", "Pickaxe: Sonar Duration (in ticks)");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_burst_cost", "Axe: 3x3 Chopping Cost Per Block");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_cost", "Axe: Shockwave Cost");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_distance", "Axe: Shockwave Distance");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.axe_cleave_damage", "Axe: Shockwave Damage");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.shovel_burst_cost", "Shovel: 3x3 Digging Cost Per Block");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.shovel_path_cost", "Shovel: 3x3 Path Cost Per Block");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hoe_till_cost", "Hoe: 3x3 Tilling Cost Per Block");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.hoe_harvest_cost", "Hoe: Area Harvest Cost");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.sword_discharge_threshold", "Sword: Kinetic Discharge Threshold");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spear_discharge_threshold", "Spear: Kinetic Discharge Threshold");
+
         }
 
     }

@@ -17,10 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CaveVines;
-import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -290,9 +287,12 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
         }
     }
     private void createSimpleBlocksLoot(Block industrialBlock) {
-        if(industrialBlock != null){
-            this.add(industrialBlock, (block) ->
-                    this.createSingleItemTable(industrialBlock));
+        if (industrialBlock != null) {
+            if (industrialBlock instanceof DoorBlock) {
+                this.add(industrialBlock, this.createDoorTable(industrialBlock));
+            } else {
+                this.add(industrialBlock, this.createSingleItemTable(industrialBlock));
+            }
         }
     }
     private void createColoredBlocksLoot(Block coloredBlock) {

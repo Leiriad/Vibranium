@@ -22,13 +22,13 @@ public abstract class RandomSpreadStructurePlacementMixin {
 
         // Check if it matches your permanent configuration IDs
         if (currentSalt == 12345678) {
-            int customSpacing = VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.spacing;
-            int customSeparation = VibraniumConfigManager.INSTANCE.meteoritesOverworld.placement.separation;
+            int customSpacing = VibraniumConfigManager.INSTANCE.worldGen.meteoritesOverworld.placement.spacing;
+            int customSeparation = VibraniumConfigManager.INSTANCE.worldGen.meteoritesOverworld.placement.separation;
 
             cir.setReturnValue(calculateChunkPos(instance, seed, x, z, customSpacing, customSeparation, currentSalt));
         } else if (currentSalt == 87654321) {
-            int customSpacing = VibraniumConfigManager.INSTANCE.meteoritesEnd.placement.spacing;
-            int customSeparation = VibraniumConfigManager.INSTANCE.meteoritesEnd.placement.separation;
+            int customSpacing = VibraniumConfigManager.INSTANCE.worldGen.meteoritesEnd.placement.spacing;
+            int customSeparation = VibraniumConfigManager.INSTANCE.worldGen.meteoritesEnd.placement.separation;
 
             cir.setReturnValue(calculateChunkPos(instance, seed, x, z, customSpacing, customSeparation, currentSalt));
         }

@@ -1,10 +1,13 @@
 package io.github.leiriad.vibranium.item;
 
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.client.event.KeyInputHandler;
+import io.github.leiriad.vibranium.config.VibraniumConfigManager;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -34,11 +37,12 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Consumer;
 
-public class VibraniumHoe extends HoeItem {
+public class VibraniumHoe extends HoeItem implements VibraniumAbilityItem{
 
     private static final ThreadLocal<Boolean> IS_HARVESTING_AREA = ThreadLocal.withInitial(() -> false);
-    private static final float COST_PER_EXTRA_TILL = 0.5F;
-    private static final float COST_PER_HARVEST_PULSE = 5.0F;
+    private static final float COST_PER_EXTRA_TILL = VibraniumConfigManager.INSTANCE.tools.hoeTillCost;
+    private static final float COST_PER_HARVEST_PULSE = VibraniumConfigManager.INSTANCE.tools.hoeHarvestCost;
+    private static final int HARVEST_RADIUS = 3;
 
     public VibraniumHoe(Properties properties) {
         super(VibraniumToolMaterial.VIBRANIUM, -3.0F, 0.0F, properties);
@@ -64,6 +68,16 @@ public class VibraniumHoe extends HoeItem {
 
         return props;
     }
+    /**
+     * Handles key press packet from server (NetworkManager receiver).
+     * Toggles 3x3 Kinetic Burst mode immediately.
+     */
+    @Override
+    public void onAbilityKeyPressed(Player player, ItemStack stack) {
+        if (player.level() instanceof ServerLevel serverLevel) {
+            toggleKineticBurstMode(serverLevel, player, stack);
+        }
+    }
 
     /**
      * Accumulates kinetic charge on block break.
@@ -78,8 +92,10 @@ public class VibraniumHoe extends HoeItem {
             float updatedCharge = Math.min(100.0F, currentCharge + 10.0F);
             stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), updatedCharge);
 
-            // Sonic Harvest effect when breaking a mature crop
-            if (state.getBlock() instanceof CropBlock cropBlock && cropBlock.isMaxAge(state)) {
+            // Check if BURST_MODE is active before triggering Sonic Harvest Pulse
+            boolean burstActive = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
+
+            if (burstActive && state.getBlock() instanceof CropBlock cropBlock && cropBlock.isMaxAge(state)) {
                 if (updatedCharge >= COST_PER_HARVEST_PULSE) {
                     IS_HARVESTING_AREA.set(true);
                     try {
@@ -106,21 +122,13 @@ public class VibraniumHoe extends HoeItem {
 
         ItemStack stack = context.getItemInHand();
 
-        // Shift + Right Click on block -> Toggle Kinetic Burst (3x3 mode)
-        if (player.isSecondaryUseActive()) {
-            if (!level.isClientSide()) {
-                toggleKineticBurstMode(level, player, stack);
-            }
-            return InteractionResult.SUCCESS;
-        }
-
-        // Standard Right Click on block -> Resonant Tilling (1x1 or 3x3 depending on mode)
+        // Standard Right Click on block -> Resonant Tilling (1x1 or radiusxradius depending on mode)
         if (context.getClickedFace() != Direction.DOWN) {
             BlockState targetState = level.getBlockState(clickedPos);
 
             if (TILLABLES.containsKey(targetState.getBlock()) && level.getBlockState(clickedPos.above()).isAir()) {
                 if (!level.isClientSide()) {
-                    boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+                    boolean burstActive = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
                     EquipmentSlot slot = context.getHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
 
                     if (burstActive) {
@@ -146,24 +154,16 @@ public class VibraniumHoe extends HoeItem {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        // Shift + Right Click in air -> Toggle Kinetic Burst (3x3 mode)
-        if (player.isSecondaryUseActive()) {
-            if (!level.isClientSide()) {
-                toggleKineticBurstMode(level, player, stack);
-            }
-            return InteractionResult.SUCCESS;
-        }
-
         player.startUsingItem(hand);
         return InteractionResult.CONSUME;
     }
 
     /**
-     * Toggles the 3x3 Kinetic Burst mode manually.
+     * Toggles the Kinetic Burst mode manually.
      */
     private void toggleKineticBurstMode(Level level, Player player, ItemStack stack) {
         float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        boolean currentMode = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+        boolean currentMode = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
         boolean newState = !currentMode;
 
         if (newState) {
@@ -171,13 +171,13 @@ public class VibraniumHoe extends HoeItem {
                 return;
             }
 
-            stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), true);
+            stack.set(VibraniumDataComponents.BURST_MODE.get(), true);
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.8F, 1.5F);
             player.displayClientMessage(
                     Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active").withStyle(ChatFormatting.LIGHT_PURPLE), true);
         } else {
-            stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+            stack.set(VibraniumDataComponents.BURST_MODE.get(), false);
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.8F, 1.2F);
             player.displayClientMessage(
@@ -186,10 +186,10 @@ public class VibraniumHoe extends HoeItem {
     }
 
     /**
-     * Tills a 3x3 area using vanilla tilling logic.
+     * Tills a radiusxradius area using vanilla tilling logic.
      */
     private void burstTill(Level level, BlockPos center, Player player, ItemStack stack, EquipmentSlot slot) {
-        int radius = 1;
+        int radius = HARVEST_RADIUS/2;
         boolean tilledAny = false;
 
         for (int x = -radius; x <= radius; x++) {
@@ -241,7 +241,7 @@ public class VibraniumHoe extends HoeItem {
             VibraniumToolActions.spawnShockwave(serverLevel, center.getBottomCenter(), 4.0F, 0.2F, player);
         }
 
-        int radius = 4;
+        int radius = HARVEST_RADIUS;
         BlockPos.betweenClosedStream(center.offset(-radius, -1, -radius), center.offset(radius, 1, radius))
                 .forEach(targetPos -> {
                     BlockState targetState = level.getBlockState(targetPos);
@@ -284,15 +284,11 @@ public class VibraniumHoe extends HoeItem {
     }
 
     @Override
-    public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext tooltipContext,
-            TooltipDisplay tooltipDisplay,
-            Consumer<Component> consumer,
-            TooltipFlag tooltipFlag
-    ) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
+        Component abilityKey = KeyInputHandler.itemAbilityKey.getTranslatedKeyMessage();
+        Component useKey = Minecraft.getInstance().options.keyUse.getTranslatedKeyMessage();
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+        boolean burstActive = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
 
         ChatFormatting statusColor = burstActive ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.DARK_GRAY;
         String statusKey = burstActive ? "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active" : "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive";
@@ -308,7 +304,7 @@ public class VibraniumHoe extends HoeItem {
         );
 
         consumer.accept(
-                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle")
+                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", abilityKey, useKey)
                         .withStyle(ChatFormatting.GRAY)
         );
 

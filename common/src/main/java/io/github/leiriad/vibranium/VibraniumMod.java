@@ -1,7 +1,7 @@
 package io.github.leiriad.vibranium;
 
 import io.github.leiriad.vibranium.config.VibraniumConfigManager;
-import io.github.leiriad.vibranium.event.VibraniumEvents;
+import io.github.leiriad.vibranium.init.VibraniumEvents;
 import io.github.leiriad.vibranium.init.*;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import org.slf4j.Logger;

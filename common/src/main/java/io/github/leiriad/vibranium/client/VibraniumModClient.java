@@ -7,17 +7,21 @@ import dev.architectury.registry.client.gui.MenuScreenRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import io.github.leiriad.vibranium.block.BaseElectricWireBlock;
+import io.github.leiriad.vibranium.client.event.KeyInputHandler;
 import io.github.leiriad.vibranium.client.render.OreHighlightRenderer;
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
-import io.github.leiriad.vibranium.init.VibraniumItems;
 import io.github.leiriad.vibranium.init.VibraniumMenus;
+import io.github.leiriad.vibranium.item.BlackPantherArmorItem;
+import io.github.leiriad.vibranium.item.VibraniumAbilityItem;
+import io.github.leiriad.vibranium.network.AbilityPayload;
 import io.github.leiriad.vibranium.network.OreHighlightPayload;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 
 import java.util.HashMap;
@@ -29,7 +33,7 @@ public class VibraniumModClient {
     private static final Map<Fluid, Integer> FLUID_COLORS = new HashMap<>();
 
     public static void init() {
-
+        KeyInputHandler.register();
         RenderTypeRegistry.register(ChunkSectionLayer.CUTOUT,
                     VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_CYAN.get(),
                     VibraniumBlocks.FLOWERING_PURPLE_AZALEA_LEAVES_DARK_BLUE.get(),
@@ -108,8 +112,8 @@ public class VibraniumModClient {
         FLUID_COLORS.put(VibraniumFluids.HOT_WATER_STILL.get(), hotWaterColorHex);
         FLUID_COLORS.put(VibraniumFluids.HOT_WATER_FLOWING.get(), hotWaterColorHex);
 
-        //Register Ore Highlight Event
-        // Registers the S2C network packet receiver
+        //Network Events
+        //Register Ore Highlight Event (Registers the S2C network packet receiver)
         NetworkManager.registerReceiver(
                 NetworkManager.Side.S2C,
                 OreHighlightPayload.TYPE,
@@ -118,7 +122,35 @@ public class VibraniumModClient {
                     context.queue(() -> OreHighlightRenderer.addOres(payload.orePositions(), payload.durationTicks()));
                 }
         );
+        //Register Ability trigger key
+        NetworkManager.registerReceiver(
+                NetworkManager.c2s(), // Client to Server
+                AbilityPayload.TYPE,
+                AbilityPayload.CODEC,
+                (payload, context) -> {
+                    Player player = context.getPlayer();
+                    context.queue(() -> {
+                        if (player == null) return;
 
+                        //Held weapon/tool in main hand
+                        ItemStack mainHandStack = player.getMainHandItem();
+                        if (mainHandStack.getItem() instanceof VibraniumAbilityItem abilityItem) {
+                            abilityItem.onAbilityKeyPressed(player, mainHandStack);
+                            return;
+                        }
+
+                        //Helmet ability (Tactical Scan) when sneaking
+                        if (player.isSecondaryUseActive()) {
+                            ItemStack headStack = player.getItemBySlot(EquipmentSlot.HEAD);
+                            if (headStack.getItem() instanceof BlackPantherArmorItem helmetItem) {
+                                helmetItem.onAbilityKeyPressed(player, headStack);
+                                return;
+                            }
+                        }
+
+                    });
+                }
+        );
     }
     /**
      * Safely retrieves the client-side tint color for any registered fluid.

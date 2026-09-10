@@ -4,7 +4,10 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "SoundEngineMixin",
-    "GuiGraphicsMixin"
+    "GuiGraphicsMixin",
+    "GuiHudMixin",
+    "BossHealthOverlayAccessor",
+    "AvatarRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

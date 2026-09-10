@@ -5,7 +5,9 @@
   "mixins": [
     "CropBlockMixin",
     "StructurePlacementAccessor",
-    "RandomSpreadStructurePlacementMixin"
+    "RandomSpreadStructurePlacementMixin",
+    "EntityStealthBootsMixin",
+    "PlayerStepSoundMixin"
   ],
   "injectors": {
     "defaultRequire": 1

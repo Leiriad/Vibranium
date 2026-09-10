@@ -1,10 +1,13 @@
 package io.github.leiriad.vibranium.item;
 
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.client.event.KeyInputHandler;
+import io.github.leiriad.vibranium.config.VibraniumConfigManager;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -36,12 +39,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Consumer;
 
-public class VibraniumShovel extends ShovelItem {
+public class VibraniumShovel extends ShovelItem implements VibraniumAbilityItem{
 
     //ThreadLocal guard to prevent recursive execution loops when mining a 3x3 area
     private static final ThreadLocal<Boolean> IS_MINING_AREA = ThreadLocal.withInitial(() -> false);
-    private static final float COST_PER_EXTRA_BLOCK = 2.0F;
-    private static final float COST_PER_PATH_BLOCK = 0.5F; // Low charge cost for flattening paths
+    private static final float COST_PER_EXTRA_BLOCK = VibraniumConfigManager.INSTANCE.tools.shovelBurstBlockCost;
+    private static final float COST_PER_PATH_BLOCK = VibraniumConfigManager.INSTANCE.tools.shovelPathCost; // Low charge cost for flattening paths
+    private static final int PATH_RADIUS = 3;
 
     public VibraniumShovel(Properties properties) {
         super(VibraniumToolMaterial.VIBRANIUM, 4.5F, -3.0F, properties);
@@ -67,7 +71,16 @@ public class VibraniumShovel extends ShovelItem {
 
         return props;
     }
-
+    /**
+     * Handles key press packet from server (NetworkManager receiver).
+     * Toggles 3x3 Kinetic Burst mode immediately.
+     */
+    @Override
+    public void onAbilityKeyPressed(Player player, ItemStack stack) {
+        if (player.level() instanceof ServerLevel serverLevel) {
+            toggleKineticBurstMode(serverLevel, player, stack);
+        }
+    }
     /**
      * Accumulates kinetic charge on block break and triggers 3x3 Kinetic Burst if active.
      * Passive effect: Automatically collapses falling blocks (Sand, Gravel) above the mined block.
@@ -81,11 +94,11 @@ public class VibraniumShovel extends ShovelItem {
             float updatedCharge = Math.min(100.0F, currentCharge + 5.0F);
             stack.set(VibraniumDataComponents.KINETIC_CHARGE.get(), updatedCharge);
 
-            boolean isBurstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+            boolean isBurstActive = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
 
             if (isBurstActive) {
                 if (updatedCharge < COST_PER_EXTRA_BLOCK) {
-                    stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+                    stack.set(VibraniumDataComponents.BURST_MODE.get(), false);
                 } else if (isSoftEarth(state)) {
                     IS_MINING_AREA.set(true);
                     try {
@@ -123,26 +136,18 @@ public class VibraniumShovel extends ShovelItem {
 
         ItemStack stack = context.getItemInHand();
 
-        //Shift + Right Click on block -> Toggle Kinetic Burst (3x3 mode)
-        if (player.isSecondaryUseActive()) {
-            if (!level.isClientSide()) {
-                toggleKineticBurstMode(level, player, stack);
-            }
-            return InteractionResult.SUCCESS;
-        }
-
-        //Standard Right Click on block -> Dirt path creation (1x1 or 3x3 depending on mode)
+        //UseKey on block -> Dirt path creation (1x1 or 3x3 depending on mode)
         if (context.getClickedFace() != Direction.DOWN) {
             BlockState targetState = level.getBlockState(clickedPos);
             BlockState pathState = FLATTENABLES.get(targetState.getBlock());
 
             if (pathState != null && level.getBlockState(clickedPos.above()).isAir()) {
                 if (!level.isClientSide()) {
-                    boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+                    boolean burstActive = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
                     EquipmentSlot slot = context.getHand() == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
 
                     if (burstActive) {
-                        create3x3PathArea(level, clickedPos, player, stack, slot);
+                        createPathArea(level, clickedPos, player, stack, slot);
                     } else {
                         // Vanilla behaviour (1x1 path)
                         level.setBlock(clickedPos, pathState, Block.UPDATE_ALL);
@@ -161,15 +166,12 @@ public class VibraniumShovel extends ShovelItem {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        //Shift + Right Click in air -> Toggle Kinetic Burst (3x3 mode)
-        if (player.isSecondaryUseActive()) {
-            if (!level.isClientSide()) {
-                toggleKineticBurstMode(level, player, stack);
-            }
+        if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
+            //UseKey alone -> Trigger special item ability (Path creation )
             return InteractionResult.SUCCESS;
         }
 
-        //Maintain blocking stance on normal right click in air
+        //Maintain blocking stance on normal useKey in air
         player.startUsingItem(hand);
         return InteractionResult.CONSUME;
     }
@@ -180,7 +182,7 @@ public class VibraniumShovel extends ShovelItem {
      */
     private void toggleKineticBurstMode(Level level, Player player, ItemStack stack) {
         float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        boolean currentMode = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+        boolean currentMode = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
         boolean newState = !currentMode;
 
         if (newState) {
@@ -189,13 +191,13 @@ public class VibraniumShovel extends ShovelItem {
                 return;
             }
 
-            stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), true);
+            stack.set(VibraniumDataComponents.BURST_MODE.get(), true);
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.8F, 1.5F);
             player.displayClientMessage(
                     Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active").withStyle(ChatFormatting.LIGHT_PURPLE), true);
         } else {
-            stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+            stack.set(VibraniumDataComponents.BURST_MODE.get(), false);
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.8F, 1.2F);
             player.displayClientMessage(
@@ -223,7 +225,7 @@ public class VibraniumShovel extends ShovelItem {
                 for (int z = -1; z <= 1; z++) {
                     if (x == 0 && z == 0) continue;
                     if (!breakBlockWithChargeCost(level, center.offset(x, 0, z), player, stack, slot)) {
-                        stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+                        stack.set(VibraniumDataComponents.BURST_MODE.get(), false);
                         return;
                     }
                 }
@@ -237,7 +239,7 @@ public class VibraniumShovel extends ShovelItem {
                     if (depth == 0 && width == 0) continue;
                     BlockPos targetPos = center.relative(direction, depth).relative(right, width);
                     if (!breakBlockWithChargeCost(level, targetPos, player, stack, slot)) {
-                        stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+                        stack.set(VibraniumDataComponents.BURST_MODE.get(), false);
                         return;
                     }
                 }
@@ -246,7 +248,7 @@ public class VibraniumShovel extends ShovelItem {
     }
 
     /**
-     * Breaks a target block within the 3x3 area if kinetic charge is sufficient.
+     * Breaks a target block within the area if kinetic charge is sufficient.
      * Returns false when charge is depleted.
      */
     private boolean breakBlockWithChargeCost(Level level, BlockPos pos, Player player, ItemStack stack, EquipmentSlot slot) {
@@ -269,8 +271,8 @@ public class VibraniumShovel extends ShovelItem {
     /**
      * Creates a 3x3 dirt path area consuming low kinetic charge (0.5F per extra path block).
      */
-    private void create3x3PathArea(Level level, BlockPos center, Player player, ItemStack stack, EquipmentSlot slot) {
-        int radius = 1;
+    private void createPathArea(Level level, BlockPos center, Player player, ItemStack stack, EquipmentSlot slot) {
+        int radius = PATH_RADIUS/2;
         boolean createdAny = false;
 
         for (int x = -radius; x <= radius; x++) {
@@ -321,17 +323,12 @@ public class VibraniumShovel extends ShovelItem {
         return 72000;
     }
 
-
     @Override
-    public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext tooltipContext,
-            TooltipDisplay tooltipDisplay,
-            Consumer<Component> consumer,
-            TooltipFlag tooltipFlag
-    ) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
+        Component abilityKey = KeyInputHandler.itemAbilityKey.getTranslatedKeyMessage();
+        Component useKey = Minecraft.getInstance().options.keyUse.getTranslatedKeyMessage();
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+        boolean burstActive = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
 
         ChatFormatting statusColor = burstActive ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.DARK_GRAY;
         String statusKey = burstActive ? "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active" : "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive";
@@ -345,11 +342,15 @@ public class VibraniumShovel extends ShovelItem {
                         .withStyle(statusColor, ChatFormatting.BOLD)
         );
         consumer.accept(
-                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle")
+                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", abilityKey, useKey)
                         .withStyle(ChatFormatting.GRAY)
         );
         consumer.accept(
                 Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.gravity")
+                        .withStyle(ChatFormatting.GRAY)
+        );
+        consumer.accept(
+                Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".shovel.passive.path", useKey)
                         .withStyle(ChatFormatting.GRAY)
         );
 

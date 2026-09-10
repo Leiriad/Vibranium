@@ -1,10 +1,13 @@
 package io.github.leiriad.vibranium.item;
 
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.client.event.KeyInputHandler;
+import io.github.leiriad.vibranium.config.VibraniumConfigManager;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -15,17 +18,13 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.BlocksAttacks;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -35,11 +34,13 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
 
-public class VibraniumAxe extends AxeItem {
+public class VibraniumAxe extends AxeItem implements VibraniumAbilityItem{
 
     private static final ThreadLocal<Boolean> IS_MINING_AREA = ThreadLocal.withInitial(() -> false);
-    private static final float COST_PER_EXTRA_BLOCK = 2.0F;
-    private static final float CLEAVE_CHARGE_COST = 25.0F;
+    private static final float COST_PER_EXTRA_BLOCK = VibraniumConfigManager.INSTANCE.tools.axeBurstBlockCost;
+    private static final float CLEAVE_CHARGE_COST = VibraniumConfigManager.INSTANCE.tools.axeCleaveCost;
+    private static final float CLEAVE_DAMAGE = VibraniumConfigManager.INSTANCE.tools.axeCleaveDamage;
+    private static final int CLEAVE_DISTANCE = VibraniumConfigManager.INSTANCE.tools.axeCleaveDistance;
 
     public VibraniumAxe(Properties properties) {
         super(VibraniumToolMaterial.VIBRANIUM, 6.0F, -3.1F, properties);
@@ -48,19 +49,29 @@ public class VibraniumAxe extends AxeItem {
     public static Item.Properties getProperties(Item.Properties settings) {
        return settings.enchantable(22);
     }
+    /**
+     * Handles key press packet from server (NetworkManager receiver).
+     * Toggles 3x3 Kinetic Burst mode immediately.
+     */
+    @Override
+    public void onAbilityKeyPressed(Player player, ItemStack stack) {
+        if (player.level() instanceof ServerLevel serverLevel) {
+            toggleKineticBurstMode(serverLevel, player, stack);
+        }
+    }
 
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miner) {
         if (!level.isClientSide() && miner instanceof Player player && !IS_MINING_AREA.get()) {
 
-            boolean isBurstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+            boolean isBurstActive = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
 
             if (isBurstActive) {
                 //RESONANCE MODE: Consume charge
                 if (state.is(BlockTags.MINEABLE_WITH_AXE) || state.is(BlockTags.LEAVES)) {
                     float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
                     if (currentCharge < COST_PER_EXTRA_BLOCK) {
-                        stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+                        stack.set(VibraniumDataComponents.BURST_MODE.get(), false);
                     } else {
                         IS_MINING_AREA.set(true);
                         try {
@@ -123,13 +134,6 @@ public class VibraniumAxe extends AxeItem {
         Level level = context.getLevel();
         ItemStack stack = context.getItemInHand();
 
-        if (player.isSecondaryUseActive()) {
-            if (!level.isClientSide()) {
-                toggleKineticBurstMode(level, player, stack);
-            }
-            return InteractionResult.SUCCESS;
-        }
-
         if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
             if (tryTriggerDirectionalCleave(serverLevel, player, stack)) {
                 return InteractionResult.SUCCESS;
@@ -143,14 +147,9 @@ public class VibraniumAxe extends AxeItem {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (player.isSecondaryUseActive()) {
-            if (!level.isClientSide()) {
-                toggleKineticBurstMode(level, player, stack);
-            }
-            return InteractionResult.SUCCESS;
-        }
-
         if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
+
+            //UseKey alone -> Trigger special item ability (Cleave)
             if (tryTriggerDirectionalCleave(serverLevel, player, stack)) {
                 return InteractionResult.SUCCESS;
             }
@@ -173,7 +172,7 @@ public class VibraniumAxe extends AxeItem {
             Vec3 look = player.getLookAngle().normalize();
             Vec3 start = player.position().add(0, 0.5, 0);
 
-            for (int i = 1; i <= 6; i++) {
+            for (int i = 1; i <= CLEAVE_DISTANCE; i++) {
                 Vec3 point = start.add(look.scale(i));
                 BlockPos targetPos = BlockPos.containing(point);
 
@@ -181,7 +180,7 @@ public class VibraniumAxe extends AxeItem {
 
                 AABB box = new AABB(targetPos).inflate(1.0);
                 level.getEntitiesOfClass(LivingEntity.class, box, e -> e != player).forEach(entity -> {
-                    entity.hurt(level.damageSources().playerAttack(player), 7.0F);
+                    entity.hurt(level.damageSources().playerAttack(player), CLEAVE_DAMAGE);
                     entity.setDeltaMovement(look.x * 1.0, 0.45, look.z * 1.0);
                     entity.hurtMarked = true;
                 });
@@ -232,16 +231,16 @@ public class VibraniumAxe extends AxeItem {
 
     private void toggleKineticBurstMode(Level level, Player player, ItemStack stack) {
         float currentCharge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        boolean currentMode = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+        boolean currentMode = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
         boolean newState = !currentMode;
 
         if (newState) {
             if (currentCharge < COST_PER_EXTRA_BLOCK) return;
-            stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), true);
+            stack.set(VibraniumDataComponents.BURST_MODE.get(), true);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.8F, 1.5F);
             player.displayClientMessage(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active").withStyle(ChatFormatting.LIGHT_PURPLE), true);
         } else {
-            stack.set(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+            stack.set(VibraniumDataComponents.BURST_MODE.get(), false);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.8F, 1.2F);
             player.displayClientMessage(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive").withStyle(ChatFormatting.GRAY), true);
         }
@@ -260,20 +259,31 @@ public class VibraniumAxe extends AxeItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag
-    ) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
+        Component abilityKey = KeyInputHandler.itemAbilityKey.getTranslatedKeyMessage();
+        Component useKey = Minecraft.getInstance().options.keyUse.getTranslatedKeyMessage();
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
-        boolean burstActive = stack.getOrDefault(VibraniumDataComponents.RESONANCE_MODE.get(), false);
+        boolean burstActive = stack.getOrDefault(VibraniumDataComponents.BURST_MODE.get(), false);
 
         ChatFormatting statusColor = burstActive ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.DARK_GRAY;
         String statusKey = burstActive ? "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active" : "tooltip." + VibraniumMod.MOD_ID + ".tool.mode.inactive";
 
-        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", (int) charge).withStyle((charge > 0) ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY));
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", (int) charge).withStyle((charge > 0) ?
+                ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY));
+
         consumer.accept(Component.translatable(statusKey).withStyle(statusColor, ChatFormatting.BOLD));
-        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle").withStyle(ChatFormatting.GRAY));
-        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave").withStyle(ChatFormatting.LIGHT_PURPLE));
-        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break").withStyle(ChatFormatting.DARK_GREEN));
+
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".tool.active.toggle", abilityKey, useKey)
+                .withStyle(ChatFormatting.GRAY));
+
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".axe.active.cleave", useKey)
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
+
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".axe.passive.shield_break")
+                .withStyle(ChatFormatting.DARK_GREEN));
 
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);
     }
+
+
 }

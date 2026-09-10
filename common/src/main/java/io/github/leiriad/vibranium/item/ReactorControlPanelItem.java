@@ -2,6 +2,7 @@ package io.github.leiriad.vibranium.item;
 
 import io.github.leiriad.vibranium.VibraniumMod;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -22,9 +23,10 @@ public class ReactorControlPanelItem extends BlockItem {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
+        Component useKey = Minecraft.getInstance().options.keyUse.getTranslatedKeyMessage();
         consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.function")
                 .withStyle(ChatFormatting.GRAY));
-        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface")
+        consumer.accept(Component.translatable("tooltip." + VibraniumMod.MOD_ID + ".reactor_control_panel.interface", useKey)
                 .withStyle(ChatFormatting.LIGHT_PURPLE));
 
         super.appendHoverText(stack, tooltipContext, tooltipDisplay, consumer, tooltipFlag);

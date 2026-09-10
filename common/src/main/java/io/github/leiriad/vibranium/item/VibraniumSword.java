@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.item;
 
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.config.VibraniumConfigManager;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
@@ -31,9 +32,7 @@ import java.util.function.Consumer;
 
 public class VibraniumSword extends Item {
 
-    public VibraniumSword(Properties properties) {
-        super(properties);
-    }
+    public static final float DISCHARGE_THRESHOLD = VibraniumConfigManager.INSTANCE.tools.swordDischargeThreshold;
 
     public static Item.Properties getProperties(Item.Properties settings) {
         Item.Properties props = settings
@@ -64,6 +63,9 @@ public class VibraniumSword extends Item {
 
         return props;
     }
+    public VibraniumSword(Properties properties) {
+        super(properties);
+    }
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
@@ -87,7 +89,7 @@ public class VibraniumSword extends Item {
         if (attacker.level() instanceof ServerLevel serverLevel && attacker instanceof Player player) {
             float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
-            if (charge >= 10.0F) { //Minimal charge required to trigger discharge
+            if (charge >= DISCHARGE_THRESHOLD) { //Minimal charge required to trigger discharge
                 float radius = 2.5F + (charge / 25.0F);  //Shockwave radius
                 float force = 1.0F + (charge / 50.0F);   //Knockback force
                 float bonusDamage = charge * 0.25F;      //Increased scaling for noticeable damage
@@ -119,13 +121,7 @@ public class VibraniumSword extends Item {
     }
 
     @Override
-    public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext tooltipContext,
-            TooltipDisplay tooltipDisplay,
-            Consumer<Component> consumer,
-            TooltipFlag tooltipFlag
-    ) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
         int percentage = (int) charge;
 

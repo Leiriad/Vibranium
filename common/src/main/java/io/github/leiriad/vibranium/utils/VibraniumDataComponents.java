@@ -16,7 +16,7 @@ public class VibraniumDataComponents {
     public static final RegistrySupplier<DataComponentType<Float>> KINETIC_CHARGE =
             DATA_COMPONENTS.register("kinetic_charge",
                     () -> DataComponentType.<Float>builder().persistent(Codec.FLOAT).build());
-    public static final Supplier<DataComponentType<Boolean>> RESONANCE_MODE =
+    public static final Supplier<DataComponentType<Boolean>> BURST_MODE =
             DATA_COMPONENTS.register("resonance_mode",
                     () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).build());
 

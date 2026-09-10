@@ -1,6 +1,7 @@
 package io.github.leiriad.vibranium.item;
 
 import io.github.leiriad.vibranium.VibraniumMod;
+import io.github.leiriad.vibranium.config.VibraniumConfigManager;
 import io.github.leiriad.vibranium.utils.VibraniumDataComponents;
 import io.github.leiriad.vibranium.utils.VibraniumToolActions;
 import io.github.leiriad.vibranium.utils.VibraniumToolMaterial;
@@ -37,39 +38,31 @@ import java.util.function.Consumer;
 
 import static io.github.leiriad.vibranium.utils.VibraniumToolActions.spawnShockwave;
 
-public class VibraniumSpear extends Item {
+public class VibraniumSpear extends Item{
 
-    // Unique attribute modifier IDs
-    private static final Identifier SPEAR_DAMAGE_ID = Identifier.fromNamespaceAndPath("vibranium", "spear_damage");
-    private static final Identifier SPEAR_SPEED_ID = Identifier.fromNamespaceAndPath("vibranium", "spear_speed");
-    private static final Identifier SPEAR_REACH_ID = Identifier.fromNamespaceAndPath("vibranium", "spear_reach");
-
-    public VibraniumSpear(Properties properties) {
-        super(properties);
-    }
-
+    public static final float DISCHARGE_THRESHOLD = VibraniumConfigManager.INSTANCE.tools.spearDischargeThreshold;
     public static Item.Properties getProperties(Item.Properties settings) {
         Item.Properties props = settings
                 .durability(VibraniumToolMaterial.VIBRANIUM.durability())
                 .enchantable(22)
                 .spear(
-                VibraniumToolMaterial.VIBRANIUM,
-                0.625F, // f: Attack / thrust speed
-                1.5F,   // g: Charge damage multiplier
-                0.1F,   // h: Very short MINIMUM charge duration (maximum responsiveness)
+                        VibraniumToolMaterial.VIBRANIUM,
+                        0.625F, // f: Attack / thrust speed
+                        1.5F,   // g: Charge damage multiplier
+                        0.1F,   // h: Very short MINIMUM charge duration (maximum responsiveness)
 
-                // ENGAGEMENT Phase (Stability) - Increased!
-                3.0F,   // i: Threshold 1 - The spear remains stable for 3.0 seconds (instead of 0.5s)
-                1.0F,   // j: Value multiplier 1
+                        // ENGAGEMENT Phase (Stability) - Increased!
+                        3.0F,   // i: Threshold 1 - The spear remains stable for 3.0 seconds (instead of 0.5s)
+                        1.0F,   // j: Value multiplier 1
 
-                // TRANSITION Phase
-                5.0F,   // k: Threshold 2 - Shaking delayed to 5.0 seconds
-                1.0F,   // l: Value multiplier 2
+                        // TRANSITION Phase
+                        5.0F,   // k: Threshold 2 - Shaking delayed to 5.0 seconds
+                        1.0F,   // l: Value multiplier 2
 
-                // RELATIVE Phase
-                5.0F,   // m: Threshold 3
-                1.0F    // n: Value multiplier 3
-        );
+                        // RELATIVE Phase
+                        5.0F,   // m: Threshold 3
+                        1.0F    // n: Value multiplier 3
+                );
         // Range (+2 blocks compared to vanilla spear)
         props.component(DataComponents.ATTACK_RANGE, new AttackRange(2.0F, 5.0F, 2.0F, 7.0F, 0.125F, 0.5F));
 
@@ -96,12 +89,17 @@ public class VibraniumSpear extends Item {
         return props;
     }
 
+    public VibraniumSpear(Properties properties) {
+        super(properties);
+    }
+
+
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
 
-        if (charge >= 10.0F) { //Requires a minimum charge threshold
+        if (charge >= DISCHARGE_THRESHOLD) { //Requires a minimum charge threshold
             if (level instanceof ServerLevel serverLevel) {
                 float radius = 3.0F + (charge / 20.0F); // Effect radius based on charge
                 float force = 1.5F + (charge / 50.0F);  // Knockback force multiplier
@@ -163,13 +161,7 @@ public class VibraniumSpear extends Item {
         }
     }
     @Override
-    public void appendHoverText(
-            ItemStack stack,
-            Item.TooltipContext tooltipContext,
-            TooltipDisplay tooltipDisplay,
-            Consumer<Component> consumer,
-            TooltipFlag tooltipFlag
-    ) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Consumer<Component> consumer, TooltipFlag tooltipFlag) {
         float charge = stack.getOrDefault(VibraniumDataComponents.KINETIC_CHARGE.get(), 0.0F);
         int percentage = (int) charge;
 
