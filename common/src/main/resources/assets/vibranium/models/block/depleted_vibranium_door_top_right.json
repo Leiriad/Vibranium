@@ -3,19 +3,19 @@
   "credit": "Made with Blockbench",
   "ambientocclusion": false,
   "textures": {
-    "1": "vibranium:block/depleted_vibranium_door_top",
-    "particle": "vibranium:block/depleted_vibranium_door_top"
+    "0": "vibranium:block/depleted_vibranium_door",
+    "particle": "vibranium:block/depleted_vibranium_door"
   },
   "elements": [
     {
       "from": [0, 0, 0],
       "to": [3, 16, 16],
       "faces": {
-        "north": {"uv": [3, 0, 0, 16], "texture": "#1", "cullface": "north"},
-        "east": {"uv": [0, 0, 16, 16], "texture": "#1"},
-        "south": {"uv": [0, 0, 3, 16], "texture": "#1", "cullface": "south"},
-        "west": {"uv": [16, 0, 0, 16], "texture": "#1", "cullface": "west"},
-        "up": {"uv": [0, 0, 16, 3], "rotation": 270, "texture": "#1", "cullface": "up"}
+        "north": {"uv": [1, 0, 0, 8], "texture": "#0", "cullface": "north"},
+        "east": {"uv": [0, 0, 8, 8], "texture": "#0"},
+        "south": {"uv": [0, 0, 1, 8], "texture": "#0", "cullface": "south"},
+        "west": {"uv": [8, 0, 0, 8], "texture": "#0", "cullface": "west"},
+        "up": {"uv": [0, 0, 8, 1], "rotation": 270, "texture": "#0", "cullface": "up"}
       }
     }
   ]
