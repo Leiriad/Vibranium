@@ -10,11 +10,10 @@ A multi-loader Minecraft mod built with **Architectury API** that brings the myt
 
 ## 🛠 Features
 
-- **Natural World Generation**: Find raw Vibranium ore deposits buried deep in the Overworld and Deepslate layers.
-- **Industrial Processing & Energy**: Refine raw materials into high-purity ingots, build advanced storage blocks, and construct high-capacity **Vibranium Capacitors** for energy distribution.
+- **Natural World Generation**: Find Vibranium meteorites buried deep in the Overworld and End.
+- **Industrial Processing & Energy**: Refine raw materials into high-purity ingots, build advanced furnaces, and construct a reactor for energy distribution.
 - **Advanced Tools & Armour**: Craft durable Vibranium gear that absorbs and redistributes kinetic energy.
-- **Kimoyo Technology**: Craft functional **Kimoyo Beads** capable of storing and manipulating thermal energy, illumination, and items.
-
+  
 ---
 
 ## 📦 Requirements & Dependencies
