@@ -364,7 +364,7 @@ public class VibraniumBlocks {
                 FLAT_ELECTRIC_LAMP,
                 ELECTRIC_HEATER
         ).forEach(blockSupplier -> {
-            CreativeTabRegistry.appendStack(CreativeModeTabs.FUNCTIONAL_BLOCKS, () -> new ItemStack(blockSupplier.get()));
+            CreativeTabRegistry.appendStack(CreativeModeTabs.REDSTONE_BLOCKS, () -> new ItemStack(blockSupplier.get()));
         });
 
         //COLORED BLOCKS
