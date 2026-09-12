@@ -101,7 +101,8 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
             }
 
             // Check if fuel is in slot 0
-            boolean hasFuel = this.inventory.getItem(0).is(VibraniumItems.VIBRANIUM_DUST.get());
+            ItemStack stackInSlot = this.inventory.getItem(0);
+            boolean hasFuel = !stackInSlot.isEmpty() && stackInSlot.is(VibraniumItems.VIBRANIUM_DUST.get());
 
             // Update blockstate LIT property
             this.updateLitState(core != null && hasFuel);
@@ -180,7 +181,7 @@ public class ReactorHatchEntity extends BlockEntity implements WorldlyContainer{
 
     @Override
     public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction dir) {
-        return slot == 0 && stack.is(VibraniumItems.VIBRANIUM_DUST);
+        return slot == 0 && stack.is(VibraniumItems.VIBRANIUM_DUST.get());
     }
 
     @Override

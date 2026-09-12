@@ -178,6 +178,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Isole efficacement des radiations du cœur du réacteur.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Insérez la poudre de Vibranium ici");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Résidus et scories de combustion");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info", "S'obtient uniquement en chauffant de la poudre de vibranium au-dessus de 1 200 °C dans un four placé contre le réacteur.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Distillé dans un alambic. Haute concentration !");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Charge cinétique");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Propulsion Cinétique : ACTIF");
@@ -400,6 +401,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Aísla eficazmente contra la radiación del núcleo del reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Inserta el polvo de Vibranium aquí");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Residuos y escorias de combustión");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info", "Solo se obtiene calentando polvo de vibranium a más de 1200 °C en un horno colocado junto al reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Destilado en un alambique. ¡Alta graduación!");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Carga cinética");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Propulsión Cinética: ACTIVO");
@@ -625,6 +627,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Effectively insulates against radiation from the reactor core.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Insert Vibranium powder here");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Combustion waste and slag");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info", "Obtained only by heating Vibranium Dust above 1,200°C in a furnace placed against the reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Distilled in a brewing stand. High potency!");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Kinetic Charge");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Kinetic Burst: ACTIVE");

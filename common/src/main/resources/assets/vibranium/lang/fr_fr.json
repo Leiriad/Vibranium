@@ -233,6 +233,7 @@
   "tooltip.vibranium.tool.mode.inactive": "Propulsion Cinétique : INACTIF",
   "tooltip.vibranium.trapdoor.interaction": "Nécessite de la Redstone ou une pioche en diamant pour interagir en sécurité.",
   "tooltip.vibranium.trapdoor.repulsion": "Éjecte les entités vers le haut par énergie cinétique si l'on marche ou frappe dessus.",
+  "tooltip.vibranium.vibranium_ingot.info": "S'obtient uniquement en chauffant de la poudre de vibranium au-dessus de 1 200 °C dans un four placé contre le réacteur.",
   "tooltip.vibranium.weapons.charge": "Charge cinétique",
   "tooltip.vibranium.wire.tranfer_rate": "Taux de transfert : %s K E/t"
 }

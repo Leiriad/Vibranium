@@ -192,7 +192,7 @@
   "tooltip.vibranium.axe.passive.shield_break": "Passive: Disarms Shields via Kinetic Overload",
   "tooltip.vibranium.black_panther_boots_desc": "§7Converts fall damage into kinetic charge and suppresses Sculk vibrations.",
   "tooltip.vibranium.black_panther_chestplate_desc": "§7Stores incoming physical damage as kinetic charge.",
-  "tooltip.vibranium.black_panther_helmet_desc": "§7Grants immunity to Darkness and reveals nearby entities.",
+  "tooltip.vibranium.black_panther_helmet_desc": "§7Grants immunity to Darkness and reveals nearby entities (Sneak + %s).",
   "tooltip.vibranium.black_panther_leggings_desc": "§7Increases movement speed and step height.",
   "tooltip.vibranium.black_panther_set_bonus": "§7Full Set Bonus: Kinetic Energy Transfer",
   "tooltip.vibranium.block.charge_info": "Stores kinetic energy when taking hits, projectiles, or is fallen on.",
@@ -233,6 +233,7 @@
   "tooltip.vibranium.tool.mode.inactive": "Kinetic Burst: INACTIVE",
   "tooltip.vibranium.trapdoor.interaction": "Requires Redstone or a Diamond Pickaxe to interact safely.",
   "tooltip.vibranium.trapdoor.repulsion": "Launches entities upward with kinetic energy when stepped on or struck.",
+  "tooltip.vibranium.vibranium_ingot.info": "Obtained only by heating Vibranium Dust above 1,200°C in a furnace placed against the reactor.",
   "tooltip.vibranium.weapons.charge": "Kinetic Charge",
   "tooltip.vibranium.wire.tranfer_rate": "Transfer rate: %s K E/t"
 }

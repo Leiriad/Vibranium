@@ -232,6 +232,7 @@
   "tooltip.vibranium.tool.mode.inactive": "Propulsión Cinética: INACTIVO",
   "tooltip.vibranium.trapdoor.interaction": "Requiere Redstone o un pico de diamante para interactuar de forma segura.",
   "tooltip.vibranium.trapdoor.repulsion": "Lanza a las entidades hacia arriba con energía cinética al pisarla o golpearla.",
+  "tooltip.vibranium.vibranium_ingot.info": "Solo se obtiene calentando polvo de vibranium a más de 1200 °C en un horno colocado junto al reactor.",
   "tooltip.vibranium.weapons.charge": "Carga cinética",
   "tooltip.vibranium.wire.tranfer_rate": "Tasa de transferencia: %s K E/t"
 }

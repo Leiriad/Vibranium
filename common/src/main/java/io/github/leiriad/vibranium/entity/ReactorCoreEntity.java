@@ -7,13 +7,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -444,8 +447,9 @@ public class ReactorCoreEntity extends BlockEntity {
 
                     mutablePos.set(centerPos.getX() + x, centerPos.getY() + y, centerPos.getZ() + z);
                     BlockEntity be = level.getBlockEntity(mutablePos);
-
-                    if (be instanceof AbstractFurnaceBlockEntity furnace) {
+                    BlockState targetState = level.getBlockState(mutablePos);
+                    if (targetState.is(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", "furnaces")))) {
+                        if (be instanceof AbstractFurnaceBlockEntity furnace) {
                         ItemStack inputStack = furnace.getItem(0); // SLOT_INPUT
 
                         if (!inputStack.isEmpty()) {
@@ -500,6 +504,7 @@ public class ReactorCoreEntity extends BlockEntity {
                                 atLeastOneFurnaceBoosted = true; // Heat is officially being drawn out
                             }
                         }
+                    }
                     }
                 }
             }
