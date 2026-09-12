@@ -24,7 +24,7 @@ import static io.github.leiriad.vibranium.init.VibraniumBlocks.VIBRANIUM_DIRT;
 public class VibraniumGrassBlock extends GrassBlock implements BonemealableBlock{
     //PROPERTIES
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return baseVibraniumDirtSettings().mapColor(MapColor.COLOR_PURPLE);
+        return baseVibraniumDirtSettings().mapColor(MapColor.COLOR_PURPLE).sound(SoundType.GRASS);
     }
     public static final MapCodec<GrassBlock> CODEC = simpleCodec(VibraniumGrassBlock::new);
 

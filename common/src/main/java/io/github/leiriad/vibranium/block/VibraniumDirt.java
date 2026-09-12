@@ -16,7 +16,7 @@ public class VibraniumDirt extends Block {
     //PROPERTIES
     public static final MapCodec<Block> CODEC = simpleCodec(VibraniumDirt::new);
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return baseVibraniumDirtSettings().sound(SoundType.GRAVEL);
+        return baseVibraniumDirtSettings();
     }
     @Override
     protected MapCodec<? extends Block> codec() {

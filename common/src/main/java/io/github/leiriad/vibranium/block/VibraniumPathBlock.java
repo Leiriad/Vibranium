@@ -21,7 +21,7 @@ import static io.github.leiriad.vibranium.init.VibraniumBlocks.VIBRANIUM_DIRT;
 public class VibraniumPathBlock extends DirtPathBlock {
     //PROPERTIES
     public static BlockBehaviour.Properties getProperties(BlockBehaviour.Properties settings){
-        return baseVibraniumDirtSettings().sound(SoundType.GRAVEL).mapColor(MapColor.TERRACOTTA_PINK);
+        return baseVibraniumDirtSettings().mapColor(MapColor.TERRACOTTA_PINK);
     }
 
     //CONSTRUCTOR
