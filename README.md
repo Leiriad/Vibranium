@@ -49,11 +49,11 @@ To run **Vibranium**, ensure you have installed the correct mod loader and requi
 
 For detailed information on crafting recipes, block functions, and item mechanics, check out our [GitHub Wiki](https://github.com/Leiriad/Vibranium/wiki):
 
-* [Home](https://github.com/Leiriad/Vibranium/wiki/Home)
-* [Configuration](https://github.com/Leiriad/Vibranium/wiki/Configuration)
-* [Natural Blocks](https://github.com/Leiriad/Vibranium/wiki/Natural-Blocks)
-* [Industrial Blocks](https://github.com/Leiriad/Vibranium/wiki/Industrial-Blocks)
-* [Items & Gear](https://github.com/Leiriad/Vibranium/wiki/Items)
+**[Configuration](https://github.com/Leiriad/Vibranium/wiki/Configuration)**
+**[Natural Blocks](https://github.com/Leiriad/Vibranium/wiki/Natural-Blocks)**
+**[Building Blocks & Glass](https://github.com/Leiriad/Vibranium/wiki/Building-Blocks-&-Glass)**
+**[Industrial Blocks](https://github.com/Leiriad/Vibranium/wiki/Industrial-Blocks)**
+**[Items & Gear](https://github.com/Leiriad/Vibranium/wiki/Items-&-Gears)**
 
 ---
 
