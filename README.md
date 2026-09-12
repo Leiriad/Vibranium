@@ -4,7 +4,7 @@
 [![Mod Loader](https://img.shields.io/badge/Modloader-Fabric%20%7C%20NeoForge-blue.svg)](https://architectury.dev/)
 [![Architectury API](https://img.shields.io/badge/API-Architectury-orange.svg)](https://modrinth.com/mod/architectury-api)
 
-A multi-loader Minecraft mod built with **Architectury API** that brings the mythical element of **Vibranium** into your world. Discover rare ore deposits, refine advanced alloys, construct industrial energy storage systems, and harness the unique properties of Kimoyo technology.
+A multi-loader Minecraft mod built with **Architectury API** that brings the mythical element of **Vibranium** into your world. Discover rare meteorite structures, smelt advanced materials, and harness the power of the Black Panther!
 
 ---
 
