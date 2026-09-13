@@ -87,7 +87,9 @@ public class MeteoritePiece extends StructurePiece {
         double innerRadiusSq = Math.pow(radius - thickness, 2);
         int[] decoCounts = generateDecoration(world, origin, innerRadiusSq, waterLevel, random, box, blocksToPlace);
         int dirtCount = decoCounts[0];
-        int cavevinesCount = decoCounts[1];
+        int gravelCount = decoCounts[1];
+        int clayCount = decoCounts[2];
+        int cavevinesCount = decoCounts[3];
 
         //COUNTING
         int shellBlocksCount = 0;
@@ -96,8 +98,8 @@ public class MeteoritePiece extends StructurePiece {
         }
 
         //VALIDATION
-        if (oreCount < 2 || dirtCount < 1 || shellBlocksCount<1) {
-            repairStructure(origin, blocksToPlace, oreCount, dirtCount, shellBlocksCount, box, world);
+        if (oreCount < 2 || dirtCount < 1 || gravelCount < 1|| clayCount <1 || shellBlocksCount<1) {
+            repairStructure(origin, blocksToPlace, oreCount, dirtCount, gravelCount, clayCount, shellBlocksCount, box, world);
         }
         if (cavevinesCount < 1) {
             repairDecorations(blocksToPlace, random);
@@ -267,8 +269,7 @@ public class MeteoritePiece extends StructurePiece {
         return sourcesPlaced;
     }
     private int[] generateDecoration(WorldGenLevel world, BlockPos origin, double innerRadiusSq, int waterLevel, RandomSource random, BoundingBox box, Map<BlockPos, BlockState> blocksToPlace) {
-        int[] counts = new int[2];
-        int dirtCount = 0;
+        int[] counts =  new int[4];
         int cavevinesCount = 0;
         double decorationScanRadiusSq = Math.pow(radius - thickness + 2.0, 2);
 
@@ -295,7 +296,10 @@ public class MeteoritePiece extends StructurePiece {
                             BlockState belowState = getEffectiveState(world, belowPos,  blocksToPlace);
 
                             if (belowState.is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)||belowState.is(BlockTags.STONE_ORE_REPLACEABLES)||belowState.is(Blocks.BLACKSTONE)) {
-                                dirtCount += generateFloor(belowPos, waterLevel, box, blocksToPlace);
+                                int[] floorResult = generateFloor(belowPos, waterLevel, box, blocksToPlace);
+                                counts[0] += floorResult[0];//dirt
+                                counts[1] += floorResult[1];//gravel
+                                counts[2] += floorResult[2];//clay
                                 decorateFloor(world, pos, random, box, waterLevel, blocksToPlace);
                             }
                         }
@@ -313,8 +317,8 @@ public class MeteoritePiece extends StructurePiece {
                 }
             }
         }
-        counts[0] = dirtCount;
-        counts[1] = cavevinesCount;
+
+        counts[3] = cavevinesCount;
         return  counts;
     }
     private BlockState getRandomVibraniumPlant(WorldGenLevel world, RandomSource random) {
@@ -396,15 +400,17 @@ public class MeteoritePiece extends StructurePiece {
         }
     }
 
-    private void repairStructure(BlockPos origin, Map<BlockPos, BlockState> blocksToPlace, int orecount, int dirtcount, int shellblockcount, BoundingBox box, WorldGenLevel world) {
-        //Find wall
+    private void repairStructure(BlockPos origin, Map<BlockPos, BlockState> blocksToPlace, int orecount, int dirtcount, int gravelcount, int claycount, int shellblockcount, BoundingBox box, WorldGenLevel world) {
+        // Find wall anchors
         List<BlockPos> validAnchors = blocksToPlace.entrySet().stream()
                 .filter(e -> {
                     BlockState state = e.getValue();
                     return state.isSolid() &&
                             !state.is(VibraniumBlocks.VIBRANIUM_ORE.get()) &&
                             !state.is(VibraniumBlocks.VIBRANIUM_DIRT.get()) &&
-                            !state.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get());
+                            !state.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get()) &&
+                            !state.is(VibraniumBlocks.BLACK_GRAVEL.get()) &&
+                            !state.is(VibraniumBlocks.BLACK_CLAY.get());
                 })
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
@@ -412,15 +418,15 @@ public class MeteoritePiece extends StructurePiece {
         if (validAnchors.isEmpty()) return;
         Collections.shuffle(validAnchors);
 
-        //Repare loot
+        // Repair essential loot (Ores, Dirt/Grass, Black Gravel, Black Clay)
         for (BlockPos anchorPos : validAnchors) {
-            if (orecount >= 2 && dirtcount >= 1) break;
+            // Stop early if all minimum counts are met
+            if (orecount >= 2 && dirtcount >= 1 && gravelcount >= 1 && claycount >= 1) break;
 
             if (orecount < 2) {
                 blocksToPlace.put(anchorPos, VibraniumBlocks.VIBRANIUM_ORE.get().defaultBlockState());
                 orecount++;
-            }
-            else if (dirtcount < 1) {
+            } else if (dirtcount < 1) {
                 BlockPos abovePos = anchorPos.above();
                 BlockState stateAbove = blocksToPlace.get(abovePos);
 
@@ -430,15 +436,24 @@ public class MeteoritePiece extends StructurePiece {
                     blocksToPlace.put(anchorPos, VibraniumBlocks.VIBRANIUM_DIRT.get().defaultBlockState());
                 }
                 dirtcount++;
+            } else if (gravelcount < 1) {
+                blocksToPlace.put(anchorPos, VibraniumBlocks.BLACK_GRAVEL.get().defaultBlockState());
+                gravelcount++;
+            } else if (claycount < 1) {
+                blocksToPlace.put(anchorPos, VibraniumBlocks.BLACK_CLAY.get().defaultBlockState());
+                claycount++;
             }
         }
 
-        //Repare blackstone
+        // Repair blackstone shell
         if (shellblockcount < 1) {
-            // On cherche un bloc solide qui n'est toujours pas du loot
             for (BlockPos pos : validAnchors) {
                 BlockState current = blocksToPlace.get(pos);
-                if (!current.is(VibraniumBlocks.VIBRANIUM_ORE.get()) && !current.is(VibraniumBlocks.VIBRANIUM_DIRT.get())) {
+                if (!current.is(VibraniumBlocks.VIBRANIUM_ORE.get()) &&
+                        !current.is(VibraniumBlocks.VIBRANIUM_DIRT.get()) &&
+                        !current.is(VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get()) &&
+                        !current.is(VibraniumBlocks.BLACK_GRAVEL.get()) &&
+                        !current.is(VibraniumBlocks.BLACK_CLAY.get())) {
                     blocksToPlace.put(pos, Blocks.BLACKSTONE.defaultBlockState());
                     break;
                 }
@@ -584,8 +599,12 @@ public class MeteoritePiece extends StructurePiece {
         return oreCount;
     }
 
-    private int generateFloor(BlockPos target, int waterLevel, BoundingBox box, Map<BlockPos, BlockState> blocksToPlace) {
+    private int[] generateFloor(BlockPos target, int waterLevel, BoundingBox box, Map<BlockPos, BlockState> blocksToPlace) {
+        int [] soilCounts = new int[3];
         int dirtCount = 0;
+        int gravelCount = 0;
+        int clayCount = 0;
+
         double patchNoise = Math.sin(target.getX() * 0.12) + Math.sin(target.getZ() * 0.12);
         double detailNoise = Math.sin(target.getX() * 0.5) * Math.cos(target.getZ() * 0.5);
 
@@ -593,7 +612,7 @@ public class MeteoritePiece extends StructurePiece {
         for (Direction dir : Direction.Plane.HORIZONTAL) {
             BlockState neighbor = blocksToPlace.get(target.relative(dir));
             if (neighbor != null && neighbor.is(VibraniumBlocks.VIBRANIUM_ORE.get())) {
-                return 0;
+                return soilCounts;
             }
         }
 
@@ -612,15 +631,17 @@ public class MeteoritePiece extends StructurePiece {
                 }
             } else {
                 // Leave Blackstone once in a while
-                return 0;
+                return soilCounts;
             }
         }
         //Bank
         else if (isBank) {
             if (patchNoise > 1.3) {
                 floorState = VibraniumBlocks.BLACK_CLAY.get().defaultBlockState();
+                clayCount++;
             } else if (detailNoise > 0.4) {
                 floorState = VibraniumBlocks.BLACK_GRAVEL.get().defaultBlockState();
+                gravelCount++;
             } else {
                 floorState = VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get().defaultBlockState();
                 dirtCount++;
@@ -628,13 +649,19 @@ public class MeteoritePiece extends StructurePiece {
         }
         //Surface
         else {
-            if (detailNoise > 0.95) return 0;
+            if (detailNoise > 0.95) return soilCounts;
             floorState = VibraniumBlocks.VIBRANIUM_GRASS_BLOCK.get().defaultBlockState();
             dirtCount++;
         }
 
         safeSetBlock(target, floorState, box, blocksToPlace);
-        return dirtCount;
+
+        // Populate the array before returning
+        soilCounts[0] = dirtCount;
+        soilCounts[1] = gravelCount;
+        soilCounts[2] = clayCount;
+
+        return soilCounts;
     }
     private void decorateFloor(WorldGenLevel world, BlockPos target, RandomSource random, BoundingBox box, int waterLevel, Map<BlockPos, BlockState> blocksToPlace) {
         BlockState floorState = getEffectiveState(world, target.below(), blocksToPlace);

@@ -31,7 +31,7 @@ public class VibraniumBlocks {
     public static final RegistrySupplier<Block> VIBRANIUM_PATH = register("vibranium_path", VibraniumPathBlock::new, () -> VibraniumPathBlock.getProperties(BlockBehaviour.Properties.of()), true);
     public static final RegistrySupplier<Block> VIBRANIUM_FARMLAND = register("vibranium_farmland", VibraniumFarmland::new, () -> VibraniumFarmland.getProperties(BlockBehaviour.Properties.of()), true);
 
-    public static final RegistrySupplier<Block> BLACK_GRAVEL = register("black_gravel", BlackGravel::new, () -> BlackGravel.getProperties(BlockBehaviour.Properties.of()), true);
+    public static final RegistrySupplier<Block> BLACK_GRAVEL = register("black_gravel", BlackGravel::new, () -> BlackGravel.getProperties(BlockBehaviour.Properties.of()), false);
     public static final RegistrySupplier<Block> BLACK_CLAY = register("black_clay", BlackClay::new, () -> BlackClay.getProperties(BlockBehaviour.Properties.of()), true);
 
     //GRASS
@@ -114,6 +114,17 @@ public class VibraniumBlocks {
 
 
     //BLOCKITEMS
+    public static final RegistrySupplier<Item> BLACK_GRAVEL_ITEM = BLOCKITEMS.register("black_gravel",
+            () -> {
+                ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
+                        Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_gravel"));
+
+                return new BlackGravelItem(
+                        BLACK_GRAVEL.get(),
+                        BlackGravelItem.getProperties().setId(itemKey)
+                );
+            }
+    );
     public static final RegistrySupplier<Item> REACTOR_CORE_ITEM = BLOCKITEMS.register("reactor_core",
             () -> {
                 ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM,
