@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -135,16 +136,19 @@ public class VibraniumLootTableProvider extends FabricBlockLootTableProvider {
                 }
         );
     }
+    // Black gravel mimics vanilla gravel
     private void createBlackGravelLoot(HolderLookup.RegistryLookup<Enchantment> enchantmentLookup) {
-        // Black gravel mimics vanilla gravel
-        Block BLACK_GRAVEL = VibraniumBlocks.BLACK_GRAVEL.get();
-        if(BLACK_GRAVEL != null){
-            this.add(BLACK_GRAVEL, (block) ->
-                    createSilkTouchDispatchTable(block,
-                            this.applyExplosionCondition(block,
+        Block blackGravel = VibraniumBlocks.BLACK_GRAVEL.get();
+        if (blackGravel != null) {
+            Holder<Enchantment> fortune = enchantmentLookup.getOrThrow(Enchantments.FORTUNE);
+
+            this.add(blackGravel, (block) ->
+                    createSilkTouchDispatchTable(
+                            block,
+                            this.applyExplosionCondition(
+                                    block,
                                     LootItem.lootTableItem(Items.FLINT)
-                                            .when(BonusLevelTableCondition.bonusLevelFlatChance(
-                                                    enchantmentLookup.getOrThrow(Enchantments.FORTUNE),0.1F, 0.14285715F, 0.25F, 1.0F))
+                                            .when(BonusLevelTableCondition.bonusLevelFlatChance(fortune, 0.1F, 0.14285715F, 0.25F, 1.0F))
                                             .otherwise(LootItem.lootTableItem(block))
                             )
                     )

@@ -189,6 +189,7 @@
   "text.vibranium.config.weight_for": "Probabilidad (Weight) para %s",
   "tooltip.vibranium.axe.active.cleave": "%s: Filo Cinético",
   "tooltip.vibranium.axe.passive.shield_break": "Pasivo: Desarma Escudos por Sobrecarga Cinética",
+  "tooltip.vibranium.black_gravel.info": "Arena meteórica densa",
   "tooltip.vibranium.black_panther_boots_desc": "§7Convierte el daño de caída en carga cinética y suprime las vibraciones de Sculk.",
   "tooltip.vibranium.black_panther_chestplate_desc": "§7Almacena el daño físico recibido como carga cinética.",
   "tooltip.vibranium.black_panther_helmet_desc": "§7Otorga inmunidad a la Oscuridad y revela entidades cercanas.",

@@ -170,6 +170,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", "Eau Chaude : %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium : %ds restants");
 
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_gravel.info", "Sable météoritique épais");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req", "Nécessite d'être au centre d'une structure de 3x3x3 blocs pour fonctionner.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_2", "Les blocs compatibles sont les blocs de réacteur, les réservoirs de fluides");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_3", "et les blocs de verre renforcé.");
@@ -400,6 +401,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Aqua: %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranio: quedan %ds");
 
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_gravel.info", "Arena meteórica densa");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req", "Debe estar en el centro de una estructura de 3x3x3 bloques para funcionar.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_2", "Los bloques compatibles incluyen bloques de reactor, tanques de fluidos");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_3", "y bloques de cristal reforzado.");
@@ -632,6 +634,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Water: %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium : %ds restants");
 
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_gravel.info", "Thick meteoric sand");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req", "Must be placed at the centre of a 3x3x3 structure to function.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_2", "Compatible blocks include reactor blocks, fluid tanks,");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req_3", "and reinforced glass blocks.");

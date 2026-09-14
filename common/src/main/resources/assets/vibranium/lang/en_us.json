@@ -190,6 +190,7 @@
   "text.vibranium.config.weight_for": "Weight for %s",
   "tooltip.vibranium.axe.active.cleave": "%s: Kinetic Edge",
   "tooltip.vibranium.axe.passive.shield_break": "Passive: Disarms Shields via Kinetic Overload",
+  "tooltip.vibranium.black_gravel.info": "Thick meteoric sand",
   "tooltip.vibranium.black_panther_boots_desc": "§7Converts fall damage into kinetic charge and suppresses Sculk vibrations.",
   "tooltip.vibranium.black_panther_chestplate_desc": "§7Stores incoming physical damage as kinetic charge.",
   "tooltip.vibranium.black_panther_helmet_desc": "§7Grants immunity to Darkness and reveals nearby entities (Sneak + %s).",
