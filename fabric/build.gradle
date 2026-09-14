@@ -35,32 +35,32 @@ repositories {
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    implementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
     // Fabric API
-    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    implementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
 
     // Architectury API
-    modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+    implementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
     // Cloth Config
-    modApi "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
+    api "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
     include "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
 
     // ModMenu API
-    modApi("com.terraformersmc:modmenu:${rootProject.modmenu_version}")
+    api("com.terraformersmc:modmenu:${rootProject.modmenu_version}")
 
     // TEAMREBORN ENERGY API
-    include modApi("teamreborn:energy:${rootProject.teamreborn_energy_version}")
+    include "teamreborn:energy:${rootProject.teamreborn_energy_version}"
 
     // REI
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}"
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rootProject.rei_version}"
+    compileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:${rootProject.rei_version}"
+    compileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${rootProject.rei_version}"
 
     // JEI
-    modCompileOnlyApi("mezz.jei:jei-${rootProject.minecraft_version}-fabric-api:${rootProject.jei_version}")
+    compileOnlyApi("mezz.jei:jei-${rootProject.minecraft_version}-fabric-api:${rootProject.jei_version}")
 
-    common(project(path: ':common', configuration: 'namedElements')) { transitive = false }
+    common(project(path: ':common')) { transitive = false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
 
@@ -80,10 +80,14 @@ shadowJar {
     archiveClassifier = 'dev-shadow'
 }
 
-remapJar {
-    inputFile.set shadowJar.archiveFile
+jar {
+    inputs.file(shadowJar.archiveFile)
 }
-
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = null
+}
+assemble.dependsOn shadowJar
 loom {
     accessWidenerPath = project(":common").file("src/main/resources/vibranium.accesswidener")
 
@@ -103,5 +107,16 @@ loom {
                 ])
             }
         }
+    }
+}
+
+configurations {
+    apiElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
+    runtimeElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
     }
 }

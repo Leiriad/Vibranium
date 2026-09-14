@@ -1,6 +1,6 @@
 plugins {
     id("java-library")
-    id("dev.architectury.loom") version "${architectury_loom_version}" apply false
+    id("dev.architectury.loom-no-remap") version "${architectury_loom_version}" apply false
     id("architectury-plugin") version "${architectury_plugin_version}"
     id("com.gradleup.shadow") version "${shadow_version}" apply false
 }
@@ -16,7 +16,7 @@ allprojects {
 
 subprojects {
     // Modern way to apply plugins in subprojects instead of `apply plugin: "..."`
-    plugins.apply("dev.architectury.loom")
+    plugins.apply("dev.architectury.loom-no-remap")
     plugins.apply("architectury-plugin")
     plugins.apply("maven-publish")
 
@@ -67,7 +67,6 @@ subprojects {
 
     dependencies {
         minecraft("net.minecraft:minecraft:${rootProject.minecraft_version}")
-        mappings(loom.officialMojangMappings())
     }
 
     java {
@@ -77,12 +76,12 @@ subprojects {
 
         // Recommended modern alternative to sourceCompatibility / targetCompatibility
         toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
+            languageVersion = JavaLanguageVersion.of(25)
         }
     }
 
     tasks.withType(JavaCompile).configureEach {
-        options.release = 21
+        options.release = 25
     }
 
     // Configure Maven publishing.
