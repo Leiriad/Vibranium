@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.item;
 
+import dev.architectury.core.item.ArchitecturyBucketItem;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,9 +15,9 @@ import net.minecraft.world.level.material.Fluid;
 
 import java.util.function.Supplier;
 
-public class HotWaterBucket extends BucketItem {
+public class HotWaterBucket extends ArchitecturyBucketItem {
 
-    public HotWaterBucket(Supplier<? extends Fluid> fluid, Properties properties) {super(fluid.get(), properties);}
+    public HotWaterBucket(Supplier<? extends Fluid> fluid, Properties properties) {super(fluid, properties);}
 
     public static Item.Properties getProperties() {
         return new Item.Properties()

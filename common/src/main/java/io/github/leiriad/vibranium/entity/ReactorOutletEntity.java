@@ -52,7 +52,7 @@ public class ReactorOutletEntity extends FluidTankEntity {
             if (targetState.isAir()) {
                 // Spawn initial hot water source block at maximum temperature (300°C)
                 BlockState hotWaterState = VibraniumFluids.HOT_WATER_BLOCK.get().defaultBlockState()
-                        .setValue(HotWaterLiquidBlock.TEMPERATURE, 300);
+                        .setValue(HotWaterLiquidBlock.TEMPERATURE_LEVEL, 30);
 
                 level.setBlockAndUpdate(targetPos, hotWaterState);
                 entity.drain(100);
@@ -60,8 +60,8 @@ public class ReactorOutletEntity extends FluidTankEntity {
             }
             else if (targetState.is(VibraniumFluids.HOT_WATER_BLOCK.get()) || targetFluid.getType().equals(VibraniumFluids.HOT_WATER_FLOWING.get())) {
                 // Refresh/maintain maximum temperature for existing hot water
-                if (targetState.hasProperty(HotWaterLiquidBlock.TEMPERATURE) && targetState.getValue(HotWaterLiquidBlock.TEMPERATURE) < 300) {
-                    level.setBlockAndUpdate(targetPos, targetState.setValue(HotWaterLiquidBlock.TEMPERATURE, 300));
+                if (targetState.hasProperty(HotWaterLiquidBlock.TEMPERATURE_LEVEL) && targetState.getValue(HotWaterLiquidBlock.TEMPERATURE_LEVEL) < 30) {
+                    level.setBlockAndUpdate(targetPos, targetState.setValue(HotWaterLiquidBlock.TEMPERATURE_LEVEL, 30));
                 }
                 entity.drain(100);
                 entity.setChanged();
