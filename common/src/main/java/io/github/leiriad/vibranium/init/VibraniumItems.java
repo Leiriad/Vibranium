@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.init;
 
+import dev.architectury.core.item.ArchitecturyBucketItem;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -66,7 +67,7 @@ public class VibraniumItems {
     public static final RegistrySupplier<Item> HOT_WATER_BUCKET = ITEMS.register("hot_water_bucket", () -> {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM,
                 Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "hot_water_bucket"));
-        return new HotWaterBucket(VibraniumFluids.HOT_WATER_STILL, HotWaterBucket.getProperties().setId(key));
+        return new ArchitecturyBucketItem(VibraniumFluids.HOT_WATER_STILL, HotWaterBucket.getProperties().setId(key));
     });
 
     public static final RegistrySupplier<Item> VIBRANIUM_SHOVEL = ITEMS.register("vibranium_shovel", () -> {

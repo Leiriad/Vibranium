@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.block;
 
+import dev.architectury.core.block.ArchitecturyLiquidBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -20,33 +21,40 @@ import net.minecraft.world.level.redstone.Orientation;
 
 import java.util.function.Supplier;
 
-public class HotWaterLiquidBlock extends LiquidBlock {
-    public static final IntegerProperty TEMPERATURE = IntegerProperty.create("temperature", 0, 300);
+public class HotWaterLiquidBlock extends ArchitecturyLiquidBlock {
+    //Temperature is calculated in °C in 10 °C steps to avoid calculator saturation
+    public static final IntegerProperty TEMPERATURE_LEVEL = IntegerProperty.create("temp_level", 0, 30);
     public HotWaterLiquidBlock(Supplier<? extends FlowingFluid> fluid, Properties properties) {
-        super(fluid.get(), properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0).setValue(TEMPERATURE, 300));
+        super(fluid, properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(LEVEL, 0).setValue(TEMPERATURE_LEVEL, 30));
+    }
+    // Temperature conversion helpers
+    public static int getCelsius(BlockState state) {
+        return state.getValue(TEMPERATURE_LEVEL) * 10;
     }
 
+    public static int getKelvin(BlockState state) {
+        return getCelsius(state) + 273;
+    }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        // Enforce the inclusion of the LEVEL property so the block state definition matches vanilla liquid requirements
         super.createBlockStateDefinition(builder);
-        builder.add(TEMPERATURE);
+        builder.add(TEMPERATURE_LEVEL);
     }
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier applier, boolean bool) {
         //adds damage to player inside block
-        int temp = state.getValue(TEMPERATURE);
+        int tempC = getCelsius(state);
 
         if (!level.isClientSide() && entity instanceof LivingEntity living) {
             // The hotter the water, the more damages
-            float damage = (temp > 200) ? 2.0F : 1.0F;
+            float damage = (tempC > 200) ? 2.0F : 1.0F;
 
             if (level.getGameTime() % 20 == 0) {
                 living.hurt(level.damageSources().inFire(), damage);
             }
             // No burning if water already cold
-            if (temp > 100 && !living.fireImmune()) {
+            if (tempC > 100 && !living.fireImmune()) {
                 living.igniteForTicks(20);
             }
         }
@@ -60,13 +68,16 @@ public class HotWaterLiquidBlock extends LiquidBlock {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        int tempC = getCelsius(state);
+
         // Ice melting process
-        if (state.getValue(TEMPERATURE) > 50) {
+        if (tempC > 50) {
             BlockPos randomNeighbor = pos.offset(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
             if (level.getBlockState(randomNeighbor).is(Blocks.ICE)) {
                 level.setBlockAndUpdate(randomNeighbor, Blocks.WATER.defaultBlockState());
                 // Water temperature goes down
-                level.setBlockAndUpdate(pos, state.setValue(TEMPERATURE, Math.max(0, state.getValue(TEMPERATURE) - 20)));
+                int newLevel = Math.max(0, state.getValue(TEMPERATURE_LEVEL) - 2);
+                level.setBlockAndUpdate(pos, state.setValue(TEMPERATURE_LEVEL, newLevel));
                 // Server-side particle burst when melting ice
                 level.sendParticles(ParticleTypes.CLOUD, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 3, 0.1, 0.1, 0.1, 0.02);
                 return;
@@ -74,10 +85,10 @@ public class HotWaterLiquidBlock extends LiquidBlock {
         }
 
         // Usual cool down
-        int currentTemp = state.getValue(TEMPERATURE);
-        if (currentTemp > 20) {
+        int currentLevel = state.getValue(TEMPERATURE_LEVEL);
+        if (currentLevel > 2) {
             if (random.nextInt(3) == 0) {
-                level.setBlockAndUpdate(pos, state.setValue(TEMPERATURE, Math.max(20, currentTemp - 10)));
+                level.setBlockAndUpdate(pos, state.setValue(TEMPERATURE_LEVEL, Math.max(20, currentLevel - 1)));
                 level.levelEvent(2000, pos, 0);//smoke effect
             }
         } else {
@@ -95,7 +106,7 @@ public class HotWaterLiquidBlock extends LiquidBlock {
         super.neighborChanged(state, level, pos, block, orientation, isMoving);
 
         // Check if block is still hot
-        if (state.getValue(TEMPERATURE) > 50) {
+        if (getCelsius(state) > 50) {
             for (Direction dir : Direction.values()) {
                 BlockPos neighborPos = pos.relative(dir);
                 BlockState neighborState = level.getBlockState(neighborPos);
@@ -116,10 +127,8 @@ public class HotWaterLiquidBlock extends LiquidBlock {
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);
 
-        int temp = state.getValue(TEMPERATURE);
-
         // Only display ambient steam/bubbles if the water is hot enough (> 100°C)
-        if (temp > 100) {
+        if (getCelsius(state) > 100) {
             double x = pos.getX() + random.nextDouble();
             double y = pos.getY() + 0.9D; // Surface of the fluid
             double z = pos.getZ() + random.nextDouble();
