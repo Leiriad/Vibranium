@@ -1,10 +1,8 @@
 package io.github.leiriad.vibranium.fabric.client.compat;
 
-// English comments as requested
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
 import io.github.leiriad.vibranium.init.VibraniumItems;
-import me.shedaniel.rei.api.common.util.EntryStacks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
