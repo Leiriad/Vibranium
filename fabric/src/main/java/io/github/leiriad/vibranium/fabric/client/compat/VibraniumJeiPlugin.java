@@ -3,6 +3,7 @@ package io.github.leiriad.vibranium.fabric.client.compat;
 // English comments as requested
 import io.github.leiriad.vibranium.init.VibraniumBlocks;
 import io.github.leiriad.vibranium.init.VibraniumFluids;
+import io.github.leiriad.vibranium.init.VibraniumItems;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -41,6 +42,10 @@ public class VibraniumJeiPlugin implements IModPlugin {
         }
         if (VibraniumBlocks.VIBRANIUM_PATH.get() != null) {
             ItemStack stemStack = new ItemStack(VibraniumBlocks.VIBRANIUM_PATH.get());
+            ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, List.of(stemStack));
+        }
+        if (VibraniumItems.HOT_WATER_BUCKET.get() != null) {
+            ItemStack stemStack = new ItemStack(VibraniumItems.HOT_WATER_BUCKET.get());
             ingredientManager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, List.of(stemStack));
         }
 
