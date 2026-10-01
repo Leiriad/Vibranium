@@ -28,13 +28,16 @@ public class ElectricHeaterEntity extends BlockEntity {
     public static void tick(Level level, BlockPos pos, BlockState state, ElectricHeaterEntity lamp) {
         if (level.isClientSide()) return;
 
+        // Check directly during tick to handle block placement properly
+        lamp.checkRedstonePower(level, pos);
+
         boolean shouldBeLit = false;
 
-        // 1. Check if powered by redstone
+        // Check if powered by redstone
         if (lamp.poweredByRedstone) {
             shouldBeLit = true;
         }
-        // 2. Check if powered by energy buffer
+        // Check if powered by energy buffer
         else if (lamp.energyStored >= CONSUMPTION_PER_TICK) {
             lamp.energyStored -= CONSUMPTION_PER_TICK;
             shouldBeLit = true;
@@ -53,11 +56,18 @@ public class ElectricHeaterEntity extends BlockEntity {
         }
     }
 
-    // Called when neighbors change to evaluate redstone signal
+    // Called to evaluate redstone signal and Redstone Block presence below
     public void checkRedstonePower(Level level, BlockPos pos) {
+        // Standard neighbor signal check
         boolean hasSignal = level.hasNeighborSignal(pos);
-        if (this.poweredByRedstone != hasSignal) {
-            this.poweredByRedstone = hasSignal;
+
+        // Explicit check for a Redstone Block directly underneath
+        boolean isSittingOnRedstoneBlock = level.getBlockState(pos.below()).is(net.minecraft.world.level.block.Blocks.REDSTONE_BLOCK);
+
+        boolean powered = hasSignal || isSittingOnRedstoneBlock;
+
+        if (this.poweredByRedstone != powered) {
+            this.poweredByRedstone = powered;
             this.setChanged();
         }
     }
