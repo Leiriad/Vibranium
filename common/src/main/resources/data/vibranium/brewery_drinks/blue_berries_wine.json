@@ -5,63 +5,53 @@
   },
   "color": "#00b2c6",
   "visual": {
-    "resource_pack_model": "vibranium:items/blue_berries_wine"
+    "resource_pack_model": "brewery:brewery_drink/glow_wine"
   },
   "barrel_definitions": [
     {
-      "type": "minecraft:oak",
-      "quality_value": "quality",
-      "reveal_time": 300
-    },
-    {
-      "type": "minecraft:dark_oak",
-      "quality_value": "quality",
-      "reveal_time": 300
-    },
-    {
       "type": "*",
-      "quality_value": "quality * 0.8",
+      "quality_value": "quality",
       "reveal_time": 300
     }
   ],
-  "base_quality_value": "smooth_value_days(10.0, 0.1, 5.0, age) * 10",
+  "base_quality_value": "smooth_value_days(30.0, 30.0, 240.0, age) * 10",
   "drinking_time": "clamp(1.6 * (7 / (max(quality, 0.1))), 1.6, 4.8)",
-  "alcoholic_value": "floor(15 * (0.75 + max(quality, 0) / 40))",
+  "alcoholic_value": "8 * (0.75 + quality / 40)",
   "effects": [
     {
-      "effect": "minecraft:nausea",
-      "time": "5",
+      "effect": "minecraft:regeneration",
+      "time": "(quality - 5) * 15",
+      "value": "0",
+      "locked": false,
+      "type": "potion"
+    },
+    {
+      "effect": "minecraft:glowing",
+      "time": "(quality - 3) * 30",
       "value": "0",
       "type": "potion"
     },
     {
       "effect": "minecraft:night_vision",
-      "time": "floor(max(600 * (quality / 10), 60))",
+      "time": "(quality - 3) * 30",
       "value": "0",
       "type": "potion"
     }
   ],
-  "cooking_quality_multiplier": "cos(clamp((age / 60 - 3.0) * 0.25, -2, 2))",
+  "cooking_quality_multiplier": "cos(clamp((age / 60 - 5.0) * 0.25, -2, 2))",
   "ingredients": [
     {
       "items": [
-        "vibranium:blue_glow_berries"
+        "minecraft:glow_berries"
       ],
-      "count": 2
-    },
-    {
-      "items": [
-        "minecraft:sugar"
-      ],
-      "count": 2
+      "count": 5
     }
   ],
   "book_information": {
-    "best_cooking_time": 480.0,
-    "best_barrel_age": 6000.0,
+    "best_cooking_time": 300.0,
+    "best_barrel_age": 36000.0,
     "best_barrel_type": [
-      "oak",
-      "dark_oak"
+      "*"
     ]
   }
 }
