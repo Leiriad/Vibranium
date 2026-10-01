@@ -36,6 +36,15 @@ public class NeoForgeVibraniumScreen {
                 .setNameProvider(value -> Component.translatable("text.vibranium.config.hud_alignment." + value.toLowerCase()))
                 .setSaveConsumer(newValue -> clientConfig.hudAlignment = newValue)
                 .build());
+        clientCategory.addEntry(entryBuilder.startSelector(
+                        Component.translatable("text.vibranium.config.option.temperature_unit"),
+                        new String[]{"CELSIUS", "FAHRENHEIT"},
+                        clientConfig.temperatureUnit)
+                .setDefaultValue("CELSIUS")
+                .setNameProvider(value -> Component.literal(value.equals("CELSIUS") ? "Celsius (°C)" : "Fahrenheit (°F)"))
+                .setSaveConsumer(newValue -> clientConfig.temperatureUnit = newValue)
+                .build());
+
         // ==================== OVERWORLD TAB ====================
         ConfigCategory overworldCategory = builder.getOrCreateCategory(
                 Component.translatable("text.vibranium.config.category.overworld")

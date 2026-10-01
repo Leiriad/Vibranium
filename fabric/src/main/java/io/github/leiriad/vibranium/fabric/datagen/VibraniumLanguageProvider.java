@@ -165,7 +165,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Trappe d'alimentation du réacteur");
 
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".energy_tooltip", "Énergie : %d / 100000 FE");
-                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Température : %d°C / 3000°C");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Température : %d %s / %d %s");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Eau : %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", "Eau Chaude : %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium : %ds restants");
@@ -186,7 +186,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Isole efficacement des radiations du cœur du réacteur.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Insérez la poudre de Vibranium ici");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Résidus et scories de combustion");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info", "S'obtient uniquement en chauffant de la poudre de vibranium au-dessus de 1 200 °C dans un four placé contre le réacteur.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info.line1", "S'obtient uniquement en chauffant de la poudre de vibranium au-dessus de %d %s");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info.line2", "dans un four placé contre le réacteur.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Distillé dans un alambic. Haute concentration !");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Charge cinétique");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Propulsion Cinétique : ACTIF");
@@ -234,6 +235,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.center", "Centré");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.left", "Gauche");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.right", "Droite");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.temperature_unit", "Unité de température");
 
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Espacement (Spacing)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Séparation (Separation)");
@@ -396,7 +398,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Escotilla de alimentación del reactor");
 
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".energy_tooltip", "Energía: %d / 100000 FE");
-                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Temperatura: %d°C / 3000°C");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Temperatura: %d %s / %d %s");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", "Aqua Caliente: %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Aqua: %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranio: quedan %ds");
@@ -417,7 +419,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Aísla eficazmente contra la radiación del núcleo del reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Inserta el polvo de Vibranium aquí");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Residuos y escorias de combustión");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info", "Solo se obtiene calentando polvo de vibranium a más de 1200 °C en un horno colocado junto al reactor.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info.line1", "Se obtiene únicamente calentando polvo de vibranium a más de %d %s");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info.line2", "en un horno adyacente al reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Destilado en un alambique. ¡Alta graduación!");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Carga cinética");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Propulsión Cinética: ACTIVO");
@@ -465,6 +468,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.center", "Centro");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.left", "Izquierda");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.right", "Derecha");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.temperature_unit", "Unidad de temperatura");
 
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Espaciado (Spacing)");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separación (Separation)");
@@ -629,10 +633,10 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("container." + VibraniumMod.MOD_ID + ".reactor_hatch", "Reactor fuel hatch");
 
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".energy_tooltip", "Energy : %d / 100000 FE");
-                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Temperature : %d°C / 3000°C");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", "Temperature: %d %s / %d %s");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".hot_water_tooltip", "Hot Water: %d / %d mB");
                 translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".water_tooltip", "Water: %d / %d mB");
-                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium : %ds restants");
+                translationBuilder.add("gui." + VibraniumMod.MOD_ID + ".fuel_tooltip", "Vibranium: %ds remaining");
 
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".black_gravel.info", "Thick meteoric sand");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reactor_core.multiblock_req", "Must be placed at the centre of a 3x3x3 structure to function.");
@@ -650,7 +654,8 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".reinforced_vibranium_glass.shielding", "Effectively insulates against radiation from the reactor core.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_fuel", "Insert Vibranium powder here");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".slot_output", "Combustion waste and slag");
-                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info", "Obtained only by heating Vibranium Dust above 1,200°C in a furnace placed against the reactor.");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info.line1", "Only obtained by heating vibranium powder above %d %s");
+                translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".vibranium_ingot.info.line2", "in a furnace placed against the reactor.");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".distilled_alcohol", "Distilled in a brewing stand. High potency!");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".weapons.charge", "Kinetic Charge");
                 translationBuilder.add("tooltip." + VibraniumMod.MOD_ID + ".tool.mode.active", "Kinetic Burst: ACTIVE");
@@ -698,6 +703,7 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.center", "Centre");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.left", "Left");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.hud_alignment.right", "Right");
+                translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.temperature_unit", "Temperature Unit");
 
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.spacing", "Spacing");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.option.separation", "Separation");

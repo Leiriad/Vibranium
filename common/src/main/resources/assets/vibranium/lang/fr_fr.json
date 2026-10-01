@@ -59,7 +59,7 @@
   "container.vibranium.reactor_hatch": "Trappe d'alimentation du réacteur",
   "gui.vibranium.energy_tooltip": "Énergie : %d / 100000 FE",
   "gui.vibranium.fuel_tooltip": "Vibranium : %ds restants",
-  "gui.vibranium.heat_tooltip": "Température : %d°C / 3000°C",
+  "gui.vibranium.heat_tooltip": "Température : %d %s / %d %s",
   "gui.vibranium.hot_water_tooltip": "Eau Chaude : %d / %d mB",
   "gui.vibranium.water_tooltip": "Eau : %d / %d mB",
   "item.vibranium.ancestral_nectar": "Nectar ancestral",
@@ -181,6 +181,7 @@
   "text.vibranium.config.option.spacing": "Espacement (Spacing)",
   "text.vibranium.config.option.spear_discharge_threshold": "Lance : Seuil de décharge cinétique",
   "text.vibranium.config.option.sword_discharge_threshold": "Épée : Seuil de décharge cinétique",
+  "text.vibranium.config.option.temperature_unit": "Unité de température",
   "text.vibranium.config.section.weights": "§6Probabilité d'apparition des structures (Weights)",
   "text.vibranium.config.title": "Configuration de Vibranium",
   "text.vibranium.config.tooltip.separation.line1": "La distance minimale (en chunks) entre les structures.",
@@ -234,7 +235,8 @@
   "tooltip.vibranium.tool.mode.inactive": "Propulsion Cinétique : INACTIF",
   "tooltip.vibranium.trapdoor.interaction": "Nécessite de la Redstone ou une pioche en diamant pour interagir en sécurité.",
   "tooltip.vibranium.trapdoor.repulsion": "Éjecte les entités vers le haut par énergie cinétique si l'on marche ou frappe dessus.",
-  "tooltip.vibranium.vibranium_ingot.info": "S'obtient uniquement en chauffant de la poudre de vibranium au-dessus de 1 200 °C dans un four placé contre le réacteur.",
+  "tooltip.vibranium.vibranium_ingot.info.line1": "S'obtient uniquement en chauffant de la poudre de vibranium au-dessus de %d %s",
+  "tooltip.vibranium.vibranium_ingot.info.line2": "dans un four placé contre le réacteur.",
   "tooltip.vibranium.weapons.charge": "Charge cinétique",
   "tooltip.vibranium.wire.tranfer_rate": "Taux de transfert : %s K E/t"
 }

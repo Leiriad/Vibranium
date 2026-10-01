@@ -16,6 +16,7 @@ public class VibraniumConfig {
      * ======================================================================== */
     public static class ClientConfig {
         public String hudAlignment = "CENTER"; // Possible values: "CENTER", "LEFT", "RIGHT"
+        public String temperatureUnit = "CELSIUS"; //Choose between Celsius or Fahrenheit
     }
 
     /* ========================================================================
