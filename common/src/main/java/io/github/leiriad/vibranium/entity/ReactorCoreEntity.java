@@ -3,6 +3,7 @@ package io.github.leiriad.vibranium.entity;
 import com.mojang.datafixers.util.Pair;
 import io.github.leiriad.vibranium.block.ReactorCoreBlock;
 import io.github.leiriad.vibranium.init.*;
+import io.github.leiriad.vibranium.item.VibraniumIngot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -471,7 +472,7 @@ public class ReactorCoreEntity extends BlockEntity {
                                 int heatBonus = Math.max(1, this.temperature / 200);
 
                                 // --- HIGH TEMPERATURE INTERCEPTION FOR VIBRANIUM ---
-                                if (isVibranium && this.temperature >= 1200 && (currentCookingProgress + heatBonus) >= (totalCookTime - 1)) {
+                                if (isVibranium && this.temperature >= VibraniumIngot.REQUIRED_TEMPERATURE_CELSIUS && (currentCookingProgress + heatBonus) >= (totalCookTime - 1)) {
                                     ItemStack outputStack = furnace.getItem(2); // SLOT_OUTPUT
                                     net.minecraft.world.item.Item pureIngot = VibraniumItems.VIBRANIUM_INGOT.get();
 

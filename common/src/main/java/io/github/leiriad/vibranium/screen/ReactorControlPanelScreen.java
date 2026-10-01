@@ -3,6 +3,7 @@ package io.github.leiriad.vibranium.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.leiriad.vibranium.VibraniumMod;
 import io.github.leiriad.vibranium.menu.ReactorControlPanelMenu;
+import io.github.leiriad.vibranium.utils.TemperatureUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -119,7 +120,14 @@ public class ReactorControlPanelScreen extends AbstractContainerScreen<ReactorCo
 
         // Heat (Rendered at x + 83)
         if (mouseX >= x + 83 && mouseX < x + 83 + gaugeWidth && mouseY >= gaugeTop && mouseY < gaugeBottom) {
-            Component text = Component.translatable("gui." + VibraniumMod.MOD_ID + ".heat_tooltip", this.menu.getHeat());
+            int currentTemp = TemperatureUtils.convert(this.menu.getHeat());
+            int maxTemp = TemperatureUtils.convert(3000);
+            String unit = TemperatureUtils.getUnitSymbol();
+
+            Component text = Component.translatable(
+                    "gui." + VibraniumMod.MOD_ID + ".heat_tooltip",
+                    currentTemp, unit, maxTemp, unit
+            );
             guiGraphics.renderTooltip(this.font, List.of(ClientTooltipComponent.create(text.getVisualOrderText())), mouseX, mouseY, positioner, null);
         }
 

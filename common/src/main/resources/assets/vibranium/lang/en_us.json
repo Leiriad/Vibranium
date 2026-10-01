@@ -58,8 +58,8 @@
   "container.vibranium.reactor_control_panel": "Reactor Control Panel",
   "container.vibranium.reactor_hatch": "Reactor fuel hatch",
   "gui.vibranium.energy_tooltip": "Energy : %d / 100000 FE",
-  "gui.vibranium.fuel_tooltip": "Vibranium : %ds restants",
-  "gui.vibranium.heat_tooltip": "Temperature : %d°C / 3000°C",
+  "gui.vibranium.fuel_tooltip": "Vibranium: %ds remaining",
+  "gui.vibranium.heat_tooltip": "Temperature: %d %s / %d %s",
   "gui.vibranium.hot_water_tooltip": "Hot Water: %d / %d mB",
   "gui.vibranium.water_tooltip": "Water: %d / %d mB",
   "item.vibranium.ancestral_nectar": "Ancestral Nectar",
@@ -181,6 +181,7 @@
   "text.vibranium.config.option.spacing": "Spacing",
   "text.vibranium.config.option.spear_discharge_threshold": "Spear: Kinetic Discharge Threshold",
   "text.vibranium.config.option.sword_discharge_threshold": "Sword: Kinetic Discharge Threshold",
+  "text.vibranium.config.option.temperature_unit": "Temperature Unit",
   "text.vibranium.config.section.weights": "§6Structure Spawn Weights",
   "text.vibranium.config.title": "Vibranium Configuration",
   "text.vibranium.config.tooltip.separation.line1": "The minimum distance (in chunks) between structures. Must be lower than spacing.",
@@ -234,7 +235,8 @@
   "tooltip.vibranium.tool.mode.inactive": "Kinetic Burst: INACTIVE",
   "tooltip.vibranium.trapdoor.interaction": "Requires Redstone or a Diamond Pickaxe to interact safely.",
   "tooltip.vibranium.trapdoor.repulsion": "Launches entities upward with kinetic energy when stepped on or struck.",
-  "tooltip.vibranium.vibranium_ingot.info": "Obtained only by heating Vibranium Dust above 1,200°C in a furnace placed against the reactor.",
+  "tooltip.vibranium.vibranium_ingot.info.line1": "Only obtained by heating vibranium powder above %d %s",
+  "tooltip.vibranium.vibranium_ingot.info.line2": "in a furnace placed against the reactor.",
   "tooltip.vibranium.weapons.charge": "Kinetic Charge",
   "tooltip.vibranium.wire.tranfer_rate": "Transfer rate: %s K E/t"
 }
