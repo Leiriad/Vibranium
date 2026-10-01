@@ -29,6 +29,9 @@
     ],
     "rei_client": [
       "io.github.leiriad.vibranium.fabric.client.compat.VibraniumREIPlugin"
+    ],
+    "jei_mod_plugin": [
+      "io.github.leiriad.vibranium.fabric.client.compat.VibraniumJeiPlugin"
     ]
   },
   "mixins": [
