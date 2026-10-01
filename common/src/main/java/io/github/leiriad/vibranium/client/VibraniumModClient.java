@@ -1,5 +1,6 @@
 package io.github.leiriad.vibranium.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.architectury.networking.NetworkManager;
@@ -19,6 +20,9 @@ import io.github.leiriad.vibranium.network.OreHighlightPayload;
 import io.github.leiriad.vibranium.screen.ReactorControlPanelScreen;
 import io.github.leiriad.vibranium.screen.ReactorHatchScreen;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -94,8 +98,9 @@ public class VibraniumModClient {
                 VibraniumBlocks.ELECTRIC_WIRE_WALL.get()
         );
 
-
-
+        //Fluids
+        RenderTypeRegistry.register(ChunkSectionLayer.TRANSLUCENT, VibraniumFluids.VANILLA_MILK_STILL.get(), VibraniumFluids.VANILLA_MILK_FLOWING.get());
+        RenderTypeRegistry.register(ChunkSectionLayer.TRANSLUCENT, VibraniumFluids.HOT_WATER_STILL.get(), VibraniumFluids.HOT_WATER_FLOWING.get());
 
         //Screens init
         MenuScreenRegistry.registerScreenFactory(VibraniumMenus.REACTOR_CONTROL_PANEL_MENU.get(), ReactorControlPanelScreen::new);
