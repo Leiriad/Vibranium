@@ -43,6 +43,19 @@ To run **Vibranium**, ensure you have installed the correct mod loader and requi
 3. Place the downloaded `.jar` file along with **Architectury API** and **Cloth Config** (and **Fabric API** if using Fabric) into your `.minecraft/mods` folder.
 4. Launch the game and explore!
 
+   
+---
+
+If you use the Nature X resource pack, here is a resource pack to align Vibranium Mod textures with it: [Vibranium-x-Nature-X](https://github.com/Leiriad/Vibranium-x-Nature-X/releases/tag/v1.21.11-1.0.0)
+
+
+---
+
+## 🌐 Where to download
+[**Modrinth**](https://modrinth.com/mod/vibranium-leiriadjenkins)
+[**CurseForge**](https://www.curseforge.com/minecraft/mc-mods/vibranium-1-21-11)
+
+
 ---
 
 ## 📚 Wiki & Documentation
