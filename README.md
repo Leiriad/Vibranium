@@ -70,4 +70,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 AI tools were used strictly as a coding assistant for brainstorming and accelerating logic writing. 
 
-All assets — including custom textures, models, sound design, and game balance — were created entirely by hand. No AI generation was used for visual or audio content.
+All assets, including custom textures, models, sound design, and game balance, were created entirely by hand. No AI generation was used for visual or audio content.
