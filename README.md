@@ -54,7 +54,7 @@ If you use the Nature X resource pack, here is a resource pack to align Vibraniu
 ## 🌐 Where to download
 
 [<img src="https://icons.iconarchive.com/icons/simpleicons-team/simple/128/curseforge-icon.png">](https://www.curseforge.com/minecraft/mc-mods/vibranium-1-21-11)
-[![Modrinth Logo](https://jsdelivr.net)](https://modrinth.com/mod/vibranium-leiriadjenkins)
+[![Modrinth Downloads](https://shields.io)]([https://modrinth.com](https://modrinth.com/mod/vibranium-leiriadjenkins))
 
 ---
 
