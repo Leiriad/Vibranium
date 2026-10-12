@@ -1,12 +1,8 @@
 {
-  "replace": false,
-  "values": [
-    {
-      "item": "vibranium:blue_berries_spirit",
-      "thirst": 4,
-      "hydration": 0.4,
-      "stamina": 0,
-      "temperature": 4.0
-    }
-  ]
+  "type": "vibranium:blue_berries_spirit",
+  "amount": 1,
+  "effect_chance": 0.0,
+  "effect_duration": 0,
+  "effect_potency": 0,
+  "saturation": 0.3
 }

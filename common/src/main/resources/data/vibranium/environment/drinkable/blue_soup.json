@@ -1,12 +1,8 @@
 {
-  "replace": false,
-  "values": [
-    {
-      "item": "vibranium:blue_soup",
-      "thirst": 10,
-      "hydration": 0.8,
-      "stamina": 5,
-      "temperature": 3.0
-    }
-  ]
+  "type": "vibranium:blue_soup",
+  "amount": 3,
+  "effect_chance": 0.0,
+  "effect_duration": 0,
+  "effect_potency": 0,
+  "saturation": 0.7
 }
