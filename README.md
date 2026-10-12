@@ -43,6 +43,20 @@ To run **Vibranium**, ensure you have installed the correct mod loader and requi
 3. Place the downloaded `.jar` file along with **Architectury API** and **Cloth Config** (and **Fabric API** if using Fabric) into your `.minecraft/mods` folder.
 4. Launch the game and explore!
 
+   
+---
+
+If you use the Nature X resource pack, here is a resource pack to align Vibranium Mod textures with it: [Vibranium-x-Nature-X](https://github.com/Leiriad/Vibranium-x-Nature-X/releases/tag/v1.21.11-1.0.0)
+
+
+---
+
+## 🌐 Where to download 
+
+[![CurseForge Downloads](https://img.shields.io/curseforge/dt/1692262?logo=curseforge&logoSize=150)](https://www.curseforge.com/minecraft/mc-mods/vibranium-1-21-11) 
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/8oWuVG5o?logo=Modrinth&logoSize=150)](https://modrinth.com/mod/vibranium-leiriadjenkins)
+
+
 ---
 
 ## 📚 Wiki & Documentation
@@ -68,6 +82,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 ## 🤖 AI Usage Statement
 
-AI tools were used strictly as a coding assistant ("vibe coding") for brainstorming and accelerating logic writing. 
+AI tools were used strictly as a coding assistant for brainstorming and accelerating logic writing. 
 
-All assets — including custom textures, models, sound design, and game balance — were created entirely by hand. No AI generation was used for visual or audio content.
+All assets, including custom textures, models, sound design, and game balance, were created entirely by hand. No AI generation was used for visual or audio content.
