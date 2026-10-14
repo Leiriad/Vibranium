@@ -5,6 +5,9 @@ import io.github.leiriad.vibranium.init.VibraniumItems;
 import io.github.leiriad.vibranium.utils.VibraniumTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.minecraft.advancements.criterion.ConsumeItemTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.*;
@@ -375,7 +378,7 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .pattern("VVV")
                         .pattern("V V")
                         .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
-                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .unlockedBy("consumed_ancestral_nectar", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(itemHolderGetter,VibraniumItems.ANCESTRAL_NECTAR.get())))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_helmet")));
                 // Black Panther Chestplate
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.BLACK_PANTHER_CHESTPLATE.get(), 1)
@@ -383,7 +386,7 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .pattern("VVV")
                         .pattern("VVV")
                         .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
-                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .unlockedBy("consumed_ancestral_nectar", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(itemHolderGetter,VibraniumItems.ANCESTRAL_NECTAR.get())))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_chestplate")));
                 // Black Panther Leggings
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.BLACK_PANTHER_LEGGINGS.get(), 1)
@@ -391,14 +394,14 @@ public class VibraniumRecipeProvider extends FabricRecipeProvider {
                         .pattern("V V")
                         .pattern("V V")
                         .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
-                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .unlockedBy("consumed_ancestral_nectar", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(itemHolderGetter,VibraniumItems.ANCESTRAL_NECTAR.get())))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_leggings")));
                 // Black Panther Boots
                 ShapedRecipeBuilder.shaped(itemHolderGetter, RecipeCategory.COMBAT, VibraniumItems.BLACK_PANTHER_BOOTS.get(), 1)
                         .pattern("V V")
                         .pattern("V V")
                         .define('V', VibraniumItems.VIBRANIUM_INGOT.get())
-                        .unlockedBy(getHasName(VibraniumItems.VIBRANIUM_INGOT.get()), has(VibraniumItems.VIBRANIUM_INGOT.get()))
+                        .unlockedBy("consumed_ancestral_nectar", ConsumeItemTrigger.TriggerInstance.usedItem(ItemPredicate.Builder.item().of(itemHolderGetter,VibraniumItems.ANCESTRAL_NECTAR.get())))
                         .save(exporter, ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(VibraniumMod.MOD_ID, "black_panther_boots")));
 
                 //TOOLS

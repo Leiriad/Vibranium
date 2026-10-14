@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "id": "vibranium:reactor_core"
+    },
+    "title": {
+      "translate": "advancements.vibranium.reactor_core.title"
+    },
+    "description": {
+      "translate": "advancements.vibranium.reactor_core.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "minecraft:story/root",
+  "criteria": {
+    "has_reactor_core": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "vibranium:reactor_core"
+          }
+        ]
+      }
+    }
+  }
+}

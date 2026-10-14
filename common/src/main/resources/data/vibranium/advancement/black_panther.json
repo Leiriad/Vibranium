@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "id": "vibranium:ancestral_nectar"
+    },
+    "title": {
+      "text": "Black Panther"
+    },
+    "description": {
+      "translate": "advancements.vibranium.ancestral_nectar.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "parent": "minecraft:story/root",
+  "criteria": {
+    "ate_soup": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "vibranium:ancestral_nectar"
+        }
+      }
+    }
+  }
+}

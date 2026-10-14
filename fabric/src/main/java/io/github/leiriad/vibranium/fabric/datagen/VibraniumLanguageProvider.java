@@ -224,6 +224,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "Cette trappe n'est reliée à aucun réacteur !");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "L'alarme de surchauffe du réacteur sonne !");
 
+                //Advancements
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".ancestral_nectar.description", "Buvez le nectar des ancêtres et endossez le costume du Black Panther.");
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".reactor_core.title", "Cœur de la Matrice");
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".reactor_core.description", "Domptez l'énergie infinie du Vibranium pour alimenter vos technologies.");
+
                 //Config
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Configuration de Vibranium");
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.category.client", "Interface Client");
@@ -456,6 +461,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "¡Esta escotilla no está conectada a ningún reactor!");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "¡Suena la alarma de fusión del reactor!");
+
+                //Advancements
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".ancestral_nectar.description", "Bebe el néctar de los ancestros y asume el manto del Black Panther.");
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".reactor_core.title", "Corazón de la Red");
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".reactor_core.description", "Domina la energía infinita del Vibranium para potenciar tu tecnología.");
 
                 //Config
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Configuración de Vibranium");
@@ -691,6 +701,11 @@ public class VibraniumLanguageProvider extends FabricLanguageProvider {
 
                 translationBuilder.add("message." + VibraniumMod.MOD_ID + ".hatch_no_core", "This hatch is not connected to any reactor core!");
                 translationBuilder.add("subtitles." + VibraniumMod.MOD_ID + ".meltdown_alarm", "Reactor Meltdown Alarm blares!");
+
+                //Advancements
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".ancestral_nectar.description", "Drink the nectar of the gods and inherit the mantle of the Black Panther.");
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".reactor_core.title", "Heart of the Grid");
+                translationBuilder.add("advancements." + VibraniumMod.MOD_ID + ".reactor_core.description", "Harness the infinite energy of Vibranium to power advanced tech.");
 
                 //Config
                 translationBuilder.add("text." + VibraniumMod.MOD_ID + ".config.title", "Vibranium Configuration");

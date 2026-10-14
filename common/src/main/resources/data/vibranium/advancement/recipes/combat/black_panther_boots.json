@@ -1,27 +1,25 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
+    "consumed_ancestral_nectar": {
+      "conditions": {
+        "item": {
+          "items": "vibranium:ancestral_nectar"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    },
     "has_the_recipe": {
       "conditions": {
         "recipe": "vibranium:black_panther_boots"
       },
       "trigger": "minecraft:recipe_unlocked"
-    },
-    "has_vibranium_ingot": {
-      "conditions": {
-        "items": [
-          {
-            "items": "vibranium:vibranium_ingot"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_vibranium_ingot"
+      "consumed_ancestral_nectar"
     ]
   ],
   "rewards": {
